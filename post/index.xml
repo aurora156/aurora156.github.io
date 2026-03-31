@@ -7,13 +7,491 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>凉介</copyright>
-        <lastBuildDate>Tue, 31 Mar 2026 10:24:55 +0800</lastBuildDate><atom:link href="https://aurora156.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 05 Mar 2026 21:31:04 +0800</lastBuildDate><atom:link href="https://aurora156.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>MyFirstBlog</title>
         <link>https://aurora156.github.io/p/myfirstblog/</link>
-        <pubDate>Tue, 31 Mar 2026 10:24:55 +0800</pubDate>
+        <pubDate>Thu, 05 Mar 2026 21:31:04 +0800</pubDate>
         
         <guid>https://aurora156.github.io/p/myfirstblog/</guid>
-        <description></description>
+        <description>&lt;h1 id=&#34;hugogithub搭建个人博客&#34;&gt;Hugo+Github搭建个人博客
+&lt;/h1&gt;&lt;p&gt;参考视频：【【雷】Hugo + Github免费搭建博客，并实现自动化部署】 &lt;a class=&#34;link&#34; href=&#34;https://www.bilibili.com/video/BV1bovfeaEtQ/?share_source=copy_web&amp;amp;vd_source=b5c399783868e9dbf7a8c84cca665abf&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://www.bilibili.com/video/BV1bovfeaEtQ/?share_source=copy_web&amp;vd_source=b5c399783868e9dbf7a8c84cca665abf&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;下载hugo&#34;&gt;下载HUGO
+&lt;/h2&gt;&lt;p&gt;HUGO官网：https://gohugo.io/&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c1.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;1&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c2.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c2.3%e4%b9%8b%e9%97%b4.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;.3之&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;4.找到自己电脑对应的版本&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c3.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;3&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;5.解压后在文件夹中打开cmd&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c4.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;4&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;6.在cmd中输入&lt;code&gt;hugo new site 要创建文件夹的名字&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c5.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;5&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;7.若配置了hugo的全局环境变量则无需执行copy命令，若不知道是否配置，则与图中操作一样&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c%e5%a4%8d%e5%88%b61.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;77286624813&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;下载网页主题并启动&#34;&gt;下载网页主题并启动
+&lt;/h2&gt;&lt;p&gt;8.配置完成后先看看启动后的样子是怎样的&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c9.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;9&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ol start=&#34;9&#34;&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5cPixPin_2026-03-07_14-57-51.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;ixPin_2026-03-07_14-57-5&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;10.这时打开的网址什么都没有，但服务其实已经搭好了&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c10.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;11.查看完后先把cmd窗口放到后台，别关掉，重新打开hugo官网&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c%e5%a4%8d%e5%88%b61.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;77286685650&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;12.&lt;img src=&#34;https://aurora156.github.io/assets%5c%e5%a4%8d%e5%88%b62.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;77286693182&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ol start=&#34;13&#34;&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c%e5%a4%8d%e5%88%b63.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;77286703125&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ol start=&#34;14&#34;&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c%e5%a4%8d%e5%88%b64.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;77286708779&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;15.选择版本随意，但此处建议使用3.30.0（因为视频教程中用的是这个，使用其他版本在后续的配置中可能会无法按照教程继续进行）&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c%e5%a4%8d%e5%88%b66.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;77286713150&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ol start=&#34;16&#34;&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c12.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;17.下载好主题后，把主题压缩包解压到hugo的&lt;code&gt;theme&lt;/code&gt;文件夹中&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;C:%5cUsers%5c%e5%90%b4%e6%8c%af%e8%b4%b5%5cAppData%5cLocal%5cTemp%5c1772867617631.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;77286761763&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;18.打开下载的&lt;code&gt;hugo-theme-stack-3.30.0&lt;/code&gt;文件夹，再打开其中的&lt;code&gt;exampleSite&lt;/code&gt;文件夹&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c13.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ol start=&#34;19&#34;&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c%e5%a4%8d%e5%88%b68.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;77286773775&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;20.粘贴到hugo的dev文件夹下&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c%e5%a4%8d%e5%88%b69.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;77286777775&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;21.删掉&lt;code&gt;hugo.toml&lt;/code&gt;，因为刚刚复制的&lt;code&gt;hugo.yaml&lt;/code&gt;与其作用是一致的，相当于已经配置好了的&lt;code&gt;hugo.toml&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c15.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;22.然后打开刚刚复制过来的&lt;code&gt;content&lt;/code&gt;文件夹，再打开之中的&lt;code&gt;post&lt;/code&gt;文件夹&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c%e5%a4%8d%e5%88%b610.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;77286785742&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;23.因为&lt;code&gt;rich-content&lt;/code&gt;中有引用国外网站，可能会导致之后无法启动网页&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c17.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;24.回到&lt;code&gt;dev&lt;/code&gt;文件夹&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B611.png&#34;
+	width=&#34;632&#34;
+	height=&#34;554&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B611_hu_90dcd3abe440803c.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B611_hu_b3b931a2c3ad7626.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;制1&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;114&#34;
+		data-flex-basis=&#34;273px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ol start=&#34;25&#34;&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B612.png&#34;
+	width=&#34;1001&#34;
+	height=&#34;193&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B612_hu_b85db8f86edcd2f6.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B612_hu_e3ed7a23f4fd0508.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;制1&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;518&#34;
+		data-flex-basis=&#34;1244px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;26.此时已经可以启动网页了，点开步骤8时放在后台的cmd窗口，输入&lt;code&gt;hugo server -D&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B613.png&#34;
+	width=&#34;896&#34;
+	height=&#34;451&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B613_hu_b81b9662bb96b011.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B613_hu_72d988f2ab76d584.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;制1&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;198&#34;
+		data-flex-basis=&#34;476px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;27.注意别关闭cmd窗口，关闭后就打不开下方网页了&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B614.png&#34;
+	width=&#34;896&#34;
+	height=&#34;456&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B614_hu_f0ae21e8994a6784.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B614_hu_2ce0dfc29f7d4b78.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;制1&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;196&#34;
+		data-flex-basis=&#34;471px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;创建第一个博客&#34;&gt;创建第一个博客
+&lt;/h2&gt;&lt;p&gt;28.网页启动后可以在cmd窗口用快捷键&lt;code&gt;Ctrl+C&lt;/code&gt;结束网页，此时就可以继续输入命令了。&lt;/p&gt;
+&lt;p&gt;输入&lt;code&gt;hugo new content post/myFirstBlog/index.md&lt;/code&gt;创建新内容&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B615.png&#34;
+	width=&#34;896&#34;
+	height=&#34;42&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B615_hu_c06afcc3a5cc96f6.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B615_hu_8e546777192a487a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;制1&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;2133&#34;
+		data-flex-basis=&#34;5120px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;29.在cmd窗口输入&lt;code&gt;hugo server -D&lt;/code&gt;，重新启动网页&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B616.png&#34;
+	width=&#34;896&#34;
+	height=&#34;461&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B616_hu_cf5a8d31e35713c5.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B616_hu_70af0ffd5201f4e0.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;制1&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;194&#34;
+		data-flex-basis=&#34;466px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ol start=&#34;30&#34;&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B617.png&#34;
+	width=&#34;896&#34;
+	height=&#34;454&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B617_hu_8920c6489aeaab22.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B617_hu_5ee2c0f7d68e26d7.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;制1&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;197&#34;
+		data-flex-basis=&#34;473px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;31.Hugo的默认根路径在在&lt;code&gt;static&lt;/code&gt;文件夹，所以要注意修改笔记中图片的路径(以下为我存放图片的位置)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B618.png&#34;
+	width=&#34;879&#34;
+	height=&#34;302&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B618_hu_4f24b41e135cf8cf.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B618_hu_aedf3311b7367512.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;制1&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;291&#34;
+		data-flex-basis=&#34;698px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;stack主题配置&#34;&gt;stack主题配置
+&lt;/h2&gt;&lt;p&gt;见参考视频【【雷】Hugo + Github免费搭建博客，并实现自动化部署】 &lt;a class=&#34;link&#34; href=&#34;https://www.bilibili.com/video/BV1bovfeaEtQ/?p=2&amp;amp;share_source=copy_web&amp;amp;vd_source=b5c399783868e9dbf7a8c84cca665abf&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://www.bilibili.com/video/BV1bovfeaEtQ/?p=2&amp;share_source=copy_web&amp;vd_source=b5c399783868e9dbf7a8c84cca665abf&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;github常规部署&#34;&gt;Github常规部署
+&lt;/h2&gt;&lt;p&gt;32.下载Git：https://git-scm.com/downloads/win&lt;/p&gt;
+&lt;p&gt;33.登录Github：https://github.com/&lt;/p&gt;
+&lt;p&gt;34.若Github要2FA验证，可以下载下方插件&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B619.png&#34;
+	width=&#34;896&#34;
+	height=&#34;163&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B619_hu_78053b081a6cbc88.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B619_hu_accdba96eb9c451.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;制1&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;549&#34;
+		data-flex-basis=&#34;1319px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;35.创建仓库&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c20.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ol start=&#34;36&#34;&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B620.png&#34;
+	width=&#34;1001&#34;
+	height=&#34;963&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B620_hu_ecb154593f435525.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B620_hu_fa141734915afb59.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;制2&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;103&#34;
+		data-flex-basis=&#34;249px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B621.png&#34;
+	width=&#34;891&#34;
+	height=&#34;411&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B621_hu_e71646668ee68008.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B621_hu_ba21f64e4720b9dd.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;制2&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;216&#34;
+		data-flex-basis=&#34;520px&#34;
+	
+&gt;
+37.修改&lt;code&gt;hugo.yaml&lt;/code&gt;中&lt;code&gt;baseurl&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c22.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;38.&lt;/p&gt;
+&lt;p&gt;打开&lt;code&gt;dev&lt;/code&gt;中的&lt;code&gt;public&lt;/code&gt;文件夹，在路径处输入&lt;code&gt;cmd&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;补充（非必要，可不看）：可以先删掉&lt;code&gt;public&lt;/code&gt;文件夹，再在cmd窗口输入&lt;code&gt;hugo -D&lt;/code&gt;重新生成一个&lt;code&gt;public&lt;/code&gt;文件夹。因为在配置主题的时候可能会把很多没必要的地方删掉，而删掉的部分仍留在public中，这时就可以用&lt;code&gt;hugo -D&lt;/code&gt;重新生成一次静态页面&lt;/p&gt;
+&lt;p&gt;39.然后在cmd窗口依次输入&lt;code&gt;git init&lt;/code&gt;、&lt;code&gt;git add .&lt;/code&gt;、&lt;code&gt;git commit -m &amp;quot;first commit&amp;quot;&lt;/code&gt;、&lt;code&gt;git branch -M main&lt;/code&gt;、&lt;code&gt;git remote add origin https://github.com/xxx/xxx.github.io.git&lt;/code&gt;（这里填你自己的仓库地址）、&lt;code&gt;git push -u origin main&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;40.如果和图中一样说明部署完成了&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B622.png&#34;
+	width=&#34;1001&#34;
+	height=&#34;438&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B622_hu_dc06cab318f220e8.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B622_hu_bd02096b60506f15.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;制2&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;228&#34;
+		data-flex-basis=&#34;548px&#34;
+	
+&gt;&lt;/p&gt;
+</description>
         </item>
         <item>
         <title>Chinese Test</title>
