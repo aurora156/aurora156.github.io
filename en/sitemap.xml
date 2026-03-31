@@ -16,30 +16,12 @@
                 />
     <xhtml:link
                 rel="alternate"
-                hreflang="en"
+                hreflang="en-us"
                 href="https://aurora156.github.io/"
                 />
   </url><url>
     <loc>https://aurora156.github.io/p/myfirstblog/</loc>
     <lastmod>2026-03-31T10:24:55+08:00</lastmod>
-  </url><url>
-    <loc>https://aurora156.github.io/post/</loc>
-    <lastmod>2026-03-31T10:24:55+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://aurora156.github.io/zh-cn/post/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="ar"
-                href="https://aurora156.github.io/ar/post/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://aurora156.github.io/post/"
-                />
   </url><url>
     <loc>https://aurora156.github.io/archives/</loc>
     <lastmod>2019-05-28T00:00:00+00:00</lastmod>
@@ -53,7 +35,7 @@
                 />
     <xhtml:link
                 rel="alternate"
-                hreflang="en"
+                hreflang="en-us"
                 href="https://aurora156.github.io/page/"
                 />
   </url><url>
@@ -71,7 +53,7 @@
                 />
     <xhtml:link
                 rel="alternate"
-                hreflang="en"
+                hreflang="en-us"
                 href="https://aurora156.github.io/categories/"
                 />
   </url><url>
@@ -104,7 +86,7 @@
                 />
     <xhtml:link
                 rel="alternate"
-                hreflang="en"
+                hreflang="en-us"
                 href="https://aurora156.github.io/tags/"
                 />
   </url><url>
@@ -123,7 +105,7 @@
                 />
     <xhtml:link
                 rel="alternate"
-                hreflang="en"
+                hreflang="en-us"
                 href="https://aurora156.github.io/p/placeholder-text/"
                 />
   </url><url>
@@ -139,7 +121,7 @@
                 />
     <xhtml:link
                 rel="alternate"
-                hreflang="en"
+                hreflang="en-us"
                 href="https://aurora156.github.io/categories/test/"
                 />
   </url><url>
@@ -167,7 +149,7 @@
                 />
     <xhtml:link
                 rel="alternate"
-                hreflang="en"
+                hreflang="en-us"
                 href="https://aurora156.github.io/about/"
                 />
   </url><url>
