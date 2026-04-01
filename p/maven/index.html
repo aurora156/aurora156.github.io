@@ -229,7 +229,28 @@
       <ol>
         <li><a href="#1基本信息">1.基本信息</a></li>
         <li><a href="#2安装步骤">2.安装步骤</a></li>
-        <li><a href="#idea集成maven项目">IDEA集成Maven项目</a></li>
+      </ol>
+    </li>
+    <li><a href="#idea集成maven项目">IDEA集成Maven项目</a>
+      <ol>
+        <li><a href="#1创建maven项目">1.创建Maven项目</a></li>
+        <li><a href="#2maven坐标">2.Maven坐标</a></li>
+        <li><a href="#3导入maven项目">3.导入Maven项目</a></li>
+      </ol>
+    </li>
+    <li><a href="#依赖管理">依赖管理</a>
+      <ol>
+        <li><a href="#1依赖配置">1.依赖配置</a></li>
+        <li><a href="#2生命周期">2.生命周期</a></li>
+      </ol>
+    </li>
+    <li><a href="#单元测试">单元测试</a>
+      <ol>
+        <li><a href="#1测试">1.测试</a>
+          <ol>
+            <li><a href="#单元测试-1">单元测试</a></li>
+          </ol>
+        </li>
       </ol>
     </li>
   </ol>
@@ -398,9 +419,9 @@
 <p>打开系统属性 -&gt; 环境变量 -&gt; 新建 -&gt; 变量名：MAVEN_HOME，值为你所下载的maven的位置，接着在PATH路径中添加%MAVEN_HOME%\bin</p>
 <p>全部点击确定以后打开cmd输入mvn -v,若出现以下样式，则说明安装成功了</p>
 <p>![vn- ](assets/mvn- v.png)</p>
-<h3 id="idea集成maven项目">IDEA集成Maven项目
-</h3><p>①创建Maven项目</p>
-<ol>
+<h2 id="idea集成maven项目">IDEA集成Maven项目
+</h2><h3 id="1创建maven项目">1.创建Maven项目
+</h3><ol>
 <li></li>
 </ol>
 <p><img src="/p/maven/assets/m1.png"
@@ -447,8 +468,8 @@
 ></p>
 <p>完成以上全局配置(<code>注意：是全局配置</code>)：首先点击close-project，再点击Customizs，接着点击All settings即可进入到全局配置</p>
 <p>创建模块，选择new module，填写模块信息，选择构建工具为Maven，点击create，创建完成</p>
-<p>②Maven坐标</p>
-<p>概念：是<code>资源(jar)的唯一标识，通过该坐标可以唯一定位资源位置</code></p>
+<h3 id="2maven坐标">2.Maven坐标
+</h3><p>概念：是<code>资源(jar)的唯一标识，通过该坐标可以唯一定位资源位置</code></p>
 <p>使用坐标来<code>定义项目</code>或<code>引入项目中需要的依赖</code></p>
 <p>主要组成：</p>
 <ul>
@@ -461,8 +482,121 @@
 </ul>
 </li>
 </ul>
-<p>③导入Maven项目</p>
-<p>方式一：File -&gt; Project Structure -&gt; Modules -&gt; Import Module -&gt; 选择maven项目的pom.xml</p>
+<h3 id="3导入maven项目">3.导入Maven项目
+</h3><p>方式一：File -&gt; Project Structure -&gt; Modules -&gt; Import Module -&gt; 选择maven项目的pom.xml</p>
+<p>方式二：Maven面板 -&gt; (Add Maven Projects) -&gt; 选择maven项目的pom.xml</p>
+<ul>
+<li>建议将要导入的maven项目复制到你的项目目录下</li>
+<li>建议选择maven项目的pom.xml文件进行导入</li>
+</ul>
+<h2 id="依赖管理">依赖管理
+</h2><h3 id="1依赖配置">1.依赖配置
+</h3><p>①依赖：指当前项目运行所需要的jar包，一个项目中可以引入多个依赖</p>
+<p>②配置：</p>
+<p>1.在pom.xml中编写<code>&lt;dependencies&gt;</code>标签</p>
+<p>2.在<code>&lt;dependencies&gt;</code>标签中使用<code>&lt;dependency&gt;</code>标签</p>
+<p>3.定义坐标的<code>groupId,artifactId,version</code></p>
+<p>4.点击刷新按钮，引入最新加入的坐标</p>
+<p>依赖坐标信息：<strong><a class="link" href="https://mvnrepository.com/"  target="_blank" rel="noopener"
+    >https://mvnrepository.com/</a></strong></p>
+<p>③排除依赖：指主动断开依赖的资源，被排除的资源<code>无需指定版本</code></p>
+<p><code>&lt;exclusions&gt;&lt;/exclusions&gt;</code></p>
+<h3 id="2生命周期">2.生命周期
+</h3><p>Maven的生命周期就是为了对所有的maven项目构建过程进行抽象和统一</p>
+<p>Maven中有三套<code>相互独立</code>的生命周期(Lifecycle)：</p>
+<ul>
+<li>clean:清理工作</li>
+<li>default：核心工作，如：编译，测试，打包，安装，部署等</li>
+<li>site：生成报告、发布站点等</li>
+</ul>
+<p>每套生命周期包含一些阶段，阶段是有顺序的，后面的阶段依赖于前面的阶段</p>
+<p><img src="/p/maven/assets/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png"
+	width="1427"
+	height="673"
+	srcset="/p/maven/assets/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F_hu_4b3a81fc6f8fca10.png 480w, /p/maven/assets/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F_hu_eecb4dde79f6240c.png 1024w"
+	loading="lazy"
+	
+		alt="命周"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="212"
+		data-flex-basis="508px"
+	
+></p>
+<p>只需要知道标红的五个阶段即可</p>
+<ul>
+<li><code>clean:</code>移除上一次构建生成的文件</li>
+<li><code>compile：</code>编译项目源代码</li>
+<li><code>test：</code>使用合适的单元测试框架运行测试(junit)</li>
+<li><code>package：</code>将编译后的文件打包，如：jar、war等</li>
+<li><code>install：</code>安装项目到本地仓库</li>
+</ul>
+<p><strong>注意：在<u>同一套</u>生命周期中，当运行后面的阶段时，前面的阶段都会运行</strong></p>
+<p>执行指定生命周期的两种方式：</p>
+<ul>
+<li>在idea中，右侧的Maven工具栏，选中对应的生命周期，双击执行</li>
+<li>在命令行中，通过命令执行</li>
+</ul>
+<h2 id="单元测试">单元测试
+</h2><h3 id="1测试">1.测试
+</h3><ul>
+<li>测试：是一种用来促进鉴定软件的正确性、完整性、安全性和质量的过程</li>
+<li>阶段划分：单元测试、集成测试、系统测试、验收测试</li>
+</ul>
+<p><img src="/p/maven/assets/%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5.png"
+	width="1697"
+	height="664"
+	srcset="/p/maven/assets/%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5_hu_7f67f855582bc1e1.png 480w, /p/maven/assets/%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5_hu_412b7ae1c6f9709.png 1024w"
+	loading="lazy"
+	
+		alt="试阶"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="255"
+		data-flex-basis="613px"
+	
+></p>
+<ul>
+<li>
+<p>测试方法：白盒测试、黑盒测试及灰盒测试</p>
+<p><img src="/p/maven/assets/%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95.png"
+	width="1601"
+	height="452"
+	srcset="/p/maven/assets/%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95_hu_a2ebe9473f05afd4.png 480w, /p/maven/assets/%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95_hu_d9fd6d4f0a934361.png 1024w"
+	loading="lazy"
+	
+		alt="试方"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="354"
+		data-flex-basis="850px"
+	
+></p>
+</li>
+</ul>
+<p>单-&gt;白、集-&gt;灰、系-&gt;黑、验-&gt;黑</p>
+<h4 id="单元测试-1">单元测试
+</h4><ul>
+<li>单元测试：就是针对最小的功能单元(方法)，编写测试代码及其正确性进行测试</li>
+<li>JUnit：最流行的java测试框架之一，提供了一些功能，方便程序进行单元测试(第三方公司提供)</li>
+</ul>
+<blockquote>
+<p>main方法测试的弊端：
+①测试代码与源代码未分开，难维护
+②一个方法测试失败，影响后面的方法
+③无法自动化测试，得到测试报告</p>
+<p>Junit方法测试的好处：(推荐)
+①测试代码与源代码分开，便于维护
+②可根据需要进行自动化测试
+③可自动化分析测试结果，产出测试报告</p>
+</blockquote>
+<p>①在pom.xml中，引入JUnit的依赖</p>
+<p>②在test/java目录下，创建测试类，并编写对应的测试方法，并在方法上声明@Test注解</p>
+<p>③运行单元测试(测试通过：绿色，测试失败：红色)</p>
+<p><strong>注意：JUnit单元测试类命名规范为：XxxxxTest【规范】。JUnit单元测试的方法，必须声明为Public void【规定】</strong>：public void xxxx(){&hellip;}</p>
 
 </section>
 
