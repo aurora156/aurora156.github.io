@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Maven 概述 1.基本信息 ![](C:\\Users\\吴振贵\\Desktop\\hugo\\dev\\content\\post\\Maven\\asset\\3 .png)\n项目对象模型：\n">
+<title></title>
+
+<link rel='canonical' href='https://aurora156.github.io/p/'>
+
+<link rel="stylesheet" href="/scss/style.min.6a692fd055deae459f2a9767f57f3855ba80cafd5041317f24f7360f6ca47cdf.css"><meta property='og:title' content="">
+<meta property='og:description' content="Maven 概述 1.基本信息 ![](C:\\Users\\吴振贵\\Desktop\\hugo\\dev\\content\\post\\Maven\\asset\\3 .png)\n项目对象模型：\n">
+<meta property='og:url' content='https://aurora156.github.io/p/'>
+<meta property='og:site_name' content='凉介的笔记'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' />
+<meta name="twitter:title" content="">
+<meta name="twitter:description" content="Maven 概述 1.基本信息 ![](C:\\Users\\吴振贵\\Desktop\\hugo\\dev\\content\\post\\Maven\\asset\\3 .png)\n项目对象模型：\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_39194fe8d5906e9f.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🌆</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">凉介的笔记</a></h1>
+            <h2 class="site-description">凉介的博客</h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#概述">概述</a>
+      <ol>
+        <li><a href="#1基本信息">1.基本信息</a></li>
+        <li><a href="#2安装步骤">2.安装步骤</a></li>
+        <li><a href="#idea集成maven项目">IDEA集成Maven项目</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/"></a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="maven">Maven
+</h1><h2 id="概述">概述
+</h2><h3 id="1基本信息">1.基本信息
+</h3><p>![](C:\Users\吴振贵\Desktop\hugo\dev\content\post\Maven\asset\3 .png)</p>
+<p>项目对象模型：</p>
+<p>①<img src="C:%5cUsers%5c%e5%90%b4%e6%8c%af%e8%b4%b5%5cDesktop%5chugo%5cdev%5ccontent%5cpost%5cMaven%5casset%5c1.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="1"
+	
+	
+></p>
+<p>②<img src="C:%5cUsers%5c%e5%90%b4%e6%8c%af%e8%b4%b5%5cDesktop%5chugo%5cdev%5ccontent%5cpost%5cMaven%5casset%5c2.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="2"
+	
+	
+></p>
+<p>依赖管理模型：</p>
+<p>dependency</p>
+<h3 id="2安装步骤">2.安装步骤
+</h3><p><img src="C:%5cUsers%5c%e5%90%b4%e6%8c%af%e8%b4%b5%5cDesktop%5chugo%5cdev%5ccontent%5cpost%5cMaven%5casset%5c%e5%ae%89%e8%a3%85%e6%ad%a5%e9%aa%a4.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="装步"
+	
+	
+></p>
+<p>①解压Maven文件：</p>
+<p>这里我解压到的位置是：D:\develop（<code>注意：目录不要带空格</code>）</p>
+<p>②配置本地仓库：</p>
+<p>在你的maven目录中新建一个mvn_repo(指定为Maven的本地仓库)</p>
+<p>然后修改maven的配置文件，打开conf文件中的settings.xml(打开方式不要选记事本，此处我选择的是vs code)，然后找到<localRepository>D:\develop.m2\apache-maven-3.9.11\mvn_repo</localRepository></p>
+<p>将其复制粘贴到注释之外，接着往下拉，找到mirror标签(不是mirrors)，将原本的内容删除，配置阿里云的私服地址： <mirror></p>
+<p>​        <id>alimaven</id></p>
+<p>​        <name>aliyun maven</name></p>
+<p>​        <url><a class="link" href="http://maven.aliyun.com/nexus/content/groups/public/"  target="_blank" rel="noopener"
+    >http://maven.aliyun.com/nexus/content/groups/public/</a></url></p>
+<p>​        <mirrorOf>central</mirrorOf></p>
+<p>​    </mirror></p>
+<p>③配置环境变量</p>
+<p>打开系统属性 -&gt; 环境变量 -&gt; 新建 -&gt; 变量名：MAVEN_HOME，值为你所下载的maven的位置，接着在PATH路径中添加%MAVEN_HOME%\bin</p>
+<p>全部点击确定以后打开cmd输入mvn -v,若出现以下样式，则说明安装成功了</p>
+<p>![vn- ](C:\Users\吴振贵\Desktop\hugo\dev\content\post\Maven\asset\mvn- v.png)</p>
+<h3 id="idea集成maven项目">IDEA集成Maven项目
+</h3><p>①创建Maven项目</p>
+<ol>
+<li></li>
+</ol>
+<p><img src="C:%5cUsers%5c%e5%90%b4%e6%8c%af%e8%b4%b5%5cDesktop%5chugo%5cdev%5ccontent%5cpost%5cMaven%5casset%5cm1.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<ol start="2">
+<li></li>
+</ol>
+<p><img src="C:%5cUsers%5c%e5%90%b4%e6%8c%af%e8%b4%b5%5cDesktop%5chugo%5cdev%5ccontent%5cpost%5cMaven%5casset%5cm2.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<ol start="3">
+<li></li>
+</ol>
+<p><img src="C:%5cUsers%5c%e5%90%b4%e6%8c%af%e8%b4%b5%5cDesktop%5chugo%5cdev%5ccontent%5cpost%5cMaven%5casset%5cm3.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>完成以上全局配置(<code>注意：是全局配置</code>)：首先点击close-project，再点击Customizs，接着点击All settings即可进入到全局配置</p>
+<p>创建模块，选择new module，填写模块信息，选择构建工具为Maven，点击create，创建完成</p>
+<p>②Maven坐标</p>
+<p>概念：是<code>资源(jar)的唯一标识，通过该坐标可以唯一定位资源位置</code></p>
+<p>使用坐标来<code>定义项目</code>或<code>引入项目中需要的依赖</code></p>
+<p>主要组成：</p>
+<ul>
+<li>groupId：定义当前Maven项目隶属组织名称(通常是域名反写)</li>
+<li>artifacId:定义当前Maven项目名称(通常是模块名称)</li>
+<li>version:定义当前版本号
+<ul>
+<li><code>SNAPSHOT</code>：功能不稳定、尚处于开发中的版本，即快照版本</li>
+<li><code>RELEASE</code>：功能趋于稳定、当前更新停止，可以用于发行的版本</li>
+</ul>
+</li>
+</ul>
+<p>③导入Maven项目</p>
+<p>方式一：File -&gt; Project Structure -&gt; Modules -&gt; Import Module -&gt; 选择maven项目的pom.xml</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <script src="https://utteranc.es/client.js" 
+        repo="IAmYuanyu/IAmYuanyu.github.io"
+        issue-term="pathname"
+        
+        crossorigin="anonymous"
+        async
+        >
+</script>
+
+<style>
+    .utterances {
+        max-width: unset;
+    }
+</style>
+
+<script>
+    let utterancesLoaded = false;
+
+    function setUtterancesTheme(theme) {
+        let utterances = document.querySelector('.utterances iframe');
+        if (utterances) {
+            utterances.contentWindow.postMessage(
+                {
+                    type: 'set-theme',
+                    theme: `github-${theme}`
+                },
+                'https://utteranc.es'
+            );
+        }
+    }
+
+    addEventListener('message', event => {
+        if (event.origin !== 'https://utteranc.es') return;
+
+        
+        utterancesLoaded = true;
+        setUtterancesTheme(document.documentElement.dataset.scheme)
+    });
+
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (!utterancesLoaded) return;
+        setUtterancesTheme(e.detail)
+    })
+</script>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2025 - 
+        
+        2026 凉介
+    </section>
+    
+    <section class="powerby">
+        
+            本站于2026年3月31日建立 <br/>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
