@@ -248,7 +248,7 @@
       <ol>
         <li><a href="#1测试">1.测试</a>
           <ol>
-            <li><a href="#单元测试-1">单元测试</a></li>
+            <li></li>
           </ol>
         </li>
       </ol>
@@ -578,8 +578,8 @@
 </li>
 </ul>
 <p>单-&gt;白、集-&gt;灰、系-&gt;黑、验-&gt;黑</p>
-<h4 id="单元测试-1">单元测试
-</h4><ul>
+<p>###2.单元测试</p>
+<ul>
 <li>单元测试：就是针对最小的功能单元(方法)，编写测试代码及其正确性进行测试</li>
 <li>JUnit：最流行的java测试框架之一，提供了一些功能，方便程序进行单元测试(第三方公司提供)</li>
 </ul>
@@ -597,6 +597,140 @@
 <p>②在test/java目录下，创建测试类，并编写对应的测试方法，并在方法上声明@Test注解</p>
 <p>③运行单元测试(测试通过：绿色，测试失败：红色)</p>
 <p><strong>注意：JUnit单元测试类命名规范为：XxxxxTest【规范】。JUnit单元测试的方法，必须声明为Public void【规定】</strong>：public void xxxx(){&hellip;}</p>
+<p>#####断言</p>
+<p><img src="/p/maven/assets/%E6%96%AD%E8%A8%80%E6%96%B9%E6%B3%95.png"
+	width="2366"
+	height="1075"
+	srcset="/p/maven/assets/%E6%96%AD%E8%A8%80%E6%96%B9%E6%B3%95_hu_e00f20d0b3ab149b.png 480w, /p/maven/assets/%E6%96%AD%E8%A8%80%E6%96%B9%E6%B3%95_hu_e46e8e12cc982ea8.png 1024w"
+	loading="lazy"
+	
+		alt="言方"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="220"
+		data-flex-basis="528px"
+	
+></p>
+<p>String msg:提示错误信息</p>
+<p>最后一个用来判断抛出的异常与我期望的异常是否是一致的（出现异常时使用的断言）</p>
+<p><img src="/p/maven/assets/throw1.png"
+	width="1012"
+	height="382"
+	srcset="/p/maven/assets/throw1_hu_e04c32a95b600853.png 480w, /p/maven/assets/throw1_hu_2e80789dc4a613d3.png 1024w"
+	loading="lazy"
+	
+		alt="hrow"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="264"
+		data-flex-basis="635px"
+	
+></p>
+<p><img src="/p/maven/assets/throws2.png"
+	width="876"
+	height="318"
+	srcset="/p/maven/assets/throws2_hu_66c859917021c53c.png 480w, /p/maven/assets/throws2_hu_ed89b3502cc3c39e.png 1024w"
+	loading="lazy"
+	
+		alt="hrows"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="275"
+		data-flex-basis="661px"
+	
+></p>
+<p><img src="/p/maven/assets/throw3.png"
+	width="610"
+	height="174"
+	srcset="/p/maven/assets/throw3_hu_399e975567f27881.png 480w, /p/maven/assets/throw3_hu_19acd7aabf1279fa.png 1024w"
+	loading="lazy"
+	
+		alt="hrow"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="350"
+		data-flex-basis="841px"
+	
+></p>
+<h5 id="注解">注解
+</h5><p>JUnit单元测试时通过参数化测试进行声明方法形参(@P+@V)</p>
+<p><img src="/p/maven/assets/%E6%B3%A8%E8%A7%A3.png"
+	width="2346"
+	height="1062"
+	srcset="/p/maven/assets/%E6%B3%A8%E8%A7%A3_hu_4fe58b0fa3ea7783.png 480w, /p/maven/assets/%E6%B3%A8%E8%A7%A3_hu_ab1d673668a7960e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="220"
+		data-flex-basis="530px"
+	
+></p>
+<p>其中：<strong>第二个和第三个(P、V)搭配使用</strong>，两B和两A之间的区别：BE、AE的执行次数为：<strong>有N个测试方法就执行N次</strong>，BA和AA是：<strong>整个测试类只执行1次</strong>，BE、AE的核心作用：<strong>初始化/清理每个测试独有的资源</strong>，BA、AA：<strong>初始化/清理全局共享的静态资源</strong></p>
+<p>BA：</p>
+<p><img src="/p/maven/assets/BA%E6%B3%A8%E8%A7%A3.png"
+	width="718"
+	height="716"
+	srcset="/p/maven/assets/BA%E6%B3%A8%E8%A7%A3_hu_41361a3cf793c8dc.png 480w, /p/maven/assets/BA%E6%B3%A8%E8%A7%A3_hu_fe60b1104784b6d1.png 1024w"
+	loading="lazy"
+	
+		alt="A注"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="100"
+		data-flex-basis="240px"
+	
+></p>
+<p><img src="/p/maven/assets/BA%E6%B3%A8%E8%A7%A31.png"
+	width="2057"
+	height="657"
+	srcset="/p/maven/assets/BA%E6%B3%A8%E8%A7%A31_hu_d295ec75a1464609.png 480w, /p/maven/assets/BA%E6%B3%A8%E8%A7%A31_hu_77e28058c3e532b9.png 1024w"
+	loading="lazy"
+	
+		alt="A注解"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="313"
+		data-flex-basis="751px"
+	
+></p>
+<p>PV：</p>
+<p><img src="/p/maven/assets/PV%E6%B3%A8%E8%A7%A3.png"
+	width="1025"
+	height="501"
+	srcset="/p/maven/assets/PV%E6%B3%A8%E8%A7%A3_hu_6be2d2ffe13c1cda.png 480w, /p/maven/assets/PV%E6%B3%A8%E8%A7%A3_hu_a6cc4d5437bd6a9a.png 1024w"
+	loading="lazy"
+	
+		alt="V注"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="204"
+		data-flex-basis="491px"
+	
+></p>
+<p>在测试过程中可以在测试前加上@DisplayName()，为测试添加说明</p>
+<p>(下图为在@parameterizedTest前加上此注解的运行结果)</p>
+<p><img src="/p/maven/assets/DisplayName.png"
+	width="940"
+	height="193"
+	srcset="/p/maven/assets/DisplayName_hu_a92b94aed6741214.png 480w, /p/maven/assets/DisplayName_hu_aca430f438926b6b.png 1024w"
+	loading="lazy"
+	
+		alt="isplayNam"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="487"
+		data-flex-basis="1168px"
+	
+></p>
 
 </section>
 

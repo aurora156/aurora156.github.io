@@ -281,8 +281,8 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;单-&amp;gt;白、集-&amp;gt;灰、系-&amp;gt;黑、验-&amp;gt;黑&lt;/p&gt;
-&lt;h4 id=&#34;单元测试-1&#34;&gt;单元测试
-&lt;/h4&gt;&lt;ul&gt;
+&lt;p&gt;###2.单元测试&lt;/p&gt;
+&lt;ul&gt;
 &lt;li&gt;单元测试：就是针对最小的功能单元(方法)，编写测试代码及其正确性进行测试&lt;/li&gt;
 &lt;li&gt;JUnit：最流行的java测试框架之一，提供了一些功能，方便程序进行单元测试(第三方公司提供)&lt;/li&gt;
 &lt;/ul&gt;
@@ -300,6 +300,140 @@
 &lt;p&gt;②在test/java目录下，创建测试类，并编写对应的测试方法，并在方法上声明@Test注解&lt;/p&gt;
 &lt;p&gt;③运行单元测试(测试通过：绿色，测试失败：红色)&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;注意：JUnit单元测试类命名规范为：XxxxxTest【规范】。JUnit单元测试的方法，必须声明为Public void【规定】&lt;/strong&gt;：public void xxxx(){&amp;hellip;}&lt;/p&gt;
+&lt;p&gt;#####断言&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/maven/assets/%E6%96%AD%E8%A8%80%E6%96%B9%E6%B3%95.png&#34;
+	width=&#34;2366&#34;
+	height=&#34;1075&#34;
+	srcset=&#34;https://aurora156.github.io/p/maven/assets/%E6%96%AD%E8%A8%80%E6%96%B9%E6%B3%95_hu_e00f20d0b3ab149b.png 480w, https://aurora156.github.io/p/maven/assets/%E6%96%AD%E8%A8%80%E6%96%B9%E6%B3%95_hu_e46e8e12cc982ea8.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;言方&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;220&#34;
+		data-flex-basis=&#34;528px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;String msg:提示错误信息&lt;/p&gt;
+&lt;p&gt;最后一个用来判断抛出的异常与我期望的异常是否是一致的（出现异常时使用的断言）&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/maven/assets/throw1.png&#34;
+	width=&#34;1012&#34;
+	height=&#34;382&#34;
+	srcset=&#34;https://aurora156.github.io/p/maven/assets/throw1_hu_e04c32a95b600853.png 480w, https://aurora156.github.io/p/maven/assets/throw1_hu_2e80789dc4a613d3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;hrow&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;264&#34;
+		data-flex-basis=&#34;635px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/maven/assets/throws2.png&#34;
+	width=&#34;876&#34;
+	height=&#34;318&#34;
+	srcset=&#34;https://aurora156.github.io/p/maven/assets/throws2_hu_66c859917021c53c.png 480w, https://aurora156.github.io/p/maven/assets/throws2_hu_ed89b3502cc3c39e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;hrows&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;275&#34;
+		data-flex-basis=&#34;661px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/maven/assets/throw3.png&#34;
+	width=&#34;610&#34;
+	height=&#34;174&#34;
+	srcset=&#34;https://aurora156.github.io/p/maven/assets/throw3_hu_399e975567f27881.png 480w, https://aurora156.github.io/p/maven/assets/throw3_hu_19acd7aabf1279fa.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;hrow&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;350&#34;
+		data-flex-basis=&#34;841px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h5 id=&#34;注解&#34;&gt;注解
+&lt;/h5&gt;&lt;p&gt;JUnit单元测试时通过参数化测试进行声明方法形参(@P+@V)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/maven/assets/%E6%B3%A8%E8%A7%A3.png&#34;
+	width=&#34;2346&#34;
+	height=&#34;1062&#34;
+	srcset=&#34;https://aurora156.github.io/p/maven/assets/%E6%B3%A8%E8%A7%A3_hu_4fe58b0fa3ea7783.png 480w, https://aurora156.github.io/p/maven/assets/%E6%B3%A8%E8%A7%A3_hu_ab1d673668a7960e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;220&#34;
+		data-flex-basis=&#34;530px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;其中：&lt;strong&gt;第二个和第三个(P、V)搭配使用&lt;/strong&gt;，两B和两A之间的区别：BE、AE的执行次数为：&lt;strong&gt;有N个测试方法就执行N次&lt;/strong&gt;，BA和AA是：&lt;strong&gt;整个测试类只执行1次&lt;/strong&gt;，BE、AE的核心作用：&lt;strong&gt;初始化/清理每个测试独有的资源&lt;/strong&gt;，BA、AA：&lt;strong&gt;初始化/清理全局共享的静态资源&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;BA：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/maven/assets/BA%E6%B3%A8%E8%A7%A3.png&#34;
+	width=&#34;718&#34;
+	height=&#34;716&#34;
+	srcset=&#34;https://aurora156.github.io/p/maven/assets/BA%E6%B3%A8%E8%A7%A3_hu_41361a3cf793c8dc.png 480w, https://aurora156.github.io/p/maven/assets/BA%E6%B3%A8%E8%A7%A3_hu_fe60b1104784b6d1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;A注&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;100&#34;
+		data-flex-basis=&#34;240px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/maven/assets/BA%E6%B3%A8%E8%A7%A31.png&#34;
+	width=&#34;2057&#34;
+	height=&#34;657&#34;
+	srcset=&#34;https://aurora156.github.io/p/maven/assets/BA%E6%B3%A8%E8%A7%A31_hu_d295ec75a1464609.png 480w, https://aurora156.github.io/p/maven/assets/BA%E6%B3%A8%E8%A7%A31_hu_77e28058c3e532b9.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;A注解&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;313&#34;
+		data-flex-basis=&#34;751px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;PV：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/maven/assets/PV%E6%B3%A8%E8%A7%A3.png&#34;
+	width=&#34;1025&#34;
+	height=&#34;501&#34;
+	srcset=&#34;https://aurora156.github.io/p/maven/assets/PV%E6%B3%A8%E8%A7%A3_hu_6be2d2ffe13c1cda.png 480w, https://aurora156.github.io/p/maven/assets/PV%E6%B3%A8%E8%A7%A3_hu_a6cc4d5437bd6a9a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;V注&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;204&#34;
+		data-flex-basis=&#34;491px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;在测试过程中可以在测试前加上@DisplayName()，为测试添加说明&lt;/p&gt;
+&lt;p&gt;(下图为在@parameterizedTest前加上此注解的运行结果)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/maven/assets/DisplayName.png&#34;
+	width=&#34;940&#34;
+	height=&#34;193&#34;
+	srcset=&#34;https://aurora156.github.io/p/maven/assets/DisplayName_hu_a92b94aed6741214.png 480w, https://aurora156.github.io/p/maven/assets/DisplayName_hu_aca430f438926b6b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;isplayNam&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;487&#34;
+		data-flex-basis=&#34;1168px&#34;
+	
+&gt;&lt;/p&gt;
 </description>
         </item>
         <item>
