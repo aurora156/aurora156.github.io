@@ -7,7 +7,35 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>凉介</copyright>
-        <lastBuildDate>Wed, 01 Apr 2026 17:51:36 +0800</lastBuildDate><atom:link href="https://aurora156.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 08 Apr 2026 22:38:33 +0800</lastBuildDate><atom:link href="https://aurora156.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Web后端开发</title>
+        <link>https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/</link>
+        <pubDate>Wed, 08 Apr 2026 22:38:33 +0800</pubDate>
+        
+        <guid>https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/</guid>
+        <description>&lt;h1 id=&#34;web后端开发&#34;&gt;Web后端开发
+&lt;/h1&gt;&lt;h2 id=&#34;web基础知识&#34;&gt;Web基础知识
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E8%B5%84%E6%BA%90.png&#34;
+	width=&#34;2247&#34;
+	height=&#34;689&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E8%B5%84%E6%BA%90_hu_853908cb42ad840a.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E8%B5%84%E6%BA%90_hu_e71d1d08513c2e25.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;326&#34;
+		data-flex-basis=&#34;782px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;静态资源：服务器上存储的不会改变的数据，通常不会根据用户的请求而变化。比如：HTML、CSS、JS、图片、视频等(负责页面展示)&lt;/li&gt;
+&lt;li&gt;动态资源：服务器端根据用户请求和其他数据动态生成的，内容可能会在每次请求时都发生变化。比如：&lt;del&gt;Servlet、JSP&lt;/del&gt;（&lt;u&gt;Spring框架&lt;/u&gt;）等(负责逻辑处理)&lt;/li&gt;
+&lt;li&gt;B/S架构：Browser/Server，浏览器/服务器架构模式。客户只需浏览器，应用程序的逻辑和数据都存在服务器端。(维护方便  体验一般)&lt;/li&gt;
+&lt;li&gt;C/S架构：Client/Server，客户端/服务器架构模式。需要单独开发维护客户端。(体验不错  开发维护麻烦)&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>Maven</title>
         <link>https://aurora156.github.io/p/maven/</link>
         <pubDate>Wed, 01 Apr 2026 17:51:36 +0800</pubDate>
