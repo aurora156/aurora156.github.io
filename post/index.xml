@@ -33,6 +33,638 @@
 &lt;li&gt;B/S架构：Browser/Server，浏览器/服务器架构模式。客户只需浏览器，应用程序的逻辑和数据都存在服务器端。(维护方便  体验一般)&lt;/li&gt;
 &lt;li&gt;C/S架构：Client/Server，客户端/服务器架构模式。需要单独开发维护客户端。(体验不错  开发维护麻烦)&lt;/li&gt;
 &lt;/ul&gt;
+&lt;h2 id=&#34;spring&#34;&gt;Spring
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;官网：&lt;a class=&#34;link&#34; href=&#34;https://spring.io&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://spring.io&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Spring发展到今天已经形成了一种开发生态圈，Spring提供了若干个子项目，每个项目用于完成特定的功能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/Spring.png&#34;
+	width=&#34;2046&#34;
+	height=&#34;919&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/Spring_hu_8584ca3fed9de125.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/Spring_hu_f3d22092c303a673.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;prin&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;222&#34;
+		data-flex-basis=&#34;534px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/SFB.png&#34;
+	width=&#34;2281&#34;
+	height=&#34;792&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/SFB_hu_ed2b2c4be0698259.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/SFB_hu_aa693aecbe7e9280.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;F&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;288&#34;
+		data-flex-basis=&#34;691px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Spring Boot【官方推荐、企业主流】可以帮助我们非常快速的构架应用程序、简化开发、提高效率&lt;/p&gt;
+&lt;h3 id=&#34;入门程序&#34;&gt;入门程序
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;需求：基于SpringBoot开发一个Web应用，浏览器发起请求/hello之后，给浏览器返回一个字符串“Hello Xxx”&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E9%9C%80%E6%B1%82.png&#34;
+	width=&#34;2139&#34;
+	height=&#34;414&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E9%9C%80%E6%B1%82_hu_a39b80f03a754fb7.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E9%9C%80%E6%B1%82_hu_17cd2e8e14b62170.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;516&#34;
+		data-flex-basis=&#34;1240px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;步骤&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;①创建springboot工程，并勾选web开发相关依赖&lt;/p&gt;
+&lt;p&gt;②定义HelloController类，&lt;u&gt;添加方法hello，并添加注解&lt;/u&gt;（定义请求处理方法）&lt;/p&gt;
+&lt;p&gt;③运行启动类，测试&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%88%9B%E5%BB%BA1.png&#34;
+	width=&#34;982&#34;
+	height=&#34;918&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%88%9B%E5%BB%BA1_hu_a0b88dd5bafe155a.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%88%9B%E5%BB%BA1_hu_daad9a0e9f93b3ca.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;建&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;106&#34;
+		data-flex-basis=&#34;256px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%88%9B%E5%BB%BA2.png&#34;
+	width=&#34;982&#34;
+	height=&#34;918&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%88%9B%E5%BB%BA2_hu_3654d3c1b1fb3e00.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%88%9B%E5%BB%BA2_hu_e56224d8f36661f1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;建&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;106&#34;
+		data-flex-basis=&#34;256px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@RestController //表示当前类是一个请求处理类
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public class HelloController {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    @RequestMapping(&amp;#34;/hello&amp;#34;)//标识请求路径
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    public String hello(String name){
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        System.out.println(&amp;#34;name&amp;#34; + name);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        //给前端响应数据
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        return &amp;#34;Hello&amp;#34; + name + &amp;#34;~&amp;#34;;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;然后到Springboot启动类中运行debug：若出现以下界面则表示运行成功了&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/Hello.png&#34;
+	width=&#34;2300&#34;
+	height=&#34;440&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/Hello_hu_fb729d9a10337955.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/Hello_hu_845dac51e321baf.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;ell&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;522&#34;
+		data-flex-basis=&#34;1254px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;然后在浏览器输入&lt;a class=&#34;link&#34; href=&#34;http://localhost:8080/hello?name=heima&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;localhost:8080/hello?name=itheima&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E6%B5%8F%E8%A7%88%E5%99%A8.png&#34;
+	width=&#34;594&#34;
+	height=&#34;114&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E6%B5%8F%E8%A7%88%E5%99%A8_hu_2527c6b6aa3e6dd9.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E6%B5%8F%E8%A7%88%E5%99%A8_hu_9e1a04492ef6e9f7.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;览&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;521&#34;
+		data-flex-basis=&#34;1250px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;出现以上界面则说明成功完成了&lt;/p&gt;
+&lt;h4 id=&#34;spring官方脚手架连接不上解决方案&#34;&gt;Spring官方脚手架连接不上解决方案
+&lt;/h4&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E8%84%9A%E6%89%8B%E6%9E%B6.png&#34;
+	width=&#34;1177&#34;
+	height=&#34;1005&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E8%84%9A%E6%89%8B%E6%9E%B6_hu_7ed65c3c5e327e.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E8%84%9A%E6%89%8B%E6%9E%B6_hu_76619ca4869fc466.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;手&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;117&#34;
+		data-flex-basis=&#34;281px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;如果出现上面情况，可以将URL换成阿里云的&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E9%98%BF%E9%87%8C%E4%BA%91.png&#34;
+	width=&#34;1160&#34;
+	height=&#34;1013&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E9%98%BF%E9%87%8C%E4%BA%91_hu_1141b3570b4bf2f7.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E9%98%BF%E9%87%8C%E4%BA%91_hu_d0bb843931b4c56.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;里&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;114&#34;
+		data-flex-basis=&#34;274px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;后面的和上面的入门程序的步骤一样&lt;/p&gt;
+&lt;h3 id=&#34;入门程序剖析&#34;&gt;入门程序剖析
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;为什么一个main方法九江web应用启动类了？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E4%BE%9D%E8%B5%96.png&#34;
+	width=&#34;673&#34;
+	height=&#34;337&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E4%BE%9D%E8%B5%96_hu_6b314de38eb82124.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E4%BE%9D%E8%B5%96_hu_13cd591693290a79.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;199&#34;
+		data-flex-basis=&#34;479px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;起步依赖：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;spring-boot-starter-web：包含了web应用开发所需要的常见依赖&lt;/li&gt;
+&lt;li&gt;spring-boot-starter-test：包含了单元测试所需要的常见依赖&lt;/li&gt;
+&lt;li&gt;官方提供的starter：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://docs.spring.io/spring-boot/docs/3.1.3/reference/htmlsingle/#using.build-systems.starters&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://docs.spring.io/spring-boot/docs/3.1.3/reference/htmlsingle/#using.build-systems.starters&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/tomcat.png&#34;
+	width=&#34;2435&#34;
+	height=&#34;1183&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/tomcat_hu_2fc3a5fa2d87a744.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/tomcat_hu_8fd1fd4c2c04bb30.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;omca&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;205&#34;
+		data-flex-basis=&#34;493px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;其中的tomcat服务器是内嵌的，一个main方法就可以将tomcat服务器启动起来&lt;/p&gt;
+&lt;h3 id=&#34;http协议&#34;&gt;HTTP协议
+&lt;/h3&gt;&lt;h4 id=&#34;请求协议&#34;&gt;请求协议
+&lt;/h4&gt;&lt;h5 id=&#34;请求数据格式&#34;&gt;请求数据格式
+&lt;/h5&gt;&lt;p&gt;概念：&lt;strong&gt;H&lt;/strong&gt;yper &lt;strong&gt;T&lt;/strong&gt;ext &lt;strong&gt;T&lt;/strong&gt;ransfer &lt;strong&gt;P&lt;/strong&gt;rotocol，超文本传输协议，规定了浏览器和服务器之间数据传输的规则。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E8%AF%B7%E6%B1%82-%E5%93%8D%E5%BA%94.png&#34;
+	width=&#34;1993&#34;
+	height=&#34;327&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E8%AF%B7%E6%B1%82-%E5%93%8D%E5%BA%94_hu_f353edda93f24567.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E8%AF%B7%E6%B1%82-%E5%93%8D%E5%BA%94_hu_8682a8f3c6939e1d.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;求-响&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;609&#34;
+		data-flex-basis=&#34;1462px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;超文本：&lt;strong&gt;可以互相链接、跳转的文本，也就是包含超链接&lt;/strong&gt;的文本。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;普通文本：只能从头到尾读，不能跳转。&lt;/li&gt;
+&lt;li&gt;超文本：里面有&lt;strong&gt;链接&lt;/strong&gt;，点一下就能跳到另一篇文档、图片、网页。&lt;/li&gt;
+&lt;li&gt;HTTP 就是专门用来&lt;strong&gt;在网络上传输这种带链接的超文本内容&lt;/strong&gt;的协议，所以叫 “超文本传输协议”。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;特点：&lt;/p&gt;
+&lt;p&gt;1.基于TCP协议的：面向连接，安全&lt;/p&gt;
+&lt;p&gt;2.基于请求-响应模型的：一次请求对应一次响应&lt;/p&gt;
+&lt;p&gt;3.HTTP协议是无状态的协议：对于事物处理没有记忆能力。每次请求-响应都是独立的&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;缺点：多次请求间不能共享数据&lt;/li&gt;
+&lt;li&gt;优点：速度快&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/GET%E5%92%8CPOST.png&#34;
+	width=&#34;2365&#34;
+	height=&#34;1117&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/GET%E5%92%8CPOST_hu_301d00e8b31adcc4.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/GET%E5%92%8CPOST_hu_977d3ffaa76ea88c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;ET和POS&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;211&#34;
+		data-flex-basis=&#34;508px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;常见的请求头：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E8%AF%B7%E6%B1%82%E5%A4%B4.png&#34;
+	width=&#34;2349&#34;
+	height=&#34;1211&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E8%AF%B7%E6%B1%82%E5%A4%B4_hu_497267a5e224f88f.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E8%AF%B7%E6%B1%82%E5%A4%B4_hu_b7a4aaf04ed56414.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;求&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;193&#34;
+		data-flex-basis=&#34;465px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h5 id=&#34;请求数据获取&#34;&gt;请求数据获取
+&lt;/h5&gt;&lt;ul&gt;
+&lt;li&gt;Web服务器(Tomcat)对HTTP协议的请求数据进行解析，并进行了封装(HttpServletRequest)，在调用Controller方法的时候传递给了该方法。这样，就使得程序员不必直接对协议进行操作，让Web开发更加便捷&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/HSR.png&#34;
+	width=&#34;2304&#34;
+	height=&#34;852&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/HSR_hu_b6ff049c1371f85c.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/HSR_hu_8a63df45bbe9984a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;S&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;270&#34;
+		data-flex-basis=&#34;649px&#34;
+	
+&gt;&lt;/li&gt;
+&lt;li&gt;通过HttpServerletRequest对象获取请求数据，里面封装了所有的请求信息&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/HSR1.png&#34;
+	width=&#34;1900&#34;
+	height=&#34;928&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/HSR1_hu_d4a2b74d365d312c.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/HSR1_hu_7c6be83b71d1047a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;SR&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;204&#34;
+		data-flex-basis=&#34;491px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@RestController
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public class RequestController {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    @RequestMapping(&amp;#34;/request&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    public String request(HttpServletRequest request){
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        //1.获取请求方式
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        String method = request.getMethod();
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        System.out.println(&amp;#34;请求方式&amp;#34; + method);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        //2.获取请求url地址
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        String url = request.getRequestURL().toString();  //http://localhost:8080/request
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        System.out.println(&amp;#34;请求地址&amp;#34; + url);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        String uri = request.getRequestURI();
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        System.out.println(&amp;#34;请求URI&amp;#34; + uri);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        //3.获取请求协议
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        String protocol = request.getProtocol();
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        System.out.println(&amp;#34;请求协议&amp;#34; + protocol);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        //4.获取请求参数 - name
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        String name = request.getParameter(&amp;#34;name&amp;#34;);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        String age = request.getParameter(&amp;#34;age&amp;#34;);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        System.out.println(&amp;#34;请求参数 - name&amp;#34; + name + &amp;#34; age&amp;#34; + age);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        //5.获取请求头 - Accept(如果要获取其他请求头，将Accept替换即可)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        String accept = request.getHeader(&amp;#34;Accept&amp;#34;);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        System.out.println(&amp;#34;请求头 - Accept&amp;#34; + accept);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        return &amp;#34;OK&amp;#34;;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;在浏览器输入：&lt;a class=&#34;link&#34; href=&#34;http://localhost:8080/request?name=itheima&amp;amp;age=18&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;localhost:8080/request?name=itheima&amp;amp;age=18&lt;/a&gt;即可得到下方结果&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E8%8E%B7%E5%8F%96%E8%AF%B7%E6%B1%82.png&#34;
+	width=&#34;1834&#34;
+	height=&#34;196&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E8%8E%B7%E5%8F%96%E8%AF%B7%E6%B1%82_hu_1e146f7c325b825b.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E8%8E%B7%E5%8F%96%E8%AF%B7%E6%B1%82_hu_44fd5bd4bee65e4d.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;取请&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;935&#34;
+		data-flex-basis=&#34;2245px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;响应协议&#34;&gt;响应协议
+&lt;/h4&gt;&lt;h5 id=&#34;响应数据格式&#34;&gt;响应数据格式
+&lt;/h5&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F.png&#34;
+	width=&#34;2393&#34;
+	height=&#34;455&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F_hu_7cbaecf094d5cf0d.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F_hu_d34cd89b83e6c07b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;应数据格&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;525&#34;
+		data-flex-basis=&#34;1262px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;常见的响应状态码：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E7%8A%B6%E6%80%81%E7%A0%81.png&#34;
+	width=&#34;2311&#34;
+	height=&#34;1101&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E7%8A%B6%E6%80%81%E7%A0%81_hu_4d989ef0779ebe96.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E7%8A%B6%E6%80%81%E7%A0%81_hu_5f8d76cf130edf26.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;态&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;209&#34;
+		data-flex-basis=&#34;503px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;重定向(3xx)：底层会获取到多次请求&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E9%87%8D%E5%AE%9A%E5%90%91.png&#34;
+	width=&#34;1932&#34;
+	height=&#34;933&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E9%87%8D%E5%AE%9A%E5%90%91_hu_5b690621eb4d54a0.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E9%87%8D%E5%AE%9A%E5%90%91_hu_c7e211fa9e14de7a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;定&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;207&#34;
+		data-flex-basis=&#34;496px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;例如：在网页输入http://www.baidu.com/&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E7%99%BE%E5%BA%A61.png&#34;
+	width=&#34;1086&#34;
+	height=&#34;407&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E7%99%BE%E5%BA%A61_hu_20e23ad1d1b9542a.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E7%99%BE%E5%BA%A61_hu_715faf87338c9c7e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;度&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;266&#34;
+		data-flex-basis=&#34;640px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;经过重定向再次请求：https://www.baidu.com/&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E7%99%BE%E5%BA%A62.png&#34;
+	width=&#34;987&#34;
+	height=&#34;454&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E7%99%BE%E5%BA%A62_hu_7fadd86d74a1f165.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E7%99%BE%E5%BA%A62_hu_fe252ce8187e1782.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;度&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;217&#34;
+		data-flex-basis=&#34;521px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;常见状态码：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%B8%B8%E8%A7%81%E7%8A%B6%E6%80%81%E7%A0%81.png&#34;
+	width=&#34;1511&#34;
+	height=&#34;357&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%B8%B8%E8%A7%81%E7%8A%B6%E6%80%81%E7%A0%81_hu_def8df98ff00a69.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%B8%B8%E8%A7%81%E7%8A%B6%E6%80%81%E7%A0%81_hu_a83725e02bcce99.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;见状态&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;423&#34;
+		data-flex-basis=&#34;1015px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h5 id=&#34;响应数据设置&#34;&gt;响应数据设置
+&lt;/h5&gt;&lt;ul&gt;
+&lt;li&gt;Web服务器对HTTP协议的响应数据进行了封装(HttpServletResponse)，并在调用Controller方法的时候传递给了该方法。这样，就使得程序员不必直接对协议进行操作，让Web开发更加便捷。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/HSP%E5%93%8D%E5%BA%94.png&#34;
+	width=&#34;1416&#34;
+	height=&#34;530&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/HSP%E5%93%8D%E5%BA%94_hu_7c18204ec44f9bd4.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/HSP%E5%93%8D%E5%BA%94_hu_11cbe00a8ce2bac2.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;SP响&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;267&#34;
+		data-flex-basis=&#34;641px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;封装方式一：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%B0%81%E8%A3%85%E6%96%B9%E5%BC%8F1.png&#34;
+	width=&#34;1441&#34;
+	height=&#34;564&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%B0%81%E8%A3%85%E6%96%B9%E5%BC%8F1_hu_79648ecea1a69676.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%B0%81%E8%A3%85%E6%96%B9%E5%BC%8F1_hu_e5cdc049dd312c5.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;装方式&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;255&#34;
+		data-flex-basis=&#34;613px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@RestController
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public class ResponseController {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    /*
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    * 方式一：使用HttpServletResponse对象
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    * */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    @RequestMapping(&amp;#34;/response&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    public void response(HttpServletResponse response) throws IOException {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        //1.设置响应状态码
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        response.setStatus(401);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        //2.设置响应头
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        response.setHeader(&amp;#34;name&amp;#34;, &amp;#34;itheima&amp;#34;);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        //3.设置响应体（数据）
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        response.getWriter().write(&amp;#34;&amp;lt;h1&amp;gt;hello response&amp;lt;/h1&amp;gt;&amp;#34;);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;封装方式二：&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%B0%81%E8%A3%85%E6%96%B9%E5%BC%8F2.png&#34;
+	width=&#34;1440&#34;
+	height=&#34;475&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%B0%81%E8%A3%85%E6%96%B9%E5%BC%8F2_hu_e435e007546cecfe.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%B0%81%E8%A3%85%E6%96%B9%E5%BC%8F2_hu_9af3e279c8a80516.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;装方式&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;303&#34;
+		data-flex-basis=&#34;727px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@RestController
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public class ResponseController {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    /*
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    方式二：使用ResponseEntity对象
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    @RequestMapping(&amp;#34;/response2&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    public ResponseEntity&amp;lt;String&amp;gt; response2() {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        return ResponseEntity.status(401)//响应状态码
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                .header(&amp;#34;name&amp;#34;, &amp;#34;javaweb-ai&amp;#34;)//响应头
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                .body(&amp;#34;&amp;lt;h1&amp;gt;hello response&amp;lt;/h1&amp;gt;&amp;#34;);//响应体
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;结果：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E7%A0%81%E5%A4%B4.png&#34;
+	width=&#34;901&#34;
+	height=&#34;399&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E7%A0%81%E5%A4%B4_hu_4cf8c7c24262047d.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E7%A0%81%E5%A4%B4_hu_ac72d3e3dc8392c5.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;225&#34;
+		data-flex-basis=&#34;541px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%93%8D%E5%BA%94%E4%BD%93.png&#34;
+	width=&#34;655&#34;
+	height=&#34;113&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%93%8D%E5%BA%94%E4%BD%93_hu_13ebcb08e9f7b51.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%93%8D%E5%BA%94%E4%BD%93_hu_4326c26eb229f9bd.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;应&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;579&#34;
+		data-flex-basis=&#34;1391px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;注意：响应状态码 和 响应头如果没有特殊要求的话，通常不手动设定。服务器会根据请求处理的逻辑，自动设置响应状态码和响应头。&lt;/code&gt;&lt;/p&gt;
 </description>
         </item>
         <item>
