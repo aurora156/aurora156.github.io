@@ -240,6 +240,12 @@
             <li><a href="#响应协议">响应协议</a></li>
           </ol>
         </li>
+        <li><a href="#springbootweb案例">SpringBootWeb案例</a></li>
+        <li><a href="#分层解耦">分层解耦</a>
+          <ol>
+            <li><a href="#三层架构">三层架构</a></li>
+          </ol>
+        </li>
       </ol>
     </li>
   </ol>
@@ -951,6 +957,316 @@
 	
 ></p>
 <p><code>注意：响应状态码 和 响应头如果没有特殊要求的话，通常不手动设定。服务器会根据请求处理的逻辑，自动设置响应状态码和响应头。</code></p>
+<h3 id="springbootweb案例">SpringBootWeb案例
+</h3><p>需求：基于SpringBoot开发web程序，完成用户列表的渲染展示</p>
+<p>当在浏览器地址栏，访问前端静态页面（http://localhost:8080/usre.html）后，在前端页面上，会发送ajax请求，请求服务端（http://localhost:8080/list），服务端程序加载 user.txt 文件中的数据，读取出来后最终给前端页面响应json格式的数据，前端页面再将数据渲染展示在表格中。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/SpB%E9%9C%80%E6%B1%82.png"
+	width="1026"
+	height="309"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/SpB%E9%9C%80%E6%B1%82_hu_1d31b7c8440d4fe0.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/SpB%E9%9C%80%E6%B1%82_hu_1dd2ae62191c51cb.png 1024w"
+	loading="lazy"
+	
+		alt="pB需"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="332"
+		data-flex-basis="796px"
+	
+></p>
+<p><strong>1.准备工作：</strong></p>
+<ul>
+<li><strong>创建一个SpringBoot工程，并勾选web依赖、lombok</strong></li>
+<li><strong>引入资料中准备好的用户数据文件(user.txt)，及前端静态页面</strong></li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E6%96%87%E4%BB%B6.png"
+	width="459"
+	height="561"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E6%96%87%E4%BB%B6_hu_9b845e8b46fc1f3e.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E6%96%87%E4%BB%B6_hu_9a29cd471a4fe5a6.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="81"
+		data-flex-basis="196px"
+	
+></p>
+<ul>
+<li><strong>定义一个实体类，用来封装用户信息</strong></li>
+</ul>
+<p>在 <code>com.itheima</code> 下再定义一个包 <code>pojo</code>，专门用来存放实体类。 在该包下定义一个实体类User：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">com</span><span class="p">.</span><span class="nx">itheima</span><span class="p">.</span><span class="nx">pojo</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">lombok</span><span class="p">.</span><span class="nx">AllArgsConstructor</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">lombok</span><span class="p">.</span><span class="nx">Data</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">lombok</span><span class="p">.</span><span class="nx">NoArgsConstructor</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">java</span><span class="p">.</span><span class="nx">time</span><span class="p">.</span><span class="nx">LocalDateTime</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 用户信息
+</span></span></span><span class="line"><span class="cl"><span class="cm">* */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="err">@</span><span class="nx">Data</span><span class="w">   </span><span class="cp">//目的：自动生成getter和setter方法</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="err">@</span><span class="nx">NoArgsConstructor</span><span class="w">  </span><span class="cp">//无参构造</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="err">@</span><span class="nx">AllArgsConstructor</span><span class="w"> </span><span class="cp">//全参构造</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">public</span><span class="w"> </span><span class="nx">class</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">private</span><span class="w"> </span><span class="nx">Integer</span><span class="w"> </span><span class="nx">id</span><span class="p">;</span><span class="w"> </span><span class="cp">//在项目中，建议使用包装类（目的：不要默认值）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">private</span><span class="w"> </span><span class="nx">String</span><span class="w"> </span><span class="nx">username</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">private</span><span class="w"> </span><span class="nx">String</span><span class="w"> </span><span class="nx">password</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">private</span><span class="w"> </span><span class="nx">String</span><span class="w"> </span><span class="nx">name</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">private</span><span class="w"> </span><span class="nx">Integer</span><span class="w"> </span><span class="nx">age</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">private</span><span class="w"> </span><span class="nx">LocalDateTime</span><span class="w"> </span><span class="nx">updateTime</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>2.开发服务端程序，接收请求，读取文本数据并响应</strong></p>
+<p>由于在案例中，需要读取文本中的数据，并且还需要将对象转为json格式，所以这里呢，我们在项目中再引入一个非常常用的工具包hutool。 然后调用里面的工具类，就可以非常方便快捷的完成业务操作。</p>
+<ul>
+<li><code>pom.xml</code>中引入依赖</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">dependency</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">groupId</span><span class="o">&gt;</span><span class="n">cn</span><span class="o">.</span><span class="n">hutool</span><span class="o">&lt;/</span><span class="n">groupId</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="n">hutool</span><span class="o">-</span><span class="n">all</span><span class="o">&lt;/</span><span class="n">artifactId</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span><span class="mf">5.8</span><span class="o">.</span><span class="mi">27</span><span class="o">&lt;/</span><span class="n">version</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="n">dependency</span><span class="o">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>在<code>com.itheima</code>包下新建一个子包<code>controller</code>，在其中创建一个<code>UserController</code></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">package</span> <span class="n">com</span><span class="o">.</span><span class="n">itheima</span><span class="o">.</span><span class="n">controller</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">import</span> <span class="n">cn</span><span class="o">.</span><span class="n">hutool</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">IoUtil</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">import</span> <span class="n">com</span><span class="o">.</span><span class="n">itheima</span><span class="o">.</span><span class="n">pojo</span><span class="o">.</span><span class="n">User</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">import</span> <span class="n">org</span><span class="o">.</span><span class="n">springframework</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">bind</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">RequestMapping</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">import</span> <span class="n">org</span><span class="o">.</span><span class="n">springframework</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">bind</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">RestController</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">import</span> <span class="n">java</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">InputStream</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">import</span> <span class="n">java</span><span class="o">.</span><span class="n">nio</span><span class="o">.</span><span class="n">charset</span><span class="o">.</span><span class="n">StandardCharsets</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">import</span> <span class="n">java</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">LocalDateTime</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">import</span> <span class="n">java</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">format</span><span class="o">.</span><span class="n">DateTimeFormatter</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">import</span> <span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">ArrayList</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">import</span> <span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">List</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">import</span> <span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">Collectors</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">/*</span>
+</span></span><span class="line"><span class="cl"> <span class="o">*</span> <span class="err">用户信息</span><span class="n">controller</span>
+</span></span><span class="line"><span class="cl"> <span class="o">*</span> <span class="o">*/</span>
+</span></span><span class="line"><span class="cl"><span class="err">@</span><span class="n">RestController</span>  <span class="o">//</span><span class="err">封装了@</span><span class="n">ResponseBody</span> <span class="o">-&gt;</span> <span class="err">作用：将</span><span class="n">controller返回值直接作为响应体的数据直接响应</span><span class="err">；返回值是对象</span><span class="o">/</span><span class="err">集合</span><span class="o">-&gt;</span><span class="n">json</span><span class="o">-&gt;</span> <span class="err">响应</span>
+</span></span><span class="line"><span class="cl"><span class="n">public</span> <span class="k">class</span> <span class="n">UserController</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="err">@</span><span class="n">RequestMapping</span><span class="p">(</span><span class="s2">&#34;/list&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">list</span><span class="p">()</span> <span class="n">throws</span> <span class="n">Exception</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="o">//</span><span class="mf">1.</span><span class="err">加载并读取</span><span class="n">user</span><span class="o">.</span><span class="n">txt文件</span><span class="err">，获取用户数据</span>
+</span></span><span class="line"><span class="cl">        <span class="o">//</span><span class="err">通过字节码对象来获取到类加载器</span>
+</span></span><span class="line"><span class="cl">        <span class="n">InputStream</span> <span class="ow">in</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">getClass</span><span class="p">()</span><span class="o">.</span><span class="n">getClassLoader</span><span class="p">()</span><span class="o">.</span><span class="n">getResourceAsStream</span><span class="p">(</span><span class="s2">&#34;user.txt&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">List</span><span class="o">&lt;</span><span class="ne">String</span><span class="o">&gt;</span> <span class="n">lines</span> <span class="o">=</span> <span class="n">IoUtil</span><span class="o">.</span><span class="n">readLines</span><span class="p">(</span><span class="ow">in</span><span class="p">,</span> <span class="n">StandardCharsets</span><span class="o">.</span><span class="n">UTF_8</span><span class="p">,</span> <span class="n">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="o">//</span><span class="mf">2.</span><span class="err">解析用户信息，封装为</span><span class="n">User对象</span> <span class="o">-&gt;</span> <span class="n">list集合</span>
+</span></span><span class="line"><span class="cl">        <span class="o">//</span><span class="err">遍历集合</span>
+</span></span><span class="line"><span class="cl">        <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">userList</span> <span class="o">=</span> <span class="n">lines</span><span class="o">.</span><span class="n">stream</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">line</span> <span class="o">-&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="o">//</span> <span class="err">根据“，”进行截取</span>
+</span></span><span class="line"><span class="cl">            <span class="ne">String</span><span class="p">[]</span> <span class="n">parts</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&#34;,&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="o">//</span><span class="err">获取信息</span>
+</span></span><span class="line"><span class="cl">            <span class="o">//</span><span class="mi">5</span><span class="p">,</span><span class="n">zhaoyun</span><span class="p">,</span><span class="mi">1234567890</span><span class="p">,</span><span class="err">赵云</span><span class="p">,</span><span class="mi">27</span><span class="p">,</span><span class="mi">2024</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">16</span> <span class="mi">11</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mi">28</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Integer</span> <span class="n">id</span> <span class="o">=</span> <span class="n">Integer</span><span class="o">.</span><span class="n">parseInt</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">            <span class="ne">String</span> <span class="n">username</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="ne">String</span> <span class="n">password</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="ne">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Integer</span> <span class="n">age</span> <span class="o">=</span> <span class="n">Integer</span><span class="o">.</span><span class="n">parseInt</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">4</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">LocalDateTime</span> <span class="n">updateTime</span> <span class="o">=</span> <span class="n">LocalDateTime</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">DateTimeFormatter</span><span class="o">.</span><span class="n">ofPattern</span><span class="p">(</span><span class="s2">&#34;yyyy-MM-dd HH:mm:ss&#34;</span><span class="p">));</span><span class="o">//</span><span class="err">注意：</span><span class="n">parts</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="err">和</span><span class="n">DTF是写在一个一个</span><span class="p">()</span><span class="err">里的，如果没有写在一个括号里，虽然不会报红，但是运行时会报错</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">new</span> <span class="n">User</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">updateTime</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">})</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="n">Collectors</span><span class="o">.</span><span class="n">toList</span><span class="p">());</span><span class="o">//</span><span class="err">封装到集合当中</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="o">//</span><span class="mf">3.</span><span class="err">返回数据</span><span class="p">(</span><span class="n">json</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">userList</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>**3.启动服务测试，访问：**http://localhost:8080/user.html</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8%E6%95%B0%E6%8D%AE.png"
+	width="1888"
+	height="662"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8%E6%95%B0%E6%8D%AE_hu_8c3d8cb4cca267ac.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8%E6%95%B0%E6%8D%AE_hu_9076b08bfe1b1872.png 1024w"
+	loading="lazy"
+	
+		alt="户列表数"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="285"
+		data-flex-basis="684px"
+	
+></p>
+<blockquote>
+<p>@ResponseBody注解的作用</p>
+<ul>
+<li>将controller方法的返回值直接写入HTTP响应体</li>
+<li>如果是对象或集合，会先转为json，再响应</li>
+<li>@RestController = @Controller + @ResponseBody</li>
+</ul>
+</blockquote>
+<h3 id="分层解耦">分层解耦
+</h3><p>由于上一个项目的代码有着复用性差、难以维护的缺点，所以引入了该小节的内容</p>
+<h4 id="三层架构">三层架构
+</h4><p>为什么要进行拆分：遵循单一职责原则，便于复用、后期维护</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3%E5%8E%9F%E5%88%99.png"
+	width="2454"
+	height="1185"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3%E5%8E%9F%E5%88%99_hu_5f95cf7049e25b40.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3%E5%8E%9F%E5%88%99_hu_d19644399181964b.png 1024w"
+	loading="lazy"
+	
+		alt="一职责原"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="207"
+		data-flex-basis="497px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84.png"
+	width="2447"
+	height="782"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84_hu_2b8b52575afd02fe.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84_hu_352d3876d267999b.png 1024w"
+	loading="lazy"
+	
+		alt="层架"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="312"
+		data-flex-basis="750px"
+	
+></p>
+<ul>
+<li>controller：控制层，接收前端发送的请求，对请求进行处理，并响应数据</li>
+<li>service：业务逻辑层，处理具体的业务逻辑</li>
+<li>dao：数据访问层（Data Access Object）(持久层)，负责数据访问操作，包括数据的增、删、改、查</li>
+</ul>
+<p>流程：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%841.png"
+	width="983"
+	height="507"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%841_hu_b928e2ce52e08b95.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%841_hu_cdfefd7a7fb76db1.png 1024w"
+	loading="lazy"
+	
+		alt="层架构"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="193"
+		data-flex-basis="465px"
+	
+></p>
+<p>对比：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%AF%B9%E6%AF%94.png"
+	width="2484"
+	height="1353"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%AF%B9%E6%AF%94_hu_24a1341b29f7212.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E5%AF%B9%E6%AF%94_hu_435c79866d0bf58b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="183"
+		data-flex-basis="440px"
+	
+></p>
 
 </section>
 
