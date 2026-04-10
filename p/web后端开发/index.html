@@ -244,6 +244,10 @@
         <li><a href="#分层解耦">分层解耦</a>
           <ol>
             <li><a href="#三层架构">三层架构</a></li>
+            <li><a href="#分层解耦-1">分层解耦</a></li>
+            <li><a href="#ioc--di入门">IOC &amp; DI入门</a></li>
+            <li><a href="#ioc详解">IOC详解</a></li>
+            <li><a href="#di详解">DI详解</a></li>
           </ol>
         </li>
       </ol>
@@ -623,6 +627,8 @@
 ></li>
 <li>通过HttpServerletRequest对象获取请求数据，里面封装了所有的请求信息</li>
 </ul>
+<p><code>@RestController //表示当前类是一个请求处理类</code></p>
+<p><code>@RequestMapping(&quot;/hello&quot;)  //标识请求路径</code></p>
 <p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/HSR1.png"
 	width="1900"
 	height="928"
@@ -1267,6 +1273,220 @@
 		data-flex-basis="440px"
 	
 ></p>
+<h4 id="分层解耦-1">分层解耦
+</h4><ul>
+<li>耦合：衡量软件中各个层/各个模块的依赖关联程度</li>
+<li>内聚：软件中各个功能模块内部的功能联系</li>
+<li>软件设计原则：高内聚低耦合</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E6%8E%A7%E5%8F%8D%E4%BE%9D%E6%B3%A8.png"
+	width="1652"
+	height="566"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E6%8E%A7%E5%8F%8D%E4%BE%9D%E6%B3%A8_hu_dbb97d0e90d833fe.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E6%8E%A7%E5%8F%8D%E4%BE%9D%E6%B3%A8_hu_974b8e5a3fd616b3.png 1024w"
+	loading="lazy"
+	
+		alt="反依"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="291"
+		data-flex-basis="700px"
+	
+></p>
+<ul>
+<li><strong>控制反转</strong>：<strong>I</strong>nversion <strong>O</strong>f <strong>C</strong>ontrol，简称<strong>IOC</strong>。对象的创建控制权由程序自身转移到外部(容器)，这种思想成为控制反转</li>
+<li><strong>依赖注入</strong>：<strong>D</strong>ependency <strong>I</strong>njection，简称<strong>DI</strong>。容器为应用程序提供运行时，所依赖的资源，称之为依赖注入</li>
+<li><strong>Bean对象</strong>：IOC容器中创建、管理的对象，称之为<strong>Bean</strong></li>
+</ul>
+<h4 id="ioc--di入门">IOC &amp; DI入门
+</h4><p>1.将Dao及Service层的实现类，交给IOC容器管理</p>
+<p>(@Component：将当前类交给IOC容器管理)</p>
+<p><code>注意：是加在实现类上，而非接口上</code></p>
+<p>2.为Controller及Service注入运行时所依赖的对象</p>
+<p>(@Autowired：应用程序运行时，会自动的查询该类型的Bean对象，并赋值给改成员变量)</p>
+<p>①修改rController层：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/UC1.png"
+	width="568"
+	height="117"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/UC1_hu_939eca85664fd9c.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/UC1_hu_2006829ebfe9f09f.png 1024w"
+	loading="lazy"
+	
+		alt="C"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="485"
+		data-flex-basis="1165px"
+	
+></p>
+<p>②分别修改Dao层和Service层：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/D%E5%B1%82.png"
+	width="652"
+	height="116"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/D%E5%B1%82_hu_7d455325965b24b.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/D%E5%B1%82_hu_c57720d857193b78.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="562"
+		data-flex-basis="1348px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/S%E5%B1%82.png"
+	width="651"
+	height="153"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/S%E5%B1%82_hu_98716d5e6c0ead57.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/S%E5%B1%82_hu_e16ab1be31f152.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="425"
+		data-flex-basis="1021px"
+	
+></p>
+<p>③Controller层和Server层注入对象：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/C%E5%B1%82.png"
+	width="525"
+	height="159"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/C%E5%B1%82_hu_ccdaa15580e94d9a.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/C%E5%B1%82_hu_ced00fb4eabe5d7d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="330"
+		data-flex-basis="792px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/US%E5%B1%82.png"
+	width="950"
+	height="174"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/US%E5%B1%82_hu_1355e035607d7901.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/US%E5%B1%82_hu_3f1f3b7f1f60b3ba.png 1024w"
+	loading="lazy"
+	
+		alt="S"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="545"
+		data-flex-basis="1310px"
+	
+></p>
+<h4 id="ioc详解">IOC详解
+</h4><ul>
+<li>要把某个对象交给IOC容器管理，需要在对应的类上加上如下注解之一：</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E6%B3%A8%E8%A7%A3.png"
+	width="2206"
+	height="499"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E6%B3%A8%E8%A7%A3_hu_9c6eff098e2b128a.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E6%B3%A8%E8%A7%A3_hu_bec277693d92e16a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="442"
+		data-flex-basis="1061px"
+	
+></p>
+<p><code> 注意：声明bean的时候，可以通过注解的value属性指定bean的名字，如果没有指定，默认为类名首字母小写</code></p>
+<ul>
+<li>前面声明的bean的四大注解，想要生效，还需要被组件扫描注解**@ComponentScan**扫描</li>
+<li>该注解虽然没有显示配置，但是实际上已经包含在了启动类声明注解**@SpringBootApplication<strong>中，默认</strong>扫描的范围是启动类所在包及其子包**</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/Scan.png"
+	width="371"
+	height="187"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/Scan_hu_47ad02353d71b0dc.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/Scan_hu_22bd00f3d302bc7e.png 1024w"
+	loading="lazy"
+	
+		alt="ca"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="198"
+		data-flex-basis="476px"
+	
+></p>
+<p>按住ctrl键点击@SpringBootApplication即可看到@ComponentScan</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/CScan.png"
+	width="472"
+	height="243"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/CScan_hu_c263313d01f10609.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/CScan_hu_2d34b04b27c9bbd5.png 1024w"
+	loading="lazy"
+	
+		alt="Sca"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="194"
+		data-flex-basis="466px"
+	
+></p>
+<h4 id="di详解">DI详解
+</h4><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/DI%E8%AF%A6%E8%A7%A3.png"
+	width="2434"
+	height="1215"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/DI%E8%AF%A6%E8%A7%A3_hu_9432a0b08a946051.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/DI%E8%AF%A6%E8%A7%A3_hu_96e5afe64bcef27d.png 1024w"
+	loading="lazy"
+	
+		alt="I详"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="200"
+		data-flex-basis="480px"
+	
+></p>
+<p>实际开发中，前两种使用较多</p>
+<ul>
+<li>Autowired注解，默认是按照<strong>类型</strong>进行注入的</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/A1.png"
+	width="742"
+	height="265"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/A1_hu_9750559128765f2f.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/A1_hu_4ac76ad900c350b0.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="280"
+		data-flex-basis="672px"
+	
+></p>
+<ul>
+<li>如果存在多个相同类型的bean，将会报出如下错误：</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E6%8A%A5%E9%94%99.png"
+	width="2310"
+	height="275"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E6%8A%A5%E9%94%99_hu_c2071a19c5de31c5.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E6%8A%A5%E9%94%99_hu_795357a13ee35468.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="840"
+		data-flex-basis="2016px"
+	
+></p>
+<p>解决方案：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88.png"
+	width="2327"
+	height="602"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88_hu_2cbf93d98a3270dd.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88_hu_9031a257a20db2d8.png 1024w"
+	loading="lazy"
+	
+		alt="决方"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="386"
+		data-flex-basis="927px"
+	
+></p>
+<blockquote>
+<p><code> 注意：方案二中的@Qualifier中要写这个类的名字(默认是首字母小写，其他不变)</code></p>
+<p>@Aurowired是Spring框架提供的注解，而@Resource是JavaEE规范提供的</p>
+<p>@Aurowired默认是按照类型注入的，而@Resource默认是按照名称注入的</p>
+</blockquote>
 
 </section>
 
