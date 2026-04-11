@@ -232,13 +232,19 @@
         <li><a href="#数据模型">数据模型</a></li>
       </ol>
     </li>
-    <li><a href="#sql">SQL</a>
+    <li><a href="#sql">SQL</a></li>
+    <li><a href="#sql语句">SQL语句</a>
       <ol>
-        <li><a href="#sql语句">SQL语句</a>
+        <li><a href="#ddl">DDL</a>
           <ol>
-            <li><a href="#ddl">DDL</a></li>
+            <li><a href="#数据库">数据库</a></li>
+            <li><a href="#mysql客户端工具---图形化工具">MySQL客户端工具 - 图形化工具</a></li>
+            <li><a href="#表结构-创建">表结构-创建</a></li>
+            <li><a href="#案例">案例</a></li>
+            <li><a href="#表结构-查询修改删除">表结构-查询、修改、删除</a></li>
           </ol>
         </li>
+        <li><a href="#dml">DML</a></li>
       </ol>
     </li>
   </ol>
@@ -411,10 +417,10 @@
 		data-flex-basis="802px"
 	
 ></p>
-<h3 id="sql语句">SQL语句
-</h3><h4 id="ddl">DDL
-</h4><h5 id="数据库">数据库
-</h5><ul>
+<h2 id="sql语句">SQL语句
+</h2><h3 id="ddl">DDL
+</h3><h4 id="数据库">数据库
+</h4><ul>
 <li>操作语法		[ ]：可选(如果要使用里面的代码，[ ]不要敲)</li>
 </ul>
 <p><img src="/p/mysql/assets/%E6%93%8D%E4%BD%9C%E8%AF%AD%E6%B3%95.png"
@@ -451,8 +457,8 @@
 ></p>
 </blockquote>
 <p><code>注意：上述语法中的database，也可以替换成schema(复数要加s)。如：Create schema db01；MySQL8版本中，默认字符集为utfmb4</code></p>
-<h5 id="mysql客户端工具---图形化工具">MySQL客户端工具 - 图形化工具
-</h5><p><img src="/p/mysql/assets/%E5%B7%A5%E5%85%B7.png"
+<h4 id="mysql客户端工具---图形化工具">MySQL客户端工具 - 图形化工具
+</h4><p><img src="/p/mysql/assets/%E5%B7%A5%E5%85%B7.png"
 	width="1371"
 	height="293"
 	srcset="/p/mysql/assets/%E5%B7%A5%E5%85%B7_hu_1fd1c44fc86a62a0.png 480w, /p/mysql/assets/%E5%B7%A5%E5%85%B7_hu_cc99942273eef369.png 1024w"
@@ -599,8 +605,8 @@
 	
 ></p>
 <p>如果觉得名字不好记可以自行更改</p>
-<h5 id="表结构-创建">表结构-创建
-</h5><ul>
+<h4 id="表结构-创建">表结构-创建
+</h4><ul>
 <li><strong>创建表的语法：</strong></li>
 </ul>
 <p><img src="/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A8.png"
@@ -617,21 +623,29 @@
 		data-flex-basis="577px"
 	
 ></p>
-<p><img src="/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A81.png"
-	width="455"
-	height="236"
-	srcset="/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A81_hu_dc0b352bd8d80c58.png 480w, /p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A81_hu_f0652847e09c8de5.png 1024w"
-	loading="lazy"
-	
-		alt="建表"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="192"
-		data-flex-basis="462px"
-	
-></p>
-<p>选中该字段运行：左侧就会出现相关信息</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">--</span><span class="err">创建表</span>
+</span></span><span class="line"><span class="cl"><span class="n">create</span> <span class="n">table</span> <span class="n">user</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">id</span> <span class="ne">int</span> <span class="n">comment</span><span class="s1">&#39;ID,唯一标识&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">username</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="n">comment</span><span class="s1">&#39;用户名&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="n">comment</span><span class="s1">&#39;姓名&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">age</span> <span class="ne">int</span> <span class="n">comment</span><span class="s1">&#39;年龄&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">gender</span> <span class="n">char</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="n">comment</span><span class="s1">&#39;性别&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="n">comment</span> <span class="s1">&#39;用户信息表&#39;</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>选中该字段运行：左侧就会出现相关信息</p>
 <p><img src="/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A82.png"
 	width="386"
 	height="280"
@@ -691,21 +705,29 @@
 		data-flex-basis="1018px"
 	
 ></p>
-<p><img src="/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A8%EF%BC%88%E7%BA%A6%E6%9D%9F%EF%BC%89.png"
-	width="775"
-	height="241"
-	srcset="/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A8%EF%BC%88%E7%BA%A6%E6%9D%9F%EF%BC%89_hu_c68dfc79da8c7ebd.png 480w, /p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A8%EF%BC%88%E7%BA%A6%E6%9D%9F%EF%BC%89_hu_63acab13796e5697.png 1024w"
-	loading="lazy"
-	
-		alt="建表（约束"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="321"
-		data-flex-basis="771px"
-	
-></p>
-<p><img src="/p/mysql/assets/user.png"
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">--</span> <span class="err">创建表（约束）</span>
+</span></span><span class="line"><span class="cl"><span class="n">create</span> <span class="n">table</span> <span class="n">user</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">id</span> <span class="ne">int</span> <span class="n">primary</span> <span class="n">key</span> <span class="n">auto_increment</span> <span class="n">comment</span><span class="s1">&#39;ID,唯一标识&#39;</span><span class="p">,</span>    <span class="o">--</span> <span class="err">主键约束</span> <span class="n">auto_increment</span>
+</span></span><span class="line"><span class="cl">    <span class="n">username</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="ow">not</span> <span class="n">null</span> <span class="n">unique</span> <span class="n">comment</span><span class="s1">&#39;用户名&#39;</span><span class="p">,</span>  <span class="o">--</span> <span class="err">不为空且唯一</span>
+</span></span><span class="line"><span class="cl">    <span class="n">name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="ow">not</span> <span class="n">null</span> <span class="n">comment</span><span class="s1">&#39;姓名&#39;</span><span class="p">,</span>  <span class="o">--</span> <span class="err">非空</span>
+</span></span><span class="line"><span class="cl">    <span class="n">age</span> <span class="ne">int</span> <span class="n">comment</span><span class="s1">&#39;年龄&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">gender</span> <span class="n">char</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="n">default</span><span class="s1">&#39;男&#39;</span> <span class="n">comment</span><span class="s1">&#39;性别&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="n">comment</span> <span class="s1">&#39;用户信息表&#39;</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/mysql/assets/user.png"
 	width="965"
 	height="130"
 	srcset="/p/mysql/assets/user_hu_cdb95c26ec0dba42.png 480w, /p/mysql/assets/user_hu_5e4514b0963a7cc5.png 1024w"
@@ -727,7 +749,481 @@
 <pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">auto_increment：自增值(从最大值开始自增)
 </span></span></code></pre></td></tr></table>
 </div>
+</div><ul>
+<li>数据类型</li>
+</ul>
+<p>MySQL中的数据类型有很多，主要分为三类：数值类型、字符串类型、日期时间类型</p>
+<p><strong>数值类型：</strong></p>
+<p><img src="/p/mysql/assets/%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B.png"
+	width="1955"
+	height="562"
+	srcset="/p/mysql/assets/%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B_hu_66d6ed7ba822e23e.png 480w, /p/mysql/assets/%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B_hu_ba3a92467332dc4f.png 1024w"
+	loading="lazy"
+	
+		alt="值类"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="347"
+		data-flex-basis="834px"
+	
+></p>
+<p><strong>字符串类型：</strong></p>
+<p><img src="/p/mysql/assets/%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B.png"
+	width="2072"
+	height="510"
+	srcset="/p/mysql/assets/%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B_hu_eb64bcd26381da6d.png 480w, /p/mysql/assets/%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B_hu_261d8b8fba2813d8.png 1024w"
+	loading="lazy"
+	
+		alt="符串类"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="406"
+		data-flex-basis="975px"
+	
+></p>
+<p><strong>日期时间类型：</strong></p>
+<p><img src="/p/mysql/assets/%E6%97%A5%E6%9C%9F%E6%97%B6%E9%97%B4%E7%B1%BB%E5%9E%8B.png"
+	width="1518"
+	height="587"
+	srcset="/p/mysql/assets/%E6%97%A5%E6%9C%9F%E6%97%B6%E9%97%B4%E7%B1%BB%E5%9E%8B_hu_dfe47f50bd6e6606.png 480w, /p/mysql/assets/%E6%97%A5%E6%9C%9F%E6%97%B6%E9%97%B4%E7%B1%BB%E5%9E%8B_hu_ebb98d254265dec8.png 1024w"
+	loading="lazy"
+	
+		alt="期时间类"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="258"
+		data-flex-basis="620px"
+	
+></p>
+<h4 id="案例">案例
+</h4><p>根据页面原型，设计员工表</p>
+<p>步骤：</p>
+<p>①阅读并分析页面原型及需求</p>
+<p>②分析表中包含哪些字段，以及字段的类型、约束</p>
+<p>③创建表结构</p>
+<p>需求：</p>
+<p><img src="/p/mysql/assets/%E5%91%98%E5%B7%A5%E8%A1%A81.png"
+	width="1176"
+	height="42"
+	srcset="/p/mysql/assets/%E5%91%98%E5%B7%A5%E8%A1%A81_hu_3a996503a40628dd.png 480w, /p/mysql/assets/%E5%91%98%E5%B7%A5%E8%A1%A81_hu_5975585a3514c55c.png 1024w"
+	loading="lazy"
+	
+		alt="工表"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="2800"
+		data-flex-basis="6720px"
+	
+></p>
+<p><img src="/p/mysql/assets/%E5%91%98%E5%B7%A5%E8%A1%A82.png"
+	width="877"
+	height="444"
+	srcset="/p/mysql/assets/%E5%91%98%E5%B7%A5%E8%A1%A82_hu_6bea55afd4ef139.png 480w, /p/mysql/assets/%E5%91%98%E5%B7%A5%E8%A1%A82_hu_316d03cfdc2dd626.png 1024w"
+	loading="lazy"
+	
+		alt="工表"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="197"
+		data-flex-basis="474px"
+	
+></p>
+<p><img src="/p/mysql/assets/%E5%91%98%E5%B7%A5%E8%A1%A83.png"
+	width="1079"
+	height="367"
+	srcset="/p/mysql/assets/%E5%91%98%E5%B7%A5%E8%A1%A83_hu_ecd037d7708dd7d5.png 480w, /p/mysql/assets/%E5%91%98%E5%B7%A5%E8%A1%A83_hu_9886fbf3631fd9a9.png 1024w"
+	loading="lazy"
+	
+		alt="工表"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="294"
+		data-flex-basis="705px"
+	
+></p>
+<p><img src="/p/mysql/assets/%E5%91%98%E5%B7%A5%E8%A1%A84.png"
+	width="945"
+	height="36"
+	srcset="/p/mysql/assets/%E5%91%98%E5%B7%A5%E8%A1%A84_hu_6c5142423d8712bb.png 480w, /p/mysql/assets/%E5%91%98%E5%B7%A5%E8%A1%A84_hu_ebe4032c52ff920.png 1024w"
+	loading="lazy"
+	
+		alt="工表"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="2625"
+		data-flex-basis="6300px"
+	
+></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">--</span> <span class="err">案例：设计员工表</span> <span class="n">emp</span>
+</span></span><span class="line"><span class="cl"><span class="o">--</span> <span class="err">基础字段：</span><span class="n">id</span> <span class="err">主键；</span> <span class="n">create_time</span> <span class="err">创建时间；</span> <span class="n">update_time</span> <span class="err">修改时间；</span>
+</span></span><span class="line"><span class="cl"><span class="n">create</span> <span class="n">table</span> <span class="n">emp</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">id</span> <span class="ne">int</span> <span class="n">unsigned</span> <span class="n">primary</span> <span class="n">key</span> <span class="n">auto_increment</span> <span class="n">comment</span> <span class="s1">&#39;id,主键&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">username</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="ow">not</span> <span class="n">null</span>  <span class="n">unique</span> <span class="n">comment</span> <span class="s1">&#39;用户名&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">password</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span> <span class="n">default</span> <span class="s1">&#39;123456&#39;</span> <span class="n">comment</span> <span class="s1">&#39;密码&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="ow">not</span> <span class="n">null</span> <span class="n">comment</span> <span class="s1">&#39;姓名&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">gender</span> <span class="n">tinyint</span> <span class="n">unsigned</span> <span class="ow">not</span> <span class="n">null</span> <span class="n">comment</span> <span class="s1">&#39;性别 ,1 男；2 女&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">phone</span> <span class="n">char</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="ow">not</span> <span class="n">null</span> <span class="n">unique</span> <span class="n">comment</span> <span class="s1">&#39;手机号&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">job</span> <span class="n">tinyint</span> <span class="n">unsigned</span> <span class="n">comment</span> <span class="s1">&#39;职位,1 班主任；2 讲师；3 学工主管；4 教研主管；5 咨询师&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">salary</span> <span class="ne">int</span> <span class="n">unsigned</span> <span class="n">comment</span> <span class="s1">&#39;薪资&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">entry_date</span> <span class="n">date</span> <span class="n">comment</span> <span class="s1">&#39;入职日期&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">image</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span> <span class="n">comment</span> <span class="s1">&#39;图像&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">create_time</span> <span class="n">datetime</span> <span class="n">comment</span> <span class="s1">&#39;创建时间&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">update_time</span> <span class="n">datetime</span> <span class="n">comment</span> <span class="s1">&#39;修改时间&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span><span class="n">comment</span> <span class="s1">&#39;员工表&#39;</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
 </div>
+</div><h4 id="表结构-查询修改删除">表结构-查询、修改、删除
+</h4><ul>
+<li>表结构的查询、修改、删除相关语法如下：</li>
+</ul>
+<p><img src="/p/mysql/assets/%E6%9F%A5%E4%BF%AE%E5%88%A0.png"
+	width="2137"
+	height="941"
+	srcset="/p/mysql/assets/%E6%9F%A5%E4%BF%AE%E5%88%A0_hu_ca0a43d6333efab3.png 480w, /p/mysql/assets/%E6%9F%A5%E4%BF%AE%E5%88%A0_hu_94d82fffa30aec39.png 1024w"
+	loading="lazy"
+	
+		alt="修"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="227"
+		data-flex-basis="545px"
+	
+></p>
+<p><code>注意：在删除表时，表中的全部数据也会被删除</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">--</span> <span class="err">查询当前数据库所有表</span>
+</span></span><span class="line"><span class="cl"><span class="n">show</span> <span class="n">tables</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">--</span> <span class="err">查看表结构</span>
+</span></span><span class="line"><span class="cl"><span class="n">desc</span> <span class="n">emp</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">--</span> <span class="err">查询建表语句</span>
+</span></span><span class="line"><span class="cl"><span class="n">show</span> <span class="n">create</span> <span class="n">table</span> <span class="n">emp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">--</span> <span class="err">字段：添加字段</span> <span class="n">qq</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">alter</span> <span class="n">table</span> <span class="n">emp</span> <span class="n">add</span> <span class="n">qq</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span>  <span class="n">comment</span> <span class="s1">&#39;qq号码&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">--</span> <span class="err">字段：修改字段类型</span> <span class="n">qq</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">alter</span> <span class="n">table</span> <span class="n">emp</span> <span class="n">modify</span> <span class="n">qq</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span> <span class="n">comment</span> <span class="s1">&#39;qq号码&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">--</span> <span class="err">字段：修改字段名</span> <span class="n">qq</span> <span class="o">-&gt;</span> <span class="n">qq_num</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">alter</span> <span class="n">table</span> <span class="n">emp</span> <span class="n">change</span> <span class="n">qq</span> <span class="n">qq_num</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span> <span class="n">comment</span> <span class="s1">&#39;qq号码&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">--</span> <span class="err">字段：删除字段</span> <span class="n">qq_num</span>
+</span></span><span class="line"><span class="cl"><span class="n">alter</span> <span class="n">table</span> <span class="n">emp</span> <span class="n">drop</span> <span class="n">column</span> <span class="n">qq_num</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">--</span> <span class="err">修改表名</span>
+</span></span><span class="line"><span class="cl"><span class="n">alter</span> <span class="n">table</span> <span class="n">emp</span> <span class="n">rename</span> <span class="n">to</span> <span class="n">employee</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">--</span> <span class="err">删除表</span>
+</span></span><span class="line"><span class="cl"><span class="n">drop</span> <span class="n">table</span> <span class="n">user</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>也可以通过以下操作添加/修改，删除字段选择&quot; - &ldquo;，删除表结构选择drop,改名选择Rename</p>
+<p><img src="/p/mysql/assets/%E6%B7%BB%E5%8A%A0.png"
+	width="1339"
+	height="1043"
+	srcset="/p/mysql/assets/%E6%B7%BB%E5%8A%A0_hu_a010498c76c8818b.png 480w, /p/mysql/assets/%E6%B7%BB%E5%8A%A0_hu_63c6ec933922497b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="128"
+		data-flex-basis="308px"
+	
+></p>
+<h3 id="dml">DML
+</h3><ul>
+<li>
+<p>DML英文全称是Data Manipulation Language(数据操作语言)，用来对数据库中表的数据记录进行增、删、改操作。</p>
+<ul>
+<li>添加数据(INSERT)</li>
+<li>修改数据(UPDATE)</li>
+<li>删除数据(DELETE)</li>
+</ul>
+<p><strong>添加语句：</strong></p>
+<p><img src="/p/mysql/assets/insert.png"
+	width="2361"
+	height="695"
+	srcset="/p/mysql/assets/insert_hu_372444f8f0341879.png 480w, /p/mysql/assets/insert_hu_760a659678045d4d.png 1024w"
+	loading="lazy"
+	
+		alt="nser"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="339"
+		data-flex-basis="815px"
+	
+></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">-- DML : 插入数据 - insert
+</span></span><span class="line"><span class="cl">-- 1. 为 emp 表的 username, password, name, gender, phone 字段插入值
+</span></span><span class="line"><span class="cl">insert into emp(username,password,name,gender,phone) values (&#39;songjiang&#39;,&#39;12345678&#39;,&#39;宋江&#39;,1,&#39;11122233345&#39;);
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">-- 2. 为 emp 表的 所有字段插入值
+</span></span><span class="line"><span class="cl">-- 方式1：
+</span></span><span class="line"><span class="cl">insert into emp (id, username, password, name, gender, phone, job, salary, entry_date, image, create_time, update_time)
+</span></span><span class="line"><span class="cl">            values (null,&#39;linchong&#39;,&#39;12345678&#39;,&#39;林冲&#39;,&#39;1&#39;,&#39;13300012254&#39;,1,6000,&#39;2020-01-01&#39;,&#39;1.jpg&#39;,now(),now());
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">-- 方式2：
+</span></span><span class="line"><span class="cl">insert into emp values (null,&#39;likui&#39;,&#39;12345678&#39;,&#39;李逵&#39;,&#39;1&#39;,&#39;13300012256&#39;,1,6000,&#39;2020-01-01&#39;,&#39;1.jpg&#39;,now(),now());
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">-- 3. 批量为 emp 表的 username, password, name, gender, phone  字段插入数据
+</span></span><span class="line"><span class="cl">insert into emp (username,password,name,gender,phone) values
+</span></span><span class="line"><span class="cl">                (&#39;ruanxiaoer&#39;,&#39;12345678&#39;,&#39;阮小二&#39;,1,&#39;11122233346&#39;),
+</span></span><span class="line"><span class="cl">                (&#39;ruanxiaowu&#39;,&#39;12345678&#39;,&#39;阮小五&#39;,1,&#39;11122233347&#39;);
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/mysql/assets/%E6%8F%92%E5%85%A5%E7%BB%93%E6%9E%9C.png"
+	width="1962"
+	height="237"
+	srcset="/p/mysql/assets/%E6%8F%92%E5%85%A5%E7%BB%93%E6%9E%9C_hu_fcba8fae3a90a2f5.png 480w, /p/mysql/assets/%E6%8F%92%E5%85%A5%E7%BB%93%E6%9E%9C_hu_d4ffb774a3aa48b6.png 1024w"
+	loading="lazy"
+	
+		alt="入结"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="827"
+		data-flex-basis="1986px"
+	
+></p>
+<blockquote>
+<p>注意：</p>
+<p>1.插入数据时，指定的字段顺序需要与值的顺序是一一对应的</p>
+<p>2.字符串和日期型数据应该包含在引号中（单引号、双引号都可以）</p>
+<p>(使用双引号可能会报红，但是不妨碍正常运行，建议使用单引号)</p>
+<p>3.插入的数据大小/长度，应该在字段的规定范围内</p>
+</blockquote>
+<p><strong>修改语句：</strong></p>
+<p><img src="/p/mysql/assets/%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE.png"
+	width="2130"
+	height="268"
+	srcset="/p/mysql/assets/%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE_hu_12a970472052aade.png 480w, /p/mysql/assets/%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE_hu_e5489867ad4056f.png 1024w"
+	loading="lazy"
+	
+		alt="改数"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="794"
+		data-flex-basis="1907px"
+	
+></p>
+<blockquote>
+<p>注意：修改语句的条件可以有，也可以没有，如果没有条件，则会修改整张表的所有数据</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">-- DML : 更新数据 - update
+</span></span><span class="line"><span class="cl">-- 1. 将 emp 表的ID为1员工 用户名更新为 &#39;zhangsan&#39;, 姓名name字段更新为 &#39;张三&#39;
+</span></span><span class="line"><span class="cl">update emp set username = &#39;zhangsan&#39; ,name = &#39;张三&#39; where id = 1;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">-- 2. 将 emp 表的所有员工的入职日期更新为 &#39;2010-01-01&#39;
+</span></span><span class="line"><span class="cl">update emp set entry_date = &#39;2010-01-01&#39;;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果不添加条件，会报出以下警告，此时点击Execute则会继续运行</p>
+</li>
+</ul>
+<p><img src="/p/mysql/assets/%E8%AD%A6%E5%91%8A.png"
+	width="1982"
+	height="64"
+	srcset="/p/mysql/assets/%E8%AD%A6%E5%91%8A_hu_94575ed074cb1e82.png 480w, /p/mysql/assets/%E8%AD%A6%E5%91%8A_hu_80a67e3da2431762.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="3096"
+		data-flex-basis="7432px"
+	
+></p>
+<p><img src="/p/mysql/assets/%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE1.png"
+	width="1964"
+	height="211"
+	srcset="/p/mysql/assets/%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE1_hu_be4dcc6fb1778c49.png 480w, /p/mysql/assets/%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE1_hu_3d610f11c0345412.png 1024w"
+	loading="lazy"
+	
+		alt="改数据"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="930"
+		data-flex-basis="2233px"
+	
+></p>
+<p><strong>删除语句：</strong></p>
+<p><img src="/p/mysql/assets/%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE.png"
+	width="2302"
+	height="275"
+	srcset="/p/mysql/assets/%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE_hu_7549b628c8a3f8f9.png 480w, /p/mysql/assets/%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE_hu_a1fef6912c729941.png 1024w"
+	loading="lazy"
+	
+		alt="除数"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="837"
+		data-flex-basis="2009px"
+	
+></p>
+<blockquote>
+<p>注意：</p>
+<p>1.DELETE 语句的条件可以有，也可以没有，如果没有条件，则会删除整张表的所有数据。</p>
+<p>2.DELETE 语句不能删除某一个字段的值(如果要操作，可以使用UPDATE，将该字段的值置为NULL)。</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">-- DML : 删除数据 - delete
+</span></span><span class="line"><span class="cl">-- 1. 删除 emp 表中 ID为1的员工
+</span></span><span class="line"><span class="cl">delete from emp where id = 1;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">-- 2. 删除 emp 表中的所有员工
+</span></span><span class="line"><span class="cl">delete from emp;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">-- DML : 删除数据 - delete
+</span></span><span class="line"><span class="cl">-- 1. 删除 emp 表中 ID为1的员工
+</span></span><span class="line"><span class="cl">delete from emp where id = 1;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">-- 2. 删除 emp 表中的所有员工
+</span></span><span class="line"><span class="cl">delete from emp;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/mysql/assets/%E5%88%A0%E9%99%A4%E8%AD%A6%E5%91%8A.png"
+	width="1965"
+	height="81"
+	srcset="/p/mysql/assets/%E5%88%A0%E9%99%A4%E8%AD%A6%E5%91%8A_hu_c529271a791ef4f4.png 480w, /p/mysql/assets/%E5%88%A0%E9%99%A4%E8%AD%A6%E5%91%8A_hu_be589e47e291fc29.png 1024w"
+	loading="lazy"
+	
+		alt="除警"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="2425"
+		data-flex-basis="5822px"
+	
+></p>
+<p><img src="/p/mysql/assets/%E8%AD%A6%E5%91%8A%E4%BF%A1%E6%81%AF.png"
+	width="1038"
+	height="146"
+	srcset="/p/mysql/assets/%E8%AD%A6%E5%91%8A%E4%BF%A1%E6%81%AF_hu_462eec176308644f.png 480w, /p/mysql/assets/%E8%AD%A6%E5%91%8A%E4%BF%A1%E6%81%AF_hu_145fe3df35c70d5b.png 1024w"
+	loading="lazy"
+	
+		alt="告信"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="710"
+		data-flex-basis="1706px"
+	
+></p>
+
 </section>
 
 
