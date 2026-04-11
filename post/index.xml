@@ -7,7 +7,444 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>凉介</copyright>
-        <lastBuildDate>Wed, 08 Apr 2026 22:38:33 +0800</lastBuildDate><atom:link href="https://aurora156.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 11 Apr 2026 12:36:46 +0800</lastBuildDate><atom:link href="https://aurora156.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>MySQL</title>
+        <link>https://aurora156.github.io/p/mysql/</link>
+        <pubDate>Sat, 11 Apr 2026 12:36:46 +0800</pubDate>
+        
+        <guid>https://aurora156.github.io/p/mysql/</guid>
+        <description>&lt;h1 id=&#34;mysql&#34;&gt;MySQL
+&lt;/h1&gt;&lt;h2 id=&#34;定义&#34;&gt;定义
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;数据库：&lt;strong&gt;D&lt;/strong&gt;ata&lt;strong&gt;B&lt;/strong&gt;ase(DB)，是存储和管理数据的仓库&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E6%95%B0%E6%8D%AE%E5%BA%93.png&#34;
+	width=&#34;1523&#34;
+	height=&#34;476&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E6%95%B0%E6%8D%AE%E5%BA%93_hu_476c68234e933451.png 480w, https://aurora156.github.io/p/mysql/assets/%E6%95%B0%E6%8D%AE%E5%BA%93_hu_564c4796e89004a0.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;据&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;319&#34;
+		data-flex-basis=&#34;767px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;数据库管理系统：&lt;strong&gt;D&lt;/strong&gt;ata&lt;strong&gt;B&lt;/strong&gt;ase &lt;strong&gt;M&lt;/strong&gt;anagement &lt;strong&gt;S&lt;/strong&gt;ystem(DBMS),操作和管理数据库的大型软件&lt;/li&gt;
+&lt;li&gt;SQL：&lt;strong&gt;S&lt;/strong&gt;tructured &lt;strong&gt;Q&lt;/strong&gt;uery &lt;strong&gt;L&lt;/strong&gt;anguage，操作关系型数据库的编程语言，定义了一套操作关系型数据库&lt;strong&gt;统一标准&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;数据库产品&#34;&gt;数据库产品
+&lt;/h2&gt;&lt;p&gt;以下均属于关系型数据库&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%A7%E5%93%81.png&#34;
+	width=&#34;1565&#34;
+	height=&#34;1122&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%A7%E5%93%81_hu_fceda7ea460c2e8f.png 480w, https://aurora156.github.io/p/mysql/assets/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%A7%E5%93%81_hu_569bba0bb87ce28e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;据库产&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;139&#34;
+		data-flex-basis=&#34;334px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;mysql概述&#34;&gt;MySQL概述
+&lt;/h2&gt;&lt;p&gt;MySQL连接：&lt;strong&gt;mysql&lt;/strong&gt; -&lt;strong&gt;h&lt;/strong&gt;xxx -&lt;strong&gt;P&lt;/strong&gt;xxx -&lt;strong&gt;u&lt;/strong&gt;xxx -&lt;strong&gt;p&lt;/strong&gt;xxx&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;-h：连接的ip地址(可选){未选，默认本机的3306接口}&lt;/p&gt;
+&lt;p&gt;-P：连接的端口号(可选)&lt;/p&gt;
+&lt;p&gt;-u：指定的用户名&lt;/p&gt;
+&lt;p&gt;-p：指定的密码&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;数据模型&#34;&gt;数据模型
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;关系型数据库：建立在关系模型基础上，由多张相互连接的二维表(有行有列)组成的数据库(RDBMS)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;特点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;使用表存储数据，格式统一，便于维护&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用SQL语言操作，标准统一，使用方便，可用于复杂查询&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B.png&#34;
+	width=&#34;2353&#34;
+	height=&#34;1102&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B_hu_24c0651363191e93.png 480w, https://aurora156.github.io/p/mysql/assets/%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B_hu_f1264ad2e4b04832.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;据模&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;213&#34;
+		data-flex-basis=&#34;512px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;数据库存储方式：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;数据库 -&amp;gt; 表 -&amp;gt; 数据(记录)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;sql&#34;&gt;SQL
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;分类：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E5%88%86%E7%B1%BB.png&#34;
+	width=&#34;2126&#34;
+	height=&#34;498&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E5%88%86%E7%B1%BB_hu_7f6175772e1ce605.png 480w, https://aurora156.github.io/p/mysql/assets/%E5%88%86%E7%B1%BB_hu_2c92efaba5d50343.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;426&#34;
+		data-flex-basis=&#34;1024px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;重点关注前三个&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E5%88%86%E7%B1%BB1.png&#34;
+	width=&#34;1875&#34;
+	height=&#34;561&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E5%88%86%E7%B1%BB1_hu_54f6bae0b26337a.png 480w, https://aurora156.github.io/p/mysql/assets/%E5%88%86%E7%B1%BB1_hu_c9339a8364aedf0c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;类&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;334&#34;
+		data-flex-basis=&#34;802px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;sql语句&#34;&gt;SQL语句
+&lt;/h3&gt;&lt;h4 id=&#34;ddl&#34;&gt;DDL
+&lt;/h4&gt;&lt;h5 id=&#34;数据库&#34;&gt;数据库
+&lt;/h5&gt;&lt;ul&gt;
+&lt;li&gt;操作语法		[ ]：可选(如果要使用里面的代码，[ ]不要敲)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E6%93%8D%E4%BD%9C%E8%AF%AD%E6%B3%95.png&#34;
+	width=&#34;2215&#34;
+	height=&#34;824&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E6%93%8D%E4%BD%9C%E8%AF%AD%E6%B3%95_hu_1f52ffe67b2c2c7f.png 480w, https://aurora156.github.io/p/mysql/assets/%E6%93%8D%E4%BD%9C%E8%AF%AD%E6%B3%95_hu_b7bf3bc6de7db1d4.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;作语&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;268&#34;
+		data-flex-basis=&#34;645px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;数据库名后的[ ]作用是指定字符集(默认utf8mb4)&lt;/p&gt;
+&lt;p&gt;在命令行敲：mysql -u root -p进入mysql&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;系统自带数据库：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E6%95%B0%E6%8D%AE%E5%BA%931.png&#34;
+	width=&#34;302&#34;
+	height=&#34;114&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E6%95%B0%E6%8D%AE%E5%BA%931_hu_48cab445e4e99d7c.png 480w, https://aurora156.github.io/p/mysql/assets/%E6%95%B0%E6%8D%AE%E5%BA%931_hu_350ca1ba4cfadc9a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;据库&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;264&#34;
+		data-flex-basis=&#34;635px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;注意：上述语法中的database，也可以替换成schema(复数要加s)。如：Create schema db01；MySQL8版本中，默认字符集为utfmb4&lt;/code&gt;&lt;/p&gt;
+&lt;h5 id=&#34;mysql客户端工具---图形化工具&#34;&gt;MySQL客户端工具 - 图形化工具
+&lt;/h5&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E5%B7%A5%E5%85%B7.png&#34;
+	width=&#34;1371&#34;
+	height=&#34;293&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E5%B7%A5%E5%85%B7_hu_1fd1c44fc86a62a0.png 480w, https://aurora156.github.io/p/mysql/assets/%E5%B7%A5%E5%85%B7_hu_cc99942273eef369.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;467&#34;
+		data-flex-basis=&#34;1123px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;介绍：DataGrip是JetBrains旗下的一款数据库管理工具，是管理和开发MySQL、Oracle、PostgreSQL的理想解决方案&lt;/li&gt;
+&lt;li&gt;官网：https://www.jetbrains.com/zh-cn/datagrip/&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;连接数据库：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;创建project&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BAproject.png&#34;
+	width=&#34;1026&#34;
+	height=&#34;839&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BAproject_hu_239b4fe26de5abc6.png 480w, https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BAproject_hu_ca53c6f98a85d290.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;建projec&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;122&#34;
+		data-flex-basis=&#34;293px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BA2.png&#34;
+	width=&#34;1024&#34;
+	height=&#34;825&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BA2_hu_826e4f00c1ab6c93.png 480w, https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BA2_hu_84299ffc8862eb33.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;建&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;124&#34;
+		data-flex-basis=&#34;297px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;创建连接&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%BF%9E%E6%8E%A5.png&#34;
+	width=&#34;1026&#34;
+	height=&#34;520&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%BF%9E%E6%8E%A5_hu_999b93928c970a9c.png 480w, https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%BF%9E%E6%8E%A5_hu_775dd71d4727a8b1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;建连&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;197&#34;
+		data-flex-basis=&#34;473px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E4%B8%8B%E8%BD%BD%E9%A9%B1%E5%8A%A8.png&#34;
+	width=&#34;881&#34;
+	height=&#34;152&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E4%B8%8B%E8%BD%BD%E9%A9%B1%E5%8A%A8_hu_f20fe906ef1e0a0a.png 480w, https://aurora156.github.io/p/mysql/assets/%E4%B8%8B%E8%BD%BD%E9%A9%B1%E5%8A%A8_hu_abbb69cf17732385.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;载驱&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;579&#34;
+		data-flex-basis=&#34;1391px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;下载驱动, 可能会比较耗时, 耐心等待一会儿。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;测试连接&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;下载完驱动之后，可以点击 Test Connection 来测试一下是否可以正常的连接数据库。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E6%B5%8B%E8%AF%95%E8%BF%9E%E6%8E%A5.png&#34;
+	width=&#34;1224&#34;
+	height=&#34;971&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E6%B5%8B%E8%AF%95%E8%BF%9E%E6%8E%A5_hu_1076a79f44202d54.png 480w, https://aurora156.github.io/p/mysql/assets/%E6%B5%8B%E8%AF%95%E8%BF%9E%E6%8E%A5_hu_b3ff302dcf175d67.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;试连&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;126&#34;
+		data-flex-basis=&#34;302px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;然后点击 OK ， 就已经连接上了MySQL数据库了。&lt;/p&gt;
+&lt;p&gt;连接上以后点击图中所示按钮可以选择要展示的数据库&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/select.png&#34;
+	width=&#34;541&#34;
+	height=&#34;898&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/select_hu_2dfe15410ed8395.png 480w, https://aurora156.github.io/p/mysql/assets/select_hu_1afd29bf05c0316b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;elec&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;60&#34;
+		data-flex-basis=&#34;144px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;此时右边的控制台会出现一个console，在这里就可以编写数据库(如果没有就自行点击左侧的类似于终端按钮的图标即可显示)&lt;/p&gt;
+&lt;p&gt;注解：&amp;ndash;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;找上一次编辑的文件：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E7%BC%96%E8%BE%91.png&#34;
+	width=&#34;869&#34;
+	height=&#34;821&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E7%BC%96%E8%BE%91_hu_65abdafc4c336711.png 480w, https://aurora156.github.io/p/mysql/assets/%E7%BC%96%E8%BE%91_hu_8f5b93822b64b02b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;105&#34;
+		data-flex-basis=&#34;254px&#34;
+	
+&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E7%BC%96%E8%BE%911.png&#34;
+	width=&#34;368&#34;
+	height=&#34;385&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E7%BC%96%E8%BE%911_hu_1bda7699bf0331c9.png 480w, https://aurora156.github.io/p/mysql/assets/%E7%BC%96%E8%BE%911_hu_45e421c83d61e8ed.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;辑&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;95&#34;
+		data-flex-basis=&#34;229px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;如果觉得名字不好记可以自行更改&lt;/p&gt;
+&lt;h5 id=&#34;表结构-创建&#34;&gt;表结构-创建
+&lt;/h5&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;创建表的语法：&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A8.png&#34;
+	width=&#34;1164&#34;
+	height=&#34;484&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A8_hu_ffcd2b1ec5c3a1af.png 480w, https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A8_hu_f23fa46ca434ed1b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;建&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;240&#34;
+		data-flex-basis=&#34;577px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A81.png&#34;
+	width=&#34;455&#34;
+	height=&#34;236&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A81_hu_dc0b352bd8d80c58.png 480w, https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A81_hu_f0652847e09c8de5.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;建表&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;192&#34;
+		data-flex-basis=&#34;462px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;选中该字段运行：左侧就会出现相关信息&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A82.png&#34;
+	width=&#34;386&#34;
+	height=&#34;280&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A82_hu_bda902f2e03801dd.png 480w, https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A82_hu_ac62a3791b34ede1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;建表&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;137&#34;
+		data-flex-basis=&#34;330px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;双击user：就可以查看表&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A83.png&#34;
+	width=&#34;976&#34;
+	height=&#34;275&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A83_hu_4a61392818d9fab9.png 480w, https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A83_hu_f4a30868a17e5c36.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;建表&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;354&#34;
+		data-flex-basis=&#34;851px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E7%BA%A6%E6%9D%9F.png&#34;
+	width=&#34;1017&#34;
+	height=&#34;354&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E7%BA%A6%E6%9D%9F_hu_30824cb103d60dd0.png 480w, https://aurora156.github.io/p/mysql/assets/%E7%BA%A6%E6%9D%9F_hu_4acdf8682c57790c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;287&#34;
+		data-flex-basis=&#34;689px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;约束&lt;/strong&gt;：约束是作用于表中字段上的规则，用于限制存储在表中的数据&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;目的&lt;/strong&gt;：保证数据库中数据的正确性、有效性和完整性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E7%BA%A6%E6%9D%9F1.png&#34;
+	width=&#34;2296&#34;
+	height=&#34;541&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E7%BA%A6%E6%9D%9F1_hu_c0d01651da4af174.png 480w, https://aurora156.github.io/p/mysql/assets/%E7%BA%A6%E6%9D%9F1_hu_b981b56e2030fe2e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;束&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;424&#34;
+		data-flex-basis=&#34;1018px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A8%EF%BC%88%E7%BA%A6%E6%9D%9F%EF%BC%89.png&#34;
+	width=&#34;775&#34;
+	height=&#34;241&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A8%EF%BC%88%E7%BA%A6%E6%9D%9F%EF%BC%89_hu_c68dfc79da8c7ebd.png 480w, https://aurora156.github.io/p/mysql/assets/%E5%88%9B%E5%BB%BA%E8%A1%A8%EF%BC%88%E7%BA%A6%E6%9D%9F%EF%BC%89_hu_63acab13796e5697.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;建表（约束&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;321&#34;
+		data-flex-basis=&#34;771px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mysql/assets/user.png&#34;
+	width=&#34;965&#34;
+	height=&#34;130&#34;
+	srcset=&#34;https://aurora156.github.io/p/mysql/assets/user_hu_cdb95c26ec0dba42.png 480w, https://aurora156.github.io/p/mysql/assets/user_hu_5e4514b0963a7cc5.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;se&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;742&#34;
+		data-flex-basis=&#34;1781px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;auto_increment：自增值(从最大值开始自增)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description>
+        </item>
+        <item>
         <title>Web后端开发</title>
         <link>https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/</link>
         <pubDate>Wed, 08 Apr 2026 22:38:33 +0800</pubDate>
