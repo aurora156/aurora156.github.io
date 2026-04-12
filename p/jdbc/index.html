@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="引言 Java程序操作数据库\nJDBC 本质： sun公司官方定义的一套操作所有关系型数据库的规范，即接口。 各个数据库厂商去实现这套接口，提供数据库驱动jar包。 我们可以使用这套接口（JDBC）编程，真正执行的代码是驱动jar包中的实现类。 例如：MySQL中的jar包依赖\n">
+<title>JDBC</title>
+
+<link rel='canonical' href='https://aurora156.github.io/p/jdbc/'>
+
+<link rel="stylesheet" href="/scss/style.min.6a692fd055deae459f2a9767f57f3855ba80cafd5041317f24f7360f6ca47cdf.css"><meta property='og:title' content="JDBC">
+<meta property='og:description' content="引言 Java程序操作数据库\nJDBC 本质： sun公司官方定义的一套操作所有关系型数据库的规范，即接口。 各个数据库厂商去实现这套接口，提供数据库驱动jar包。 我们可以使用这套接口（JDBC）编程，真正执行的代码是驱动jar包中的实现类。 例如：MySQL中的jar包依赖\n">
+<meta property='og:url' content='https://aurora156.github.io/p/jdbc/'>
+<meta property='og:site_name' content='凉介的笔记'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-04-12T15:59:16&#43;08:00'/><meta property='article:modified_time' content='2026-04-12T15:59:16&#43;08:00'/>
+<meta name="twitter:title" content="JDBC">
+<meta name="twitter:description" content="引言 Java程序操作数据库\nJDBC 本质： sun公司官方定义的一套操作所有关系型数据库的规范，即接口。 各个数据库厂商去实现这套接口，提供数据库驱动jar包。 我们可以使用这套接口（JDBC）编程，真正执行的代码是驱动jar包中的实现类。 例如：MySQL中的jar包依赖\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_39194fe8d5906e9f.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🌆</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">凉介的笔记</a></h1>
+            <h2 class="site-description">凉介的博客</h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#入门程序">入门程序</a></li>
+    <li><a href="#执行dql语句">执行DQL语句</a></li>
+    <li><a href="#预编译sql">预编译SQL</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/jdbc/">JDBC</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2026-04-12</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="引言">引言
+</h1><p><strong>Java程序操作数据库</strong></p>
+<p><img src="/p/jdbc/assets/Java%E6%93%8D%E4%BD%9C%E6%95%B0%E6%8D%AE%E5%BA%93.png"
+	width="2235"
+	height="1172"
+	srcset="/p/jdbc/assets/Java%E6%93%8D%E4%BD%9C%E6%95%B0%E6%8D%AE%E5%BA%93_hu_ef89622f98b5bfa8.png 480w, /p/jdbc/assets/Java%E6%93%8D%E4%BD%9C%E6%95%B0%E6%8D%AE%E5%BA%93_hu_871c814991cd9959.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="190"
+		data-flex-basis="457px"
+	
+></p>
+<h1 id="jdbc">JDBC
+</h1><p><img src="/p/jdbc/assets/JDBC%E6%8E%A5%E5%8F%A3.png"
+	width="1178"
+	height="723"
+	srcset="/p/jdbc/assets/JDBC%E6%8E%A5%E5%8F%A3_hu_59dcb3705896cce4.png 480w, /p/jdbc/assets/JDBC%E6%8E%A5%E5%8F%A3_hu_6559459262828d36.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="162"
+		data-flex-basis="391px"
+	
+></p>
+<ul>
+<li><strong>本质：</strong>
+<ul>
+<li>sun公司官方定义的一套操作所有关系型数据库的规范，即接口。</li>
+<li>各个数据库厂商去实现这套接口，提供数据库<strong>驱动jar包</strong>。</li>
+<li>我们可以使用这套接口（<strong>JDBC</strong>）编程，真正执行的代码是驱动<strong>jar</strong>包中的实现类。</li>
+</ul>
+</li>
+</ul>
+<p>例如：MySQL中的jar包依赖</p>
+<p><img src="/p/jdbc/assets/MySQL%E6%8E%A5%E5%8F%A3.png"
+	width="590"
+	height="198"
+	srcset="/p/jdbc/assets/MySQL%E6%8E%A5%E5%8F%A3_hu_48cea33a545d179b.png 480w, /p/jdbc/assets/MySQL%E6%8E%A5%E5%8F%A3_hu_ed15966a25491bae.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="297"
+		data-flex-basis="715px"
+	
+></p>
+<h2 id="入门程序">入门程序
+</h2><ul>
+<li>需求：基于JDBC程序，执行update语句 (<strong>update</strong> user <strong>set</strong> age = 25 <strong>where</strong> id = 1)</li>
+<li>步骤：
+<ul>
+<li>准备工作：创建一个maven项目，引入依赖；并准备数据库表user。</li>
+<li>代码实现：编写JDBC程序，操作数据库</li>
+</ul>
+</li>
+</ul>
+<p><img src="/p/jdbc/assets/%E4%BE%9D%E8%B5%961.png"
+	width="980"
+	height="444"
+	srcset="/p/jdbc/assets/%E4%BE%9D%E8%B5%961_hu_bbd1395edeb509f0.png 480w, /p/jdbc/assets/%E4%BE%9D%E8%B5%961_hu_790c596ad677cb8f.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="220"
+		data-flex-basis="529px"
+	
+></p>
+<p><img src="/p/jdbc/assets/JDBC%E7%A8%8B%E5%BA%8F.png"
+	width="1378"
+	height="857"
+	srcset="/p/jdbc/assets/JDBC%E7%A8%8B%E5%BA%8F_hu_bace02bd73db01e8.png 480w, /p/jdbc/assets/JDBC%E7%A8%8B%E5%BA%8F_hu_a2371f86cacba689.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="160"
+		data-flex-basis="385px"
+	
+></p>
+<p>1.创建项目，引入依赖</p>
+<p><img src="/p/jdbc/assets/%E5%88%9B%E5%BB%BAMaven.png"
+	width="687"
+	height="564"
+	srcset="/p/jdbc/assets/%E5%88%9B%E5%BB%BAMaven_hu_825d7f422832d6.png 480w, /p/jdbc/assets/%E5%88%9B%E5%BB%BAMaven_hu_54edfe87abfa48c6.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="121"
+		data-flex-basis="292px"
+	
+></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;dependencies&gt;
+</span></span><span class="line"><span class="cl">    &lt;dependency&gt;
+</span></span><span class="line"><span class="cl">        &lt;groupId&gt;com.mysql&lt;/groupId&gt;
+</span></span><span class="line"><span class="cl">        &lt;artifactId&gt;mysql-connector-j&lt;/artifactId&gt;
+</span></span><span class="line"><span class="cl">        &lt;version&gt;8.0.33&lt;/version&gt;
+</span></span><span class="line"><span class="cl">    &lt;/dependency&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    &lt;dependency&gt;
+</span></span><span class="line"><span class="cl">        &lt;groupId&gt;org.junit.jupiter&lt;/groupId&gt;
+</span></span><span class="line"><span class="cl">        &lt;artifactId&gt;junit-jupiter&lt;/artifactId&gt;
+</span></span><span class="line"><span class="cl">        &lt;version&gt;5.9.3&lt;/version&gt;
+</span></span><span class="line"><span class="cl">        &lt;scope&gt;test&lt;/scope&gt;
+</span></span><span class="line"><span class="cl">    &lt;/dependency&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    &lt;dependency&gt;
+</span></span><span class="line"><span class="cl">        &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+</span></span><span class="line"><span class="cl">        &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+</span></span><span class="line"><span class="cl">        &lt;version&gt;1.18.30&lt;/version&gt;
+</span></span><span class="line"><span class="cl">    &lt;/dependency&gt;
+</span></span><span class="line"><span class="cl">&lt;/dependencies&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2.准备数据库表user</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">create</span> <span class="n">table</span> <span class="n">user</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">id</span> <span class="ne">int</span> <span class="n">unsigned</span> <span class="n">primary</span> <span class="n">key</span> <span class="n">auto_increment</span> <span class="n">comment</span> <span class="s1">&#39;ID,主键&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">username</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="n">comment</span> <span class="s1">&#39;用户名&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">password</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span> <span class="n">comment</span> <span class="s1">&#39;密码&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="n">comment</span> <span class="s1">&#39;姓名&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">age</span> <span class="n">tinyint</span> <span class="n">unsigned</span> <span class="n">comment</span> <span class="s1">&#39;年龄&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="n">comment</span> <span class="s1">&#39;用户表&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">insert</span> <span class="n">into</span> <span class="n">user</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span> <span class="n">values</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;daqiao&#39;</span><span class="p">,</span> <span class="s1">&#39;123456&#39;</span><span class="p">,</span> <span class="s1">&#39;大乔&#39;</span><span class="p">,</span> <span class="mi">22</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                                                         <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;xiaoqiao&#39;</span><span class="p">,</span> <span class="s1">&#39;123456&#39;</span><span class="p">,</span> <span class="s1">&#39;小乔&#39;</span><span class="p">,</span> <span class="mi">18</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                                                         <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;diaochan&#39;</span><span class="p">,</span> <span class="s1">&#39;123456&#39;</span><span class="p">,</span> <span class="s1">&#39;貂蝉&#39;</span><span class="p">,</span> <span class="mi">24</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                                                         <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;lvbu&#39;</span><span class="p">,</span> <span class="s1">&#39;123456&#39;</span><span class="p">,</span> <span class="s1">&#39;吕布&#39;</span><span class="p">,</span> <span class="mi">28</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                                                         <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;zhaoyun&#39;</span><span class="p">,</span> <span class="s1">&#39;12345678&#39;</span><span class="p">,</span> <span class="s1">&#39;赵云&#39;</span><span class="p">,</span> <span class="mi">27</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>3.编写测试类：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">com</span><span class="p">.</span><span class="nx">itheima</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">org</span><span class="p">.</span><span class="nx">testng</span><span class="p">.</span><span class="nx">annotations</span><span class="p">.</span><span class="nx">Test</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">java</span><span class="p">.</span><span class="nx">sql</span><span class="p">.</span><span class="nx">Connection</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">java</span><span class="p">.</span><span class="nx">sql</span><span class="p">.</span><span class="nx">DriverManager</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">java</span><span class="p">.</span><span class="nx">sql</span><span class="p">.</span><span class="nx">Statement</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">public</span><span class="w"> </span><span class="nx">class</span><span class="w"> </span><span class="nx">JdbcTest</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">        JDBC入门程序
+</span></span></span><span class="line"><span class="cl"><span class="cm">    */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="err">@</span><span class="nx">Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">public</span><span class="w"> </span><span class="nx">void</span><span class="w"> </span><span class="nf">testUpdate</span><span class="p">()</span><span class="w"> </span><span class="nx">throws</span><span class="w"> </span><span class="nx">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="cp">//1.注册驱动</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">Class</span><span class="p">.</span><span class="nf">forName</span><span class="p">(</span><span class="s">&#34;com.mysql.cj.jdbc.Driver&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="cp">//2.获取数据库连接</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">String</span><span class="w"> </span><span class="nx">url</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#34;jdbc:mysql://localhost:3306/web01&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">String</span><span class="w"> </span><span class="nx">username</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#34;root&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">String</span><span class="w"> </span><span class="nx">password</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#34;123456&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">Connection</span><span class="w"> </span><span class="nx">connection</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">DriverManager</span><span class="p">.</span><span class="nf">getConnection</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span><span class="nx">username</span><span class="p">,</span><span class="nx">password</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="cp">//3.获取SQL语句执行对象</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">Statement</span><span class="w"> </span><span class="nx">statement</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">connection</span><span class="p">.</span><span class="nf">createStatement</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="cp">//4.执行SQL</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">statement</span><span class="p">.</span><span class="nf">executeUpdate</span><span class="p">(</span><span class="s">&#34;update user set age = 25 where id = 1&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="cp">//5.释放资源</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">statement</span><span class="p">.</span><span class="nb">close</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">connection</span><span class="p">.</span><span class="nb">close</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>注册驱动时：先双击shift，然后在搜索框输入Driver，记得点击右上角的include&hellip;，找到后按照以下操作就可以找到驱动的路径(复制粘贴即可)</p>
+<p>获取数据库连接时url固定的格式为&rsquo;&lsquo;jdbc:mysql://&rsquo;&rsquo;，后面加上指定的数据库ip地址端口号</p>
+</blockquote>
+<p><img src="/p/jdbc/assets/Driver.png"
+	width="2560"
+	height="1380"
+	srcset="/p/jdbc/assets/Driver_hu_77a67c8e223cd1ce.png 480w, /p/jdbc/assets/Driver_hu_9731fe5b38b8cc5f.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="185"
+		data-flex-basis="445px"
+	
+></p>
+<p>4.查看结果：</p>
+<p>更新前：</p>
+<p><img src="/p/jdbc/assets/%E6%9B%B4%E6%96%B0%E5%89%8D.png"
+	width="1088"
+	height="332"
+	srcset="/p/jdbc/assets/%E6%9B%B4%E6%96%B0%E5%89%8D_hu_9ff072108f64ff68.png 480w, /p/jdbc/assets/%E6%9B%B4%E6%96%B0%E5%89%8D_hu_5e329e57824d6f77.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="327"
+		data-flex-basis="786px"
+	
+></p>
+<p>更新后：</p>
+<p><img src="/p/jdbc/assets/%E6%9B%B4%E6%96%B0%E5%90%8E.png"
+	width="1045"
+	height="295"
+	srcset="/p/jdbc/assets/%E6%9B%B4%E6%96%B0%E5%90%8E_hu_d5297f34f2a2849e.png 480w, /p/jdbc/assets/%E6%9B%B4%E6%96%B0%E5%90%8E_hu_81718bb07b620029.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="354"
+		data-flex-basis="850px"
+	
+></p>
+<h2 id="执行dql语句">执行DQL语句
+</h2><ul>
+<li>需求：基于JDBC执行如下select语句，将查询结果封装到User对象中</li>
+<li>SQL：select * from user where username = &lsquo;daqiao&rsquo; and password = &lsquo;123456&rsquo;</li>
+<li><strong>ResultSet</strong>（结果集对象）：<strong>ResultSet rs = statement.executeQuery()</strong>
+<ul>
+<li>next()：将光标从当前位置向前移动一行，并判断当前行是否为有效行，返回值为boolean。
+<ul>
+<li>true：有效行，当前行有数据(解析各个字段的值，调用result当中get方法)</li>
+<li>false：无效行，当前行没有数据(代表数据已经解析完了)</li>
+</ul>
+</li>
+<li>getXxx(&hellip;)：获取数据，可以根据列的编号获取，也可以根据列名获取(推荐)。</li>
+</ul>
+</li>
+<li>结果解析步骤：<img src="/p/jdbc/assets/%E7%BB%93%E6%9E%9C%E8%A7%A3%E6%9E%90%E6%AD%A5%E9%AA%A4.png"
+	width="986"
+	height="416"
+	srcset="/p/jdbc/assets/%E7%BB%93%E6%9E%9C%E8%A7%A3%E6%9E%90%E6%AD%A5%E9%AA%A4_hu_6f00052d6df11d38.png 480w, /p/jdbc/assets/%E7%BB%93%E6%9E%9C%E8%A7%A3%E6%9E%90%E6%AD%A5%E9%AA%A4_hu_8b553a5f62861281.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="237"
+		data-flex-basis="568px"
+	
+></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">@Test
+</span></span><span class="line"><span class="cl">public void testSelect() throws Exception {
+</span></span><span class="line"><span class="cl">    String url = &#34;jdbc:mysql://localhost:3306/web01&#34;;
+</span></span><span class="line"><span class="cl">    String USER = &#34;root&#34;;
+</span></span><span class="line"><span class="cl">    String PASSWORD = &#34;123456&#34;;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    Connection conn = null;
+</span></span><span class="line"><span class="cl">    PreparedStatement stmt = null;
+</span></span><span class="line"><span class="cl">    ResultSet rs = null; //封装查询返回的结果
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    try {
+</span></span><span class="line"><span class="cl">        //1.注册JDBC驱动
+</span></span><span class="line"><span class="cl">        Class.forName(&#34;com.mysql.cj.jdbc.Driver&#34;);
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        //2.获取数据库连接
+</span></span><span class="line"><span class="cl">        conn = DriverManager.getConnection(url, USER, PASSWORD);
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        //3.执行查询
+</span></span><span class="line"><span class="cl">        String sql = &#34;select id,username,password,name,age from user where username = ? and password = ?&#34;;  //预编译SQL(推荐)【 ？：占位符】
+</span></span><span class="line"><span class="cl">        stmt = conn.prepareStatement(sql);
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        stmt.setString(1, &#34;daqiao&#34;);
+</span></span><span class="line"><span class="cl">        stmt.setString(2, &#34;123456&#34;);
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	    //将结果集封装在ResultSet对象中
+</span></span><span class="line"><span class="cl">        rs = stmt.executeQuery();
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        //4.处理结果
+</span></span><span class="line"><span class="cl">        while (rs.next()) {
+</span></span><span class="line"><span class="cl">            User user = new User(
+</span></span><span class="line"><span class="cl">            rs.getInt(&#34;id&#34;),
+</span></span><span class="line"><span class="cl">            rs.getString(&#34;username&#34;),
+</span></span><span class="line"><span class="cl">            rs.getString(&#34;password&#34;),
+</span></span><span class="line"><span class="cl">            rs.getString(&#34;name&#34;),
+</span></span><span class="line"><span class="cl">            rs.getInt(&#34;age&#34;)
+</span></span><span class="line"><span class="cl">            );
+</span></span><span class="line"><span class="cl">            System.out.println(user);//使用Lombok的 @Data 自动生成 toString() 方法
+</span></span><span class="line"><span class="cl">        }
+</span></span><span class="line"><span class="cl">    }catch (SQLException se){   //捕获SQLException异常
+</span></span><span class="line"><span class="cl">        //Handle errors for JDBC
+</span></span><span class="line"><span class="cl">        se.printStackTrace();
+</span></span><span class="line"><span class="cl">    }catch (Exception e){   //捕获Exception异常
+</span></span><span class="line"><span class="cl">        //Handle errors for Class.forName
+</span></span><span class="line"><span class="cl">        e.printStackTrace();
+</span></span><span class="line"><span class="cl">    }finally {
+</span></span><span class="line"><span class="cl">        //5.释放资源
+</span></span><span class="line"><span class="cl">        try{
+</span></span><span class="line"><span class="cl">            if(rs != null) rs.close();
+</span></span><span class="line"><span class="cl">            if(stmt != null) stmt.close();
+</span></span><span class="line"><span class="cl">            if(conn != null) conn.close();
+</span></span><span class="line"><span class="cl">        }catch (SQLException se){   //捕获SQLException异常
+</span></span><span class="line"><span class="cl">            se.printStackTrace();
+</span></span><span class="line"><span class="cl">        }
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/jdbc/assets/%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C.png"
+	width="1118"
+	height="217"
+	srcset="/p/jdbc/assets/%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C_hu_3e6f45bac0b586d1.png 480w, /p/jdbc/assets/%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C_hu_3451466ce3656556.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="515"
+		data-flex-basis="1236px"
+	
+></p>
+<blockquote>
+<p>小结：</p>
+<p>JDBC程序执行</p>
+<ul>
+<li>DML语句：int rowsAffected = statement.executeUpdate();</li>
+<li>DQL语句：ResultSet rs = statement.executeQuery();</li>
+</ul>
+<p>DQL语句执行完毕结果集ResultSet解析？</p>
+<ul>
+<li>resultSet.next()：光标往下一行</li>
+<li>resultSet.getXxx()：获取字段数据</li>
+</ul>
+</blockquote>
+<h2 id="预编译sql">预编译SQL
+</h2><p>1.静态SQL(参数硬编码)</p>
+<p><img src="/p/jdbc/assets/%E9%9D%99%E6%80%81.png"
+	width="2237"
+	height="325"
+	srcset="/p/jdbc/assets/%E9%9D%99%E6%80%81_hu_acbd8c21e3979209.png 480w, /p/jdbc/assets/%E9%9D%99%E6%80%81_hu_ec0e0fda366cef3f.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="688"
+		data-flex-basis="1651px"
+	
+></p>
+<p>2.预编译SQL(参数动态传递)</p>
+<p><img src="/p/jdbc/assets/%E9%A2%84%E7%BC%96%E8%AF%91.png"
+	width="2231"
+	height="400"
+	srcset="/p/jdbc/assets/%E9%A2%84%E7%BC%96%E8%AF%91_hu_f32ef172dc9d4446.png 480w, /p/jdbc/assets/%E9%A2%84%E7%BC%96%E8%AF%91_hu_1fac17cdf607c27b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="557"
+		data-flex-basis="1338px"
+	
+></p>
+<ul>
+<li>
+<p><strong>优势一：可以防止SQL注入，更安全</strong></p>
+<p>SQL注入：通过控制输入来修改实现定义好的SQL语句，以达到执行代码对服务器进行<strong>攻击</strong>的方法</p>
+<p>典型案例：</p>
+<p><img src="/p/jdbc/assets/%E7%99%BB%E5%BD%95.png"
+	width="527"
+	height="274"
+	srcset="/p/jdbc/assets/%E7%99%BB%E5%BD%95_hu_68a6a17036844433.png 480w, /p/jdbc/assets/%E7%99%BB%E5%BD%95_hu_c90f20a5443e085d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="461px"
+	
+></p>
+<p>演示：</p>
+<p><strong>1.静态SQL</strong></p>
+<p>准备一个静态SQL文件，在其控制台输入java -jar sql_Injection_demo-0.0.1-SNAPSHOT.jar</p>
+<p>(这个文件和下面的那个文件都是事先准备的)</p>
+<p>接着在浏览器输入其端口号：localhost：xxxx</p>
+<p>在上述页面中输入账号密码后就会在控制台输出账号密码，将用户名密码直接写死在了SQL语句中</p>
+<p><img src="/p/jdbc/assets/%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81.png"
+	width="2244"
+	height="852"
+	srcset="/p/jdbc/assets/%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81_hu_f41bfbb6aa3d73dc.png 480w, /p/jdbc/assets/%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81_hu_c6afea7c2b78d1be.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="263"
+		data-flex-basis="632px"
+	
+></p>
+<p>此时在用户名随意书写：sjashakjf，然后在密码输入&rsquo;or'1&rsquo; = &lsquo;1</p>
+<p><img src="/p/jdbc/assets/%E9%9D%99%E6%80%81%E7%99%BB%E5%BD%95.png"
+	width="715"
+	height="537"
+	srcset="/p/jdbc/assets/%E9%9D%99%E6%80%81%E7%99%BB%E5%BD%95_hu_a432bff8bf75aaf5.png 480w, /p/jdbc/assets/%E9%9D%99%E6%80%81%E7%99%BB%E5%BD%95_hu_bc6e81480057632f.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="133"
+		data-flex-basis="319px"
+	
+></p>
+<p><img src="/p/jdbc/assets/%E9%9D%99%E6%80%81%E6%88%90%E5%8A%9F%E7%99%BB%E5%BD%95.png"
+	width="1330"
+	height="219"
+	srcset="/p/jdbc/assets/%E9%9D%99%E6%80%81%E6%88%90%E5%8A%9F%E7%99%BB%E5%BD%95_hu_d49f5102083e8b89.png 480w, /p/jdbc/assets/%E9%9D%99%E6%80%81%E6%88%90%E5%8A%9F%E7%99%BB%E5%BD%95_hu_13f9113258698dfc.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="607"
+		data-flex-basis="1457px"
+	
+></p>
+<p>此时在SQL语句中就会变成如下的代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">select count(*) from emp where username = &#39;songjiang&#39; and password = &#39;123456&#39;	--原本
+</span></span><span class="line"><span class="cl">select count(*) from emp where username = &#39;sjashakjf&#39; and password = &#39;&#39;or&#39;1&#39; = &#39;1&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>&lsquo;&lsquo;or'1&rsquo; = &lsquo;1&rsquo;因为1 = 1是恒等，所以该语句不会报错(改变了原有的SQL语句的含义)，就会登录成功</p>
+<p><strong>2.预编译SQL</strong></p>
+<p>准备一个静态SQL文件，在其控制台输入java -jar sql_Injection_demo-0.0.1-SNAPSHOT.jar</p>
+<p>接着在浏览器输入其端口号：localhost：xxxx</p>
+<p><img src="/p/jdbc/assets/%E9%A2%84%E7%BC%96%E8%AF%91%E8%BE%93%E5%87%BA.png"
+	width="2277"
+	height="953"
+	srcset="/p/jdbc/assets/%E9%A2%84%E7%BC%96%E8%AF%91%E8%BE%93%E5%87%BA_hu_6b7b0456d1a55d50.png 480w, /p/jdbc/assets/%E9%A2%84%E7%BC%96%E8%AF%91%E8%BE%93%E5%87%BA_hu_3e0f5515df342eb3.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="238"
+		data-flex-basis="573px"
+	
+></p>
+<p>使用这种方法后，就会将第一个字符串替换第一个字符，第二个字符串替换第二个字符，此时就不会改变原有的SQL语句的含义</p>
+</li>
+<li>
+<p><strong>优势二：性能更高</strong></p>
+</li>
+</ul>
+<p><img src="/p/jdbc/assets/%E4%BC%98%E5%8A%BF2.png"
+	width="2277"
+	height="634"
+	srcset="/p/jdbc/assets/%E4%BC%98%E5%8A%BF2_hu_90d4a9a31a6a8dd7.png 480w, /p/jdbc/assets/%E4%BC%98%E5%8A%BF2_hu_15fc11e8a25f4b2a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="359"
+		data-flex-basis="861px"
+	
+></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <script src="https://utteranc.es/client.js" 
+        repo="IAmYuanyu/IAmYuanyu.github.io"
+        issue-term="pathname"
+        
+        crossorigin="anonymous"
+        async
+        >
+</script>
+
+<style>
+    .utterances {
+        max-width: unset;
+    }
+</style>
+
+<script>
+    let utterancesLoaded = false;
+
+    function setUtterancesTheme(theme) {
+        let utterances = document.querySelector('.utterances iframe');
+        if (utterances) {
+            utterances.contentWindow.postMessage(
+                {
+                    type: 'set-theme',
+                    theme: `github-${theme}`
+                },
+                'https://utteranc.es'
+            );
+        }
+    }
+
+    addEventListener('message', event => {
+        if (event.origin !== 'https://utteranc.es') return;
+
+        
+        utterancesLoaded = true;
+        setUtterancesTheme(document.documentElement.dataset.scheme)
+    });
+
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (!utterancesLoaded) return;
+        setUtterancesTheme(e.detail)
+    })
+</script>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2025 - 
+        
+        2026 凉介
+    </section>
+    
+    <section class="powerby">
+        
+            本站于2026年3月31日建立 <br/>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
