@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Mybatis 什么是Mybatis？\nMybatis是一款优秀的持久层框架，用于简化JDBC的开发 JDBC与Mybatis代码的对比： ">
+<title>Mybatis</title>
+
+<link rel='canonical' href='https://aurora156.github.io/p/mybatis/'>
+
+<link rel="stylesheet" href="/scss/style.min.6a692fd055deae459f2a9767f57f3855ba80cafd5041317f24f7360f6ca47cdf.css"><meta property='og:title' content="Mybatis">
+<meta property='og:description' content="Mybatis 什么是Mybatis？\nMybatis是一款优秀的持久层框架，用于简化JDBC的开发 JDBC与Mybatis代码的对比： ">
+<meta property='og:url' content='https://aurora156.github.io/p/mybatis/'>
+<meta property='og:site_name' content='凉介的笔记'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-04-13T10:46:52&#43;08:00'/><meta property='article:modified_time' content='2026-04-13T10:46:52&#43;08:00'/>
+<meta name="twitter:title" content="Mybatis">
+<meta name="twitter:description" content="Mybatis 什么是Mybatis？\nMybatis是一款优秀的持久层框架，用于简化JDBC的开发 JDBC与Mybatis代码的对比： ">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_39194fe8d5906e9f.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🌆</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">凉介的笔记</a></h1>
+            <h2 class="site-description">凉介的博客</h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#入门程序">入门程序</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/mybatis/">Mybatis</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2026-04-13</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="mybatis">Mybatis
+</h1><p>什么是Mybatis？</p>
+<ul>
+<li>Mybatis是一款<strong>优秀</strong>的持久层框架，用于<strong>简化JDBC</strong>的开发<img src="/p/mybatis/assets/Mybatis.png"
+	width="1213"
+	height="412"
+	srcset="/p/mybatis/assets/Mybatis_hu_219825ac535b95cc.png 480w, /p/mybatis/assets/Mybatis_hu_4c716c0643214f3e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="294"
+		data-flex-basis="706px"
+	
+></li>
+<li>JDBC与Mybatis代码的对比：</li>
+</ul>
+<p><img src="/p/mybatis/assets/JDBC.png"
+	width="1641"
+	height="1215"
+	srcset="/p/mybatis/assets/JDBC_hu_593ac24c151784f5.png 480w, /p/mybatis/assets/JDBC_hu_3585a824dec3bad8.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="135"
+		data-flex-basis="324px"
+	
+></p>
+<p><img src="/p/mybatis/assets/Mybatis1.png"
+	width="655"
+	height="464"
+	srcset="/p/mybatis/assets/Mybatis1_hu_2e4aaf5cc734c1d8.png 480w, /p/mybatis/assets/Mybatis1_hu_9c307758a566059c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="141"
+		data-flex-basis="338px"
+	
+></p>
+<h2 id="入门程序">入门程序
+</h2><ul>
+<li>准备工作
+<ul>
+<li>创建SpringBoot工程、引入Mybatis相关依赖</li>
+<li>准备数据库表user、实体类User</li>
+<li>配置Mybatis（在application.properties中数据库连接信息）</li>
+</ul>
+</li>
+<li>编写Mybatis程序：编写Mybatis的持久层接口，定义SQL(<strong>注解</strong>/XML)</li>
+</ul>
+<blockquote>
+<p>提示：Mybatis的持久层接口命名规范为 XxxMapper，也称Mapper接口</p>
+</blockquote>
+<p>准备工作：</p>
+<p><strong>1.创建springboot工程，并导入 mybatis的起步依赖、mysql的驱动包、lombok。</strong></p>
+<p><img src="/p/mybatis/assets/DT.png"
+	width="447"
+	height="304"
+	srcset="/p/mybatis/assets/DT_hu_3e3c201637cdb0f5.png 480w, /p/mybatis/assets/DT_hu_703d8c6b37f52ae1.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="147"
+		data-flex-basis="352px"
+	
+></p>
+<p><img src="/p/mybatis/assets/SQL.png"
+	width="435"
+	height="633"
+	srcset="/p/mybatis/assets/SQL_hu_25f4b652f1daa990.png 480w, /p/mybatis/assets/SQL_hu_386dbfb8c97ba2f7.png 1024w"
+	loading="lazy"
+	
+		alt="Q"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="68"
+		data-flex-basis="164px"
+	
+></p>
+<p>项目工程创建完成后，自动在pom.xml文件中，导入Mybatis依赖和MySQL驱动依赖。如下所示：</p>
+<p><img src="/p/mybatis/assets/%E5%AF%BC%E5%85%A5%E4%BE%9D%E8%B5%96.png"
+	width="906"
+	height="705"
+	srcset="/p/mybatis/assets/%E5%AF%BC%E5%85%A5%E4%BE%9D%E8%B5%96_hu_204d26c0a7e7aac1.png 480w, /p/mybatis/assets/%E5%AF%BC%E5%85%A5%E4%BE%9D%E8%B5%96_hu_68c2ddd4e1f71801.png 1024w"
+	loading="lazy"
+	
+		alt="入依"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="128"
+		data-flex-basis="308px"
+	
+></p>
+<p><strong>2.数据准备：创建用户表user，并创建对应的实体类User。</strong></p>
+<ul>
+<li>
+<p>用户表 user（如果已经存在，就不用创建了）</p>
+</li>
+<li>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">create</span> <span class="n">table</span> <span class="n">user</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">id</span> <span class="ne">int</span> <span class="n">unsigned</span> <span class="n">primary</span> <span class="n">key</span> <span class="n">auto_increment</span> <span class="n">comment</span> <span class="s1">&#39;ID,主键&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">username</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="n">comment</span> <span class="s1">&#39;用户名&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">password</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span> <span class="n">comment</span> <span class="s1">&#39;密码&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="n">comment</span> <span class="s1">&#39;姓名&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">age</span> <span class="n">tinyint</span> <span class="n">unsigned</span> <span class="n">comment</span> <span class="s1">&#39;年龄&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="n">comment</span> <span class="s1">&#39;用户表&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">insert</span> <span class="n">into</span> <span class="n">user</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span> <span class="n">values</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;daqiao&#39;</span><span class="p">,</span> <span class="s1">&#39;123456&#39;</span><span class="p">,</span> <span class="s1">&#39;大乔&#39;</span><span class="p">,</span> <span class="mi">22</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                                                           <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;xiaoqiao&#39;</span><span class="p">,</span> <span class="s1">&#39;123456&#39;</span><span class="p">,</span> <span class="s1">&#39;小乔&#39;</span><span class="p">,</span> <span class="mi">18</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                                                           <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;diaochan&#39;</span><span class="p">,</span> <span class="s1">&#39;123456&#39;</span><span class="p">,</span> <span class="s1">&#39;貂蝉&#39;</span><span class="p">,</span> <span class="mi">24</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                                                           <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;lvbu&#39;</span><span class="p">,</span> <span class="s1">&#39;123456&#39;</span><span class="p">,</span> <span class="s1">&#39;吕布&#39;</span><span class="p">,</span> <span class="mi">28</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                                                           <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;zhaoyun&#39;</span><span class="p">,</span> <span class="s1">&#39;12345678&#39;</span><span class="p">,</span> <span class="s1">&#39;赵云&#39;</span><span class="p">,</span> <span class="mi">27</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>实体类：实体类的属性名与表中的字段名一一对应。 实体类放在 <code>com.itheima.pojo</code> 包下。</p>
+</li>
+<li>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">@Data
+</span></span><span class="line"><span class="cl">@NoArgsConstructor
+</span></span><span class="line"><span class="cl">@AllArgsConstructor
+</span></span><span class="line"><span class="cl">public class User {
+</span></span><span class="line"><span class="cl">    private Integer id; //ID
+</span></span><span class="line"><span class="cl">    private String username; //用户名
+</span></span><span class="line"><span class="cl">    private String password; //密码
+</span></span><span class="line"><span class="cl">    private String name; //姓名
+</span></span><span class="line"><span class="cl">    private Integer age; //年龄
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<p><img src="/p/mybatis/assets/pojo.png"
+	width="516"
+	height="451"
+	srcset="/p/mybatis/assets/pojo_hu_448dc51e406863e0.png 480w, /p/mybatis/assets/pojo_hu_4a634441f186ac38.png 1024w"
+	loading="lazy"
+	
+		alt="oj"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="114"
+		data-flex-basis="274px"
+	
+></p>
+<p><strong>3.配置Mybatis</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">#数据库访问的url地址
+</span></span><span class="line"><span class="cl">spring.datasource.url=jdbc:mysql://localhost:3306/web
+</span></span><span class="line"><span class="cl">#数据库驱动类类名
+</span></span><span class="line"><span class="cl">spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+</span></span><span class="line"><span class="cl">#访问数据库-用户名
+</span></span><span class="line"><span class="cl">spring.datasource.username=root
+</span></span><span class="line"><span class="cl">#访问数据库-密码
+</span></span><span class="line"><span class="cl">spring.datasource.password=123456
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>上述的配置，可以直接复制过去，不要敲错了。 全部都是 <code>spring.datasource.xxxx</code> 开头。</p>
+<p>具体内容根据自己的设置进行更改</p>
+</blockquote>
+<p><strong>4.编写Mybatis程序：编写Mybatis的持久层接口，定义SQL语句（注解）</strong></p>
+<p>在创建出来的springboot工程中，在引导类所在包下，在创建一个包 <code>mapper</code> 。在 <code>mapper</code> 包下创建一个接口 <code>UserMapper</code> ，这是一个持久层接口（Mybatis的持久层接口规范一般都叫 XxxMapper）。</p>
+<p>UserMapper接口的内容如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">com</span><span class="p">.</span><span class="nx">itheima</span><span class="p">.</span><span class="nx">mapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">com</span><span class="p">.</span><span class="nx">itheima</span><span class="p">.</span><span class="nx">pojo</span><span class="p">.</span><span class="nx">User</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">org</span><span class="p">.</span><span class="nx">apache</span><span class="p">.</span><span class="nx">ibatis</span><span class="p">.</span><span class="nx">annotations</span><span class="p">.</span><span class="nx">Mapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">org</span><span class="p">.</span><span class="nx">apache</span><span class="p">.</span><span class="nx">ibatis</span><span class="p">.</span><span class="nx">annotations</span><span class="p">.</span><span class="nx">Select</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">java</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">List</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="err">@</span><span class="nx">Mapper</span><span class="w"> </span><span class="cp">//应用程序在运行时，汇总的为该接口创建一个实现类对象(代理对象)，并且会自动将该实现类对象存入IOC容器 - bean</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">public</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nx">UserMapper</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * 查询所有用户
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="err">@</span><span class="nf">Select</span><span class="p">(</span><span class="s">&#34;select * from user&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">public</span><span class="w"> </span><span class="nx">List</span><span class="p">&lt;</span><span class="nx">User</span><span class="p">&gt;</span><span class="w"> </span><span class="nf">finAll</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>注解说明：</p>
+<ul>
+<li>
+<p>@Mapper注解：表示是mybatis中的Mapper接口程序运行时，框架会自动生成接口的实现类对象(代理对象)，并给交Spring的IOC容器管理</p>
+</li>
+<li>
+<p>@Select注解：代表的就是select查询，用于书写select查询语句</p>
+</li>
+</ul>
+</blockquote>
+<p><strong>5.单元测试</strong></p>
+<p>在创建出来的SpringBoot工程中，在src下的test目录下，已经自动帮我们创建好了测试类 ，并且在测试类上已经添加了注解 <code>@SpringBootTest</code>，代表该测试类已经与SpringBoot整合。</p>
+<p>该测试类在运行时，会自动通过引导类加载Spring的环境（IOC容器）。我们要测试那个bean对象，就可以直接通过<code>@Autowired</code>注解直接将其注入进行，然后就可以测试了。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">com</span><span class="p">.</span><span class="nx">itheima</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">com</span><span class="p">.</span><span class="nx">itheima</span><span class="p">.</span><span class="nx">mapper</span><span class="p">.</span><span class="nx">UserMapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">com</span><span class="p">.</span><span class="nx">itheima</span><span class="p">.</span><span class="nx">pojo</span><span class="p">.</span><span class="nx">User</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">org</span><span class="p">.</span><span class="nx">junit</span><span class="p">.</span><span class="nx">jupiter</span><span class="p">.</span><span class="nx">api</span><span class="p">.</span><span class="nx">Test</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">org</span><span class="p">.</span><span class="nx">springframework</span><span class="p">.</span><span class="nx">beans</span><span class="p">.</span><span class="nx">factory</span><span class="p">.</span><span class="nx">annotation</span><span class="p">.</span><span class="nx">Autowired</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">org</span><span class="p">.</span><span class="nx">springframework</span><span class="p">.</span><span class="nx">boot</span><span class="p">.</span><span class="nx">test</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">SpringBootTest</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">java</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">List</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="err">@</span><span class="nx">SpringBootTest</span><span class="w"> </span><span class="cp">//SpringBoot单元测试的注解 - 当前测试类中的测试方法运行时，会启动Springboot项目 - IOC容器</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">class</span><span class="w"> </span><span class="nx">SpringbootMybatisQuickstartApplicationTests</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="err">@</span><span class="nx">Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">private</span><span class="w"> </span><span class="nx">UserMapper</span><span class="w"> </span><span class="nx">userMapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="err">@</span><span class="nx">Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">public</span><span class="w"> </span><span class="nx">void</span><span class="w"> </span><span class="nf">testFindAll</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">List</span><span class="p">&lt;</span><span class="nx">User</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">userList</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">userMapper</span><span class="p">.</span><span class="nf">finAll</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">userList</span><span class="p">.</span><span class="nf">forEach</span><span class="p">(</span><span class="nx">System</span><span class="p">.</span><span class="nx">out</span><span class="p">::</span><span class="nx">println</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>运行结果：</strong></p>
+<p><img src="/p/mybatis/assets/%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C.png"
+	width="2420"
+	height="547"
+	srcset="/p/mybatis/assets/%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C_hu_a362a703d6d12af5.png 480w, /p/mybatis/assets/%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C_hu_18a9e0074b55b4f6.png 1024w"
+	loading="lazy"
+	
+		alt="行结"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="442"
+		data-flex-basis="1061px"
+	
+></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <script src="https://utteranc.es/client.js" 
+        repo="IAmYuanyu/IAmYuanyu.github.io"
+        issue-term="pathname"
+        
+        crossorigin="anonymous"
+        async
+        >
+</script>
+
+<style>
+    .utterances {
+        max-width: unset;
+    }
+</style>
+
+<script>
+    let utterancesLoaded = false;
+
+    function setUtterancesTheme(theme) {
+        let utterances = document.querySelector('.utterances iframe');
+        if (utterances) {
+            utterances.contentWindow.postMessage(
+                {
+                    type: 'set-theme',
+                    theme: `github-${theme}`
+                },
+                'https://utteranc.es'
+            );
+        }
+    }
+
+    addEventListener('message', event => {
+        if (event.origin !== 'https://utteranc.es') return;
+
+        
+        utterancesLoaded = true;
+        setUtterancesTheme(document.documentElement.dataset.scheme)
+    });
+
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (!utterancesLoaded) return;
+        setUtterancesTheme(e.detail)
+    })
+</script>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2025 - 
+        
+        2026 凉介
+    </section>
+    
+    <section class="powerby">
+        
+            本站于2026年3月31日建立 <br/>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
