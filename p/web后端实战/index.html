@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Tlias智能学习辅助系统 需求：\n部门管理：\n查询、新增、修改、删除 员工管理：\n查询、新增、修改、删除 文件上传 报表统计\n登录认证\n日志管理\n班级、学员管理(实战内容)\n准备工作 开发规范 - 开发模式 前后端混合开发\n">
+<title>Web后端实战</title>
+
+<link rel='canonical' href='https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/'>
+
+<link rel="stylesheet" href="/scss/style.min.6a692fd055deae459f2a9767f57f3855ba80cafd5041317f24f7360f6ca47cdf.css"><meta property='og:title' content="Web后端实战">
+<meta property='og:description' content="Tlias智能学习辅助系统 需求：\n部门管理：\n查询、新增、修改、删除 员工管理：\n查询、新增、修改、删除 文件上传 报表统计\n登录认证\n日志管理\n班级、学员管理(实战内容)\n准备工作 开发规范 - 开发模式 前后端混合开发\n">
+<meta property='og:url' content='https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/'>
+<meta property='og:site_name' content='凉介的笔记'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-04-15T20:28:12&#43;08:00'/><meta property='article:modified_time' content='2026-04-15T20:28:12&#43;08:00'/>
+<meta name="twitter:title" content="Web后端实战">
+<meta name="twitter:description" content="Tlias智能学习辅助系统 需求：\n部门管理：\n查询、新增、修改、删除 员工管理：\n查询、新增、修改、删除 文件上传 报表统计\n登录认证\n日志管理\n班级、学员管理(实战内容)\n准备工作 开发规范 - 开发模式 前后端混合开发\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_39194fe8d5906e9f.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🌆</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">凉介的笔记</a></h1>
+            <h2 class="site-description">凉介的博客</h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#准备工作">准备工作</a>
+      <ol>
+        <li><a href="#开发规范---开发模式">开发规范 - 开发模式</a></li>
+        <li><a href="#开发规范---restful风格">开发规范 - Restful风格</a></li>
+        <li><a href="#工程搭建">工程搭建</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/">Web后端实战</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2026-04-15</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="tlias智能学习辅助系统">Tlias智能学习辅助系统
+</h1><ul>
+<li>
+<p>需求：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%9C%80%E6%B1%82.png"
+	width="1074"
+	height="632"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%9C%80%E6%B1%82_hu_3b0e8424120e6ddc.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%9C%80%E6%B1%82_hu_db7a89982f70f393.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="169"
+		data-flex-basis="407px"
+	
+></p>
+</li>
+<li>
+<p>部门管理：</p>
+<ul>
+<li>查询、新增、修改、删除</li>
+</ul>
+</li>
+<li>
+<p>员工管理：</p>
+<ul>
+<li>查询、新增、修改、删除</li>
+<li>文件上传</li>
+</ul>
+</li>
+<li>
+<p>报表统计</p>
+</li>
+<li>
+<p>登录认证</p>
+</li>
+<li>
+<p>日志管理</p>
+</li>
+<li>
+<p>班级、学员管理(实战内容)</p>
+</li>
+</ul>
+<h2 id="准备工作">准备工作
+</h2><h3 id="开发规范---开发模式">开发规范 - 开发模式
+</h3><p><strong>前后端混合开发</strong></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E5%90%8E%E7%AB%AF%E6%B7%B7%E5%90%88%E5%BC%80%E5%8F%91.png"
+	width="2021"
+	height="1064"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E5%90%8E%E7%AB%AF%E6%B7%B7%E5%90%88%E5%BC%80%E5%8F%91_hu_f274cec20d8e08b5.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E5%90%8E%E7%AB%AF%E6%B7%B7%E5%90%88%E5%BC%80%E5%8F%91_hu_7b870a8cb667f0df.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="189"
+		data-flex-basis="455px"
+	
+></p>
+<p><strong>前后端分离开发</strong></p>
+<ul>
+<li>当前最为主流的开发模式：前后端分离</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB.png"
+	width="1485"
+	height="662"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB_hu_c2b99092d53b4fe5.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB_hu_3b904d693263339d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="224"
+		data-flex-basis="538px"
+	
+></p>
+<p>此处的接口为<strong>功能接口</strong>，接口是依据<strong>原型+ 需求</strong>进行设计的</p>
+<p>该项目的接口文档：<a class="link" href="https://heuqqdmbyk.feishu.cn/wiki/GyZVwpRf6ir89qkKtFqc0HlTnhg"  target="_blank" rel="noopener"
+    >接口文档 - 飞书云文档</a></p>
+<p>基本的开发流程为：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B.png"
+	width="2145"
+	height="218"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B_hu_a5fee0b45573bd51.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B_hu_b2f87bd3149043cc.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="983"
+		data-flex-basis="2361px"
+	
+></p>
+<h3 id="开发规范---restful风格">开发规范 - Restful风格
+</h3><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/Restful.png"
+	width="1942"
+	height="880"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/Restful_hu_5d10fa3e23f582d0.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/Restful_hu_e57d61d2e09380ce.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="220"
+		data-flex-basis="529px"
+	
+></p>
+<ul>
+<li>REST（<strong>RE</strong>presentational <strong>S</strong>tate <strong>T</strong>ransfer），表述性状态转换，它是一种软件架构风格。</li>
+</ul>
+<p>传统风格：<strong>不规范、难维护</strong></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BC%A0%E7%BB%9F%E9%A3%8E%E6%A0%BC.png"
+	width="2232"
+	height="525"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BC%A0%E7%BB%9F%E9%A3%8E%E6%A0%BC_hu_61ae32d124152ddb.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BC%A0%E7%BB%9F%E9%A3%8E%E6%A0%BC_hu_6c829537e5e2c8a0.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="425"
+		data-flex-basis="1020px"
+	
+></p>
+<p>REST风格：<strong>URL定位资源，HTTP动词描述操作</strong></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/Rest%E9%A3%8E%E6%A0%BC.png"
+	width="2204"
+	height="516"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/Rest%E9%A3%8E%E6%A0%BC_hu_32bc7f57bcc53eef.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/Rest%E9%A3%8E%E6%A0%BC_hu_dc875d643d49b8dc.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="427"
+		data-flex-basis="1025px"
+	
+></p>
+<blockquote>
+<p>注意：</p>
+<p>1.REST是风格，是约定方式，约定不是规定，可以打破</p>
+<p>2.描述功能模块通常使用复数形式(加s)，表示此类资源，而非单个资源。如：users、books&hellip;</p>
+</blockquote>
+<ul>
+<li>
+<p>思考：</p>
+<ul>
+<li>
+<p>前后端都在并行开发，后端开发完对应的接口之后，如何对接口进行请求测试呢？</p>
+<p>浏览器中发送的请求都是GET方式的请求，无法发送其他三个请求</p>
+</li>
+<li>
+<p>前后端都在并行开发，前端开发过程中，如何获取到数据，测试页面的渲染展示呢？</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>此时需要借助两个工具(选其一即可)：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/PA%E5%B7%A5%E5%85%B7.png"
+	width="548"
+	height="268"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/PA%E5%B7%A5%E5%85%B7_hu_5f8fe2aaa64ca313.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/PA%E5%B7%A5%E5%85%B7_hu_1babb3ed991babbb.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="204"
+		data-flex-basis="490px"
+	
+></p>
+<p>此处使用Apifox工具：</p>
+<ul>
+<li>
+<p>介绍：Apifox是一款集成了Api文档、Api调试、Api Mock、Api测试的一体化协作平台</p>
+</li>
+<li>
+<p>作用：接口文档管理、接口请求测试、Mock服务</p>
+<p>Mock服务：（Apifox为前端提供的模拟的URL地址，访问这个地址，就会给你返回对应的数据，以便前端测试）</p>
+</li>
+<li>
+<p>官网： <a class="link" href="https://apifox.com/"  target="_blank" rel="noopener"
+    >https://apifox.com/</a></p>
+</li>
+</ul>
+<p>安装完成之后，就可以扫码登录Apifox，就可以使用了</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/api%E4%BD%BF%E7%94%A81.png"
+	width="1600"
+	height="998"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/api%E4%BD%BF%E7%94%A81_hu_741a3ff798e4d632.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/api%E4%BD%BF%E7%94%A81_hu_fbd507e9f33b763c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="160"
+		data-flex-basis="384px"
+	
+></p>
+<p>此处是打开了之前写的Springboot的入门程序的代码进行测试的</p>
+<p>在输入URL地址后，就可以看到接受的数据了</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/api%E4%BD%BF%E7%94%A82.png"
+	width="1600"
+	height="950"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/api%E4%BD%BF%E7%94%A82_hu_3e79e184dc1f3f06.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/api%E4%BD%BF%E7%94%A82_hu_b6a2d82585363fac.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="168"
+		data-flex-basis="404px"
+	
+></p>
+<h3 id="工程搭建">工程搭建
+</h3><ul>
+<li>创建SpringBoot工程，并引入web开发起步依赖、mybatis、mysql驱动、lombok。</li>
+<li>创建数据库表dept，并在application.yml中配置数据库的基本信息。</li>
+<li>准备基础代码结构，并引入实体类Dept及统一的响应结果封装类 Result。</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/Result.png"
+	width="1145"
+	height="803"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/Result_hu_606878b43c4430af.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/Result_hu_83a7be0db0a393a9.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="142"
+		data-flex-basis="342px"
+	
+></p>
+<ul>
+<li>创建项目：</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%9B%E5%BB%BA01.png"
+	width="509"
+	height="453"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%9B%E5%BB%BA01_hu_736d5d354d6c46ca.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%9B%E5%BB%BA01_hu_a2b52aa666f56597.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="112"
+		data-flex-basis="269px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%9B%E5%BB%BA1.png"
+	width="982"
+	height="896"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%9B%E5%BB%BA1_hu_4113058d9158673e.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%9B%E5%BB%BA1_hu_ed1d905fe6f3d011.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="109"
+		data-flex-basis="263px"
+	
+></p>
+<ul>
+<li>创建<code>tlias</code>数据库，并准备<code>dept</code>部门表。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">dept</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">id</span> <span class="ne">int</span> <span class="n">unsigned</span> <span class="n">PRIMARY</span> <span class="n">KEY</span> <span class="n">AUTO_INCREMENT</span> <span class="n">COMMENT</span> <span class="s1">&#39;ID, 主键&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="n">NOT</span> <span class="n">NULL</span> <span class="n">UNIQUE</span> <span class="n">COMMENT</span> <span class="s1">&#39;部门名称&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">create_time</span> <span class="n">datetime</span> <span class="n">DEFAULT</span> <span class="n">NULL</span> <span class="n">COMMENT</span> <span class="s1">&#39;创建时间&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">update_time</span> <span class="n">datetime</span> <span class="n">DEFAULT</span> <span class="n">NULL</span> <span class="n">COMMENT</span> <span class="s1">&#39;修改时间&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="n">COMMENT</span> <span class="s1">&#39;部门表&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">dept</span> <span class="n">VALUES</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;学工部&#39;</span><span class="p">,</span><span class="s1">&#39;2024-09-25 09:47:40&#39;</span><span class="p">,</span><span class="s1">&#39;2024-09-25 09:47:40&#39;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                      <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;教研部&#39;</span><span class="p">,</span><span class="s1">&#39;2024-09-25 09:47:40&#39;</span><span class="p">,</span><span class="s1">&#39;2024-09-09 15:17:04&#39;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                      <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;咨询部&#39;</span><span class="p">,</span><span class="s1">&#39;2024-09-25 09:47:40&#39;</span><span class="p">,</span><span class="s1">&#39;2024-09-30 21:26:24&#39;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                      <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="s1">&#39;就业部&#39;</span><span class="p">,</span><span class="s1">&#39;2024-09-25 09:47:40&#39;</span><span class="p">,</span><span class="s1">&#39;2024-09-25 09:47:40&#39;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                      <span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="s1">&#39;人事部&#39;</span><span class="p">,</span><span class="s1">&#39;2024-09-25 09:47:40&#39;</span><span class="p">,</span><span class="s1">&#39;2024-09-25 09:47:40&#39;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                      <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;行政部&#39;</span><span class="p">,</span><span class="s1">&#39;2024-11-30 20:56:37&#39;</span><span class="p">,</span><span class="s1">&#39;2024-09-30 20:56:37&#39;</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>在 <code>application.yml</code> 配置文件中配置数据库的连接信息。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">  application:
+</span></span><span class="line"><span class="cl">    name: tlias-web-management
+</span></span><span class="line"><span class="cl">    # 配置数据库连接信息
+</span></span><span class="line"><span class="cl">  datasource:
+</span></span><span class="line"><span class="cl">    url: jdbc:mysql://localhost:3306/tlias
+</span></span><span class="line"><span class="cl">    username: root
+</span></span><span class="line"><span class="cl">    password: 123456
+</span></span><span class="line"><span class="cl">    driver-class-name: com.mysql.cj.jdbc.Driver
+</span></span><span class="line"><span class="cl">mybatis:
+</span></span><span class="line"><span class="cl">  configuration:
+</span></span><span class="line"><span class="cl">    #配置Mybatis的日志输出
+</span></span><span class="line"><span class="cl">    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>准备基础包结构</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%9F%BA%E7%A1%80%E5%8C%85%E7%BB%93%E6%9E%84.png"
+	width="471"
+	height="345"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%9F%BA%E7%A1%80%E5%8C%85%E7%BB%93%E6%9E%84_hu_8e05e4ecf2307711.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%9F%BA%E7%A1%80%E5%8C%85%E7%BB%93%E6%9E%84_hu_c5c05bfaf18d3713.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="136"
+		data-flex-basis="327px"
+	
+></p>
+<ul>
+<li>实体类Dept</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">com</span><span class="p">.</span><span class="nx">itheima</span><span class="p">.</span><span class="nx">pojo</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">lombok</span><span class="p">.</span><span class="nx">AllArgsConstructor</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">lombok</span><span class="p">.</span><span class="nx">Data</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">lombok</span><span class="p">.</span><span class="nx">NoArgsConstructor</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">java</span><span class="p">.</span><span class="nx">time</span><span class="p">.</span><span class="nx">LocalDateTime</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="err">@</span><span class="nx">Data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="err">@</span><span class="nx">NoArgsConstructor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="err">@</span><span class="nx">AllArgsConstructor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">public</span><span class="w"> </span><span class="nx">class</span><span class="w"> </span><span class="nx">Dept</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">private</span><span class="w"> </span><span class="nx">Integer</span><span class="w"> </span><span class="nx">id</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">private</span><span class="w"> </span><span class="nx">String</span><span class="w"> </span><span class="nx">name</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">private</span><span class="w"> </span><span class="nx">LocalDateTime</span><span class="w"> </span><span class="nx">createTime</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">private</span><span class="w"> </span><span class="nx">LocalDateTime</span><span class="w"> </span><span class="nx">updateTime</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>统一响应结果Result</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">com</span><span class="p">.</span><span class="nx">itheima</span><span class="p">.</span><span class="nx">pojo</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">lombok</span><span class="p">.</span><span class="nx">Data</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">java</span><span class="p">.</span><span class="nx">io</span><span class="p">.</span><span class="nx">Serializable</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 后端统一返回结果
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="err">@</span><span class="nx">Data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">public</span><span class="w"> </span><span class="nx">class</span><span class="w"> </span><span class="nx">Result</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">private</span><span class="w"> </span><span class="nx">Integer</span><span class="w"> </span><span class="nx">code</span><span class="p">;</span><span class="w"> </span><span class="cp">//编码：1成功，0为失败</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">private</span><span class="w"> </span><span class="nx">String</span><span class="w"> </span><span class="nx">msg</span><span class="p">;</span><span class="w"> </span><span class="cp">//错误信息</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">private</span><span class="w"> </span><span class="nx">Object</span><span class="w"> </span><span class="nx">data</span><span class="p">;</span><span class="w"> </span><span class="cp">//数据</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">public</span><span class="w"> </span><span class="nx">static</span><span class="w"> </span><span class="nx">Result</span><span class="w"> </span><span class="nf">success</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">Result</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">new</span><span class="w"> </span><span class="nf">Result</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">result</span><span class="p">.</span><span class="nx">code</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">result</span><span class="p">.</span><span class="nx">msg</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#34;success&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">result</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">public</span><span class="w"> </span><span class="nx">static</span><span class="w"> </span><span class="nx">Result</span><span class="w"> </span><span class="nf">success</span><span class="p">(</span><span class="nx">Object</span><span class="w"> </span><span class="nx">object</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">Result</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">new</span><span class="w"> </span><span class="nf">Result</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">result</span><span class="p">.</span><span class="nx">data</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">object</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">result</span><span class="p">.</span><span class="nx">code</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">result</span><span class="p">.</span><span class="nx">msg</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#34;success&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">result</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">public</span><span class="w"> </span><span class="nx">static</span><span class="w"> </span><span class="nx">Result</span><span class="w"> </span><span class="nb">error</span><span class="p">(</span><span class="nx">String</span><span class="w"> </span><span class="nx">msg</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">Result</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">new</span><span class="w"> </span><span class="nf">Result</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">result</span><span class="p">.</span><span class="nx">msg</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">msg</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">result</span><span class="p">.</span><span class="nx">code</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">result</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>基础代码结构</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%9F%BA%E7%A1%80%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84.png"
+	width="511"
+	height="893"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%9F%BA%E7%A1%80%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84_hu_1294528865c25b48.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%9F%BA%E7%A1%80%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84_hu_b4add6a21cd738c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="57"
+		data-flex-basis="137px"
+	
+></p>
+<ul>
+<li>DeptMapper</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">com</span><span class="p">.</span><span class="nx">itheima</span><span class="p">.</span><span class="nx">mapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">org</span><span class="p">.</span><span class="nx">apache</span><span class="p">.</span><span class="nx">ibatis</span><span class="p">.</span><span class="nx">annotations</span><span class="p">.</span><span class="nx">Mapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="err">@</span><span class="nx">Mapper</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">public</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nx">DeptMapper</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>DeptService</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">com</span><span class="p">.</span><span class="nx">itheima</span><span class="p">.</span><span class="nx">service</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">public</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nx">DeptService</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>DeptServiceImpl</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">com</span><span class="p">.</span><span class="nx">itheima</span><span class="p">.</span><span class="nx">service</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">public</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nx">DeptService</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>DeptServiceImpl</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">com</span><span class="p">.</span><span class="nx">itheima</span><span class="p">.</span><span class="nx">service</span><span class="p">.</span><span class="nx">impl</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">com</span><span class="p">.</span><span class="nx">itheima</span><span class="p">.</span><span class="nx">service</span><span class="p">.</span><span class="nx">DeptService</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">org</span><span class="p">.</span><span class="nx">springframework</span><span class="p">.</span><span class="nx">stereotype</span><span class="p">.</span><span class="nx">Service</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="err">@</span><span class="nx">Service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">public</span><span class="w"> </span><span class="nx">class</span><span class="w"> </span><span class="nx">DeptServiceImpl</span><span class="w"> </span><span class="nx">implements</span><span class="w"> </span><span class="nx">DeptService</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>DeptController</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">com</span><span class="p">.</span><span class="nx">itheima</span><span class="p">.</span><span class="nx">controller</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nx">org</span><span class="p">.</span><span class="nx">springframework</span><span class="p">.</span><span class="nx">web</span><span class="p">.</span><span class="nx">bind</span><span class="p">.</span><span class="nx">annotation</span><span class="p">.</span><span class="nx">RestController</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 部门管理控制器
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="err">@</span><span class="nx">RestController</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">public</span><span class="w"> </span><span class="nx">class</span><span class="w"> </span><span class="nx">DeptController</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <script src="https://utteranc.es/client.js" 
+        repo="IAmYuanyu/IAmYuanyu.github.io"
+        issue-term="pathname"
+        
+        crossorigin="anonymous"
+        async
+        >
+</script>
+
+<style>
+    .utterances {
+        max-width: unset;
+    }
+</style>
+
+<script>
+    let utterancesLoaded = false;
+
+    function setUtterancesTheme(theme) {
+        let utterances = document.querySelector('.utterances iframe');
+        if (utterances) {
+            utterances.contentWindow.postMessage(
+                {
+                    type: 'set-theme',
+                    theme: `github-${theme}`
+                },
+                'https://utteranc.es'
+            );
+        }
+    }
+
+    addEventListener('message', event => {
+        if (event.origin !== 'https://utteranc.es') return;
+
+        
+        utterancesLoaded = true;
+        setUtterancesTheme(document.documentElement.dataset.scheme)
+    });
+
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (!utterancesLoaded) return;
+        setUtterancesTheme(e.detail)
+    })
+</script>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2025 - 
+        
+        2026 凉介
+    </section>
+    
+    <section class="powerby">
+        
+            本站于2026年3月31日建立 <br/>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
