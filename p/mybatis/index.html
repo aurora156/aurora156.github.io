@@ -242,6 +242,7 @@
         <li><a href="#xml映射文件---辅助配置">XML映射文件 - 辅助配置</a></li>
       </ol>
     </li>
+    <li><a href="#springboot配置文件">Springboot配置文件</a></li>
   </ol>
 </nav>
         </div>
@@ -740,6 +741,7 @@
 ></p>
 <blockquote>
 <p>扩展：可以将application.properties文件替换为application.yaml(需将原本的文件注释掉)</p>
+<p>下文中有详细叙述</p>
 <p>文件的优先级：properties &gt; yml &gt; yaml</p>
 <p>此时文件内容需要更改为：(因为文件格式不一致)</p>
 <div class="highlight"><div class="chroma">
@@ -1468,7 +1470,120 @@
 	
 ></p>
 <p>此时将项目中同包同名的文件remove即可，不移除也可以照常运行，但是项目真正开发项目中一般不会出现这种情况</p>
-
+<h2 id="springboot配置文件">Springboot配置文件
+</h2><ul>
+<li>Springboot项目提供了多种属性配置方式(properties、yaml、yml)</li>
+</ul>
+<p><img src="/p/mybatis/assets/yaml.png"
+	width="1955"
+	height="975"
+	srcset="/p/mybatis/assets/yaml_hu_a883d3e0fdd73891.png 480w, /p/mybatis/assets/yaml_hu_f4e63f5f99e12fa8.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="200"
+		data-flex-basis="481px"
+	
+></p>
+<blockquote>
+<ul>
+<li>格式：
+<ul>
+<li>数值前边必须有空格，作为分隔符</li>
+<li>使用缩进表示层级关系，缩进时，不允许使用Tab键，只能用空格（idea中会自动将Tab转换为空格）</li>
+<li>缩进的空格数目不重要，只要相同层级的元素左侧对齐即可</li>
+<li>#  表示注释，从这个字符一直到行尾，都会被解析器忽略</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p><img src="/p/mybatis/assets/%E9%85%8D%E7%BD%AE.png"
+	width="1086"
+	height="376"
+	srcset="/p/mybatis/assets/%E9%85%8D%E7%BD%AE_hu_56a68466f36e6f95.png 480w, /p/mybatis/assets/%E9%85%8D%E7%BD%AE_hu_a92925898c06034c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="288"
+		data-flex-basis="693px"
+	
+></p>
+<ul>
+<li><strong>定义对象/Map集合：</strong></li>
+</ul>
+<p><img src="/p/mybatis/assets/%E5%AF%B9%E8%B1%A1Map.png"
+	width="1063"
+	height="377"
+	srcset="/p/mybatis/assets/%E5%AF%B9%E8%B1%A1Map_hu_8979569b83b782e6.png 480w, /p/mybatis/assets/%E5%AF%B9%E8%B1%A1Map_hu_65499f847e1c45e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="281"
+		data-flex-basis="676px"
+	
+></p>
+<ul>
+<li><strong>定义数组/List/Set集合：记得加 - ，- 后面要加空格</strong></li>
+</ul>
+<p><img src="/p/mybatis/assets/%E6%95%B0%E7%BB%84.png"
+	width="1049"
+	height="363"
+	srcset="/p/mybatis/assets/%E6%95%B0%E7%BB%84_hu_dfc8b8f7c3fedf8c.png 480w, /p/mybatis/assets/%E6%95%B0%E7%BB%84_hu_badc59d5e8f6eef0.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="288"
+		data-flex-basis="693px"
+	
+></p>
+<blockquote>
+<p>注意：在yml格式的配置文件中，如果配置项的值是以0开头的，值需要使用  **&rsquo; &rsquo; ** 引起来，因为0开头在yml中表示8进制的数据</p>
+<p>例如：输入一个0开头的Password就需要设置为：&lsquo;0123456&rsquo;</p>
+</blockquote>
+<p>所以前面的application.properties就可以改为yml文件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">spring:
+</span></span><span class="line"><span class="cl">  application:
+</span></span><span class="line"><span class="cl">    name: springboot-mybatis-quickstart
+</span></span><span class="line"><span class="cl">    # 配置数据库连接信息
+</span></span><span class="line"><span class="cl">  datasource:
+</span></span><span class="line"><span class="cl">    type: com.alibaba.druid.pool.DruidDataSource
+</span></span><span class="line"><span class="cl">    url: jdbc:mysql://localhost:3306/web01
+</span></span><span class="line"><span class="cl">    username: root
+</span></span><span class="line"><span class="cl">    password: 123456
+</span></span><span class="line"><span class="cl">    driver-class-name: com.mysql.cj.jdbc.Driver
+</span></span><span class="line"><span class="cl">mybatis:
+</span></span><span class="line"><span class="cl">  configuration:
+</span></span><span class="line"><span class="cl">  #配置Mybatis的日志输出
+</span></span><span class="line"><span class="cl">    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+</span></span><span class="line"><span class="cl">  #指定XML映射文件的位置
+</span></span><span class="line"><span class="cl">  mapper-locations: classpath:mapper/*.xml
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
 </section>
 
 
