@@ -351,6 +351,837 @@
 		data-flex-basis=&#34;1061px&#34;
 	
 &gt;&lt;/p&gt;
+&lt;h2 id=&#34;辅助配置&#34;&gt;辅助配置
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;默认在Mybatis中配置的SQL语句是不识别的。可以做如下配置：&lt;/p&gt;
+&lt;p&gt;先点击图中所示按钮：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E8%AF%86%E5%88%ABSQL%E8%AF%AD%E5%8F%A5.png&#34;
+	width=&#34;1581&#34;
+	height=&#34;795&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E8%AF%86%E5%88%ABSQL%E8%AF%AD%E5%8F%A5_hu_d7288bbb12ede7bc.png 480w, https://aurora156.github.io/p/mybatis/assets/%E8%AF%86%E5%88%ABSQL%E8%AF%AD%E5%8F%A5_hu_a9157040d59cc748.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;198&#34;
+		data-flex-basis=&#34;477px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;然后直接搜索MySQL：&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/MySQL.png&#34;
+	width=&#34;982&#34;
+	height=&#34;186&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/MySQL_hu_23a8ac0103e4205b.png 480w, https://aurora156.github.io/p/mybatis/assets/MySQL_hu_3295c94e1a4a8a15.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;527&#34;
+		data-flex-basis=&#34;1267px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;此时编译器就会给这条语句高亮提示，但是会报错：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%8A%A5%E9%94%99.png&#34;
+	width=&#34;515&#34;
+	height=&#34;130&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%8A%A5%E9%94%99_hu_5b20d332b3d43a1b.png 480w, https://aurora156.github.io/p/mybatis/assets/%E6%8A%A5%E9%94%99_hu_415a76e403e8d297.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;396&#34;
+		data-flex-basis=&#34;950px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;产生原因：idea和数据库没有建立连接，不识别信息&lt;/li&gt;
+&lt;li&gt;解决方式：在idea中配置MySQL数据库连接&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E9%80%89%E6%8B%A9%E9%85%8D%E7%BD%AE.png&#34;
+	width=&#34;698&#34;
+	height=&#34;1076&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E9%80%89%E6%8B%A9%E9%85%8D%E7%BD%AE_hu_60d0b242e2daa644.png 480w, https://aurora156.github.io/p/mybatis/assets/%E9%80%89%E6%8B%A9%E9%85%8D%E7%BD%AE_hu_11d2f1b5f3a746e6.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;64&#34;
+		data-flex-basis=&#34;155px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E5%A1%AB%E5%86%99.png&#34;
+	width=&#34;999&#34;
+	height=&#34;865&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E5%A1%AB%E5%86%99_hu_1746247c2a5592d2.png 480w, https://aurora156.github.io/p/mybatis/assets/%E5%A1%AB%E5%86%99_hu_2ba5c521cd7a4e21.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;115&#34;
+		data-flex-basis=&#34;277px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E8%BF%9E%E6%8E%A5%E6%88%90%E5%8A%9F.png&#34;
+	width=&#34;534&#34;
+	height=&#34;273&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E8%BF%9E%E6%8E%A5%E6%88%90%E5%8A%9F_hu_c1f641b524a064d.png 480w, https://aurora156.github.io/p/mybatis/assets/%E8%BF%9E%E6%8E%A5%E6%88%90%E5%8A%9F_hu_a562a90045164ba7.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;195&#34;
+		data-flex-basis=&#34;469px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;连上之后就有SQL提示了&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;默认情况喜爱，在Mybatis中，SQL语句执行是，我们并看不到SQL语句的执行日志。加入如下配置，即可查看配置：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%89%A7%E8%A1%8C%E6%97%A5%E5%BF%97.png&#34;
+	width=&#34;2221&#34;
+	height=&#34;217&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%89%A7%E8%A1%8C%E6%97%A5%E5%BF%97_hu_19fbb98522ccd1d2.png 480w, https://aurora156.github.io/p/mybatis/assets/%E6%89%A7%E8%A1%8C%E6%97%A5%E5%BF%97_hu_a696e0c271e7e4f7.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;1023&#34;
+		data-flex-basis=&#34;2456px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;扩展：可以将application.properties文件替换为application.yaml(需将原本的文件注释掉)&lt;/p&gt;
+&lt;p&gt;文件的优先级：properties &amp;gt; yml &amp;gt; yaml&lt;/p&gt;
+&lt;p&gt;此时文件内容需要更改为：(因为文件格式不一致)&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# 更简洁，但是要注意: 后面一定一定要加个空格
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;spring:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  datasource:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    url: jdbc:mysql://localhost:3306/web01
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    username: root
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    password: 123456
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    driver-class-name: com.mysql.cj.jdbc.Driver
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mybatis:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  configuration:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%8E%A7%E5%88%B6%E5%8F%B0.png&#34;
+	width=&#34;1683&#34;
+	height=&#34;617&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%8E%A7%E5%88%B6%E5%8F%B0_hu_767cb5802178331f.png 480w, https://aurora156.github.io/p/mybatis/assets/%E6%8E%A7%E5%88%B6%E5%8F%B0_hu_c4ee320fa7f64528.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;272&#34;
+		data-flex-basis=&#34;654px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;jdbc-vs-mybatis&#34;&gt;JDBC VS Mybatis
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/VS.png&#34;
+	width=&#34;2344&#34;
+	height=&#34;1108&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/VS_hu_f29685e546a43b9b.png 480w, https://aurora156.github.io/p/mybatis/assets/VS_hu_7f1b205bd458f39e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;211&#34;
+		data-flex-basis=&#34;507px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;数据库连接池&#34;&gt;数据库连接池
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;数据库连接池&lt;/strong&gt;是个容器，负责分配、管理数据库连接(Connection)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;它允许应用程序重复使用一个现有的数据库连接，而不是重新再建立一个&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;释放空闲时间超过最大空闲时间的连接，来避免因为没有释放资源而引起的数据库连接遗漏&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;优势：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;资源重用&lt;/li&gt;
+&lt;li&gt;提升系统响应速度&lt;/li&gt;
+&lt;li&gt;避免数据库连接遗漏&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E4%BC%98%E5%8A%BF.png&#34;
+	width=&#34;2289&#34;
+	height=&#34;573&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E4%BC%98%E5%8A%BF_hu_1fb29f151e687056.png 480w, https://aurora156.github.io/p/mybatis/assets/%E4%BC%98%E5%8A%BF_hu_aeb8118b6fb0c8a0.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;399&#34;
+		data-flex-basis=&#34;958px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;标准接口：DataSource&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;官方(sun)提供的数据库连接池接口，由第三方组织实现此接口。&lt;/li&gt;
+&lt;li&gt;功能：获取连接 Connection getConnection() throws SQLException;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;常见产品：&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E5%B8%B8%E8%A7%81%E4%BA%A7%E5%93%81.png&#34;
+	width=&#34;2234&#34;
+	height=&#34;673&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E5%B8%B8%E8%A7%81%E4%BA%A7%E5%93%81_hu_e48d82c3074e6d8.png 480w, https://aurora156.github.io/p/mybatis/assets/%E5%B8%B8%E8%A7%81%E4%BA%A7%E5%93%81_hu_bdbcfe0be67735f6.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;331&#34;
+		data-flex-basis=&#34;796px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;切换数据库连接池：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/D%E4%BE%9D%E8%B5%96.png&#34;
+	width=&#34;759&#34;
+	height=&#34;236&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/D%E4%BE%9D%E8%B5%96_hu_47c77efd21e55c87.png 480w, https://aurora156.github.io/p/mybatis/assets/D%E4%BE%9D%E8%B5%96_hu_893800e1fe738998.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;321&#34;
+		data-flex-basis=&#34;771px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/D%E9%85%8D%E7%BD%AE.png&#34;
+	width=&#34;1027&#34;
+	height=&#34;399&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/D%E9%85%8D%E7%BD%AE_hu_b1b1beb39b21e590.png 480w, https://aurora156.github.io/p/mybatis/assets/D%E9%85%8D%E7%BD%AE_hu_d802d8b242390eb0.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;257&#34;
+		data-flex-basis=&#34;617px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E5%88%87%E6%8D%A2%E8%BE%93%E5%87%BA.png&#34;
+	width=&#34;1881&#34;
+	height=&#34;479&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E5%88%87%E6%8D%A2%E8%BE%93%E5%87%BA_hu_f221465e7e75023.png 480w, https://aurora156.github.io/p/mybatis/assets/%E5%88%87%E6%8D%A2%E8%BE%93%E5%87%BA_hu_b8c44ec44351036a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;392&#34;
+		data-flex-basis=&#34;942px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;增删改查操作&#34;&gt;增删改查操作
+&lt;/h2&gt;&lt;h3 id=&#34;删除用户---delete&#34;&gt;删除用户 - delete
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;需求：根据id删除用户信息&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;SQL：delete from user where id = 5;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Mapper接口：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E5%88%A0%E9%99%A4.png&#34;
+	width=&#34;2140&#34;
+	height=&#34;324&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E5%88%A0%E9%99%A4_hu_fdddba9544a9c3eb.png 480w, https://aurora156.github.io/p/mybatis/assets/%E5%88%A0%E9%99%A4_hu_a2eb0302bdffe35f.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;660&#34;
+		data-flex-basis=&#34;1585px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;在执行这条SQL语句时，会将#{}替换为问号，即预编译SQL&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@Delete(&amp;#34;delete from user where id = ${id}&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public Integer deleteById(Integer id);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; @Test
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; public void testDeleteById() {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    userMapper.deleteById(5);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E5%8E%9F.png&#34;
+	width=&#34;1124&#34;
+	height=&#34;346&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E5%8E%9F_hu_62d5d8616ec41c7e.png 480w, https://aurora156.github.io/p/mybatis/assets/%E5%8E%9F_hu_c2d1618bdbe06d96.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;324&#34;
+		data-flex-basis=&#34;779px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%96%B0.png&#34;
+	width=&#34;1139&#34;
+	height=&#34;339&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%96%B0_hu_12f2ae1ad9c05f43.png 480w, https://aurora156.github.io/p/mybatis/assets/%E6%96%B0_hu_d4da0cd62769b7fd.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;335&#34;
+		data-flex-basis=&#34;806px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E5%88%A0.png&#34;
+	width=&#34;1935&#34;
+	height=&#34;393&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E5%88%A0_hu_e567fc183470b453.png 480w, https://aurora156.github.io/p/mybatis/assets/%E5%88%A0_hu_ff513e8fc344f64c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;492&#34;
+		data-flex-basis=&#34;1181px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;如果想要接收返回值，就将void替换为返回值类型&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/integer.png&#34;
+	width=&#34;2105&#34;
+	height=&#34;268&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/integer_hu_e52cad341fadb5ae.png 480w, https://aurora156.github.io/p/mybatis/assets/integer_hu_c7e98ab4bcd1de0c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;785&#34;
+		data-flex-basis=&#34;1885px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;注意：DML语句执行完毕的返回值，表示该DML语句执行完毕影响的次数&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public void testDeleteById() {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    Integer i = userMapper.deleteById(5);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    System.out.println(&amp;#34;执行完毕，影响的记录数：&amp;#34; + i);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E5%88%A0%E9%99%A41.png&#34;
+	width=&#34;1325&#34;
+	height=&#34;357&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E5%88%A0%E9%99%A41_hu_a9cbc6e8fed7c80c.png 480w, https://aurora156.github.io/p/mybatis/assets/%E5%88%A0%E9%99%A41_hu_8a44dc46b0568a9.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;371&#34;
+		data-flex-basis=&#34;890px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Mybatis中的 # 号与 $ 号：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E7%AC%A6%E5%8F%B7.png&#34;
+	width=&#34;2264&#34;
+	height=&#34;371&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E7%AC%A6%E5%8F%B7_hu_ba6d5f0a51d0e566.png 480w, https://aurora156.github.io/p/mybatis/assets/%E7%AC%A6%E5%8F%B7_hu_75154d65f5b02802.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;610&#34;
+		data-flex-basis=&#34;1464px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@Delete(&amp;#34;delete from user where id = ${id}&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public Integer deleteById(Integer id);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/$.png&#34;
+	width=&#34;1873&#34;
+	height=&#34;823&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/$_hu_f4f7593602d6288c.png 480w, https://aurora156.github.io/p/mybatis/assets/$_hu_ea8eb269ed40fd68.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;227&#34;
+		data-flex-basis=&#34;546px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;新增用户---insert&#34;&gt;新增用户 - insert
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;需求：添加一个用户&lt;/li&gt;
+&lt;li&gt;SQL：insert into user(username,password,name,age) values(&amp;lsquo;xxx&amp;rsquo;,&amp;lsquo;xxx&amp;rsquo;,&amp;lsquo;xxx&amp;rsquo;,xx)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%96%B0%E5%A2%9E.png&#34;
+	width=&#34;2274&#34;
+	height=&#34;253&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%96%B0%E5%A2%9E_hu_1014a2687f9fea50.png 480w, https://aurora156.github.io/p/mybatis/assets/%E6%96%B0%E5%A2%9E_hu_37169022f45b42b5.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;898&#34;
+		data-flex-basis=&#34;2157px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@Insert(&amp;#34;insert into user(username, password, name, age) VALUES (#{username},#{password},#{name},#{age})&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public void insert(User user);//将对象值封装到对象当中
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@Test
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public void testInsert() {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    User user = new User(null,&amp;#34;gaoyuanyuan&amp;#34;,&amp;#34;666888&amp;#34;,&amp;#34;高圆圆&amp;#34;,18);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    userMapper.insert(user);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%96%B0%E5%A2%9E1.png&#34;
+	width=&#34;1932&#34;
+	height=&#34;336&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%96%B0%E5%A2%9E1_hu_402fe70e05a158c.png 480w, https://aurora156.github.io/p/mybatis/assets/%E6%96%B0%E5%A2%9E1_hu_94d78e7811522b99.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;575&#34;
+		data-flex-basis=&#34;1380px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;原本：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%96%B0%E5%8E%9F.png&#34;
+	width=&#34;1128&#34;
+	height=&#34;333&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%96%B0%E5%8E%9F_hu_73f08a103cbc8b49.png 480w, https://aurora156.github.io/p/mybatis/assets/%E6%96%B0%E5%8E%9F_hu_7f96bda628f139dc.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;338&#34;
+		data-flex-basis=&#34;812px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;现在：此时的id为6是因为主键是自增的，就算删除也是存在过，由于4和5存在过，所以自增为6&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E7%8E%B0.png&#34;
+	width=&#34;1011&#34;
+	height=&#34;329&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E7%8E%B0_hu_28c91b541ef34307.png 480w, https://aurora156.github.io/p/mybatis/assets/%E7%8E%B0_hu_8ed287fbf907a9e4.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;307&#34;
+		data-flex-basis=&#34;737px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;修改用户---update&#34;&gt;修改用户 - update
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;需求：根据ID更新用户信息&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;SQL：update user set username = &amp;rsquo; &amp;lsquo;,password = &amp;rsquo; &amp;rsquo; , name = &amp;rsquo; &amp;lsquo;,age = xx where id = x;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Mapper接口：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E4%BF%AE%E6%94%B9%E7%94%A8%E6%88%B7.png&#34;
+	width=&#34;2266&#34;
+	height=&#34;290&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E4%BF%AE%E6%94%B9%E7%94%A8%E6%88%B7_hu_d1d7d56ccc95ebd2.png 480w, https://aurora156.github.io/p/mybatis/assets/%E4%BF%AE%E6%94%B9%E7%94%A8%E6%88%B7_hu_e8c2ca92baa23f9a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;781&#34;
+		data-flex-basis=&#34;1875px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@Update(&amp;#34;update user set username = #{username},password = #{password},name = #{name},age = #{age} where id = #{id}&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public void update(User user);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@Test
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public void testUpdate() {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    User user = new User(1,&amp;#34;zhouyu&amp;#34;,&amp;#34;666888&amp;#34;,&amp;#34;周瑜&amp;#34;,18);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    userMapper.update(user);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E4%BF%AE%E6%94%B9.png&#34;
+	width=&#34;1909&#34;
+	height=&#34;322&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E4%BF%AE%E6%94%B9_hu_f9f3f2c4ffa22a3e.png 480w, https://aurora156.github.io/p/mybatis/assets/%E4%BF%AE%E6%94%B9_hu_f0bcbcf37c0718e2.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;592&#34;
+		data-flex-basis=&#34;1422px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E5%91%A8%E7%91%9C.png&#34;
+	width=&#34;1060&#34;
+	height=&#34;273&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E5%91%A8%E7%91%9C_hu_46ad396a8d2e5904.png 480w, https://aurora156.github.io/p/mybatis/assets/%E5%91%A8%E7%91%9C_hu_6f6e9fec684fe1cd.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;388&#34;
+		data-flex-basis=&#34;931px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;查询用户---select&#34;&gt;查询用户 - select
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;需求：根据用户名和密码查询用户信息&lt;/li&gt;
+&lt;li&gt;SQL：select * from user where username = &amp;rsquo; &amp;rsquo; and &amp;rsquo; &amp;rsquo; and password = &amp;rsquo; &amp;lsquo;;&lt;/li&gt;
+&lt;li&gt;Mapper接口：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%9F%A5%E8%AF%A2.png&#34;
+	width=&#34;2277&#34;
+	height=&#34;285&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%9F%A5%E8%AF%A2_hu_e051146d52112eba.png 480w, https://aurora156.github.io/p/mybatis/assets/%E6%9F%A5%E8%AF%A2_hu_bec766bee94dce08.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;798&#34;
+		data-flex-basis=&#34;1917px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;@Param注解的作用是为接口的方法形参起名字的&lt;/p&gt;
+&lt;p&gt;为什么删除和新增用户不需要起名字？&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E5%88%A0%E5%A2%9E.png&#34;
+	width=&#34;1060&#34;
+	height=&#34;164&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E5%88%A0%E5%A2%9E_hu_a6720ced72bb0113.png 480w, https://aurora156.github.io/p/mybatis/assets/%E5%88%A0%E5%A2%9E_hu_59c1fd6bfb9a11d4.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;646&#34;
+		data-flex-basis=&#34;1551px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@Select(&amp;#34;select * from user where username = #{username} and password = #{password}&amp;#34;) 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;//{}中写的是我们起的名字
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public User findByUsernameAndpassword(@Param(&amp;#34;username&amp;#34;) String username, @Param(&amp;#34;password&amp;#34;) String password);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@Test
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public void testFindByUsernameAndPassword() {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    User user = userMapper.findByUsernameAndpassword(&amp;#34;zhouyu&amp;#34;,&amp;#34;666888&amp;#34;);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    System.out.println(user);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C.png&#34;
+	width=&#34;1726&#34;
+	height=&#34;359&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C_hu_5f81170a4d585371.png 480w, https://aurora156.github.io/p/mybatis/assets/%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C_hu_b2cda22b48476ffd.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;480&#34;
+		data-flex-basis=&#34;1153px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;说明：基于&lt;strong&gt;官方骨架创建的Springboot项目&lt;/strong&gt;中，接口编译时会保留方法形参名，&lt;strong&gt;@Param注解可以省略&lt;/strong&gt;(#{形参名})&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E8%AF%B4%E6%98%8E.png&#34;
+	width=&#34;2230&#34;
+	height=&#34;267&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E8%AF%B4%E6%98%8E_hu_e5a80d533ec51125.png 480w, https://aurora156.github.io/p/mybatis/assets/%E8%AF%B4%E6%98%8E_hu_629744add67b907a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;835&#34;
+		data-flex-basis=&#34;2004px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;xml映射配置&#34;&gt;XML映射配置
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;在Mybatis中，既可以通过注解配置SQL语句，也可以通过XML配置文件配置SQL语句。&lt;/li&gt;
+&lt;li&gt;默认规则：
+&lt;ul&gt;
+&lt;li&gt;XML映射文件的名称与Mapper接口名称一致，并且将XML映射文件和Mapper接口放置在相同包下**（同包同名）**。&lt;/li&gt;
+&lt;li&gt;XML映射文件的namespace属性为Mapper接口全限定名一致。&lt;/li&gt;
+&lt;li&gt;XML映射文件中sql语句的id与Mapper 接口中的方法名一致，并保持返回类型一致。&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/XML.png&#34;
+	width=&#34;2156&#34;
+	height=&#34;670&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/XML_hu_a592a7a452961638.png 480w, https://aurora156.github.io/p/mybatis/assets/XML_hu_1d69ca19e170e433.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;321&#34;
+		data-flex-basis=&#34;772px&#34;
+	
+&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;注意：在创建UserMapper文件时，要用/创建目录，例如此处则是com/itheima/mapper&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;创建好目录结构后，从官网引入XML文件&lt;/p&gt;
+&lt;p&gt;Mybatis中文网：&lt;a class=&#34;link&#34; href=&#34;https://mybatis.p2hp.com/index.html#google_vignette&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;MyBatis 中文网 官网&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;UTF-8&amp;#34; ?&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&amp;lt;!DOCTYPE mapper
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        PUBLIC &amp;#34;-//mybatis.org//DTD Mapper 3.0//EN&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &amp;#34;https://mybatis.org/dtd/mybatis-3-mapper.dtd&amp;#34;&amp;gt; //(头信息)约束(不用动)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&amp;lt;mapper namespace=&amp;#34;com.itheima.mapper.UserMapper&amp;#34;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&amp;lt;/mapper&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;这就是XML映射文件的基本结构&lt;/p&gt;
+&lt;p&gt;然后添加查询语句：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;UTF-8&amp;#34; ?&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&amp;lt;!DOCTYPE mapper
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        PUBLIC &amp;#34;-//mybatis.org//DTD Mapper 3.0//EN&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &amp;#34;https://mybatis.org/dtd/mybatis-3-mapper.dtd&amp;#34;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&amp;lt;mapper namespace=&amp;#34;com.itheima.mapper.UserMapper&amp;#34;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &amp;lt;!--resultType：查询返回的单条记录所封装的类型--&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &amp;lt;select id=&amp;#34;findAll&amp;#34; resultType=&amp;#34;com.itheima.pojo.User&amp;#34;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        select id, username, password, name, age from user
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &amp;lt;/select&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&amp;lt;/mapper&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;记得要把原来的注解给注释了（二选一），如果不注释就不知道要执行哪个语句了导致报错&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/xml1.png&#34;
+	width=&#34;1306&#34;
+	height=&#34;612&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/xml1_hu_69e5785c67ca049.png 480w, https://aurora156.github.io/p/mybatis/assets/xml1_hu_3726de0cce70c394.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;213&#34;
+		data-flex-basis=&#34;512px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;那在Mybatis的开发中，到底使用注解开发还是使用XML开发呢 ？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;使用Mybatis的注解，主要是来完成一些简单的增删改查功能。如果需要实现复杂的SQL功能，建议使用XML来配置映射语句。&lt;/p&gt;
+&lt;p&gt;官方说明：&lt;a class=&#34;link&#34; href=&#34;https://mybatis.p2hp.com/getting-started.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;mybatis – MyBatis 3 | 入门&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E5%AE%98%E6%96%B9%E6%B3%A8%E8%A7%A3.png&#34;
+	width=&#34;1523&#34;
+	height=&#34;115&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E5%AE%98%E6%96%B9%E6%B3%A8%E8%A7%A3_hu_c45710af43087d6a.png 480w, https://aurora156.github.io/p/mybatis/assets/%E5%AE%98%E6%96%B9%E6%B3%A8%E8%A7%A3_hu_abf822e72600e55e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;1324&#34;
+		data-flex-basis=&#34;3178px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;xml映射文件---辅助配置&#34;&gt;XML映射文件 - 辅助配置
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;配置XML映射文件的位置：&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6.png&#34;
+	width=&#34;1297&#34;
+	height=&#34;272&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6_hu_f6a712c3735d1fd1.png 480w, https://aurora156.github.io/p/mybatis/assets/%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6_hu_967c95a7b5bb4621.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;476&#34;
+		data-flex-basis=&#34;1144px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B61.png&#34;
+	width=&#34;482&#34;
+	height=&#34;376&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B61_hu_df04f8630a83b9a0.png 480w, https://aurora156.github.io/p/mybatis/assets/%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B61_hu_483b7affe19e11e2.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;128&#34;
+		data-flex-basis=&#34;307px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;MybatisX&lt;/strong&gt; 是一款基于 IDEA 的快速开发Mybatis的插件，为效率而生。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/X.png&#34;
+	width=&#34;1257&#34;
+	height=&#34;405&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/X_hu_85678d67875be1a3.png 480w, https://aurora156.github.io/p/mybatis/assets/X_hu_ffde330857ff902b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;310&#34;
+		data-flex-basis=&#34;744px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;注意：在使用了这个插件以后，可能会让你原先的代码被警告(不是报错)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/mybatis/assets/%E8%AD%A6%E5%91%8A.png&#34;
+	width=&#34;866&#34;
+	height=&#34;317&#34;
+	srcset=&#34;https://aurora156.github.io/p/mybatis/assets/%E8%AD%A6%E5%91%8A_hu_6af3589977139686.png 480w, https://aurora156.github.io/p/mybatis/assets/%E8%AD%A6%E5%91%8A_hu_28f9a23ab1d1b555.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;273&#34;
+		data-flex-basis=&#34;655px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;此时将项目中同包同名的文件remove即可，不移除也可以照常运行，但是项目真正开发项目中一般不会出现这种情况&lt;/p&gt;
 </description>
         </item>
         <item>
