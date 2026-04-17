@@ -234,13 +234,14 @@
     </li>
     <li><a href="#查询部门">查询部门</a>
       <ol>
-        <li><a href="#接口开发">接口开发</a>
+        <li><a href="#基本实现">基本实现</a>
           <ol>
             <li><a href="#需求">需求</a></li>
             <li><a href="#接口描述">接口描述</a></li>
             <li><a href="#思路分析">思路分析</a></li>
             <li><a href="#代码实现">代码实现</a></li>
             <li><a href="#接口测试">接口测试</a></li>
+            <li><a href="#小结">小结</a></li>
             <li><a href="#数据封装">数据封装</a></li>
           </ol>
         </li>
@@ -252,7 +253,44 @@
         </li>
       </ol>
     </li>
-    <li><a href="#删除部门">删除部门</a></li>
+    <li><a href="#删除部门">删除部门</a>
+      <ol>
+        <li><a href="#需求-1">需求</a></li>
+        <li><a href="#思路分析-1">思路分析</a></li>
+        <li><a href="#代码实现-1">代码实现</a></li>
+        <li><a href="#前后端联调测试-1">前后端联调测试</a></li>
+      </ol>
+    </li>
+    <li><a href="#新增部门">新增部门</a>
+      <ol>
+        <li><a href="#需求-2">需求</a></li>
+        <li><a href="#思路分析-2">思路分析：</a></li>
+        <li><a href="#json参数接收">json参数接收</a></li>
+        <li><a href="#代码实现-2">代码实现</a></li>
+        <li><a href="#前后端联调测试-2">前后端联调测试</a></li>
+      </ol>
+    </li>
+    <li><a href="#修改部门">修改部门</a>
+      <ol>
+        <li><a href="#查询回显">查询回显</a>
+          <ol>
+            <li><a href="#需求-3">需求</a></li>
+            <li><a href="#代码实现-3">代码实现</a></li>
+            <li><a href="#前后端分离测试">前后端分离测试</a></li>
+            <li><a href="#小结-1">小结</a></li>
+          </ol>
+        </li>
+        <li><a href="#修改数据">修改数据</a>
+          <ol>
+            <li><a href="#需求-4">需求</a></li>
+            <li><a href="#思路分析-3">思路分析</a></li>
+            <li><a href="#代码实现-4">代码实现</a></li>
+            <li><a href="#前后端分离测试-1">前后端分离测试</a></li>
+            <li><a href="#requestmapping">@RequestMapping</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -898,7 +936,7 @@
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="查询部门">查询部门
-</h2><h3 id="接口开发">接口开发
+</h2><h3 id="基本实现">基本实现
 </h3><h4 id="需求">需求
 </h4><p>查询所有的部门数据，查询出来展示在部门管理的页面中。页面原型效果如下：</p>
 <p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%A1%B5%E9%9D%A2%E5%8E%9F%E5%9E%8B.png"
@@ -941,7 +979,20 @@
 </li>
 </ul>
 <h4 id="代码实现">代码实现
-</h4><p><strong>1). Controller层</strong></p>
+</h4><p>实现顺序：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%AE%9E%E7%8E%B0%E9%A1%BA%E5%BA%8F.png"
+	width="563"
+	height="742"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%AE%9E%E7%8E%B0%E9%A1%BA%E5%BA%8F_hu_1be2341376c7d235.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%AE%9E%E7%8E%B0%E9%A1%BA%E5%BA%8F_hu_137337f56513f970.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="75"
+		data-flex-basis="182px"
+	
+></p>
+<p><strong>1). Controller层</strong></p>
 <p>在 <code>DeptController</code> 中，增加 <code>list</code> 方法，代码如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -995,7 +1046,8 @@
 </span></span><span class="line"><span class="cl">}
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p><strong>2). Service层</strong></p>
+</div><p>快捷操作：当写完deptService.findAll();报红时，将光标放在此处，按alt + enter即可自动跳转至相应代码文件中</p>
+<p><strong>2). Service层</strong></p>
 <p>在 <code>DeptService</code> 中，增加 <code>findAll</code>方法，代码如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1232,7 +1284,8 @@
 <li>DELETE方式：@DeleteMapping</li>
 </ul>
 </blockquote>
-<p>**小结：**功能实现</p>
+<h4 id="小结">小结
+</h4><p>功能实现：</p>
 <p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0.png"
 	width="2422"
 	height="1232"
@@ -1468,7 +1521,962 @@
 	
 ></p>
 <h2 id="删除部门">删除部门
-</h2>
+</h2><h3 id="需求-1">需求
+</h3><p>查询所有的部门数据，查询出来展示在部门管理的页面中。页面原型效果如下：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E6%9D%A1%E4%BB%B6.png"
+	width="2375"
+	height="908"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E6%9D%A1%E4%BB%B6_hu_f474390a2e88e8f0.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E6%9D%A1%E4%BB%B6_hu_d3136134f928e9c9.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="261"
+		data-flex-basis="627px"
+	
+></p>
+<p>接口文档：删除部门</p>
+<h3 id="思路分析-1">思路分析
+</h3><ul>
+<li>明确了删除部门的需求之后，再来梳理一下实现该功能时，三层架构每一次的职责：</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E6%80%9D%E8%B7%AF.png"
+	width="2420"
+	height="643"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E6%80%9D%E8%B7%AF_hu_dd5ac0046ec15e4c.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E6%80%9D%E8%B7%AF_hu_668c28d89981b95e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="376"
+		data-flex-basis="903px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E7%AE%80%E5%8D%95%E5%8F%82%E6%95%B0.png"
+	width="2189"
+	height="88"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E7%AE%80%E5%8D%95%E5%8F%82%E6%95%B0_hu_655ed9bca17c8496.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E7%AE%80%E5%8D%95%E5%8F%82%E6%95%B0_hu_62c7b0d9d5b76f2d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="2487"
+		data-flex-basis="5970px"
+	
+></p>
+<ul>
+<li><strong>方式一：通过原始的</strong> <strong>HttpServletRequest</strong> <strong>对象获取请求参数</strong></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/**
+</span></span><span class="line"><span class="cl">* 根据ID删除部门 - 简单参数接收: 方式一 (HttpServletRequest)
+</span></span><span class="line"><span class="cl">*/
+</span></span><span class="line"><span class="cl">@DeleteMapping(&#34;/depts&#34;)
+</span></span><span class="line"><span class="cl">public Result delete(HttpServletRequest request){
+</span></span><span class="line"><span class="cl">    String idStr = request.getParameter(&#34;id&#34;);
+</span></span><span class="line"><span class="cl">    int id = Integer.parseInt(idStr);
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    System.out.println(&#34;根据ID删除部门: &#34; + id);
+</span></span><span class="line"><span class="cl">    return Result.success();
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>由于Date是给前端返回的数据，但是删除不需要给前端响应数据，所以返回值置空就可以</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4id.png"
+	width="2560"
+	height="1330"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4id_hu_1f7695425faf75ea.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4id_hu_c277e0bb458c9f65.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="461px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E7%BB%93%E6%9E%9C.png"
+	width="2414"
+	height="343"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E7%BB%93%E6%9E%9C_hu_8933d0684348bd4b.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E7%BB%93%E6%9E%9C_hu_f6450ea6287aea07.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="703"
+		data-flex-basis="1689px"
+	
+></p>
+<p>这种方案实现较为繁琐，而且还需要进行手动类型转换。<strong>【项目开发很少用】</strong></p>
+<ul>
+<li><strong>方案二：通过Spring提供的<code> @RequestParam 注解</code>，将请求参数绑定给方法形参</strong></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">@DeleteMapping(&#34;/depts&#34;)
+</span></span><span class="line"><span class="cl">public Result delete(@RequestParam(&#34;id&#34;) Integer deptId){
+</span></span><span class="line"><span class="cl">    System.out.println(&#34;根据ID删除部门: &#34; + deptId);
+</span></span><span class="line"><span class="cl">    return Result.success();
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>结果同上</p>
+<p><code>@RequestParam</code> 注解的value属性，需要与前端传递的参数名保持一致 。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E9%94%99%E8%AF%AF.png"
+	width="2560"
+	height="960"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E9%94%99%E8%AF%AF_hu_323d91aa021b2dd4.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E9%94%99%E8%AF%AF_hu_5ebb3ecdf1150c02.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="266"
+		data-flex-basis="640px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%8E%A7%E5%88%B6%E5%8F%B0%E6%8A%A5%E9%94%99.png"
+	width="2560"
+	height="1380"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%8E%A7%E5%88%B6%E5%8F%B0%E6%8A%A5%E9%94%99_hu_8a99e809d23c1402.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%8E%A7%E5%88%B6%E5%8F%B0%E6%8A%A5%E9%94%99_hu_ee73a5566b613be1.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="185"
+		data-flex-basis="445px"
+	
+></p>
+<blockquote>
+<p>@RequestParam注解required属性默认为true，代表该参数必须传递，如果不传递将报错。 如果参数可选，可以将属性设置为false。</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">@DeleteMapping(&#34;/depts&#34;)
+</span></span><span class="line"><span class="cl">public Result delete(@RequestParam(value = &#34;id&#34;,required = false) Integer deptId){
+</span></span><span class="line"><span class="cl">    System.out.println(&#34;根据ID删除部门: &#34; + deptId);
+</span></span><span class="line"><span class="cl">    return Result.success();
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/null.png"
+	width="2560"
+	height="963"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/null_hu_9a5e7e6a67a86dae.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/null_hu_a7bef02320d20607.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="265"
+		data-flex-basis="638px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/null1.png"
+	width="2463"
+	height="244"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/null1_hu_11310c27b1308501.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/null1_hu_3e1111257ce1681d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1009"
+		data-flex-basis="2422px"
+	
+></p>
+<p>此时就算继续传递参数也不会报错</p>
+<ul>
+<li><strong>方案三：如果请求参数名与形参变量名相同，直接定义方法形参即可接收。（省略@RequestParam）</strong></li>
+<li>【推荐】</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">@DeleteMapping(&#34;/depts&#34;)
+</span></span><span class="line"><span class="cl">public Result delete(Integer id){
+</span></span><span class="line"><span class="cl">    System.out.println(&#34;根据ID删除部门: &#34; + id);
+</span></span><span class="line"><span class="cl">    return Result.success();
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>结果同上</p>
+<h3 id="代码实现-1">代码实现
+</h3><p><strong>1).</strong> <strong>Controller层</strong></p>
+<p>在 <code>DeptMapper</code>  中，增加 <code>delete</code> 方法，代码实现如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/**
+</span></span><span class="line"><span class="cl"> * 根据id删除部门 - delete http://localhost:8080/depts?id=1
+</span></span><span class="line"><span class="cl"> */
+</span></span><span class="line"><span class="cl">@DeleteMapping(&#34;/depts&#34;)
+</span></span><span class="line"><span class="cl">public Result delete(Integer id){
+</span></span><span class="line"><span class="cl">    System.out.println(&#34;根据id删除部门, id=&#34; + id);
+</span></span><span class="line"><span class="cl">    deptService.deleteById(id);
+</span></span><span class="line"><span class="cl">    return Result.success();
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>2). Service层</strong></p>
+<p>在 <code>DeptService</code> 中，增加 <code>deleteById</code> 方法，代码实现如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/**
+</span></span><span class="line"><span class="cl"> * 根据id删除部门
+</span></span><span class="line"><span class="cl"> */
+</span></span><span class="line"><span class="cl">void deleteById(Integer id);
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>3). Mapper层</strong></p>
+<p>在 <code>DeptMapper</code> 中，增加 <code>deleteById</code> 方法，代码实现如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/**
+</span></span><span class="line"><span class="cl"> * 根据id删除部门
+</span></span><span class="line"><span class="cl"> */
+</span></span><span class="line"><span class="cl">@Delete(&#34;delete from dept where id = #{id}&#34;)
+</span></span><span class="line"><span class="cl">void deleteById(Integer id);
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果mapper接口方法形参只有一个普通类型的参数，<code>#{…}</code> 里面的属性名可以随便写，如：<code>#{id}</code>、<code>#{value}</code>。</p>
+<p>对于 DML 语句来说，执行完毕，也是有返回值的，返回值代表的是增删改操作，影响的记录数，所以可以将执行 DML 语句的方法返回值设置为 Integer。 但是一般开发时，是不需要这个返回值的，所以也可以设置为void。</p>
+<p>代码编写完毕之后，我们就可以启动服务，进行测试了。</p>
+<p>初始数据库：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%9D%E5%A7%8B.png"
+	width="979"
+	height="461"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%9D%E5%A7%8B_hu_73d423bad79ad6f.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%9D%E5%A7%8B_hu_636828476a43d7e3.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="212"
+		data-flex-basis="509px"
+	
+></p>
+<p>用上面的方法在Apifox中删除id=6的数据(此处就不放页面展示了)</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4id%E4%B8%BA6.png"
+	width="2134"
+	height="365"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4id%E4%B8%BA6_hu_309241ce6e3368d0.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4id%E4%B8%BA6_hu_f30df7e046070bf8.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="584"
+		data-flex-basis="1403px"
+	
+></p>
+<p>更新后数据库：<img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE%E5%BA%93.png"
+	width="930"
+	height="377"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE%E5%BA%93_hu_57f8887d4fd20fd1.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE%E5%BA%93_hu_f090a2ac26059aa4.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="246"
+		data-flex-basis="592px"
+	
+></p>
+<h3 id="前后端联调测试-1">前后端联调测试
+</h3><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E5%88%A0%E9%99%A4.png"
+	width="2248"
+	height="535"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E5%88%A0%E9%99%A4_hu_443cb048b3a680a3.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E5%88%A0%E9%99%A4_hu_3e24fc1c0399e1a1.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="420"
+		data-flex-basis="1008px"
+	
+></p>
+<p>此时可以发现已经删除成功了</p>
+<p>现在测试前端删除：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E5%88%A0%E9%99%A41.png"
+	width="2248"
+	height="614"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E5%88%A0%E9%99%A41_hu_dbb3fa3ca9a7d2eb.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E5%88%A0%E9%99%A41_hu_49e92cea1c797f7e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="366"
+		data-flex-basis="878px"
+	
+></p>
+<p>数据库中删除成功</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E6%B5%8B%E8%AF%95.png"
+	width="877"
+	height="223"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E6%B5%8B%E8%AF%95_hu_5dd78096239bea35.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E6%B5%8B%E8%AF%95_hu_f1a8ef218adaba0e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="393"
+		data-flex-basis="943px"
+	
+></p>
+<p>测试成功</p>
+<h2 id="新增部门">新增部门
+</h2><h3 id="需求-2">需求
+</h3><p>点击 &ldquo;新增部门&rdquo; 的按钮之后，弹出新增部门表单，填写部门名称之后，点击确定之后，保存部门数据。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A8.png"
+	width="1924"
+	height="1101"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A8_hu_87ae4a17d9370e68.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A8_hu_360703faf1460f85.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="174"
+		data-flex-basis="419px"
+	
+></p>
+<p>接口文档：添加部门</p>
+<h3 id="思路分析-2">思路分析：
+</h3><p>明确了删除部门的需求之后，再来梳理一下实现该功能时，三层架构每一次的职责：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E6%80%9D%E8%B7%AF.png"
+	width="2437"
+	height="642"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E6%80%9D%E8%B7%AF_hu_c6eaeac779ea0677.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E6%80%9D%E8%B7%AF_hu_18823f7e0ba35b36.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="379"
+		data-flex-basis="911px"
+	
+></p>
+<h3 id="json参数接收">json参数接收
+</h3><p>我们看到，在controller中，需要接收前端传递的请求参数。 那接下来，我们就先来看看在服务器端的Controller程序中，如何获取json格式的参数。</p>
+<ul>
+<li>JSON格式的参数，通常会使用一个实体对象进行接收 。</li>
+<li>规则：JSON数据的<code>键名</code>与方法形参<code>对象的属性名</code>相同，并需要使用<code>@RequestBody</code>注解标识。</li>
+</ul>
+<p>前端传递的请求参数格式为json，内容如下：<code>{&quot;name&quot;:&quot;研发部&quot;}</code>。这里，我们可以通过一个对象(dept)来接收，只需要保证对象中有name属性即可。<img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%8E%A5%E6%94%B6%E5%8F%82%E6%95%B0.png"
+	width="1026"
+	height="230"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%8E%A5%E6%94%B6%E5%8F%82%E6%95%B0_hu_3aa6546d88b49f86.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%8E%A5%E6%94%B6%E5%8F%82%E6%95%B0_hu_2d68b39dd2f3e837.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="446"
+		data-flex-basis="1070px"
+	
+></p>
+<h3 id="代码实现-2">代码实现
+</h3><p><strong>1). Controller层</strong></p>
+<p>在<code>DeptController</code>中增加方法save，具体代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/*
+</span></span><span class="line"><span class="cl">* 新增部门
+</span></span><span class="line"><span class="cl">* */
+</span></span><span class="line"><span class="cl">@PostMapping(&#34;/depts&#34;)
+</span></span><span class="line"><span class="cl">public Result add(@RequestBody Dept dept){
+</span></span><span class="line"><span class="cl">    System.out.println(&#34;添加部门：&#34; + dept);
+</span></span><span class="line"><span class="cl">    deptService.addDept(dept);
+</span></span><span class="line"><span class="cl">    return Result.success();
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>2). Service层</strong></p>
+<p>在<code>DeptService</code>中增加接口方法save，具体代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/**
+</span></span><span class="line"><span class="cl"> * 新增部门
+</span></span><span class="line"><span class="cl"> */
+</span></span><span class="line"><span class="cl">void save(Dept dept);
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在<code>DeptServiceImpl</code>中增加save方法，完成添加部门的操作，具体代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">public void save(Dept dept) {
+</span></span><span class="line"><span class="cl">    //补全基础属性 - createTime,updateTime
+</span></span><span class="line"><span class="cl">    dept.setCreateTime(LocalDateTime.now());
+</span></span><span class="line"><span class="cl">    dept.setUpdateTime(LocalDateTime.now());
+</span></span><span class="line"><span class="cl">   
+</span></span><span class="line"><span class="cl">    //调用Mapper接口方法插入数据
+</span></span><span class="line"><span class="cl">    deptMapper.insert(dept);
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>3). Mapper层</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/**
+</span></span><span class="line"><span class="cl"> * 新增部门
+</span></span><span class="line"><span class="cl"> */
+</span></span><span class="line"><span class="cl"> //注意：此处的values的后两个写的是属性名(驼峰式命名)，而不是字段名(下划线)
+</span></span><span class="line"><span class="cl">@Insert(&#34;insert into dept(name,create_time,update_time) values(#{name},#{createTime},#{updateTime})&#34;)
+</span></span><span class="line"><span class="cl">void insert(Dept dept);
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A81.png"
+	width="2560"
+	height="927"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A81_hu_96b6b4ddeb990e1e.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A81_hu_4526d7e5f788d532.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="276"
+		data-flex-basis="662px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A82.png"
+	width="2310"
+	height="372"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A82_hu_78381514c64d6c35.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A82_hu_3f2ed658891c2c6f.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="620"
+		data-flex-basis="1490px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A83.png"
+	width="915"
+	height="237"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A83_hu_655e3065ab35b07e.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A83_hu_5fa390dbfa0977bc.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="386"
+		data-flex-basis="926px"
+	
+></p>
+<p>此处序号为9是因为前面代码有误，删除了前面的序号后重新添加的</p>
+<h3 id="前后端联调测试-2">前后端联调测试
+</h3><p>此时刷新前端页面发现校验部添加成功</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E6%B7%BB%E5%8A%A0.png"
+	width="2248"
+	height="528"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E6%B7%BB%E5%8A%A0_hu_a55f3f3f536036f1.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E6%B7%BB%E5%8A%A0_hu_22a10db5fa7109f9.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="425"
+		data-flex-basis="1021px"
+	
+></p>
+<p>再测试前端添加</p>
+<p>由于我们查询是倒序查询，所以新增的部门排在最上面</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E6%B7%BB%E5%8A%A01.png"
+	width="2248"
+	height="667"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E6%B7%BB%E5%8A%A01_hu_154e158594b2cb96.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E6%B7%BB%E5%8A%A01_hu_1bddee5ec26f8600.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="337"
+		data-flex-basis="808px"
+	
+></p>
+<p>发现数据库中添加成功</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E6%B7%BB%E5%8A%A0.png"
+	width="937"
+	height="418"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E6%B7%BB%E5%8A%A0_hu_a9e2ff1a4f1d3558.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E6%B7%BB%E5%8A%A0_hu_ad23ccb2fca34bcb.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="224"
+		data-flex-basis="537px"
+	
+></p>
+<h2 id="修改部门">修改部门
+</h2><p>对于任何业务的修改功能来说，一般都会分为两步进行：查询回显、修改数据。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BF%AE%E6%94%B9%E9%83%A8%E9%97%A8.png"
+	width="1827"
+	height="1109"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BF%AE%E6%94%B9%E9%83%A8%E9%97%A8_hu_4b1363c3885d119.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BF%AE%E6%94%B9%E9%83%A8%E9%97%A8_hu_bec4ff6d0496a7ab.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="164"
+		data-flex-basis="395px"
+	
+></p>
+<h3 id="查询回显">查询回显
+</h3><h4 id="需求-3">需求
+</h4><p>当我们点击 &ldquo;编辑&rdquo; 的时候，需要根据ID查询部门数据，然后用于页面回显展示。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%A0%B9%E6%8D%AEid%E6%9F%A5%E8%AF%A2%E9%83%A8%E9%97%A8.png"
+	width="1026"
+	height="221"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%A0%B9%E6%8D%AEid%E6%9F%A5%E8%AF%A2%E9%83%A8%E9%97%A8_hu_d56a0fe35c3f9c69.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%A0%B9%E6%8D%AEid%E6%9F%A5%E8%AF%A2%E9%83%A8%E9%97%A8_hu_74819f42ddd5d8da.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="464"
+		data-flex-basis="1114px"
+	
+></p>
+<p>接口描述：根据id查询部门</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9F%A5%E8%AF%A2%E8%81%8C%E8%B4%A3.png"
+	width="1026"
+	height="260"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9F%A5%E8%AF%A2%E8%81%8C%E8%B4%A3_hu_40baec3e8a57447a.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9F%A5%E8%AF%A2%E8%81%8C%E8%B4%A3_hu_2826e4df7fa5570c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="394"
+		data-flex-basis="947px"
+	
+></p>
+<p>了解了需求之后，我们再看看接口文档中，关于根据ID查询部门的接口的描述，然后根据接口文档进行服务端接口的开发 。</p>
+<p><code>/depts/1</code>，<code>/depts/2</code> 这种在url中传递的参数，我们称之为<strong>路径参数</strong>。 那么如何接收这样的路径参数呢 ？</p>
+<p>路径参数：通过请求URL直接传递参数，使用{…}来标识该路径参数，需要使用 <code>@PathVariable</code>获取路径参数。如下所示：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%B7%AF%E5%BE%84%E5%8F%82%E6%95%B0.png"
+	width="1026"
+	height="212"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%B7%AF%E5%BE%84%E5%8F%82%E6%95%B0_hu_d4bd95b57dc133f6.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%B7%AF%E5%BE%84%E5%8F%82%E6%95%B0_hu_3f2c14e070630804.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="483"
+		data-flex-basis="1161px"
+	
+></p>
+<p>如果路径参数名与controller方法形参名称一致，<code>@PathVariable</code>注解的value属性是可以省略的。</p>
+<h4 id="代码实现-3">代码实现
+</h4><p><strong>1). Controller层</strong></p>
+<p>在 <code>DeptController</code> 中增加 <code>getById</code>方法，具体代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/**
+</span></span><span class="line"><span class="cl"> * 根据ID查询 - GET http://localhost:8080/depts/1
+</span></span><span class="line"><span class="cl"> */
+</span></span><span class="line"><span class="cl">@GetMapping(&#34;/depts/{id}&#34;)
+</span></span><span class="line"><span class="cl">public Result getById(@PathVariable Integer id){
+</span></span><span class="line"><span class="cl">    System.out.println(&#34;根据ID查询, id=&#34; + id);
+</span></span><span class="line"><span class="cl">    Dept dept = deptService.getById(id);
+</span></span><span class="line"><span class="cl">    return Result.success(dept);
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>2). Service层</strong></p>
+<p>在 <code>DeptService</code> 中增加 <code>getById</code>方法，具体代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/**
+</span></span><span class="line"><span class="cl"> * 根据id查询部门
+</span></span><span class="line"><span class="cl"> */
+</span></span><span class="line"><span class="cl">Dept getById(Integer id);
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在 <code>DeptServiceImpl</code> 中增加 <code>getById</code>方法，具体代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">public Dept getById(Integer id) {
+</span></span><span class="line"><span class="cl">    return deptMapper.getById(id);
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>3). Mapper层</strong></p>
+<p>在 <code>DeptMapper</code> 中增加 <code>getById</code> 方法，具体代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/**
+</span></span><span class="line"><span class="cl">* 根据ID查询部门数据
+</span></span><span class="line"><span class="cl">*/
+</span></span><span class="line"><span class="cl">@Select(&#34;select id, name, create_time, update_time from dept where id = #{id}&#34;)
+</span></span><span class="line"><span class="cl">Dept getById(Integer id);
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>代码编写完毕之后，我们就可以启动服务，进行测试了。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9F%A5%E8%AF%A210.png"
+	width="2560"
+	height="1026"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9F%A5%E8%AF%A210_hu_ce0cb2141504e0f2.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9F%A5%E8%AF%A210_hu_dfae694012f6f7a9.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="249"
+		data-flex-basis="598px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9F%A5%E8%AF%A2%E6%8E%A7%E5%88%B6%E5%8F%B010.png"
+	width="2434"
+	height="434"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9F%A5%E8%AF%A2%E6%8E%A7%E5%88%B6%E5%8F%B010_hu_af894303f1ce2b64.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9F%A5%E8%AF%A2%E6%8E%A7%E5%88%B6%E5%8F%B010_hu_554447198d24948e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="560"
+		data-flex-basis="1345px"
+	
+></p>
+<h4 id="前后端分离测试">前后端分离测试
+</h4><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%9B%9E%E6%98%BE.png"
+	width="2550"
+	height="658"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%9B%9E%E6%98%BE_hu_a8a0c9d42ae389.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%9B%9E%E6%98%BE_hu_6f7f497197abae0d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="387"
+		data-flex-basis="930px"
+	
+></p>
+<p>点击修改，发现部门已经回显回来了，说明测试成功</p>
+<h4 id="小结-1">小结
+</h4><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%A4%9A%E4%B8%AA%E8%B7%AF%E5%BE%84%E5%8F%82%E6%95%B0.png"
+	width="1713"
+	height="507"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%A4%9A%E4%B8%AA%E8%B7%AF%E5%BE%84%E5%8F%82%E6%95%B0_hu_5ea011e83560a7df.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%A4%9A%E4%B8%AA%E8%B7%AF%E5%BE%84%E5%8F%82%E6%95%B0_hu_3212130a36c1e7a1.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="337"
+		data-flex-basis="810px"
+	
+></p>
+<h3 id="修改数据">修改数据
+</h3><h4 id="需求-4">需求
+</h4><p>查询回显回来之后，就可以对部门的信息进行修改了，修改完毕之后，点击确定，此时，就需要根据ID修改部门的数据。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE.png"
+	width="1026"
+	height="598"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE_hu_55a324b7d082ff36.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE_hu_ed6b233e7b81a25d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="171"
+		data-flex-basis="411px"
+	
+></p>
+<p>接口文档：修改部门</p>
+<h4 id="思路分析-3">思路分析
+</h4><ul>
+<li>明确了删除部门的需求之后，再来梳理一下实现该功能时，三层架构每一次的职责：</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BF%AE%E6%94%B9%E6%80%9D%E8%B7%AF.png"
+	width="1026"
+	height="270"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BF%AE%E6%94%B9%E6%80%9D%E8%B7%AF_hu_95f01f2a36b139bd.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BF%AE%E6%94%B9%E6%80%9D%E8%B7%AF_hu_10bdf9e8d8ba4e85.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="380"
+		data-flex-basis="912px"
+	
+></p>
+<p>通过接口文档，我们可以看到前端传递的请求参数是json格式的请求参数，在Controller的方法中，我们可以通过 <code>@RequestBody</code> 注解来接收，并将其封装到一个对象中。</p>
+<h4 id="代码实现-4">代码实现
+</h4><p><strong>1). Controller层</strong></p>
+<p>在 <code>DeptController</code> 中增加 <code>update</code> 方法，具体代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/**
+</span></span><span class="line"><span class="cl"> * 修改部门 - PUT http://localhost:8080/depts  请求参数：{&#34;id&#34;:1,&#34;name&#34;:&#34;研发部&#34;}
+</span></span><span class="line"><span class="cl"> */
+</span></span><span class="line"><span class="cl">@PutMapping(&#34;/depts&#34;)
+</span></span><span class="line"><span class="cl">public Result update(@RequestBody Dept dept){
+</span></span><span class="line"><span class="cl">    System.out.println(&#34;修改部门, dept=&#34; + dept);
+</span></span><span class="line"><span class="cl">    deptService.update(dept);
+</span></span><span class="line"><span class="cl">    return Result.success();
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>2). Service层</strong></p>
+<p>在 <code>DeptService</code> 中增加 <code>update</code> 方法。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/**
+</span></span><span class="line"><span class="cl"> * 修改部门
+</span></span><span class="line"><span class="cl"> */
+</span></span><span class="line"><span class="cl">void update(Dept dept);
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在 <code>DeptServiceImpl</code> 中增加 <code>update</code> 方法。 由于是修改操作，每一次修改数据，都需要更新updateTime。所以，具体代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">public void update(Dept dept) {
+</span></span><span class="line"><span class="cl">    //补全基础属性 - updateTime
+</span></span><span class="line"><span class="cl">    dept.setUpdateTime(LocalDateTime.now());
+</span></span><span class="line"><span class="cl">    //调用Mapper接口方法更新部门
+</span></span><span class="line"><span class="cl">    deptMapper.update(dept);
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>3). Mapper层</strong></p>
+<p>在 <code>DeptMapper</code> 中增加 <code>update</code> 方法，具体代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/**
+</span></span><span class="line"><span class="cl"> * 更新部门
+</span></span><span class="line"><span class="cl"> */
+</span></span><span class="line"><span class="cl">@Update(&#34;update dept set name = #{name},update_time = #{updateTime} where id = #{id}&#34;)
+</span></span><span class="line"><span class="cl">void update(Dept dept);
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>代码编写完毕之后，我们就可以启动服务，进行测试了。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BF%AE%E6%94%B9%E5%89%8D%E7%AB%AF.png"
+	width="2560"
+	height="928"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BF%AE%E6%94%B9%E5%89%8D%E7%AB%AF_hu_324b6b7077388a4e.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BF%AE%E6%94%B9%E5%89%8D%E7%AB%AF_hu_70b5aa2f9a9f1af7.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="275"
+		data-flex-basis="662px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E4%BF%AE%E6%94%B9.png"
+	width="1977"
+	height="578"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E4%BF%AE%E6%94%B9_hu_5f3a2d935f9b2e3d.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E4%BF%AE%E6%94%B9_hu_a9af33e8792bc64d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="342"
+		data-flex-basis="820px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E4%BF%AE%E6%94%B91.png"
+	width="957"
+	height="365"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E4%BF%AE%E6%94%B91_hu_8381a278a30d4fd1.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E4%BF%AE%E6%94%B91_hu_72cc694c10237012.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="262"
+		data-flex-basis="629px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E6%AE%B5%E4%BF%AE%E6%94%B9.png"
+	width="2248"
+	height="575"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E6%AE%B5%E4%BF%AE%E6%94%B9_hu_2bc4547f36014f6a.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E6%AE%B5%E4%BF%AE%E6%94%B9_hu_1a61b05571071949.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="390"
+		data-flex-basis="938px"
+	
+></p>
+<h4 id="前后端分离测试-1">前后端分离测试
+</h4><p>前端修改名字</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E4%BF%AE%E6%94%B9.png"
+	width="2248"
+	height="659"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E4%BF%AE%E6%94%B9_hu_bd03cbfe9f7bd2e0.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E4%BF%AE%E6%94%B9_hu_713290c73eff9c0.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="341"
+		data-flex-basis="818px"
+	
+></p>
+<p>数据库更新成功</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E4%BF%AE%E6%94%B9%E7%BB%93%E6%9E%9C.png"
+	width="975"
+	height="318"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E4%BF%AE%E6%94%B9%E7%BB%93%E6%9E%9C_hu_51bc30b4e4a33e10.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E4%BF%AE%E6%94%B9%E7%BB%93%E6%9E%9C_hu_6c63369094083c1f.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="306"
+		data-flex-basis="735px"
+	
+></p>
+<h4 id="requestmapping">@RequestMapping
+</h4><p>到此呢，关于基本的部门的增删改查功能，我们已经实现了。  我们会发现，我们在 <code>DeptController</code> 中所定义的方法，所有的请求路径，都是 <code>/depts</code> 开头的，只要操作的是部门数据，请求路径都是 <code>/depts</code> 开头。</p>
+<p>那么这个时候，我们其实是可以把这个公共的路径 <code>/depts</code> 抽取到类上的，那在各个方法上，就可以省略了这个 <code>/depts</code> 路径。 代码如下：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/RM.png"
+	width="1026"
+	height="580"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/RM_hu_4fc5d6a259c714ed.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/RM_hu_7db7e896e416cf40.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="176"
+		data-flex-basis="424px"
+	
+></p>
+<blockquote>
+<p>一个完整的请求路径，应该是类上的 @RequestMapping 的value属性 + 方法上的 @RequestMapping的value属性。</p>
+</blockquote>
+
 </section>
 
 

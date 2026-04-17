@@ -601,7 +601,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;h2 id=&#34;查询部门&#34;&gt;查询部门
-&lt;/h2&gt;&lt;h3 id=&#34;接口开发&#34;&gt;接口开发
+&lt;/h2&gt;&lt;h3 id=&#34;基本实现&#34;&gt;基本实现
 &lt;/h3&gt;&lt;h4 id=&#34;需求&#34;&gt;需求
 &lt;/h4&gt;&lt;p&gt;查询所有的部门数据，查询出来展示在部门管理的页面中。页面原型效果如下：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%A1%B5%E9%9D%A2%E5%8E%9F%E5%9E%8B.png&#34;
@@ -644,7 +644,20 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h4 id=&#34;代码实现&#34;&gt;代码实现
-&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;1). Controller层&lt;/strong&gt;&lt;/p&gt;
+&lt;/h4&gt;&lt;p&gt;实现顺序：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%AE%9E%E7%8E%B0%E9%A1%BA%E5%BA%8F.png&#34;
+	width=&#34;563&#34;
+	height=&#34;742&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%AE%9E%E7%8E%B0%E9%A1%BA%E5%BA%8F_hu_1be2341376c7d235.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%AE%9E%E7%8E%B0%E9%A1%BA%E5%BA%8F_hu_137337f56513f970.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;75&#34;
+		data-flex-basis=&#34;182px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1). Controller层&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;在 &lt;code&gt;DeptController&lt;/code&gt; 中，增加 &lt;code&gt;list&lt;/code&gt; 方法，代码如下：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -698,7 +711,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;2). Service层&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;快捷操作：当写完deptService.findAll();报红时，将光标放在此处，按alt + enter即可自动跳转至相应代码文件中&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2). Service层&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;在 &lt;code&gt;DeptService&lt;/code&gt; 中，增加 &lt;code&gt;findAll&lt;/code&gt;方法，代码如下：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -935,7 +949,8 @@
 &lt;li&gt;DELETE方式：@DeleteMapping&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;**小结：**功能实现&lt;/p&gt;
+&lt;h4 id=&#34;小结&#34;&gt;小结
+&lt;/h4&gt;&lt;p&gt;功能实现：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0.png&#34;
 	width=&#34;2422&#34;
 	height=&#34;1232&#34;
@@ -1171,7 +1186,962 @@
 	
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;删除部门&#34;&gt;删除部门
-&lt;/h2&gt;</description>
+&lt;/h2&gt;&lt;h3 id=&#34;需求-1&#34;&gt;需求
+&lt;/h3&gt;&lt;p&gt;查询所有的部门数据，查询出来展示在部门管理的页面中。页面原型效果如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E6%9D%A1%E4%BB%B6.png&#34;
+	width=&#34;2375&#34;
+	height=&#34;908&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E6%9D%A1%E4%BB%B6_hu_f474390a2e88e8f0.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E6%9D%A1%E4%BB%B6_hu_d3136134f928e9c9.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;261&#34;
+		data-flex-basis=&#34;627px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;接口文档：删除部门&lt;/p&gt;
+&lt;h3 id=&#34;思路分析-1&#34;&gt;思路分析
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;明确了删除部门的需求之后，再来梳理一下实现该功能时，三层架构每一次的职责：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E6%80%9D%E8%B7%AF.png&#34;
+	width=&#34;2420&#34;
+	height=&#34;643&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E6%80%9D%E8%B7%AF_hu_dd5ac0046ec15e4c.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E6%80%9D%E8%B7%AF_hu_668c28d89981b95e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;376&#34;
+		data-flex-basis=&#34;903px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E7%AE%80%E5%8D%95%E5%8F%82%E6%95%B0.png&#34;
+	width=&#34;2189&#34;
+	height=&#34;88&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E7%AE%80%E5%8D%95%E5%8F%82%E6%95%B0_hu_655ed9bca17c8496.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E7%AE%80%E5%8D%95%E5%8F%82%E6%95%B0_hu_62c7b0d9d5b76f2d.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;2487&#34;
+		data-flex-basis=&#34;5970px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;方式一：通过原始的&lt;/strong&gt; &lt;strong&gt;HttpServletRequest&lt;/strong&gt; &lt;strong&gt;对象获取请求参数&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;* 根据ID删除部门 - 简单参数接收: 方式一 (HttpServletRequest)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;*/
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@DeleteMapping(&amp;#34;/depts&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public Result delete(HttpServletRequest request){
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    String idStr = request.getParameter(&amp;#34;id&amp;#34;);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    int id = Integer.parseInt(idStr);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    System.out.println(&amp;#34;根据ID删除部门: &amp;#34; + id);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    return Result.success();
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;由于Date是给前端返回的数据，但是删除不需要给前端响应数据，所以返回值置空就可以&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4id.png&#34;
+	width=&#34;2560&#34;
+	height=&#34;1330&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4id_hu_1f7695425faf75ea.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4id_hu_c277e0bb458c9f65.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;192&#34;
+		data-flex-basis=&#34;461px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E7%BB%93%E6%9E%9C.png&#34;
+	width=&#34;2414&#34;
+	height=&#34;343&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E7%BB%93%E6%9E%9C_hu_8933d0684348bd4b.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E7%BB%93%E6%9E%9C_hu_f6450ea6287aea07.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;703&#34;
+		data-flex-basis=&#34;1689px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;这种方案实现较为繁琐，而且还需要进行手动类型转换。&lt;strong&gt;【项目开发很少用】&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;方案二：通过Spring提供的&lt;code&gt; @RequestParam 注解&lt;/code&gt;，将请求参数绑定给方法形参&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@DeleteMapping(&amp;#34;/depts&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public Result delete(@RequestParam(&amp;#34;id&amp;#34;) Integer deptId){
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    System.out.println(&amp;#34;根据ID删除部门: &amp;#34; + deptId);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    return Result.success();
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;结果同上&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;@RequestParam&lt;/code&gt; 注解的value属性，需要与前端传递的参数名保持一致 。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E9%94%99%E8%AF%AF.png&#34;
+	width=&#34;2560&#34;
+	height=&#34;960&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E9%94%99%E8%AF%AF_hu_323d91aa021b2dd4.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4%E9%94%99%E8%AF%AF_hu_5ebb3ecdf1150c02.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;266&#34;
+		data-flex-basis=&#34;640px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%8E%A7%E5%88%B6%E5%8F%B0%E6%8A%A5%E9%94%99.png&#34;
+	width=&#34;2560&#34;
+	height=&#34;1380&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%8E%A7%E5%88%B6%E5%8F%B0%E6%8A%A5%E9%94%99_hu_8a99e809d23c1402.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%8E%A7%E5%88%B6%E5%8F%B0%E6%8A%A5%E9%94%99_hu_ee73a5566b613be1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;185&#34;
+		data-flex-basis=&#34;445px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;@RequestParam注解required属性默认为true，代表该参数必须传递，如果不传递将报错。 如果参数可选，可以将属性设置为false。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@DeleteMapping(&amp;#34;/depts&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public Result delete(@RequestParam(value = &amp;#34;id&amp;#34;,required = false) Integer deptId){
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    System.out.println(&amp;#34;根据ID删除部门: &amp;#34; + deptId);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    return Result.success();
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/null.png&#34;
+	width=&#34;2560&#34;
+	height=&#34;963&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/null_hu_9a5e7e6a67a86dae.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/null_hu_a7bef02320d20607.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;265&#34;
+		data-flex-basis=&#34;638px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/null1.png&#34;
+	width=&#34;2463&#34;
+	height=&#34;244&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/null1_hu_11310c27b1308501.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/null1_hu_3e1111257ce1681d.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;1009&#34;
+		data-flex-basis=&#34;2422px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;此时就算继续传递参数也不会报错&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;方案三：如果请求参数名与形参变量名相同，直接定义方法形参即可接收。（省略@RequestParam）&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;【推荐】&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@DeleteMapping(&amp;#34;/depts&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public Result delete(Integer id){
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    System.out.println(&amp;#34;根据ID删除部门: &amp;#34; + id);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    return Result.success();
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;结果同上&lt;/p&gt;
+&lt;h3 id=&#34;代码实现-1&#34;&gt;代码实现
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;1).&lt;/strong&gt; &lt;strong&gt;Controller层&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在 &lt;code&gt;DeptMapper&lt;/code&gt;  中，增加 &lt;code&gt;delete&lt;/code&gt; 方法，代码实现如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; * 根据id删除部门 - delete http://localhost:8080/depts?id=1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@DeleteMapping(&amp;#34;/depts&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public Result delete(Integer id){
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    System.out.println(&amp;#34;根据id删除部门, id=&amp;#34; + id);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    deptService.deleteById(id);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    return Result.success();
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;2). Service层&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在 &lt;code&gt;DeptService&lt;/code&gt; 中，增加 &lt;code&gt;deleteById&lt;/code&gt; 方法，代码实现如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; * 根据id删除部门
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;void deleteById(Integer id);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;3). Mapper层&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在 &lt;code&gt;DeptMapper&lt;/code&gt; 中，增加 &lt;code&gt;deleteById&lt;/code&gt; 方法，代码实现如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; * 根据id删除部门
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@Delete(&amp;#34;delete from dept where id = #{id}&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;void deleteById(Integer id);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;如果mapper接口方法形参只有一个普通类型的参数，&lt;code&gt;#{…}&lt;/code&gt; 里面的属性名可以随便写，如：&lt;code&gt;#{id}&lt;/code&gt;、&lt;code&gt;#{value}&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;对于 DML 语句来说，执行完毕，也是有返回值的，返回值代表的是增删改操作，影响的记录数，所以可以将执行 DML 语句的方法返回值设置为 Integer。 但是一般开发时，是不需要这个返回值的，所以也可以设置为void。&lt;/p&gt;
+&lt;p&gt;代码编写完毕之后，我们就可以启动服务，进行测试了。&lt;/p&gt;
+&lt;p&gt;初始数据库：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%9D%E5%A7%8B.png&#34;
+	width=&#34;979&#34;
+	height=&#34;461&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%9D%E5%A7%8B_hu_73d423bad79ad6f.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%9D%E5%A7%8B_hu_636828476a43d7e3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;212&#34;
+		data-flex-basis=&#34;509px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;用上面的方法在Apifox中删除id=6的数据(此处就不放页面展示了)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4id%E4%B8%BA6.png&#34;
+	width=&#34;2134&#34;
+	height=&#34;365&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4id%E4%B8%BA6_hu_309241ce6e3368d0.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%88%A0%E9%99%A4id%E4%B8%BA6_hu_f30df7e046070bf8.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;584&#34;
+		data-flex-basis=&#34;1403px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;更新后数据库：&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE%E5%BA%93.png&#34;
+	width=&#34;930&#34;
+	height=&#34;377&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE%E5%BA%93_hu_57f8887d4fd20fd1.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE%E5%BA%93_hu_f090a2ac26059aa4.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;246&#34;
+		data-flex-basis=&#34;592px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;前后端联调测试-1&#34;&gt;前后端联调测试
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E5%88%A0%E9%99%A4.png&#34;
+	width=&#34;2248&#34;
+	height=&#34;535&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E5%88%A0%E9%99%A4_hu_443cb048b3a680a3.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E5%88%A0%E9%99%A4_hu_3e24fc1c0399e1a1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;420&#34;
+		data-flex-basis=&#34;1008px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;此时可以发现已经删除成功了&lt;/p&gt;
+&lt;p&gt;现在测试前端删除：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E5%88%A0%E9%99%A41.png&#34;
+	width=&#34;2248&#34;
+	height=&#34;614&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E5%88%A0%E9%99%A41_hu_dbb3fa3ca9a7d2eb.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E5%88%A0%E9%99%A41_hu_49e92cea1c797f7e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;366&#34;
+		data-flex-basis=&#34;878px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;数据库中删除成功&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E6%B5%8B%E8%AF%95.png&#34;
+	width=&#34;877&#34;
+	height=&#34;223&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E6%B5%8B%E8%AF%95_hu_5dd78096239bea35.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E6%B5%8B%E8%AF%95_hu_f1a8ef218adaba0e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;393&#34;
+		data-flex-basis=&#34;943px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;测试成功&lt;/p&gt;
+&lt;h2 id=&#34;新增部门&#34;&gt;新增部门
+&lt;/h2&gt;&lt;h3 id=&#34;需求-2&#34;&gt;需求
+&lt;/h3&gt;&lt;p&gt;点击 &amp;ldquo;新增部门&amp;rdquo; 的按钮之后，弹出新增部门表单，填写部门名称之后，点击确定之后，保存部门数据。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A8.png&#34;
+	width=&#34;1924&#34;
+	height=&#34;1101&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A8_hu_87ae4a17d9370e68.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A8_hu_360703faf1460f85.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;174&#34;
+		data-flex-basis=&#34;419px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;接口文档：添加部门&lt;/p&gt;
+&lt;h3 id=&#34;思路分析-2&#34;&gt;思路分析：
+&lt;/h3&gt;&lt;p&gt;明确了删除部门的需求之后，再来梳理一下实现该功能时，三层架构每一次的职责：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E6%80%9D%E8%B7%AF.png&#34;
+	width=&#34;2437&#34;
+	height=&#34;642&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E6%80%9D%E8%B7%AF_hu_c6eaeac779ea0677.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E6%80%9D%E8%B7%AF_hu_18823f7e0ba35b36.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;379&#34;
+		data-flex-basis=&#34;911px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;json参数接收&#34;&gt;json参数接收
+&lt;/h3&gt;&lt;p&gt;我们看到，在controller中，需要接收前端传递的请求参数。 那接下来，我们就先来看看在服务器端的Controller程序中，如何获取json格式的参数。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;JSON格式的参数，通常会使用一个实体对象进行接收 。&lt;/li&gt;
+&lt;li&gt;规则：JSON数据的&lt;code&gt;键名&lt;/code&gt;与方法形参&lt;code&gt;对象的属性名&lt;/code&gt;相同，并需要使用&lt;code&gt;@RequestBody&lt;/code&gt;注解标识。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;前端传递的请求参数格式为json，内容如下：&lt;code&gt;{&amp;quot;name&amp;quot;:&amp;quot;研发部&amp;quot;}&lt;/code&gt;。这里，我们可以通过一个对象(dept)来接收，只需要保证对象中有name属性即可。&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%8E%A5%E6%94%B6%E5%8F%82%E6%95%B0.png&#34;
+	width=&#34;1026&#34;
+	height=&#34;230&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%8E%A5%E6%94%B6%E5%8F%82%E6%95%B0_hu_3aa6546d88b49f86.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%8E%A5%E6%94%B6%E5%8F%82%E6%95%B0_hu_2d68b39dd2f3e837.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;446&#34;
+		data-flex-basis=&#34;1070px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;代码实现-2&#34;&gt;代码实现
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;1). Controller层&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在&lt;code&gt;DeptController&lt;/code&gt;中增加方法save，具体代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/*
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;* 新增部门
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;* */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@PostMapping(&amp;#34;/depts&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public Result add(@RequestBody Dept dept){
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    System.out.println(&amp;#34;添加部门：&amp;#34; + dept);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    deptService.addDept(dept);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    return Result.success();
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;2). Service层&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在&lt;code&gt;DeptService&lt;/code&gt;中增加接口方法save，具体代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; * 新增部门
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;void save(Dept dept);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;在&lt;code&gt;DeptServiceImpl&lt;/code&gt;中增加save方法，完成添加部门的操作，具体代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public void save(Dept dept) {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    //补全基础属性 - createTime,updateTime
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    dept.setCreateTime(LocalDateTime.now());
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    dept.setUpdateTime(LocalDateTime.now());
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    //调用Mapper接口方法插入数据
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    deptMapper.insert(dept);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;3). Mapper层&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; * 新增部门
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; //注意：此处的values的后两个写的是属性名(驼峰式命名)，而不是字段名(下划线)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@Insert(&amp;#34;insert into dept(name,create_time,update_time) values(#{name},#{createTime},#{updateTime})&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;void insert(Dept dept);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A81.png&#34;
+	width=&#34;2560&#34;
+	height=&#34;927&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A81_hu_96b6b4ddeb990e1e.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A81_hu_4526d7e5f788d532.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;276&#34;
+		data-flex-basis=&#34;662px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A82.png&#34;
+	width=&#34;2310&#34;
+	height=&#34;372&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A82_hu_78381514c64d6c35.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A82_hu_3f2ed658891c2c6f.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;620&#34;
+		data-flex-basis=&#34;1490px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A83.png&#34;
+	width=&#34;915&#34;
+	height=&#34;237&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A83_hu_655e3065ab35b07e.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E9%83%A8%E9%97%A83_hu_5fa390dbfa0977bc.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;386&#34;
+		data-flex-basis=&#34;926px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;此处序号为9是因为前面代码有误，删除了前面的序号后重新添加的&lt;/p&gt;
+&lt;h3 id=&#34;前后端联调测试-2&#34;&gt;前后端联调测试
+&lt;/h3&gt;&lt;p&gt;此时刷新前端页面发现校验部添加成功&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E6%B7%BB%E5%8A%A0.png&#34;
+	width=&#34;2248&#34;
+	height=&#34;528&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E6%B7%BB%E5%8A%A0_hu_a55f3f3f536036f1.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E6%B7%BB%E5%8A%A0_hu_22a10db5fa7109f9.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;425&#34;
+		data-flex-basis=&#34;1021px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;再测试前端添加&lt;/p&gt;
+&lt;p&gt;由于我们查询是倒序查询，所以新增的部门排在最上面&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E6%B7%BB%E5%8A%A01.png&#34;
+	width=&#34;2248&#34;
+	height=&#34;667&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E6%B7%BB%E5%8A%A01_hu_154e158594b2cb96.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E6%B7%BB%E5%8A%A01_hu_1bddee5ec26f8600.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;337&#34;
+		data-flex-basis=&#34;808px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;发现数据库中添加成功&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E6%B7%BB%E5%8A%A0.png&#34;
+	width=&#34;937&#34;
+	height=&#34;418&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E6%B7%BB%E5%8A%A0_hu_a9e2ff1a4f1d3558.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E6%B7%BB%E5%8A%A0_hu_ad23ccb2fca34bcb.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;224&#34;
+		data-flex-basis=&#34;537px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;修改部门&#34;&gt;修改部门
+&lt;/h2&gt;&lt;p&gt;对于任何业务的修改功能来说，一般都会分为两步进行：查询回显、修改数据。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BF%AE%E6%94%B9%E9%83%A8%E9%97%A8.png&#34;
+	width=&#34;1827&#34;
+	height=&#34;1109&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BF%AE%E6%94%B9%E9%83%A8%E9%97%A8_hu_4b1363c3885d119.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BF%AE%E6%94%B9%E9%83%A8%E9%97%A8_hu_bec4ff6d0496a7ab.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;164&#34;
+		data-flex-basis=&#34;395px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;查询回显&#34;&gt;查询回显
+&lt;/h3&gt;&lt;h4 id=&#34;需求-3&#34;&gt;需求
+&lt;/h4&gt;&lt;p&gt;当我们点击 &amp;ldquo;编辑&amp;rdquo; 的时候，需要根据ID查询部门数据，然后用于页面回显展示。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%A0%B9%E6%8D%AEid%E6%9F%A5%E8%AF%A2%E9%83%A8%E9%97%A8.png&#34;
+	width=&#34;1026&#34;
+	height=&#34;221&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%A0%B9%E6%8D%AEid%E6%9F%A5%E8%AF%A2%E9%83%A8%E9%97%A8_hu_d56a0fe35c3f9c69.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%A0%B9%E6%8D%AEid%E6%9F%A5%E8%AF%A2%E9%83%A8%E9%97%A8_hu_74819f42ddd5d8da.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;464&#34;
+		data-flex-basis=&#34;1114px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;接口描述：根据id查询部门&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9F%A5%E8%AF%A2%E8%81%8C%E8%B4%A3.png&#34;
+	width=&#34;1026&#34;
+	height=&#34;260&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9F%A5%E8%AF%A2%E8%81%8C%E8%B4%A3_hu_40baec3e8a57447a.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9F%A5%E8%AF%A2%E8%81%8C%E8%B4%A3_hu_2826e4df7fa5570c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;394&#34;
+		data-flex-basis=&#34;947px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;了解了需求之后，我们再看看接口文档中，关于根据ID查询部门的接口的描述，然后根据接口文档进行服务端接口的开发 。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;/depts/1&lt;/code&gt;，&lt;code&gt;/depts/2&lt;/code&gt; 这种在url中传递的参数，我们称之为&lt;strong&gt;路径参数&lt;/strong&gt;。 那么如何接收这样的路径参数呢 ？&lt;/p&gt;
+&lt;p&gt;路径参数：通过请求URL直接传递参数，使用{…}来标识该路径参数，需要使用 &lt;code&gt;@PathVariable&lt;/code&gt;获取路径参数。如下所示：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%B7%AF%E5%BE%84%E5%8F%82%E6%95%B0.png&#34;
+	width=&#34;1026&#34;
+	height=&#34;212&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%B7%AF%E5%BE%84%E5%8F%82%E6%95%B0_hu_d4bd95b57dc133f6.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%B7%AF%E5%BE%84%E5%8F%82%E6%95%B0_hu_3f2c14e070630804.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;483&#34;
+		data-flex-basis=&#34;1161px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;如果路径参数名与controller方法形参名称一致，&lt;code&gt;@PathVariable&lt;/code&gt;注解的value属性是可以省略的。&lt;/p&gt;
+&lt;h4 id=&#34;代码实现-3&#34;&gt;代码实现
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;1). Controller层&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在 &lt;code&gt;DeptController&lt;/code&gt; 中增加 &lt;code&gt;getById&lt;/code&gt;方法，具体代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; * 根据ID查询 - GET http://localhost:8080/depts/1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@GetMapping(&amp;#34;/depts/{id}&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public Result getById(@PathVariable Integer id){
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    System.out.println(&amp;#34;根据ID查询, id=&amp;#34; + id);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    Dept dept = deptService.getById(id);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    return Result.success(dept);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;2). Service层&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在 &lt;code&gt;DeptService&lt;/code&gt; 中增加 &lt;code&gt;getById&lt;/code&gt;方法，具体代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; * 根据id查询部门
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dept getById(Integer id);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;在 &lt;code&gt;DeptServiceImpl&lt;/code&gt; 中增加 &lt;code&gt;getById&lt;/code&gt;方法，具体代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public Dept getById(Integer id) {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    return deptMapper.getById(id);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;3). Mapper层&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在 &lt;code&gt;DeptMapper&lt;/code&gt; 中增加 &lt;code&gt;getById&lt;/code&gt; 方法，具体代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;* 根据ID查询部门数据
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;*/
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@Select(&amp;#34;select id, name, create_time, update_time from dept where id = #{id}&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dept getById(Integer id);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;代码编写完毕之后，我们就可以启动服务，进行测试了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9F%A5%E8%AF%A210.png&#34;
+	width=&#34;2560&#34;
+	height=&#34;1026&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9F%A5%E8%AF%A210_hu_ce0cb2141504e0f2.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9F%A5%E8%AF%A210_hu_dfae694012f6f7a9.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;249&#34;
+		data-flex-basis=&#34;598px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9F%A5%E8%AF%A2%E6%8E%A7%E5%88%B6%E5%8F%B010.png&#34;
+	width=&#34;2434&#34;
+	height=&#34;434&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9F%A5%E8%AF%A2%E6%8E%A7%E5%88%B6%E5%8F%B010_hu_af894303f1ce2b64.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9F%A5%E8%AF%A2%E6%8E%A7%E5%88%B6%E5%8F%B010_hu_554447198d24948e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;560&#34;
+		data-flex-basis=&#34;1345px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;前后端分离测试&#34;&gt;前后端分离测试
+&lt;/h4&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%9B%9E%E6%98%BE.png&#34;
+	width=&#34;2550&#34;
+	height=&#34;658&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%9B%9E%E6%98%BE_hu_a8a0c9d42ae389.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%9B%9E%E6%98%BE_hu_6f7f497197abae0d.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;387&#34;
+		data-flex-basis=&#34;930px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;点击修改，发现部门已经回显回来了，说明测试成功&lt;/p&gt;
+&lt;h4 id=&#34;小结-1&#34;&gt;小结
+&lt;/h4&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%A4%9A%E4%B8%AA%E8%B7%AF%E5%BE%84%E5%8F%82%E6%95%B0.png&#34;
+	width=&#34;1713&#34;
+	height=&#34;507&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%A4%9A%E4%B8%AA%E8%B7%AF%E5%BE%84%E5%8F%82%E6%95%B0_hu_5ea011e83560a7df.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%A4%9A%E4%B8%AA%E8%B7%AF%E5%BE%84%E5%8F%82%E6%95%B0_hu_3212130a36c1e7a1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;337&#34;
+		data-flex-basis=&#34;810px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;修改数据&#34;&gt;修改数据
+&lt;/h3&gt;&lt;h4 id=&#34;需求-4&#34;&gt;需求
+&lt;/h4&gt;&lt;p&gt;查询回显回来之后，就可以对部门的信息进行修改了，修改完毕之后，点击确定，此时，就需要根据ID修改部门的数据。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE.png&#34;
+	width=&#34;1026&#34;
+	height=&#34;598&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE_hu_55a324b7d082ff36.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE_hu_ed6b233e7b81a25d.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;171&#34;
+		data-flex-basis=&#34;411px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;接口文档：修改部门&lt;/p&gt;
+&lt;h4 id=&#34;思路分析-3&#34;&gt;思路分析
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;明确了删除部门的需求之后，再来梳理一下实现该功能时，三层架构每一次的职责：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BF%AE%E6%94%B9%E6%80%9D%E8%B7%AF.png&#34;
+	width=&#34;1026&#34;
+	height=&#34;270&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BF%AE%E6%94%B9%E6%80%9D%E8%B7%AF_hu_95f01f2a36b139bd.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BF%AE%E6%94%B9%E6%80%9D%E8%B7%AF_hu_10bdf9e8d8ba4e85.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;380&#34;
+		data-flex-basis=&#34;912px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;通过接口文档，我们可以看到前端传递的请求参数是json格式的请求参数，在Controller的方法中，我们可以通过 &lt;code&gt;@RequestBody&lt;/code&gt; 注解来接收，并将其封装到一个对象中。&lt;/p&gt;
+&lt;h4 id=&#34;代码实现-4&#34;&gt;代码实现
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;1). Controller层&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在 &lt;code&gt;DeptController&lt;/code&gt; 中增加 &lt;code&gt;update&lt;/code&gt; 方法，具体代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; * 修改部门 - PUT http://localhost:8080/depts  请求参数：{&amp;#34;id&amp;#34;:1,&amp;#34;name&amp;#34;:&amp;#34;研发部&amp;#34;}
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@PutMapping(&amp;#34;/depts&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public Result update(@RequestBody Dept dept){
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    System.out.println(&amp;#34;修改部门, dept=&amp;#34; + dept);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    deptService.update(dept);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    return Result.success();
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;2). Service层&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在 &lt;code&gt;DeptService&lt;/code&gt; 中增加 &lt;code&gt;update&lt;/code&gt; 方法。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; * 修改部门
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;void update(Dept dept);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;在 &lt;code&gt;DeptServiceImpl&lt;/code&gt; 中增加 &lt;code&gt;update&lt;/code&gt; 方法。 由于是修改操作，每一次修改数据，都需要更新updateTime。所以，具体代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public void update(Dept dept) {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    //补全基础属性 - updateTime
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    dept.setUpdateTime(LocalDateTime.now());
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    //调用Mapper接口方法更新部门
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    deptMapper.update(dept);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;3). Mapper层&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在 &lt;code&gt;DeptMapper&lt;/code&gt; 中增加 &lt;code&gt;update&lt;/code&gt; 方法，具体代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; * 更新部门
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@Update(&amp;#34;update dept set name = #{name},update_time = #{updateTime} where id = #{id}&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;void update(Dept dept);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;代码编写完毕之后，我们就可以启动服务，进行测试了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BF%AE%E6%94%B9%E5%89%8D%E7%AB%AF.png&#34;
+	width=&#34;2560&#34;
+	height=&#34;928&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BF%AE%E6%94%B9%E5%89%8D%E7%AB%AF_hu_324b6b7077388a4e.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BF%AE%E6%94%B9%E5%89%8D%E7%AB%AF_hu_70b5aa2f9a9f1af7.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;275&#34;
+		data-flex-basis=&#34;662px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E4%BF%AE%E6%94%B9.png&#34;
+	width=&#34;1977&#34;
+	height=&#34;578&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E4%BF%AE%E6%94%B9_hu_5f3a2d935f9b2e3d.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E4%BF%AE%E6%94%B9_hu_a9af33e8792bc64d.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;342&#34;
+		data-flex-basis=&#34;820px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E4%BF%AE%E6%94%B91.png&#34;
+	width=&#34;957&#34;
+	height=&#34;365&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E4%BF%AE%E6%94%B91_hu_8381a278a30d4fd1.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E4%BF%AE%E6%94%B91_hu_72cc694c10237012.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;262&#34;
+		data-flex-basis=&#34;629px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E6%AE%B5%E4%BF%AE%E6%94%B9.png&#34;
+	width=&#34;2248&#34;
+	height=&#34;575&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E6%AE%B5%E4%BF%AE%E6%94%B9_hu_2bc4547f36014f6a.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E6%AE%B5%E4%BF%AE%E6%94%B9_hu_1a61b05571071949.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;390&#34;
+		data-flex-basis=&#34;938px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;前后端分离测试-1&#34;&gt;前后端分离测试
+&lt;/h4&gt;&lt;p&gt;前端修改名字&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E4%BF%AE%E6%94%B9.png&#34;
+	width=&#34;2248&#34;
+	height=&#34;659&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E4%BF%AE%E6%94%B9_hu_bd03cbfe9f7bd2e0.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E4%BF%AE%E6%94%B9_hu_713290c73eff9c0.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;341&#34;
+		data-flex-basis=&#34;818px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;数据库更新成功&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E4%BF%AE%E6%94%B9%E7%BB%93%E6%9E%9C.png&#34;
+	width=&#34;975&#34;
+	height=&#34;318&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E4%BF%AE%E6%94%B9%E7%BB%93%E6%9E%9C_hu_51bc30b4e4a33e10.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%8E%E7%AB%AF%E4%BF%AE%E6%94%B9%E7%BB%93%E6%9E%9C_hu_6c63369094083c1f.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;306&#34;
+		data-flex-basis=&#34;735px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;requestmapping&#34;&gt;@RequestMapping
+&lt;/h4&gt;&lt;p&gt;到此呢，关于基本的部门的增删改查功能，我们已经实现了。  我们会发现，我们在 &lt;code&gt;DeptController&lt;/code&gt; 中所定义的方法，所有的请求路径，都是 &lt;code&gt;/depts&lt;/code&gt; 开头的，只要操作的是部门数据，请求路径都是 &lt;code&gt;/depts&lt;/code&gt; 开头。&lt;/p&gt;
+&lt;p&gt;那么这个时候，我们其实是可以把这个公共的路径 &lt;code&gt;/depts&lt;/code&gt; 抽取到类上的，那在各个方法上，就可以省略了这个 &lt;code&gt;/depts&lt;/code&gt; 路径。 代码如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/RM.png&#34;
+	width=&#34;1026&#34;
+	height=&#34;580&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/RM_hu_4fc5d6a259c714ed.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/RM_hu_7db7e896e416cf40.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;176&#34;
+		data-flex-basis=&#34;424px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;一个完整的请求路径，应该是类上的 @RequestMapping 的value属性 + 方法上的 @RequestMapping的value属性。&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
         </item>
         <item>
         <title>Mybatis</title>
