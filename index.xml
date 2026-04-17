@@ -600,7 +600,578 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;</description>
+&lt;/div&gt;&lt;h2 id=&#34;查询部门&#34;&gt;查询部门
+&lt;/h2&gt;&lt;h3 id=&#34;接口开发&#34;&gt;接口开发
+&lt;/h3&gt;&lt;h4 id=&#34;需求&#34;&gt;需求
+&lt;/h4&gt;&lt;p&gt;查询所有的部门数据，查询出来展示在部门管理的页面中。页面原型效果如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%A1%B5%E9%9D%A2%E5%8E%9F%E5%9E%8B.png&#34;
+	width=&#34;1920&#34;
+	height=&#34;872&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%A1%B5%E9%9D%A2%E5%8E%9F%E5%9E%8B_hu_32fd44773bf6752d.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%A1%B5%E9%9D%A2%E5%8E%9F%E5%9E%8B_hu_ceda4674962595b5.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;220&#34;
+		data-flex-basis=&#34;528px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;接口描述&#34;&gt;接口描述
+&lt;/h4&gt;&lt;p&gt;参照课程资料中提供的接口文档。 &lt;code&gt;部门管理&lt;/code&gt; -&amp;gt; &lt;code&gt;部门列表查询&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;地址：&lt;a class=&#34;link&#34; href=&#34;https://heuqqdmbyk.feishu.cn/wiki/GyZVwpRf6ir89qkKtFqc0HlTnhg&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;接口文档 - 飞书云文档&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&#34;思路分析&#34;&gt;思路分析
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;明确了查询部门的需求之后，再来梳理一下实现该功能时，三层架构每一次的职责：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%81%8C%E8%B4%A3.png&#34;
+	width=&#34;2408&#34;
+	height=&#34;817&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%81%8C%E8%B4%A3_hu_60d593a8835cbe2c.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%81%8C%E8%B4%A3_hu_9d7a7af10309a92.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;294&#34;
+		data-flex-basis=&#34;707px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Controller层，负责接收前端发起的请求，并调用service查询部门数据，然后响应结果。&lt;/li&gt;
+&lt;li&gt;Service层，负责调用Mapper接口方法，查询所有部门数据。&lt;/li&gt;
+&lt;li&gt;Mapper层，执行查询所有部门数据的操作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;代码实现&#34;&gt;代码实现
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;1). Controller层&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在 &lt;code&gt;DeptController&lt;/code&gt; 中，增加 &lt;code&gt;list&lt;/code&gt; 方法，代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; * 部门管理控制器
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@RestController
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public class DeptController {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	//依赖注入，Spring 容器会自动将 DeptService 的实现类注入到这里，实现业务逻辑层的调用。
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    @Autowired
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    private DeptService deptService;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    /**
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     * 查询部门列表
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    // 映射 HTTP 请求路径
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    // 这里表示该方法处理访问路径为 /depts 的请求（默认支持所有 HTTP 方法，如 GET, POST 等）。  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    @RequestMapping(&amp;#34;/depts&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    public Result list(){
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    	// 调用业务逻辑层（Service）的 findall 方法，获取部门列表数据
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        List&amp;lt;Dept&amp;gt; deptList = deptService.findAll();
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        // 将查询到的 deptList 封装在 Result 对象中返回，通常包含状态码、消息和数据。
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        return Result.success(deptList);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;2). Service层&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在 &lt;code&gt;DeptService&lt;/code&gt; 中，增加 &lt;code&gt;findAll&lt;/code&gt;方法，代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public interface DeptService {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    /**
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     * 查询所有部门
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    public List&amp;lt;Dept&amp;gt; findAll();
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;在 &lt;code&gt;DeptServiceImpl&lt;/code&gt; 中，增加 &lt;code&gt;findAll&lt;/code&gt;方法，代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@Service
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public class DeptServiceImpl implements DeptService {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    @Autowired
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    private DeptMapper deptMapper;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    public List&amp;lt;Dept&amp;gt; findAll() {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        return deptMapper.findAll();
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;3). Mapper层&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在 &lt;code&gt;DeptMapper&lt;/code&gt; 中，增加 &lt;code&gt;findAll&lt;/code&gt;方法，代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@Mapper
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public interface DeptMapper {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    /**
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     * 查询所有部门
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    @Select(&amp;#34;select * from dept&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    public List&amp;lt;Dept&amp;gt; findAll();
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h4 id=&#34;接口测试&#34;&gt;接口测试
+&lt;/h4&gt;&lt;p&gt;启动项目，然后我们就可以打开Apifox进行测试了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C1.png&#34;
+	width=&#34;2085&#34;
+	height=&#34;506&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C1_hu_6820784fa7cfdddd.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C1_hu_6bd5ff35f825ac10.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;412&#34;
+		data-flex-basis=&#34;988px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95.png&#34;
+	width=&#34;2560&#34;
+	height=&#34;1379&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95_hu_2adbf7b5a98e5a9.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95_hu_d0307ce22ed83986.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;185&#34;
+		data-flex-basis=&#34;445px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;我们发现，已经查询出了所有的部门数据，并且响应回来的就是json格式的数据，与接口文档一致。 那接下来，我们再来测试一下，这个查询操作，我们使用post、put、delete方式来请求，是否可以获取到数据。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/POST%E8%AF%B7%E6%B1%82.png&#34;
+	width=&#34;2560&#34;
+	height=&#34;1330&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/POST%E8%AF%B7%E6%B1%82_hu_9dc91a2755c9d398.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/POST%E8%AF%B7%E6%B1%82_hu_89fc369689cf7e69.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;192&#34;
+		data-flex-basis=&#34;461px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/DELETE%E8%AF%B7%E6%B1%82.png&#34;
+	width=&#34;2560&#34;
+	height=&#34;1330&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/DELETE%E8%AF%B7%E6%B1%82_hu_b0134263932ae626.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/DELETE%E8%AF%B7%E6%B1%82_hu_65ae08c50f5175b4.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;192&#34;
+		data-flex-basis=&#34;461px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/PUT%E8%AF%B7%E6%B1%82.png&#34;
+	width=&#34;2560&#34;
+	height=&#34;1330&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/PUT%E8%AF%B7%E6%B1%82_hu_afdc395646529f3c.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/PUT%E8%AF%B7%E6%B1%82_hu_9fa64e8757fa436c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;192&#34;
+		data-flex-basis=&#34;461px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;经过测试，我们发现，现在我们其实是可以通过任何方式的请求来访问查询部门的这个接口的。 而在接口文档中，明确要求该接口的请求方式为GET，那么如何限制请求方式呢？&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;方式一：在controller方法的@RequestMapping注解中通过method属性来限定。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@RestController
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public class DeptController {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    @Autowired
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    private DeptService deptService;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    /**
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     * 查询部门列表
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    @RequestMapping(value = &amp;#34;/depts&amp;#34;, method = RequestMethod.GET)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    public Result list(){
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        List&amp;lt;Dept&amp;gt; deptList = deptService.findAll();
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        return Result.success(deptList);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;此时在去查看Apifox就会发现请求失败了，错误信息为“请求不被允许”&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%AF%B7%E6%B1%82%E5%A4%B1%E8%B4%A5.png&#34;
+	width=&#34;2560&#34;
+	height=&#34;1330&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%AF%B7%E6%B1%82%E5%A4%B1%E8%B4%A5_hu_7ecc50fd372d278d.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%AF%B7%E6%B1%82%E5%A4%B1%E8%B4%A5_hu_8a219bde505e9752.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;192&#34;
+		data-flex-basis=&#34;461px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;方式二：在controller方法上使用，@RequestMapping的衍生注解 @GetMapping。 该注解就是标识当前方法，必须以GET方式请求。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@RestController
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;public class DeptController {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    @Autowired
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    private DeptService deptService;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    /**
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     * 查询部门列表
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    @GetMapping(&amp;#34;/depts&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    public Result list(){
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        List&amp;lt;Dept&amp;gt; deptList = deptService.findAll();
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        return Result.success(deptList);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;上述两种方式，在项目开发中，推荐使用第二种方式，简洁、优雅。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;GET方式：@GetMapping&lt;/li&gt;
+&lt;li&gt;POST方式：@PostMapping&lt;/li&gt;
+&lt;li&gt;PUT方式：@PutMapping&lt;/li&gt;
+&lt;li&gt;DELETE方式：@DeleteMapping&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;**小结：**功能实现&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0.png&#34;
+	width=&#34;2422&#34;
+	height=&#34;1232&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0_hu_f2ff30aa5adfda77.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0_hu_37d5ec46919c5952.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;196&#34;
+		data-flex-basis=&#34;471px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;数据封装&#34;&gt;数据封装
+&lt;/h4&gt;&lt;p&gt;在上述测试中，我们发现部门的数据中，id、name两个属性是有值的，但是createTime、updateTime两个字段值并未成功封装(前端页面均返回null)，而数据库中是有对应的字段值的，这是为什么呢？&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%AD%97%E6%AE%B5%E5%90%8D.png&#34;
+	width=&#34;1926&#34;
+	height=&#34;464&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%AD%97%E6%AE%B5%E5%90%8D_hu_708112e9472055d4.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%AD%97%E6%AE%B5%E5%90%8D_hu_93ce8b0cc87d1968.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;415&#34;
+		data-flex-basis=&#34;996px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;原因如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;实体类属性名和数据库表查询返回的字段名一致，mybatis会自动封装。&lt;/li&gt;
+&lt;li&gt;如果实体类属性名和数据库表查询返回的字段名不一致，不能自动封装。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;解决方案：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;手动结果映射：通过@Results及@Result进行手动结果映射&lt;/li&gt;
+&lt;li&gt;起别名：在SQL语句中，对不一样的列名起别名，别名和实体类属性名一样&lt;/li&gt;
+&lt;li&gt;开启驼峰命名：如果字段名与属性名符合驼峰命名规则，Mybatis会自动通过驼峰命名规则映射&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;手动结果映射：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%89%8B%E5%8A%A8.png&#34;
+	width=&#34;1899&#34;
+	height=&#34;433&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%89%8B%E5%8A%A8_hu_20fc42763d86b6f9.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%89%8B%E5%8A%A8_hu_feceac90c0c3b6f1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;438&#34;
+		data-flex-basis=&#34;1052px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%89%8B%E5%8A%A8%E7%BB%93%E6%9E%9C.png&#34;
+	width=&#34;2560&#34;
+	height=&#34;1330&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%89%8B%E5%8A%A8%E7%BB%93%E6%9E%9C_hu_a219bfccef244e65.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%89%8B%E5%8A%A8%E7%BB%93%E6%9E%9C_hu_deb0604637f56c58.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;192&#34;
+		data-flex-basis=&#34;461px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;起别名&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%B5%B7%E5%88%AB%E5%90%8D.png&#34;
+	width=&#34;1889&#34;
+	height=&#34;217&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%B5%B7%E5%88%AB%E5%90%8D_hu_7011179ff698af59.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%B5%B7%E5%88%AB%E5%90%8D_hu_e84c1521028fabbc.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;870&#34;
+		data-flex-basis=&#34;2089px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;结果同上&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;开启驼峰命名(要求：xxx_abc -&amp;gt; xxxAbc)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%A9%BC%E5%B3%B0.png&#34;
+	width=&#34;1920&#34;
+	height=&#34;253&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%A9%BC%E5%B3%B0_hu_3fbd7e31216228b4.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%A9%BC%E5%B3%B0_hu_751ea689c022b6fa.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;758&#34;
+		data-flex-basis=&#34;1821px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;结果同上&lt;/p&gt;
+&lt;h3 id=&#34;前后端联调测试&#34;&gt;前后端联调测试
+&lt;/h3&gt;&lt;h4 id=&#34;联调测试&#34;&gt;联调测试
+&lt;/h4&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%B5%8B%E8%AF%95%E6%A6%82%E5%BF%B5.png&#34;
+	width=&#34;1149&#34;
+	height=&#34;306&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%B5%8B%E8%AF%95%E6%A6%82%E5%BF%B5_hu_d56b7810ad4f393.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%B5%8B%E8%AF%95%E6%A6%82%E5%BF%B5_hu_8f08852b8aa81310.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;375&#34;
+		data-flex-basis=&#34;901px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;完成了查询部门的功能，我们也通过 Apifox 工具测试通过了，下面我们再基于前后端分离的方式进行接口联调。具体操作如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;下载nginx&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;启动nginx，访问测试：http://localhost:90&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;双击&lt;/strong&gt; &lt;strong&gt;nginx.exe 启动Nginx，一闪而过，就说明nginx已启动完成。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%AF%E5%8A%A8Nginx.png&#34;
+	width=&#34;1278&#34;
+	height=&#34;107&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%AF%E5%8A%A8Nginx_hu_b860b656a1ca9c1f.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%AF%E5%8A%A8Nginx_hu_626b04a2d08c8bb.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;1194&#34;
+		data-flex-basis=&#34;2866px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;如果在任务管理器中，能看到上述两个进程，就说明nginx已经启动成功。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/nginx.png&#34;
+	width=&#34;1457&#34;
+	height=&#34;404&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/nginx_hu_1b320687b86fc662.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/nginx_hu_bff70fb474b373a4.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;360&#34;
+		data-flex-basis=&#34;865px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;请求访问流程&#34;&gt;请求访问流程
+&lt;/h4&gt;&lt;p&gt;前端工程请求服务器的地址为 &lt;code&gt;http://localhost:90/api/depts&lt;/code&gt;，是如何访问到后端的tomcat服务器的？&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E8%AF%B7%E6%B1%82.png&#34;
+	width=&#34;2534&#34;
+	height=&#34;605&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E8%AF%B7%E6%B1%82_hu_61451b1aa99934cc.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E8%AF%B7%E6%B1%82_hu_57d5e23faf41e6ea.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;418&#34;
+		data-flex-basis=&#34;1005px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;其实这里，是通过前端服务Nginx中提供的&lt;strong&gt;反向代理功能&lt;/strong&gt;实现的。&lt;/p&gt;
+&lt;p&gt;1). 浏览器发起请求，请求的是localhost:90 ，那其实请求的是nginx服务器。&lt;/p&gt;
+&lt;p&gt;2). 在nginx服务器中呢，并没有对请求直接进行处理，而是将请求转发给了后端的tomcat服务器，最终由tomcat服务器来处理该请求。&lt;/p&gt;
+&lt;p&gt;这个过程就是通过nginx的反向代理实现的。 那为什么浏览器不直接请求后端的tomcat服务器，而是直接请求nginx服务器呢，主要有以下几点原因：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8.png&#34;
+	width=&#34;1015&#34;
+	height=&#34;249&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8_hu_4e7a22e0a4f6678d.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8_hu_287c071eaa9f2a43.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;407&#34;
+		data-flex-basis=&#34;978px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;1). 安全：由于后端的tomcat服务器一般都会搭建集群，会有很多的服务器，把所有的tomcat暴露给前端，让前端直接请求tomcat，对于后端服务器是比较危险的。&lt;/p&gt;
+&lt;p&gt;2). 灵活：基于nginx的反向代理实现，更加灵活，后端想增加、减少服务器，对于前端来说是无感知的，只需要在nginx中配置即可。&lt;/p&gt;
+&lt;p&gt;3). 负载均衡：基于nginx的反向代理，可以很方便的实现后端tomcat的负载均衡操作。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;反向代理是一种网络架构，通过代理服务器为后端的服务器做代理，客户端的请求直接请求代理服务器，然后转发给后端的服务器。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;具体的访问流程如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%AE%BF%E9%97%AE%E6%B5%81%E7%A8%8B.png&#34;
+	width=&#34;1026&#34;
+	height=&#34;323&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%AE%BF%E9%97%AE%E6%B5%81%E7%A8%8B_hu_9b2fb77e464e4d3e.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%AE%BF%E9%97%AE%E6%B5%81%E7%A8%8B_hu_b93c11bd4172409f.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;317&#34;
+		data-flex-basis=&#34;762px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;**location：**用于定义匹配特定uri请求的规则。&lt;/li&gt;
+&lt;li&gt;**^~ /api/：**表示精确匹配，即只匹配以/api/开头的路径。&lt;/li&gt;
+&lt;li&gt;补充：^ $：正则的开始与结束；(.*)：.代表单个任意字符，*代表出现的次数为任意次数&lt;/li&gt;
+&lt;li&gt;**rewrite：**该指令用于重写匹配到的uri路径。&lt;/li&gt;
+&lt;li&gt;说明：此处的意思就是将路径/api/depts重写为/depts&lt;/li&gt;
+&lt;li&gt;**proxy_pass：**该指令用于代理转发，它将匹配到的请求转发给位于后端的指令服务器。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我们可以打开Nginx的配置文件看看是不是这样的&lt;/p&gt;
+&lt;p&gt;选择图中文件打开&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.png&#34;
+	width=&#34;1236&#34;
+	height=&#34;501&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6_hu_29ed85fd31132fd9.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6_hu_6be7e5ef1a129057.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;246&#34;
+		data-flex-basis=&#34;592px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF.png&#34;
+	width=&#34;1530&#34;
+	height=&#34;1020&#34;
+	srcset=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF_hu_872c7b00d0eabc35.png 480w, https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF_hu_97f7386cf9fcd4ae.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;150&#34;
+		data-flex-basis=&#34;360px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;删除部门&#34;&gt;删除部门
+&lt;/h2&gt;</description>
         </item>
         <item>
         <title>Mybatis</title>

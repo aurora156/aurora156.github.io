@@ -232,6 +232,27 @@
         <li><a href="#工程搭建">工程搭建</a></li>
       </ol>
     </li>
+    <li><a href="#查询部门">查询部门</a>
+      <ol>
+        <li><a href="#接口开发">接口开发</a>
+          <ol>
+            <li><a href="#需求">需求</a></li>
+            <li><a href="#接口描述">接口描述</a></li>
+            <li><a href="#思路分析">思路分析</a></li>
+            <li><a href="#代码实现">代码实现</a></li>
+            <li><a href="#接口测试">接口测试</a></li>
+            <li><a href="#数据封装">数据封装</a></li>
+          </ol>
+        </li>
+        <li><a href="#前后端联调测试">前后端联调测试</a>
+          <ol>
+            <li><a href="#联调测试">联调测试</a></li>
+            <li><a href="#请求访问流程">请求访问流程</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#删除部门">删除部门</a></li>
   </ol>
 </nav>
         </div>
@@ -876,7 +897,578 @@
 </span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
+</div><h2 id="查询部门">查询部门
+</h2><h3 id="接口开发">接口开发
+</h3><h4 id="需求">需求
+</h4><p>查询所有的部门数据，查询出来展示在部门管理的页面中。页面原型效果如下：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%A1%B5%E9%9D%A2%E5%8E%9F%E5%9E%8B.png"
+	width="1920"
+	height="872"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%A1%B5%E9%9D%A2%E5%8E%9F%E5%9E%8B_hu_32fd44773bf6752d.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%A1%B5%E9%9D%A2%E5%8E%9F%E5%9E%8B_hu_ceda4674962595b5.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="220"
+		data-flex-basis="528px"
+	
+></p>
+<h4 id="接口描述">接口描述
+</h4><p>参照课程资料中提供的接口文档。 <code>部门管理</code> -&gt; <code>部门列表查询</code></p>
+<p>地址：<a class="link" href="https://heuqqdmbyk.feishu.cn/wiki/GyZVwpRf6ir89qkKtFqc0HlTnhg"  target="_blank" rel="noopener"
+    >接口文档 - 飞书云文档</a></p>
+<h4 id="思路分析">思路分析
+</h4><ul>
+<li>
+<p>明确了查询部门的需求之后，再来梳理一下实现该功能时，三层架构每一次的职责：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%81%8C%E8%B4%A3.png"
+	width="2408"
+	height="817"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%81%8C%E8%B4%A3_hu_60d593a8835cbe2c.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%81%8C%E8%B4%A3_hu_9d7a7af10309a92.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="294"
+		data-flex-basis="707px"
+	
+></p>
+<ul>
+<li>Controller层，负责接收前端发起的请求，并调用service查询部门数据，然后响应结果。</li>
+<li>Service层，负责调用Mapper接口方法，查询所有部门数据。</li>
+<li>Mapper层，执行查询所有部门数据的操作。</li>
+</ul>
+</li>
+</ul>
+<h4 id="代码实现">代码实现
+</h4><p><strong>1). Controller层</strong></p>
+<p>在 <code>DeptController</code> 中，增加 <code>list</code> 方法，代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/**
+</span></span><span class="line"><span class="cl"> * 部门管理控制器
+</span></span><span class="line"><span class="cl"> */
+</span></span><span class="line"><span class="cl">@RestController
+</span></span><span class="line"><span class="cl">public class DeptController {
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	//依赖注入，Spring 容器会自动将 DeptService 的实现类注入到这里，实现业务逻辑层的调用。
+</span></span><span class="line"><span class="cl">    @Autowired
+</span></span><span class="line"><span class="cl">    private DeptService deptService;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    /**
+</span></span><span class="line"><span class="cl">     * 查询部门列表
+</span></span><span class="line"><span class="cl">     */
+</span></span><span class="line"><span class="cl">    // 映射 HTTP 请求路径
+</span></span><span class="line"><span class="cl">    // 这里表示该方法处理访问路径为 /depts 的请求（默认支持所有 HTTP 方法，如 GET, POST 等）。  
+</span></span><span class="line"><span class="cl">    @RequestMapping(&#34;/depts&#34;)
+</span></span><span class="line"><span class="cl">    public Result list(){
+</span></span><span class="line"><span class="cl">    	// 调用业务逻辑层（Service）的 findall 方法，获取部门列表数据
+</span></span><span class="line"><span class="cl">        List&lt;Dept&gt; deptList = deptService.findAll();
+</span></span><span class="line"><span class="cl">        // 将查询到的 deptList 封装在 Result 对象中返回，通常包含状态码、消息和数据。
+</span></span><span class="line"><span class="cl">        return Result.success(deptList);
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
 </div>
+</div><p><strong>2). Service层</strong></p>
+<p>在 <code>DeptService</code> 中，增加 <code>findAll</code>方法，代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">public interface DeptService {
+</span></span><span class="line"><span class="cl">    /**
+</span></span><span class="line"><span class="cl">     * 查询所有部门
+</span></span><span class="line"><span class="cl">     */
+</span></span><span class="line"><span class="cl">    public List&lt;Dept&gt; findAll();
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在 <code>DeptServiceImpl</code> 中，增加 <code>findAll</code>方法，代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">@Service
+</span></span><span class="line"><span class="cl">public class DeptServiceImpl implements DeptService {
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    @Autowired
+</span></span><span class="line"><span class="cl">    private DeptMapper deptMapper;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    public List&lt;Dept&gt; findAll() {
+</span></span><span class="line"><span class="cl">        return deptMapper.findAll();
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>3). Mapper层</strong></p>
+<p>在 <code>DeptMapper</code> 中，增加 <code>findAll</code>方法，代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">@Mapper
+</span></span><span class="line"><span class="cl">public interface DeptMapper {
+</span></span><span class="line"><span class="cl">    /**
+</span></span><span class="line"><span class="cl">     * 查询所有部门
+</span></span><span class="line"><span class="cl">     */
+</span></span><span class="line"><span class="cl">    @Select(&#34;select * from dept&#34;)
+</span></span><span class="line"><span class="cl">    public List&lt;Dept&gt; findAll();
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="接口测试">接口测试
+</h4><p>启动项目，然后我们就可以打开Apifox进行测试了。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C1.png"
+	width="2085"
+	height="506"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C1_hu_6820784fa7cfdddd.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C1_hu_6bd5ff35f825ac10.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="412"
+		data-flex-basis="988px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95.png"
+	width="2560"
+	height="1379"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95_hu_2adbf7b5a98e5a9.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95_hu_d0307ce22ed83986.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="185"
+		data-flex-basis="445px"
+	
+></p>
+<p>我们发现，已经查询出了所有的部门数据，并且响应回来的就是json格式的数据，与接口文档一致。 那接下来，我们再来测试一下，这个查询操作，我们使用post、put、delete方式来请求，是否可以获取到数据。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/POST%E8%AF%B7%E6%B1%82.png"
+	width="2560"
+	height="1330"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/POST%E8%AF%B7%E6%B1%82_hu_9dc91a2755c9d398.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/POST%E8%AF%B7%E6%B1%82_hu_89fc369689cf7e69.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="461px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/DELETE%E8%AF%B7%E6%B1%82.png"
+	width="2560"
+	height="1330"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/DELETE%E8%AF%B7%E6%B1%82_hu_b0134263932ae626.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/DELETE%E8%AF%B7%E6%B1%82_hu_65ae08c50f5175b4.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="461px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/PUT%E8%AF%B7%E6%B1%82.png"
+	width="2560"
+	height="1330"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/PUT%E8%AF%B7%E6%B1%82_hu_afdc395646529f3c.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/PUT%E8%AF%B7%E6%B1%82_hu_9fa64e8757fa436c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="461px"
+	
+></p>
+<p>经过测试，我们发现，现在我们其实是可以通过任何方式的请求来访问查询部门的这个接口的。 而在接口文档中，明确要求该接口的请求方式为GET，那么如何限制请求方式呢？</p>
+<ul>
+<li>方式一：在controller方法的@RequestMapping注解中通过method属性来限定。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">@RestController
+</span></span><span class="line"><span class="cl">public class DeptController {
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    @Autowired
+</span></span><span class="line"><span class="cl">    private DeptService deptService;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    /**
+</span></span><span class="line"><span class="cl">     * 查询部门列表
+</span></span><span class="line"><span class="cl">     */
+</span></span><span class="line"><span class="cl">    @RequestMapping(value = &#34;/depts&#34;, method = RequestMethod.GET)
+</span></span><span class="line"><span class="cl">    public Result list(){
+</span></span><span class="line"><span class="cl">        List&lt;Dept&gt; deptList = deptService.findAll();
+</span></span><span class="line"><span class="cl">        return Result.success(deptList);
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>此时在去查看Apifox就会发现请求失败了，错误信息为“请求不被允许”</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%AF%B7%E6%B1%82%E5%A4%B1%E8%B4%A5.png"
+	width="2560"
+	height="1330"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%AF%B7%E6%B1%82%E5%A4%B1%E8%B4%A5_hu_7ecc50fd372d278d.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%AF%B7%E6%B1%82%E5%A4%B1%E8%B4%A5_hu_8a219bde505e9752.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="461px"
+	
+></p>
+<ul>
+<li>方式二：在controller方法上使用，@RequestMapping的衍生注解 @GetMapping。 该注解就是标识当前方法，必须以GET方式请求。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">@RestController
+</span></span><span class="line"><span class="cl">public class DeptController {
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    @Autowired
+</span></span><span class="line"><span class="cl">    private DeptService deptService;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    /**
+</span></span><span class="line"><span class="cl">     * 查询部门列表
+</span></span><span class="line"><span class="cl">     */
+</span></span><span class="line"><span class="cl">    @GetMapping(&#34;/depts&#34;)
+</span></span><span class="line"><span class="cl">    public Result list(){
+</span></span><span class="line"><span class="cl">        List&lt;Dept&gt; deptList = deptService.findAll();
+</span></span><span class="line"><span class="cl">        return Result.success(deptList);
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>上述两种方式，在项目开发中，推荐使用第二种方式，简洁、优雅。</p>
+<ul>
+<li>GET方式：@GetMapping</li>
+<li>POST方式：@PostMapping</li>
+<li>PUT方式：@PutMapping</li>
+<li>DELETE方式：@DeleteMapping</li>
+</ul>
+</blockquote>
+<p>**小结：**功能实现</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0.png"
+	width="2422"
+	height="1232"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0_hu_f2ff30aa5adfda77.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0_hu_37d5ec46919c5952.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="196"
+		data-flex-basis="471px"
+	
+></p>
+<h4 id="数据封装">数据封装
+</h4><p>在上述测试中，我们发现部门的数据中，id、name两个属性是有值的，但是createTime、updateTime两个字段值并未成功封装(前端页面均返回null)，而数据库中是有对应的字段值的，这是为什么呢？</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%AD%97%E6%AE%B5%E5%90%8D.png"
+	width="1926"
+	height="464"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%AD%97%E6%AE%B5%E5%90%8D_hu_708112e9472055d4.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%AD%97%E6%AE%B5%E5%90%8D_hu_93ce8b0cc87d1968.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="415"
+		data-flex-basis="996px"
+	
+></p>
+<blockquote>
+<p>原因如下：</p>
+<ul>
+<li>实体类属性名和数据库表查询返回的字段名一致，mybatis会自动封装。</li>
+<li>如果实体类属性名和数据库表查询返回的字段名不一致，不能自动封装。</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>解决方案：</p>
+<ul>
+<li>手动结果映射：通过@Results及@Result进行手动结果映射</li>
+<li>起别名：在SQL语句中，对不一样的列名起别名，别名和实体类属性名一样</li>
+<li>开启驼峰命名：如果字段名与属性名符合驼峰命名规则，Mybatis会自动通过驼峰命名规则映射</li>
+</ul>
+</blockquote>
+<ul>
+<li>手动结果映射：</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%89%8B%E5%8A%A8.png"
+	width="1899"
+	height="433"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%89%8B%E5%8A%A8_hu_20fc42763d86b6f9.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%89%8B%E5%8A%A8_hu_feceac90c0c3b6f1.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="438"
+		data-flex-basis="1052px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%89%8B%E5%8A%A8%E7%BB%93%E6%9E%9C.png"
+	width="2560"
+	height="1330"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%89%8B%E5%8A%A8%E7%BB%93%E6%9E%9C_hu_a219bfccef244e65.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%89%8B%E5%8A%A8%E7%BB%93%E6%9E%9C_hu_deb0604637f56c58.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="461px"
+	
+></p>
+<ul>
+<li>起别名</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%B5%B7%E5%88%AB%E5%90%8D.png"
+	width="1889"
+	height="217"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%B5%B7%E5%88%AB%E5%90%8D_hu_7011179ff698af59.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%B5%B7%E5%88%AB%E5%90%8D_hu_e84c1521028fabbc.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="870"
+		data-flex-basis="2089px"
+	
+></p>
+<p>结果同上</p>
+<ul>
+<li>开启驼峰命名(要求：xxx_abc -&gt; xxxAbc)</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%A9%BC%E5%B3%B0.png"
+	width="1920"
+	height="253"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%A9%BC%E5%B3%B0_hu_3fbd7e31216228b4.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%A9%BC%E5%B3%B0_hu_751ea689c022b6fa.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="758"
+		data-flex-basis="1821px"
+	
+></p>
+<p>结果同上</p>
+<h3 id="前后端联调测试">前后端联调测试
+</h3><h4 id="联调测试">联调测试
+</h4><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%B5%8B%E8%AF%95%E6%A6%82%E5%BF%B5.png"
+	width="1149"
+	height="306"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%B5%8B%E8%AF%95%E6%A6%82%E5%BF%B5_hu_d56b7810ad4f393.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%B5%8B%E8%AF%95%E6%A6%82%E5%BF%B5_hu_8f08852b8aa81310.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="375"
+		data-flex-basis="901px"
+	
+></p>
+<p>完成了查询部门的功能，我们也通过 Apifox 工具测试通过了，下面我们再基于前后端分离的方式进行接口联调。具体操作如下：</p>
+<ul>
+<li>
+<p>下载nginx</p>
+</li>
+<li>
+<p>启动nginx，访问测试：http://localhost:90</p>
+</li>
+</ul>
+<p><strong>双击</strong> <strong>nginx.exe 启动Nginx，一闪而过，就说明nginx已启动完成。</strong></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%AF%E5%8A%A8Nginx.png"
+	width="1278"
+	height="107"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%AF%E5%8A%A8Nginx_hu_b860b656a1ca9c1f.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%90%AF%E5%8A%A8Nginx_hu_626b04a2d08c8bb.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1194"
+		data-flex-basis="2866px"
+	
+></p>
+<p>如果在任务管理器中，能看到上述两个进程，就说明nginx已经启动成功。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/nginx.png"
+	width="1457"
+	height="404"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/nginx_hu_1b320687b86fc662.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/nginx_hu_bff70fb474b373a4.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="360"
+		data-flex-basis="865px"
+	
+></p>
+<h4 id="请求访问流程">请求访问流程
+</h4><p>前端工程请求服务器的地址为 <code>http://localhost:90/api/depts</code>，是如何访问到后端的tomcat服务器的？</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E8%AF%B7%E6%B1%82.png"
+	width="2534"
+	height="605"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E8%AF%B7%E6%B1%82_hu_61451b1aa99934cc.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%89%8D%E7%AB%AF%E8%AF%B7%E6%B1%82_hu_57d5e23faf41e6ea.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="418"
+		data-flex-basis="1005px"
+	
+></p>
+<p>其实这里，是通过前端服务Nginx中提供的<strong>反向代理功能</strong>实现的。</p>
+<p>1). 浏览器发起请求，请求的是localhost:90 ，那其实请求的是nginx服务器。</p>
+<p>2). 在nginx服务器中呢，并没有对请求直接进行处理，而是将请求转发给了后端的tomcat服务器，最终由tomcat服务器来处理该请求。</p>
+<p>这个过程就是通过nginx的反向代理实现的。 那为什么浏览器不直接请求后端的tomcat服务器，而是直接请求nginx服务器呢，主要有以下几点原因：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8.png"
+	width="1015"
+	height="249"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8_hu_4e7a22e0a4f6678d.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8_hu_287c071eaa9f2a43.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="407"
+		data-flex-basis="978px"
+	
+></p>
+<p>1). 安全：由于后端的tomcat服务器一般都会搭建集群，会有很多的服务器，把所有的tomcat暴露给前端，让前端直接请求tomcat，对于后端服务器是比较危险的。</p>
+<p>2). 灵活：基于nginx的反向代理实现，更加灵活，后端想增加、减少服务器，对于前端来说是无感知的，只需要在nginx中配置即可。</p>
+<p>3). 负载均衡：基于nginx的反向代理，可以很方便的实现后端tomcat的负载均衡操作。</p>
+<blockquote>
+<p>反向代理是一种网络架构，通过代理服务器为后端的服务器做代理，客户端的请求直接请求代理服务器，然后转发给后端的服务器。</p>
+</blockquote>
+<p>具体的访问流程如下：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%AE%BF%E9%97%AE%E6%B5%81%E7%A8%8B.png"
+	width="1026"
+	height="323"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%AE%BF%E9%97%AE%E6%B5%81%E7%A8%8B_hu_9b2fb77e464e4d3e.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E8%AE%BF%E9%97%AE%E6%B5%81%E7%A8%8B_hu_b93c11bd4172409f.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="317"
+		data-flex-basis="762px"
+	
+></p>
+<blockquote>
+<ol>
+<li>**location：**用于定义匹配特定uri请求的规则。</li>
+<li>**^~ /api/：**表示精确匹配，即只匹配以/api/开头的路径。</li>
+<li>补充：^ $：正则的开始与结束；(.*)：.代表单个任意字符，*代表出现的次数为任意次数</li>
+<li>**rewrite：**该指令用于重写匹配到的uri路径。</li>
+<li>说明：此处的意思就是将路径/api/depts重写为/depts</li>
+<li>**proxy_pass：**该指令用于代理转发，它将匹配到的请求转发给位于后端的指令服务器。</li>
+</ol>
+</blockquote>
+<p>我们可以打开Nginx的配置文件看看是不是这样的</p>
+<p>选择图中文件打开</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.png"
+	width="1236"
+	height="501"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6_hu_29ed85fd31132fd9.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6_hu_6be7e5ef1a129057.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="246"
+		data-flex-basis="592px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF.png"
+	width="1530"
+	height="1020"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF_hu_872c7b00d0eabc35.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF_hu_97f7386cf9fcd4ae.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="150"
+		data-flex-basis="360px"
+	
+></p>
+<h2 id="删除部门">删除部门
+</h2>
 </section>
 
 
