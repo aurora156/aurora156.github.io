@@ -289,6 +289,15 @@
             <li><a href="#requestmapping">@RequestMapping</a></li>
           </ol>
         </li>
+        <li><a href="#日志技术">日志技术</a>
+          <ol>
+            <li><a href="#思考">思考</a></li>
+            <li><a href="#日志框架">日志框架</a></li>
+            <li><a href="#logback入门">LogBack入门</a></li>
+            <li><a href="#logback配置文件详解">Logback配置文件详解</a></li>
+            <li><a href="#logback日志级别">Logback日志级别</a></li>
+          </ol>
+        </li>
       </ol>
     </li>
   </ol>
@@ -2475,6 +2484,496 @@
 ></p>
 <blockquote>
 <p>一个完整的请求路径，应该是类上的 @RequestMapping 的value属性 + 方法上的 @RequestMapping的value属性。</p>
+</blockquote>
+<h3 id="日志技术">日志技术
+</h3><h4 id="思考">思考
+</h4><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%80%9D%E8%80%83.png"
+	width="2800"
+	height="1840"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%80%9D%E8%80%83_hu_d8b71b0bb9aa281d.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%80%9D%E8%80%83_hu_8a5462103e7fdb42.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="152"
+		data-flex-basis="365px"
+	
+></p>
+<ul>
+<li>
+<p>程序中的<strong>日志</strong>，是用来记录应用程序的运行信息、状态信息、错误信息等</p>
+</li>
+<li>
+<p>为什么要在程序中记录日志呢？</p>
+<ul>
+<li>便于<strong>追踪</strong>应用程序中的<strong>数据信息</strong>、程序的执行过程。</li>
+<li>便于对应用程序的<strong>性能</strong>进行<strong>优化</strong>。</li>
+<li>便于应用程序出现问题之后，<strong>排查问题</strong>，解决问题。</li>
+<li>便于<strong>监控系统</strong>的运行状态。</li>
+</ul>
+</li>
+<li>
+<p>之前我们编写程序时，也可以通过 <code>System.out.println(...) </code>来输出日志，为什么我们还要学习单独的日志技术呢？</p>
+<p>​    	这是因为，如果通过  <code>System.out.println(...) </code> 来记录日志，会存在以下几点问题：</p>
+<ul>
+<li>硬编码。所有的记录日志的代码，都是硬编码，没有办法做到灵活控制，要想不输出这个日志了，只能删		除掉记录日志的代码。</li>
+<li>只能输出日志到控制台。</li>
+<li>不便于程序的扩展、维护。</li>
+</ul>
+</li>
+</ul>
+<p>所以，在现在的项目开发中，我们一般都会使用专业的日志框架，来解决这些问题。</p>
+<h4 id="日志框架">日志框架
+</h4><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%97%A5%E5%BF%97%E6%A1%86%E6%9E%B6.png"
+	width="979"
+	height="284"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%97%A5%E5%BF%97%E6%A1%86%E6%9E%B6_hu_61a69effa1d1f079.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%97%A5%E5%BF%97%E6%A1%86%E6%9E%B6_hu_334440aa6f71125a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="344"
+		data-flex-basis="827px"
+	
+></p>
+<ul>
+<li><strong>JUL</strong>：这是JavaSE平台提供的官方日志框架，也被称为JUL。配置相对简单，但不够灵活，性能较差。</li>
+<li><strong>Log4j</strong>：一个流行的日志框架，提供了灵活的配置选项，支持多种输出目标。</li>
+<li>**Logback：**基于Log4j升级而来，提供了更多的功能和配置选项，性能由于Log4j。(推荐)</li>
+<li><strong>Slf4j</strong>：（Simple Logging Facade for Java）简单日志门面，提供了一套日志操作的标准接口及抽象类，允许应用程序使用不同的底层日志框架。</li>
+</ul>
+<h4 id="logback入门">LogBack入门
+</h4><ul>
+<li>准备工作：引入logback的依赖**(springboot项目中该依赖已传递)**、配置文件logback.xml。</li>
+<li>记录日志：定义日志记录对象Logger，记录日志。</li>
+</ul>
+<p><strong>1).springboot中无需引入，在springboot中已经传递了此依赖</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;dependency&gt;
+</span></span><span class="line"><span class="cl">    &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+</span></span><span class="line"><span class="cl">    &lt;artifactId&gt;logback-classic&lt;/artifactId&gt;
+</span></span><span class="line"><span class="cl">    &lt;version&gt;1.4.11&lt;/version&gt;
+</span></span><span class="line"><span class="cl">&lt;/dependency&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>2). 引入配置文件</strong> <strong>logback.xml</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
+</span></span><span class="line"><span class="cl">&lt;configuration&gt;
+</span></span><span class="line"><span class="cl">    &lt;!-- 控制台输出 --&gt;
+</span></span><span class="line"><span class="cl">    &lt;appender name=&#34;STDOUT&#34; class=&#34;ch.qos.logback.core.ConsoleAppender&#34;&gt;
+</span></span><span class="line"><span class="cl">        &lt;encoder class=&#34;ch.qos.logback.classic.encoder.PatternLayoutEncoder&#34;&gt;
+</span></span><span class="line"><span class="cl">            &lt;!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度  %msg：日志消息，%n是换行符 --&gt;
+</span></span><span class="line"><span class="cl">            &lt;pattern&gt;%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}-%msg%n&lt;/pattern&gt;
+</span></span><span class="line"><span class="cl">        &lt;/encoder&gt;
+</span></span><span class="line"><span class="cl">    &lt;/appender&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    &lt;!-- 日志输出级别 --&gt;
+</span></span><span class="line"><span class="cl">    &lt;root level=&#34;ALL&#34;&gt;
+</span></span><span class="line"><span class="cl">        &lt;appender-ref ref=&#34;STDOUT&#34; /&gt;
+</span></span><span class="line"><span class="cl">    &lt;/root&gt;
+</span></span><span class="line"><span class="cl">&lt;/configuration&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>3). 记录日志：定义日志记录对象Logger，记录日志</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">public class LogTest {
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    //定义日志记录对象
+</span></span><span class="line"><span class="cl">    private static final Logger log = LoggerFactory.getLogger(LogTest.class);
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    @Test
+</span></span><span class="line"><span class="cl">    public void testLog(){
+</span></span><span class="line"><span class="cl">        log.debug(&#34;开始计算...&#34;);
+</span></span><span class="line"><span class="cl">        int sum = 0;
+</span></span><span class="line"><span class="cl">        int[] nums = {1, 5, 3, 2, 1, 4, 5, 4, 6, 7, 4, 34, 2, 23};
+</span></span><span class="line"><span class="cl">        for (int i = 0; i &lt; nums.length; i++) {
+</span></span><span class="line"><span class="cl">            sum += nums[i];
+</span></span><span class="line"><span class="cl">        }
+</span></span><span class="line"><span class="cl">        log.info(&#34;计算结果为: &#34;+sum);
+</span></span><span class="line"><span class="cl">        log.debug(&#34;结束计算...&#34;);
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>运行单元测试，可以在控制台中看到输出的日志，如下所示：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%8E%A7%E5%88%B6%E5%8F%B0%E8%BE%93%E5%87%BA%E6%97%A5%E5%BF%97.png"
+	width="2560"
+	height="1380"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%8E%A7%E5%88%B6%E5%8F%B0%E8%BE%93%E5%87%BA%E6%97%A5%E5%BF%97_hu_f8e24a1b6f667ebe.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%8E%A7%E5%88%B6%E5%8F%B0%E8%BE%93%E5%87%BA%E6%97%A5%E5%BF%97_hu_1822a3345333fd8.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="185"
+		data-flex-basis="445px"
+	
+></p>
+<h4 id="logback配置文件详解">Logback配置文件详解
+</h4><ul>
+<li>配置文件名：logback.xml</li>
+<li>该配置文件是对Logback日志框架输出的日志进行控制的，可以来配置输出的格式、位置及日志开关等。</li>
+<li>常用的两种输出日志的位置：控制台、系统文件</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%B8%B8%E8%A7%81%E7%9A%84.png"
+	width="2284"
+	height="374"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%B8%B8%E8%A7%81%E7%9A%84_hu_c185014897320875.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%B8%B8%E8%A7%81%E7%9A%84_hu_fb1594f78d707bad.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="610"
+		data-flex-basis="1465px"
+	
+></p>
+<ul>
+<li>开启日志（ALL），关闭日志（OFF）</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%BC%80%E5%90%AF%E6%97%A5%E5%BF%97.png"
+	width="883"
+	height="292"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%BC%80%E5%90%AF%E6%97%A5%E5%BF%97_hu_e188cecb2a501a21.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%BC%80%E5%90%AF%E6%97%A5%E5%BF%97_hu_cad3fcb2a731f71e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="302"
+		data-flex-basis="725px"
+	
+></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="o">&lt;!--</span><span class="w"> </span><span class="n">日志输出级别</span><span class="w"> </span><span class="o">--&gt;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">root</span><span class="w"> </span><span class="n">level</span><span class="o">=</span><span class="s">&#34;off&#34;</span><span class="o">&gt;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">&lt;</span><span class="n">appender</span><span class="o">-</span><span class="n">ref</span><span class="w"> </span><span class="n">ref</span><span class="o">=</span><span class="s">&#34;STDOUT&#34;</span><span class="w"> </span><span class="o">/&gt;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="n">root</span><span class="o">&gt;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%85%B3%E9%97%ADdebug.png"
+	width="2437"
+	height="477"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%85%B3%E9%97%ADdebug_hu_fbaf946115fc94c5.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E5%85%B3%E9%97%ADdebug_hu_4107246a77ec9baf.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="510"
+		data-flex-basis="1226px"
+	
+></p>
+<p>完整版日志文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
+</span></span><span class="line"><span class="cl">&lt;configuration&gt;
+</span></span><span class="line"><span class="cl">    &lt;!-- 控制台输出 --&gt;
+</span></span><span class="line"><span class="cl">    &lt;appender name=&#34;STDOUT&#34; class=&#34;ch.qos.logback.core.ConsoleAppender&#34;&gt;
+</span></span><span class="line"><span class="cl">        &lt;encoder class=&#34;ch.qos.logback.classic.encoder.PatternLayoutEncoder&#34;&gt;
+</span></span><span class="line"><span class="cl">            &lt;!--格式化输出：%d 表示日期，%thread 表示线程名，%-5level表示级别从左显示5个字符宽度，%logger显示日志记录器的名称， %msg表示日志消息，%n表示换行符 --&gt;
+</span></span><span class="line"><span class="cl">            &lt;pattern&gt;%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}-%msg%n&lt;/pattern&gt;
+</span></span><span class="line"><span class="cl">        &lt;/encoder&gt;
+</span></span><span class="line"><span class="cl">    &lt;/appender&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    &lt;!-- 系统文件输出 --&gt;
+</span></span><span class="line"><span class="cl">    &lt;appender name=&#34;FILE&#34; class=&#34;ch.qos.logback.core.rolling.RollingFileAppender&#34;&gt;
+</span></span><span class="line"><span class="cl">        &lt;rollingPolicy class=&#34;ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy&#34;&gt;
+</span></span><span class="line"><span class="cl">            &lt;!-- 日志文件输出的文件名, %i表示序号 --&gt;
+</span></span><span class="line"><span class="cl">            &lt;FileNamePattern&gt;D:/tlias-%d{yyyy-MM-dd}-%i.log&lt;/FileNamePattern&gt;
+</span></span><span class="line"><span class="cl">            &lt;!-- 最多保留的历史日志文件数量 --&gt;
+</span></span><span class="line"><span class="cl">            &lt;MaxHistory&gt;30&lt;/MaxHistory&gt;
+</span></span><span class="line"><span class="cl">            &lt;!-- 最大文件大小，超过这个大小会触发滚动到新文件，默认为 10MB --&gt;
+</span></span><span class="line"><span class="cl">            &lt;maxFileSize&gt;10MB&lt;/maxFileSize&gt;
+</span></span><span class="line"><span class="cl">        &lt;/rollingPolicy&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        &lt;encoder class=&#34;ch.qos.logback.classic.encoder.PatternLayoutEncoder&#34;&gt;
+</span></span><span class="line"><span class="cl">            &lt;!--格式化输出：%d 表示日期，%thread 表示线程名，%-5level表示级别从左显示5个字符宽度，%msg表示日志消息，%n表示换行符 --&gt;
+</span></span><span class="line"><span class="cl">            &lt;pattern&gt;%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}-%msg%n&lt;/pattern&gt;
+</span></span><span class="line"><span class="cl">        &lt;/encoder&gt;
+</span></span><span class="line"><span class="cl">    &lt;/appender&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    &lt;!-- 日志输出级别 --&gt;
+</span></span><span class="line"><span class="cl">    &lt;!-- 区分大小写--&gt;
+</span></span><span class="line"><span class="cl">    &lt;root level=&#34;ALL&#34;&gt;
+</span></span><span class="line"><span class="cl">        &lt;!--输出到控制台--&gt;
+</span></span><span class="line"><span class="cl">        &lt;appender-ref ref=&#34;STDOUT&#34;/&gt;
+</span></span><span class="line"><span class="cl">        &lt;!--输出到文件--&gt;
+</span></span><span class="line"><span class="cl">        &lt;appender-ref ref=&#34;FILE&#34;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;/root&gt;
+</span></span><span class="line"><span class="cl">&lt;/configuration&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%97%A5%E5%BF%97%E8%BE%93%E5%87%BA.png"
+	width="1233"
+	height="541"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%97%A5%E5%BF%97%E8%BE%93%E5%87%BA_hu_8e831a54c1568941.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%97%A5%E5%BF%97%E8%BE%93%E5%87%BA_hu_7a001901d0a25962.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="227"
+		data-flex-basis="546px"
+	
+></p>
+<h4 id="logback日志级别">Logback日志级别
+</h4><ul>
+<li>日志级别指的是日志信息的类型，日志都会分级别，常见的日志级别如下：(级别由高到低)：</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%97%A5%E5%BF%97%E7%BA%A7%E5%88%AB.png"
+	width="2210"
+	height="589"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%97%A5%E5%BF%97%E7%BA%A7%E5%88%AB_hu_624ab7574b7f57cb.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%97%A5%E5%BF%97%E7%BA%A7%E5%88%AB_hu_96011cf0234f9773.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="375"
+		data-flex-basis="900px"
+	
+></p>
+<ul>
+<li>可以在配置文件中，灵活的控制输出那些类型的日志**(大于等于配置的日志级别的日志才会输出)**</li>
+<li>例如：在上面的root中输入：info，那么warn，error级别的日志都会输出，trace和debug则不会输出</li>
+</ul>
+<p>现在就可以将上面Controller层的代码替换为以下的代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/**
+</span></span><span class="line"><span class="cl"> * 部门管理控制器
+</span></span><span class="line"><span class="cl"> */
+</span></span><span class="line"><span class="cl">@Slf4j
+</span></span><span class="line"><span class="cl">@RequestMapping(&#34;/depts&#34;)
+</span></span><span class="line"><span class="cl">@RestController
+</span></span><span class="line"><span class="cl">public class DeptController {
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    @Autowired
+</span></span><span class="line"><span class="cl">    private DeptService deptService;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    /**
+</span></span><span class="line"><span class="cl">     * 查询部门列表
+</span></span><span class="line"><span class="cl">     */
+</span></span><span class="line"><span class="cl">    //@RequestMapping(value = &#34;/depts&#34;, method = RequestMethod.GET)
+</span></span><span class="line"><span class="cl">    @GetMapping
+</span></span><span class="line"><span class="cl">    public Result list(){
+</span></span><span class="line"><span class="cl">        //System.out.println(&#34;查询部门列表&#34;);
+</span></span><span class="line"><span class="cl">        log.info(&#34;查询部门列表&#34;);
+</span></span><span class="line"><span class="cl">        List&lt;Dept&gt; deptList = deptService.findAll();
+</span></span><span class="line"><span class="cl">        return Result.success(deptList);
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    /**
+</span></span><span class="line"><span class="cl">     * 根据id删除部门 - delete http://localhost:8080/depts?id=1
+</span></span><span class="line"><span class="cl">     */
+</span></span><span class="line"><span class="cl">    @DeleteMapping
+</span></span><span class="line"><span class="cl">    public Result delete(Integer id){
+</span></span><span class="line"><span class="cl">        //System.out.println(&#34;根据id删除部门, id=&#34; + id);
+</span></span><span class="line"><span class="cl">        log.info(&#34;根据id删除部门, id: {}&#34; , id);
+</span></span><span class="line"><span class="cl">        deptService.deleteById(id);
+</span></span><span class="line"><span class="cl">        return Result.success();
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    /**
+</span></span><span class="line"><span class="cl">     * 新增部门 - POST http://localhost:8080/depts   请求参数：{&#34;name&#34;:&#34;研发部&#34;}
+</span></span><span class="line"><span class="cl">     */
+</span></span><span class="line"><span class="cl">    @PostMapping
+</span></span><span class="line"><span class="cl">    public Result save(@RequestBody Dept dept){
+</span></span><span class="line"><span class="cl">        //System.out.println(&#34;新增部门, dept=&#34; + dept);
+</span></span><span class="line"><span class="cl">        log.info(&#34;新增部门, dept: {}&#34; , dept);
+</span></span><span class="line"><span class="cl">        deptService.save(dept);
+</span></span><span class="line"><span class="cl">        return Result.success();
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    /**
+</span></span><span class="line"><span class="cl">     * 根据ID查询 - GET http://localhost:8080/depts/1
+</span></span><span class="line"><span class="cl">     */
+</span></span><span class="line"><span class="cl">    @GetMapping(&#34;/{id}&#34;)
+</span></span><span class="line"><span class="cl">    public Result getById(@PathVariable Integer id){
+</span></span><span class="line"><span class="cl">        //System.out.println(&#34;根据ID查询, id=&#34; + id);
+</span></span><span class="line"><span class="cl">        log.info(&#34;根据ID查询, id: {}&#34; , id);
+</span></span><span class="line"><span class="cl">        Dept dept = deptService.getById(id);
+</span></span><span class="line"><span class="cl">        return Result.success(dept);
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    /**
+</span></span><span class="line"><span class="cl">     * 修改部门 - PUT http://localhost:8080/depts  请求参数：{&#34;id&#34;:1,&#34;name&#34;:&#34;研发部&#34;}
+</span></span><span class="line"><span class="cl">     */
+</span></span><span class="line"><span class="cl">    @PutMapping
+</span></span><span class="line"><span class="cl">    public Result update(@RequestBody Dept dept){
+</span></span><span class="line"><span class="cl">        //System.out.println(&#34;修改部门, dept=&#34; + dept);
+</span></span><span class="line"><span class="cl">        log.info(&#34;修改部门, dept: {}&#34; , dept);
+</span></span><span class="line"><span class="cl">        deptService.update(dept);
+</span></span><span class="line"><span class="cl">        return Result.success();
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>注意：如果上面写了注解@Slf4j，那么下面就不用在类中再写：</p>
+<p>private static final Logger log = LoggerFactory.getLogger(DeptController.class);</p>
+<p>日志代码的两种写法：(以删除部门为例)</p>
+<p>1.log.info(&ldquo;根据id删除部门, id: {}&rdquo; , id);(推荐)</p>
+<p>2.log.info(&ldquo;根据id删除部门, id: &quot; + id);</p>
 </blockquote>
 
 </section>
