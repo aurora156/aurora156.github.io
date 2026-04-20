@@ -239,6 +239,17 @@
         <li><a href="#案例">案例</a></li>
       </ol>
     </li>
+    <li><a href="#多表查询">多表查询</a>
+      <ol>
+        <li><a href="#概述-1">概述</a>
+          <ol>
+            <li><a href="#数据准备">数据准备</a></li>
+            <li><a href="#介绍">介绍</a></li>
+            <li><a href="#分类">分类</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -960,7 +971,426 @@
 	
 ></p>
 <h3 id="案例">案例
-</h3>
+</h3><ul>
+<li>
+<p>需求：请根据资料中提供的页面原型，<strong>设计员工模块涉及到的表结构</strong>。</p>
+</li>
+<li>
+<p>步骤：</p>
+<ul>
+<li>阅读页面原型及需求文档，分析各个模块涉及到的表结构，及表结构之间的关系。</li>
+<li>根据页面原型及需求文档，分析各个表结构中具体的字段及约束。</li>
+</ul>
+</li>
+<li>
+<p>分析：</p>
+<p>涉及到的模块有：</p>
+<ul>
+<li>部门管理<img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E9%83%A8%E9%97%A8%E7%AE%A1%E7%90%861.png"
+	width="1026"
+	height="401"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E9%83%A8%E9%97%A8%E7%AE%A1%E7%90%861_hu_c9e1c98edde30d1a.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E9%83%A8%E9%97%A8%E7%AE%A1%E7%90%861_hu_f02355af56b657d9.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="255"
+		data-flex-basis="614px"
+	
+></li>
+</ul>
+<p>部门管理涉及到一张部门表，这个前面我们都已经设计过了。 无需再进行设计了。</p>
+<ul>
+<li>员工管理</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%91%98%E5%B7%A5%E7%AE%A1%E7%90%862.png"
+	width="1026"
+	height="566"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%91%98%E5%B7%A5%E7%AE%A1%E7%90%862_hu_5b80e4579c97b36e.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%91%98%E5%B7%A5%E7%AE%A1%E7%90%862_hu_7001e68ee6dd063e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="181"
+		data-flex-basis="435px"
+	
+></p>
+<p>上述在员工列表查询的页面原型，当我们点击 &ldquo;新增员工&rdquo; 按钮时，会弹出一个新增员工的表单，表单展示形式如下：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E6%96%B0%E5%A2%9E%E5%91%98%E5%B7%A5.png"
+	width="691"
+	height="563"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E6%96%B0%E5%A2%9E%E5%91%98%E5%B7%A5_hu_8576781ab68ebbf5.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E6%96%B0%E5%A2%9E%E5%91%98%E5%B7%A5_hu_490977ef39614b07.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="122"
+		data-flex-basis="294px"
+	
+></p>
+<p>​	在上述的页面原型中，我们可以看到，每一个员工是归属于某一个部门的，而一个部门下可以有多个员工，所以部门与员工之间的关系是一对多的关系。</p>
+<p>​	从页面员工中，我们可以看到，员工还有工作经历的信息。而每一个员工，是可以添加多个工作经历的。 所以，工作经历我们可以再设计一张表，而员工与员工的工作经历之间的关系，是一对多的关系。</p>
+<p>​	那么，这里总共会涉及三张表，分别是：部门表、员工表、员工工作经历表。</p>
+<p>​	最终，具体的表结构如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 部门表
+</span></span></span><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">dept</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;ID, 主键&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">name</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">UNIQUE</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;部门名称&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">create_time</span><span class="w"> </span><span class="n">datetime</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;创建时间&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">update_time</span><span class="w"> </span><span class="n">datetime</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;修改时间&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;部门表&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 员工表
+</span></span></span><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">emp</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="n">auto_increment</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;ID,主键&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">username</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">unique</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;用户名&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">password</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="s1">&#39;123456&#39;</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;密码&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;姓名&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">gender</span><span class="w"> </span><span class="n">tinyint</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;性别, 1:男, 2:女&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">phone</span><span class="w"> </span><span class="nb">char</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">unique</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;手机号&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">job</span><span class="w"> </span><span class="n">tinyint</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;职位, 1 班主任, 2 讲师 , 3 学工主管, 4 教研主管, 5 咨询师&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">salary</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;薪资&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">image</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;头像&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">entry_date</span><span class="w"> </span><span class="nb">date</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;入职日期&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">dept_id</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;部门ID&#39;</span><span class="p">,</span><span class="w">  </span><span class="c1">-- 关联的是dept部门表的ID
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">create_time</span><span class="w"> </span><span class="n">datetime</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;创建时间&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">update_time</span><span class="w"> </span><span class="n">datetime</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;修改时间&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;员工表&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 员工工作经历表
+</span></span></span><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">emp_expr</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="n">auto_increment</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;ID, 主键&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">emp_id</span><span class="w">  </span><span class="nb">int</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;员工ID&#39;</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 关联的是emp员工表的ID
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">begin</span><span class="w">  </span><span class="nb">date</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;开始时间&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="nb">date</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;结束时间&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">company</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;公司名称&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">job</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;职位&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;工作经历&#39;</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<blockquote>
+<p>注意：在上述的表结构设计中，我们使用的都是逻辑外键。</p>
+</blockquote>
+<h2 id="多表查询">多表查询
+</h2><h3 id="概述-1">概述
+</h3><h4 id="数据准备">数据准备
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 部门管理
+</span></span></span><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">dept</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="n">auto_increment</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;ID, 主键&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">unique</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;部门名称&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">create_time</span><span class="w"> </span><span class="n">datetime</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;创建时间&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">update_time</span><span class="w"> </span><span class="n">datetime</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;修改时间&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;部门表&#39;</span><span class="w"> </span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">dept</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">create_time</span><span class="p">,</span><span class="w"> </span><span class="n">update_time</span><span class="p">)</span><span class="w"> </span><span class="k">values</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;学工部&#39;</span><span class="p">,</span><span class="n">now</span><span class="p">(),</span><span class="n">now</span><span class="p">()),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;教研部&#39;</span><span class="p">,</span><span class="n">now</span><span class="p">(),</span><span class="n">now</span><span class="p">()),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;咨询部&#39;</span><span class="p">,</span><span class="n">now</span><span class="p">(),</span><span class="n">now</span><span class="p">()),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="s1">&#39;就业部&#39;</span><span class="p">,</span><span class="n">now</span><span class="p">(),</span><span class="n">now</span><span class="p">()),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="s1">&#39;人事部&#39;</span><span class="p">,</span><span class="n">now</span><span class="p">(),</span><span class="n">now</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 员工管理
+</span></span></span><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">emp</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="n">auto_increment</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;ID,主键&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">username</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">unique</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;用户名&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">password</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;密码&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;姓名&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">gender</span><span class="w"> </span><span class="n">tinyint</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;性别, 1:男, 2:女&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">phone</span><span class="w"> </span><span class="nb">char</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">unique</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;手机号&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">job</span><span class="w"> </span><span class="n">tinyint</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;职位, 1:班主任,2:讲师,3:学工主管,4:教研主管,5:咨询师&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">salary</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;薪资&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">image</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;头像&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">entry_date</span><span class="w"> </span><span class="nb">date</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;入职日期&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">dept_id</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;关联的部门ID&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">create_time</span><span class="w"> </span><span class="n">datetime</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;创建时间&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">update_time</span><span class="w"> </span><span class="n">datetime</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;修改时间&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;员工表&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 准备测试数据
+</span></span></span><span class="line"><span class="cl"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="o">`</span><span class="n">emp</span><span class="o">`</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;shinaian&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;施耐庵&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090001&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">15000</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2000-01-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:35&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;songjiang&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;宋江&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090002&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">8600</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2015-01-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:37&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;lujunyi&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;卢俊义&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090003&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">8900</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2008-05-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:39&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="s1">&#39;wuyong&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;吴用&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090004&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">9200</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2007-01-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:41&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="s1">&#39;gongsunsheng&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;公孙胜&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090005&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">9500</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2012-12-05&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:43&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;huosanniang&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;扈三娘&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;13309090006&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">6500</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2013-09-05&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:45&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="s1">&#39;chaijin&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;柴进&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090007&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">4700</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2005-08-01&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:47&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="s1">&#39;likui&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;李逵&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090008&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">4800</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2014-11-09&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:49&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="s1">&#39;wusong&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;武松&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090009&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">4900</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2011-03-11&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:51&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="s1">&#39;lichong&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;林冲&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090010&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5000</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2013-09-05&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:53&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="s1">&#39;huyanzhuo&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;呼延灼&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090011&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">9700</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2007-02-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:55&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="s1">&#39;xiaoliguang&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;小李广&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090012&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">10000</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2008-08-18&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:57&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="s1">&#39;yangzhi&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;杨志&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090013&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5300</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2012-11-01&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:59&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="s1">&#39;shijin&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;史进&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090014&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">10600</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2002-08-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:36:01&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="s1">&#39;sunerniang&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;孙二娘&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;13309090015&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">10900</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2011-05-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:36:03&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="s1">&#39;luzhishen&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;鲁智深&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090016&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">9600</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2010-01-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:36:05&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">17</span><span class="p">,</span><span class="s1">&#39;liying&#39;</span><span class="p">,</span><span class="s1">&#39;12345678&#39;</span><span class="p">,</span><span class="s1">&#39;李应&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090017&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5800</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2015-03-21&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:36:07&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="s1">&#39;shiqian&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;时迁&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090018&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">10200</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2015-01-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:36:09&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">19</span><span class="p">,</span><span class="s1">&#39;gudasao&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;顾大嫂&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;13309090019&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">10500</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2008-01-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:36:11&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="s1">&#39;ruanxiaoer&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;阮小二&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090020&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">10800</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2018-01-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:36:13&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">21</span><span class="p">,</span><span class="s1">&#39;ruanxiaowu&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;阮小五&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090021&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5200</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2015-01-01&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:36:15&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">22</span><span class="p">,</span><span class="s1">&#39;ruanxiaoqi&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;阮小七&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090022&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5500</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2016-01-01&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:36:17&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">23</span><span class="p">,</span><span class="s1">&#39;ruanji&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;阮籍&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090023&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5800</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2012-01-01&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:36:19&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">24</span><span class="p">,</span><span class="s1">&#39;tongwei&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;童威&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090024&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5000</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2006-01-01&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:36:21&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="s1">&#39;tongmeng&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;童猛&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090025&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">4800</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2002-01-01&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:36:23&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="s1">&#39;yanshun&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;燕顺&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090026&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5400</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2011-01-01&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:36:25&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">27</span><span class="p">,</span><span class="s1">&#39;lijun&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;李俊&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090027&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6600</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2004-01-01&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:36:27&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">28</span><span class="p">,</span><span class="s1">&#39;lizhong&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;李忠&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090028&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5000</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2007-01-01&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:36:29&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">29</span><span class="p">,</span><span class="s1">&#39;songqing&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;宋清&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090029&#39;</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="mi">5100</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2020-01-01&#39;</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:36:31&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="s1">&#39;liyun&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;李云&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090030&#39;</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;https://dawn-itcast.oss-cn-hangzhou.aliyuncs.com/01.png&#39;</span><span class="p">,</span><span class="s1">&#39;2020-03-01&#39;</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2024-10-27 16:36:31&#39;</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="介绍">介绍
+</h4><ul>
+<li>多表查询：查询时从多张表中获取所需数据</li>
+</ul>
+<blockquote>
+<p>单表查询的SQL语句：select  字段列表  from  表名;</p>
+<p>那么要执行多表查询，只需要使用逗号分隔多张表即可，如： select   字段列表  from  表1, 表2;</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w">  </span><span class="n">emp</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">dept</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A21.png"
+	width="1971"
+	height="564"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A21_hu_ffe416ff9a8ee263.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A21_hu_56082eb408d23cf5.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="349"
+		data-flex-basis="838px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A22.png"
+	width="1929"
+	height="530"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A22_hu_b748a8016f9f0710.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A22_hu_c321ffcad99b1d53.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="363"
+		data-flex-basis="873px"
+	
+></p>
+<p>此时，我们看到查询结果中包含了大量的结果集，总共<code>150</code>条记录，而这其实就是员工表所有的记录(30行)与部门表所有记录(5行)的所有组合情况，这种现象称之为<strong>笛卡尔积</strong>。</p>
+<p><strong>笛卡尔积</strong>：笛卡尔乘积是指在数学中，两个集合(A集合和B集合)的所有组合情况。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E7%AC%9B%E5%8D%A1%E5%B0%94%E7%A7%AF1.png"
+	width="789"
+	height="298"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E7%AC%9B%E5%8D%A1%E5%B0%94%E7%A7%AF1_hu_3ebb32d8b53d22e4.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E7%AC%9B%E5%8D%A1%E5%B0%94%E7%A7%AF1_hu_ed679b9bb3824865.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="264"
+		data-flex-basis="635px"
+	
+></p>
+<p>在多表查询时，需要消除无效的笛卡尔积，只保留表关联部分的数据。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E7%AC%9B%E5%8D%A1%E5%B0%94%E7%A7%AF2.png"
+	width="795"
+	height="168"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E7%AC%9B%E5%8D%A1%E5%B0%94%E7%A7%AF2_hu_3b77ba570df846a7.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E7%AC%9B%E5%8D%A1%E5%B0%94%E7%A7%AF2_hu_e3130f9ebbb28040.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="473"
+		data-flex-basis="1135px"
+	
+></p>
+<p>在SQL语句中，如何去除无效的笛卡尔积呢？只需要给多表查询加上连接查询的条件即可。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">emp</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">dept</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">emp</span><span class="p">.</span><span class="n">dept_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dept</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>即让员工表中的dept_id字段等于部门表中的主键id即可</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A24.png"
+	width="1767"
+	height="379"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A24_hu_acc4dcb5666c37ae.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A24_hu_9ea11ac4f5a34f14.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="466"
+		data-flex-basis="1118px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A23.png"
+	width="1961"
+	height="642"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A23_hu_aae757729a7e01fa.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A23_hu_bd8d741ebfb4e4ba.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="305"
+		data-flex-basis="733px"
+	
+></p>
+<p>这样，我们就查询出来了所有的员工，及其这个员工所属的部门信息。 而由于id为29、30的员工，没有dept_id字段值，所以在多表查询时，根据连接查询的条件并没有查询到。</p>
+<h4 id="分类">分类
+</h4><p>多表查询可以分为：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2.png"
+	width="494"
+	height="164"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2_hu_410731a7c0874944.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2_hu_7b15ca865f28a19f.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="301"
+		data-flex-basis="722px"
+	
+></p>
+<ul>
+<li>连接查询
+<ul>
+<li>内连接：相当于查询A、B交集部分数据【A∩B深绿色】</li>
+<li>外连接
+<ul>
+<li>左外连接：查询左表所有数据(包括两张表交集部分数据)【A中蓝色】</li>
+<li>右外连接：查询右表所有数据(包括两张表交集部分数据)【B中浅绿】</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>子查询</li>
+</ul>
+<h5 id="内连接">内连接
+</h5><p>内连接查询：查询两表或多表中交集部分数据。</p>
+<p>内连接从语法上可以分为：</p>
+<ul>
+<li>隐式内连接</li>
+<li>显式内连接</li>
+</ul>
+<h5 id="外连接">外连接
+</h5><h5 id="子查询">子查询
+</h5><h5 id="案例-1">案例
+</h5>
 </section>
 
 
