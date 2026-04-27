@@ -250,7 +250,22 @@
         </li>
       </ol>
     </li>
-    <li><a href="#员工列表查询">员工列表查询</a></li>
+    <li><a href="#员工列表查询">员工列表查询</a>
+      <ol>
+        <li><a href="#准备工作">准备工作</a>
+          <ol>
+            <li><a href="#基础代码准备">基础代码准备</a></li>
+          </ol>
+        </li>
+        <li><a href="#分页查询">分页查询</a>
+          <ol>
+            <li><a href="#分析-1">分析</a></li>
+            <li><a href="#接口描述">接口描述</a></li>
+            <li><a href="#原始方式">原始方式</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -1775,7 +1790,907 @@
 </div></li>
 </ul>
 <h2 id="员工列表查询">员工列表查询
-</h2>
+</h2><p>具体的需求如下：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%88%97%E8%A1%A8%E6%9F%A5%E8%AF%A2%E9%9C%80%E6%B1%82.png"
+	width="1048"
+	height="577"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%88%97%E8%A1%A8%E6%9F%A5%E8%AF%A2%E9%9C%80%E6%B1%82_hu_16f63d00bcabecd1.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%88%97%E8%A1%A8%E6%9F%A5%E8%AF%A2%E9%9C%80%E6%B1%82_hu_59de704539860d2b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="181"
+		data-flex-basis="435px"
+	
+></p>
+<p>在查询员工列表数据时，既需要查询 员工的基本信息，还需要查询员工所属的部门名称，所以这里呢，会涉及到多表查询的操作。</p>
+<p>而且，在查询员工列表数据时，既要考虑搜索栏中的查询条件，还要考虑对查询的结果进行分页处理。</p>
+<p>那么接下来，我们在实现这个功能时，将会分为三个部分来逐一实现：</p>
+<h3 id="准备工作">准备工作
+</h3><p>需求：查询所有<strong>员工信息</strong>，并查询出<strong>部门名称</strong>。（涉及到的表：emp、dept）</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%91%98%E5%B7%A5%E4%BF%A1%E6%81%AF.png"
+	width="1026"
+	height="443"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%91%98%E5%B7%A5%E4%BF%A1%E6%81%AF_hu_2662feb1b12067ae.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%91%98%E5%B7%A5%E4%BF%A1%E6%81%AF_hu_69ec3602ce7ea5b0.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="231"
+		data-flex-basis="555px"
+	
+></p>
+<h4 id="基础代码准备">基础代码准备
+</h4><p><strong>1). 创建员工管理相关表结构</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 员工表
+</span></span></span><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">emp</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="n">auto_increment</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;ID,主键&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">username</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">unique</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;用户名&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">password</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="s1">&#39;123456&#39;</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;密码&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;姓名&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">gender</span><span class="w"> </span><span class="n">tinyint</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;性别, 1:男, 2:女&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">phone</span><span class="w"> </span><span class="nb">char</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">unique</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;手机号&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">job</span><span class="w"> </span><span class="n">tinyint</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;职位, 1 班主任, 2 讲师 , 3 学工主管, 4 教研主管, 5 咨询师&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">salary</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;薪资&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">image</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;头像&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">entry_date</span><span class="w"> </span><span class="nb">date</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;入职日期&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">dept_id</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;部门ID&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">create_time</span><span class="w"> </span><span class="n">datetime</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;创建时间&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">update_time</span><span class="w"> </span><span class="n">datetime</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;修改时间&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;员工表&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">emp</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;shinaian&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;施耐庵&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090001&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">15000</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2000-01-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-11-16 16:11:26&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;songjiang&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;宋江&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090002&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">8600</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2015-01-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:37&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;lujunyi&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;卢俊义&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090003&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">8900</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2008-05-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:39&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="s1">&#39;wuyong&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;吴用&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090004&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">9200</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2007-01-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:41&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="s1">&#39;gongsunsheng&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;公孙胜&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090005&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">9500</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2012-12-05&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:43&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;huosanniang&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;扈三娘&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;13309090006&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">6500</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2013-09-05&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:45&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="s1">&#39;chaijin&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;柴进&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090007&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">4700</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2005-08-01&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:47&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="s1">&#39;likui&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;李逵&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090008&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">4800</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2014-11-09&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:49&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="s1">&#39;wusong&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;武松&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090009&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">4900</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2011-03-11&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:51&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="s1">&#39;linchong&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;林冲&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090010&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5000</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2013-09-05&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:53&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="s1">&#39;huyanzhuo&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;呼延灼&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090011&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">9700</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2007-02-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:55&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="s1">&#39;xiaoliguang&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;小李广&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090012&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">10000</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2008-08-18&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:57&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="s1">&#39;yangzhi&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;杨志&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090013&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5300</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2012-11-01&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:59&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="s1">&#39;shijin&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;史进&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090014&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">10600</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2002-08-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:36:01&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="s1">&#39;sunerniang&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;孙二娘&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;13309090015&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">10900</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2011-05-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:36:03&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="s1">&#39;luzhishen&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;鲁智深&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090016&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">9600</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2010-01-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:36:05&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">17</span><span class="p">,</span><span class="s1">&#39;liying&#39;</span><span class="p">,</span><span class="s1">&#39;12345678&#39;</span><span class="p">,</span><span class="s1">&#39;李应&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090017&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5800</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2015-03-21&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:36:07&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="s1">&#39;shiqian&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;时迁&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090018&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">10200</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2015-01-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:36:09&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">19</span><span class="p">,</span><span class="s1">&#39;gudasao&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;顾大嫂&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;13309090019&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">10500</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2008-01-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:36:11&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="s1">&#39;ruanxiaoer&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;阮小二&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090020&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">10800</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2018-01-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:36:13&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">21</span><span class="p">,</span><span class="s1">&#39;ruanxiaowu&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;阮小五&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090021&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5200</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2015-01-01&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:36:15&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">22</span><span class="p">,</span><span class="s1">&#39;ruanxiaoqi&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;阮小七&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090022&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5500</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2016-01-01&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:36:17&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">23</span><span class="p">,</span><span class="s1">&#39;ruanji&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;阮籍&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090023&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5800</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2012-01-01&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:36:19&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">24</span><span class="p">,</span><span class="s1">&#39;tongwei&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;童威&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090024&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5000</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2006-01-01&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:36:21&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="s1">&#39;tongmeng&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;童猛&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090025&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">4800</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2002-01-01&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:36:23&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="s1">&#39;yanshun&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;燕顺&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090026&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5400</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2011-01-01&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-11-08 22:12:46&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">27</span><span class="p">,</span><span class="s1">&#39;lijun&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;李俊&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090027&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">6600</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2004-01-01&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-11-16 17:56:59&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">28</span><span class="p">,</span><span class="s1">&#39;lizhong&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;李忠&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090028&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5000</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2007-01-01&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-11-17 16:34:22&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="s1">&#39;liyun&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;李云&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;13309090030&#39;</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2020-03-01&#39;</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:35:33&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-20 16:36:31&#39;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">36</span><span class="p">,</span><span class="s1">&#39;linghuchong&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;令狐冲&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;18809091212&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">6800</span><span class="p">,</span><span class="s1">&#39;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg&#39;</span><span class="p">,</span><span class="s1">&#39;2023-10-19&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2023-10-20 20:44:54&#39;</span><span class="p">,</span><span class="s1">&#39;2023-11-09 09:41:04&#39;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 员工工作经历信息
+</span></span></span><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">emp_expr</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="n">auto_increment</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;ID, 主键&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">emp_id</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;员工ID&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">begin</span><span class="w"> </span><span class="nb">date</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;开始时间&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">end</span><span class="w">  </span><span class="nb">date</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;结束时间&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">company</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;公司名称&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">job</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;职位&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;工作经历&#39;</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>2).</strong> <strong>准备emp表对应的实体类Emp、EmpExpr</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.pojo</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.Data</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.time.LocalDate</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.time.LocalDateTime</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Emp</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">id</span><span class="p">;</span><span class="w"> </span><span class="c1">//ID,主键</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">username</span><span class="p">;</span><span class="w"> </span><span class="c1">//用户名</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">password</span><span class="p">;</span><span class="w"> </span><span class="c1">//密码</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w"> </span><span class="c1">//姓名</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">gender</span><span class="p">;</span><span class="w"> </span><span class="c1">//性别, 1:男, 2:女</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">phone</span><span class="p">;</span><span class="w"> </span><span class="c1">//手机号</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">job</span><span class="p">;</span><span class="w"> </span><span class="c1">//职位, 1:班主任,2:讲师,3:学工主管,4:教研主管,5:咨询师</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">salary</span><span class="p">;</span><span class="w"> </span><span class="c1">//薪资</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">image</span><span class="p">;</span><span class="w"> </span><span class="c1">//头像</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">LocalDate</span><span class="w"> </span><span class="n">entryDate</span><span class="p">;</span><span class="w"> </span><span class="c1">//入职日期</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">deptId</span><span class="p">;</span><span class="w"> </span><span class="c1">//关联的部门ID</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">LocalDateTime</span><span class="w"> </span><span class="n">createTime</span><span class="p">;</span><span class="w"> </span><span class="c1">//创建时间</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">LocalDateTime</span><span class="w"> </span><span class="n">updateTime</span><span class="p">;</span><span class="w"> </span><span class="c1">//修改时间</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//封装部门名称数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">deptName</span><span class="p">;</span><span class="w"> </span><span class="c1">//部门名称</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.pojo</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.Data</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.time.LocalDate</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 工作经历
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EmpExpr</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">id</span><span class="p">;</span><span class="w"> </span><span class="c1">//ID</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">empId</span><span class="p">;</span><span class="w"> </span><span class="c1">//员工ID</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">LocalDate</span><span class="w"> </span><span class="n">begin</span><span class="p">;</span><span class="w"> </span><span class="c1">//开始时间</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">LocalDate</span><span class="w"> </span><span class="n">end</span><span class="p">;</span><span class="w"> </span><span class="c1">//结束时间</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">company</span><span class="p">;</span><span class="w"> </span><span class="c1">//公司名称</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">job</span><span class="p">;</span><span class="w"> </span><span class="c1">//职位</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>3). 准备Emp员工管理的基础结构，包括Controller、Service、Mapper</strong></p>
+<p>EmpMapper：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.mapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.Emp</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.apache.ibatis.annotations.Mapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Mapper</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">EmpMapper</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>EmpService:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.service</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">EmpService</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>EmpServiceImpl:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.service.impl</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.mapper.EmpMapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.service.EmpService</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Service</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 员工管理
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EmpServiceImpl</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">EmpService</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">EmpMapper</span><span class="w"> </span><span class="n">empMapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>EmpController:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.controller</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.service.EmpService</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.extern.slf4j.Slf4j</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 员工管理
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Slf4j</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@RestController</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EmpController</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">EmpService</span><span class="w"> </span><span class="n">empService</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="分页查询">分页查询
+</h3><h4 id="分析-1">分析
+</h4><p>每次只展示一页的数据，比如：一页展示10条数据，如果还想看其他的数据，可以通过点击页码进行查询。</p>
+<p>在员工管理的需求中，就要求我们进行分页查询，展示出对应的数据。 具体的页面原型如下：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E5%8E%9F%E5%9E%8B.png"
+	width="1026"
+	height="434"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E5%8E%9F%E5%9E%8B_hu_676bb06d8081ef25.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E5%8E%9F%E5%9E%8B_hu_f13e5ccd024e8e81.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="236"
+		data-flex-basis="567px"
+	
+></p>
+<p>要想从数据库中进行分页查询，我们要使用<code>LIMIT</code>关键字，格式为：limit  开始索引  每页显示的条数。</p>
+<p>1). 查询第1页数据的SQL语句是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">emp</span><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>2). 查询第2页数据的SQL语句是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">emp</span><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>3). 查询第3页的数据的SQL语句是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">emp</span><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>观察以上SQL语句，发现： 开始索引一直在改变 ， 每页显示条数是固定的</p>
+<p>开始索引的计算公式：   <code>开始索引 = (当前页码 - 1)  *  每页显示条数</code></p>
+<p>我们继续基于页面原型，继续分析，得出以下结论：</p>
+<ol>
+<li>前端在请求服务端时，传递的参数
+<ol>
+<li>当前页码  page</li>
+<li>每页显示条数  pageSize</li>
+</ol>
+</li>
+<li>后端需要响应什么数据给前端
+<ol>
+<li>所查询到的数据列表（存储到List 集合中）</li>
+<li>总记录数</li>
+</ol>
+</li>
+</ol>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90.png"
+	width="2379"
+	height="1186"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90_hu_770b5f6bb3166c58.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90_hu_b392fd382720fa2e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="200"
+		data-flex-basis="481px"
+	
+></p>
+<p>后台给前端返回的数据包含：List集合(数据列表)、total(总记录数)</p>
+<p>而这两部分我们通常封装到PageResult对象中，并将该对象转换为json格式的数据响应回给浏览器。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@NoArgsConstructor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@AllArgsConstructor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">PageResult</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">total</span><span class="p">;</span><span class="w"> </span><span class="c1">//总记录数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="n">List</span><span class="w"> </span><span class="n">rows</span><span class="p">;</span><span class="w"> </span><span class="c1">//当前页数据列表</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="接口描述">接口描述
+</h4><p><strong>1). 基本信息</strong></p>
+<blockquote>
+<p>请求路径：/emps</p>
+<p>请求方式：GET</p>
+<p>接口描述：该接口用于员工列表数据的条件分页查询</p>
+</blockquote>
+<p><strong>2). 请求参数</strong></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0.png"
+	width="1217"
+	height="389"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0_hu_b86cf1112ea76c6.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0_hu_7004ae96ee02f270.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="312"
+		data-flex-basis="750px"
+	
+></p>
+<p>请求数据样例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="o">/</span><span class="n">emps</span><span class="o">?</span><span class="n">name</span><span class="o">=</span><span class="n">张</span><span class="o">&amp;</span><span class="n">gender</span><span class="o">=</span><span class="n">1</span><span class="o">&amp;</span><span class="n">begin</span><span class="o">=</span><span class="n">2007</span><span class="o">-</span><span class="n">09</span><span class="o">-</span><span class="n">01</span><span class="o">&amp;</span><span class="n">end</span><span class="o">=</span><span class="n">2022</span><span class="o">-</span><span class="n">09</span><span class="o">-</span><span class="n">01</span><span class="o">&amp;</span><span class="n">page</span><span class="o">=</span><span class="n">1</span><span class="o">&amp;</span><span class="n">pageSize</span><span class="o">=</span><span class="n">10</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>3). 响应数据</strong></p>
+<p>参数格式：application/json</p>
+<p>参数说明：<img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E.png"
+	width="1299"
+	height="918"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E_hu_52fb2038082058c3.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E_hu_ff2e27da270d91a1.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="141"
+		data-flex-basis="339px"
+	
+></p>
+<p>响应数据样例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;code&#34;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;msg&#34;</span><span class="p">:</span> <span class="s2">&#34;success&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;data&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;total&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;rows&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">       <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;username&#34;</span><span class="p">:</span> <span class="s2">&#34;jinyong&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;password&#34;</span><span class="p">:</span> <span class="s2">&#34;123456&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;金庸&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;gender&#34;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;image&#34;</span><span class="p">:</span> <span class="s2">&#34;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2022-09-02-00-27-53B.jpg&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;job&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;salary&#34;</span><span class="p">:</span> <span class="mi">8000</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;entryDate&#34;</span><span class="p">:</span> <span class="s2">&#34;2015-01-01&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;deptId&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;deptName&#34;</span><span class="p">:</span> <span class="s2">&#34;教研部&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;createTime&#34;</span><span class="p">:</span> <span class="s2">&#34;2022-09-01T23:06:30&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;updateTime&#34;</span><span class="p">:</span> <span class="s2">&#34;2022-09-02T00:29:04&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;username&#34;</span><span class="p">:</span> <span class="s2">&#34;zhangwuji&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;password&#34;</span><span class="p">:</span> <span class="s2">&#34;123456&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;张无忌&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;gender&#34;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;image&#34;</span><span class="p">:</span> <span class="s2">&#34;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2022-09-02-00-27-53B.jpg&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;job&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;salary&#34;</span><span class="p">:</span> <span class="mi">6000</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;entryDate&#34;</span><span class="p">:</span> <span class="s2">&#34;2015-01-01&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;deptId&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;deptName&#34;</span><span class="p">:</span> <span class="s2">&#34;教研部&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;createTime&#34;</span><span class="p">:</span> <span class="s2">&#34;2022-09-01T23:06:30&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;updateTime&#34;</span><span class="p">:</span> <span class="s2">&#34;2022-09-02T00:29:04&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>目前我们只考虑分页查询，先不考虑查询条件，而上述的接口文档中，与分页查询相关的参数就两个，一个是page，一个是pageSize。</p>
+<h4 id="原始方式">原始方式
+</h4><p><strong>代码实现</strong></p>
+<p>通过查看接口文档：员工列表查询</p>
+<blockquote>
+<p>请求路径：/emps</p>
+<p>请求方式：GET</p>
+<p>请求参数：跟随在请求路径后的参数字符串。  例：/emps?page=1&amp;pageSize=10</p>
+<p>响应数据：json格式</p>
+</blockquote>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%9E%B6%E6%9E%84%E8%81%8C%E8%B4%A3.png"
+	width="2387"
+	height="745"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%9E%B6%E6%9E%84%E8%81%8C%E8%B4%A3_hu_cfc60d52c75f5bcf.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%9E%B6%E6%9E%84%E8%81%8C%E8%B4%A3_hu_b567d7f9cca5b6c8.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="320"
+		data-flex-basis="768px"
+	
+></p>
+<p><strong>1).</strong> <strong>EmpController</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.controller</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.Emp</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.PageResult</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.Result</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.service.EmpService</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.extern.slf4j.Slf4j</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.GetMapping</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.RequestMapping</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.RequestParam</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 员工管理
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Slf4j</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">&#34;/emps&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@RestController</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EmpController</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">EmpService</span><span class="w"> </span><span class="n">empService</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@GetMapping</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">page</span><span class="p">(</span><span class="nd">@RequestParam</span><span class="p">(</span><span class="n">defaultValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;1&#34;</span><span class="p">)</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">page</span><span class="w"> </span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                       </span><span class="nd">@RequestParam</span><span class="p">(</span><span class="n">defaultValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;10&#34;</span><span class="p">)</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">pageSize</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;查询员工信息, page={}, pageSize={}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">page</span><span class="p">,</span><span class="w"> </span><span class="n">pageSize</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">PageResult</span><span class="o">&lt;</span><span class="n">Emp</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pageResult</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">empService</span><span class="p">.</span><span class="na">page</span><span class="p">(</span><span class="n">page</span><span class="p">,</span><span class="w"> </span><span class="n">pageSize</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">success</span><span class="p">(</span><span class="n">pageResult</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>@RequestParam(defaultValue=&ldquo;默认值&rdquo;)   //设置请求参数默认值</p>
+</blockquote>
+<p><strong>2). EmpService</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.service</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.Emp</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.PageResult</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">EmpService</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * 分页查询
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * @param page 页码
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * @param pageSize 每页记录数
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">PageResult</span><span class="o">&lt;</span><span class="n">Emp</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">page</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">page</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">pageSize</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>3). EmpServiceImpl</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.service.impl</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.mapper.EmpMapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.Emp</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.PageResult</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.service.EmpService</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Service</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 员工管理
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EmpServiceImpl</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">EmpService</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">EmpMapper</span><span class="w"> </span><span class="n">empMapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">PageResult</span><span class="w"> </span><span class="nf">page</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">page</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">pageSize</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//1. 获取总记录数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Long</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">empMapper</span><span class="p">.</span><span class="na">count</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//2. 获取结果列表</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Integer</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">page</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">pageSize</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Emp</span><span class="o">&gt;</span><span class="w"> </span><span class="n">rows</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">empMapper</span><span class="p">.</span><span class="na">list</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">pageSize</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//3. 封装结果</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PageResult</span><span class="o">&lt;</span><span class="n">Emp</span><span class="o">&gt;</span><span class="p">(</span><span class="n">total</span><span class="p">,</span><span class="n">rows</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>4). EmpMapper</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.mapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.Emp</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.apache.ibatis.annotations.Mapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.apache.ibatis.annotations.Select</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Mapper</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">EmpMapper</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * 查询总记录数
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Select</span><span class="p">(</span><span class="s">&#34;select count(*) from emp e left join dept d on e.dept_id = d.id&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Long</span><span class="w"> </span><span class="nf">count</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * 分页查询
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Select</span><span class="p">(</span><span class="s">&#34;select e.*, d.name deptName from emp e left join dept d on e.dept_id = d.id &#34;</span><span class="w"> </span><span class="o">+</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="s">&#34;order by e.update_time desc limit #{start},#{pageSize}&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Emp</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">pageSize</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>功能测试：</strong></p>
+<p>功能开发完成后，重新启动项目，使用Apifox，发起GET请求：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%88%86%E9%A1%B5%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95.png"
+	width="1131"
+	height="585"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%88%86%E9%A1%B5%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95_hu_c77e19544efd2083.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%88%86%E9%A1%B5%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95_hu_34d15df7e62b125.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="193"
+		data-flex-basis="464px"
+	
+></p>
+<p><strong>前后端联调测试：</strong></p>
+<p>打开浏览器，测试后端功能接口：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%91%98%E5%B7%A5%E5%88%86%E9%A1%B5%E7%AE%A1%E7%90%86.png"
+	width="2248"
+	height="1005"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%91%98%E5%B7%A5%E5%88%86%E9%A1%B5%E7%AE%A1%E7%90%86_hu_b1ad7ac04dfd96f0.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%91%98%E5%B7%A5%E5%88%86%E9%A1%B5%E7%AE%A1%E7%90%86_hu_89c159687ff3b1c5.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="223"
+		data-flex-basis="536px"
+	
+>点击下面的页码，可以正常的查询出对应的数据 。</p>
+
 </section>
 
 
