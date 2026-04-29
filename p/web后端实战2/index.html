@@ -262,6 +262,14 @@
             <li><a href="#分析-1">分析</a></li>
             <li><a href="#接口描述">接口描述</a></li>
             <li><a href="#原始方式">原始方式</a></li>
+            <li><a href="#pagehelper分页插件">PageHelper分页插件</a></li>
+          </ol>
+        </li>
+        <li><a href="#条件分页查询">条件分页查询</a>
+          <ol>
+            <li><a href="#需求">需求</a></li>
+            <li><a href="#接口描述-1">接口描述</a></li>
+            <li><a href="#思路">思路</a></li>
           </ol>
         </li>
       </ol>
@@ -2690,6 +2698,468 @@
 		data-flex-basis="536px"
 	
 >点击下面的页码，可以正常的查询出对应的数据 。</p>
+<h4 id="pagehelper分页插件">PageHelper分页插件
+</h4><p><strong>PageHelper是第三方提供的Mybatis框架中的一款功能强大、方便易用的分页插件，支持任何形式的单标、多表的分页查询。</strong></p>
+<p>官网：https://pagehelper.github.io/</p>
+<p>那接下来，我们可以对比一下，使用PageHelper分页插件进行分页 与 原始方式进行分页代码实现的上的差别。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/pageHelper.png"
+	width="1026"
+	height="467"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/pageHelper_hu_40c9ad62e87f129c.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/pageHelper_hu_d519bc79854b4b8.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="219"
+		data-flex-basis="527px"
+	
+></p>
+<ul>
+<li>Mapper接口层：
+<ul>
+<li>原始的分页查询功能中，我们需要在Mapper接口中定义两条SQL语句。</li>
+<li>PageHelper实现分页查询之后，只需要编写一条SQL语句，而且不需要考虑分页操作，就是一条正常的查询语句。</li>
+</ul>
+</li>
+<li>Service层：
+<ul>
+<li>需要根据页码、每页展示记录数，手动的计算起始索引。</li>
+<li>无需手动计算起始索引，直接告诉PageHelper需要查询那一页的数据，每页展示多少条记录即可。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<ul>
+<li>使用步骤：引入PageHelper的依赖
+<ul>
+<li>定义Mapper接口的查询方法(无需考虑分页)</li>
+<li>在Service方法中实现分页查询</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/PH%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4.png"
+	width="589"
+	height="435"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/PH%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4_hu_d8deae0925a49710.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/PH%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4_hu_4e5d6f4ce4184a10.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="135"
+		data-flex-basis="324px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/PH%E4%BB%A3%E7%A0%81.png"
+	width="1229"
+	height="1140"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/PH%E4%BB%A3%E7%A0%81_hu_247e0af5388f16dc.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/PH%E4%BB%A3%E7%A0%81_hu_3d6143d6a06df744.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="107"
+		data-flex-basis="258px"
+	
+></p>
+<p><strong>代码实现：</strong></p>
+<p>当使用了PageHelper分页插件进行分页，就无需再Mapper中进行手动分页了。 在Mapper中我们只需要进行正常的列表查询即可。在Service层中，调用Mapper的方法之前设置分页参数，在调用Mapper方法执行查询之后，解析分页结果，并将结果封装到PageResult对象中返回。</p>
+<p>1). 在pom.xml引入依赖</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="c">&lt;!--分页插件PageHelper--&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;groupId&gt;</span>com.github.pagehelper<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;artifactId&gt;</span>pagehelper-spring-boot-starter<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;version&gt;</span>1.4.7<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2). EmpMapper</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 查询所有的员工及其对应的部门名称
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Select</span><span class="p">(</span><span class="s">&#34;select e.*, d.name deptName from emp as e left join dept as d on e.dept_id = d.id&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Emp</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">list</span><span class="p">();</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>3). EmpServiceImpl</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">PageResult</span><span class="w"> </span><span class="nf">page</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">page</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">pageSize</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//1. 设置分页参数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">PageHelper</span><span class="p">.</span><span class="na">startPage</span><span class="p">(</span><span class="n">page</span><span class="p">,</span><span class="n">pageSize</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//2. 执行查询</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//此处能够将List集合强转为page原因是empList实际类型就是page</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//为什么实际类型是page能拿List来接收呢？</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//原因是因为Page&lt;E&gt;是ArrayList&lt;E&gt;的子类，而ArrayList&lt;E&gt;又实现了List&lt;E&gt;的接口【如上面图示】</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Emp</span><span class="o">&gt;</span><span class="w"> </span><span class="n">empList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">empMapper</span><span class="p">.</span><span class="na">list</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//3. 封装结果</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Page</span><span class="o">&lt;</span><span class="n">Emp</span><span class="o">&gt;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">Page</span><span class="o">&lt;</span><span class="n">Emp</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="n">empList</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PageResult</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="na">getTotal</span><span class="p">(),</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="na">getResult</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>功能测试</strong></p>
+<p>功能开发完成后，我们重启项目工程，打开Apifox，发起GET请求，访问 ：http://localhost:8080/emps?page=1&amp;pageSize=5</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/PH%E8%AF%B7%E6%B1%821.png"
+	width="2560"
+	height="1329"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/PH%E8%AF%B7%E6%B1%821_hu_6dd14deb7084299a.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/PH%E8%AF%B7%E6%B1%821_hu_b9eabbc0f77741ba.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="462px"
+	
+></p>
+<p>我们可以看到数据可以正常查询返回，是可以正常实现分页查询的。</p>
+<p><strong>实现机制</strong></p>
+<p>我们打开Idea的控制台，可以看到在进行分页查询时，输出的SQL语句。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/PH%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6.png"
+	width="2124"
+	height="677"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/PH%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6_hu_ddc3e0d443b4ad17.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/PH%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6_hu_4eed2faf14e0433b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="313"
+		data-flex-basis="752px"
+	
+></p>
+<p>我们看到执行了两条SQL语句，而这两条SQL语句，其实是从我们在Mapper接口中定义的SQL演变而来的。</p>
+<ul>
+<li>
+<p>第一条SQL语句，用来查询总记录数。 <img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B61.png"
+	width="2115"
+	height="278"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B61_hu_f79e76b61d7fd381.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B61_hu_405e05810b3b7e0f.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="760"
+		data-flex-basis="1825px"
+	
+></p>
+<p>其实就是将我们编写的SQL语句进行的改造增强，将查询返回的字段列表替换成了 <code>count(0)</code> 来统计总记录数。</p>
+</li>
+<li>
+<p>第二条SQL语句，用来进行分页查询，查询指定页码对应 的数据列表。</p>
+</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B62.png"
+	width="2117"
+	height="250"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B62_hu_34dc5bbb73b7850c.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B62_hu_805bd4e9b6b415d8.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="846"
+		data-flex-basis="2032px"
+	
+></p>
+<p>其实就是将我们编写的SQL语句进行的改造增强，在SQL语句之后拼接上了limit进行分页查询，而由于测试时查询的是第一页，起始索引是0，所以简写为limit ？。</p>
+<p>而PageHelper在进行分页查询时，会执行上述两条SQL语句，并将查询到的总记录数，与数据列表封装到了 <code>Page&lt;Emp&gt;</code> 对象中，我们再获取查询结果时，只需要调用Page对象的方法就可以获取。</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<ul>
+<li>PageHelper实现分页查询时，SQL语句的结尾一定一定一定不要加分号(;).。</li>
+<li>PageHelper只会对紧跟在其后的第一条SQL语句进行分页处理。</li>
+</ul>
+</blockquote>
+<h3 id="条件分页查询">条件分页查询
+</h3><p>完了分页查询后，下面我们需要在分页查询的基础上，添加条件。</p>
+<h4 id="需求">需求
+</h4><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E6%9D%A1%E4%BB%B6%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E9%9C%80%E6%B1%82.png"
+	width="1026"
+	height="568"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E6%9D%A1%E4%BB%B6%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E9%9C%80%E6%B1%82_hu_dfb96775e3bc4cd1.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E6%9D%A1%E4%BB%B6%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E9%9C%80%E6%B1%82_hu_66a9b1a0b6a1dcbc.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="180"
+		data-flex-basis="433px"
+	
+></p>
+<p>通过员工管理的页面原型我们可以看到，员工列表页面的查询，不仅仅需要考虑分页，还需要考虑查询条件。 分页查询我们已经实现了，接下来，我们需要考虑在分页查询的基础上，再加上查询条件。</p>
+<p>我们看到页面原型及需求中描述，搜索栏的搜索条件有三个，分别是：</p>
+<ul>
+<li>姓名：模糊匹配</li>
+<li>性别：精确匹配</li>
+<li>入职日期：范围匹配</li>
+</ul>
+<h4 id="接口描述-1">接口描述
+</h4><p>查看上一小节的接口文档</p>
+<h4 id="思路">思路
+</h4><p>三层架构职责：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E6%9D%A1%E4%BB%B6%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E8%81%8C%E8%B4%A3.png"
+	width="2418"
+	height="803"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E6%9D%A1%E4%BB%B6%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E8%81%8C%E8%B4%A3_hu_ae572ba8d28231be.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E6%9D%A1%E4%BB%B6%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E8%81%8C%E8%B4%A3_hu_ff5b63bced6379a7.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="301"
+		data-flex-basis="722px"
+	
+></p>
+<p><strong>功能开发</strong></p>
+<p><strong>1). 在EmpController方法中通过多个方法形参，依次接收这几个参数</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Slf4j</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">&#34;/emps&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@RestController</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EmpController</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">EmpService</span><span class="w"> </span><span class="n">empService</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@GetMapping</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">page</span><span class="p">(</span><span class="nd">@RequestParam</span><span class="p">(</span><span class="n">defaultValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;1&#34;</span><span class="p">)</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">page</span><span class="w"> </span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                       </span><span class="nd">@RequestParam</span><span class="p">(</span><span class="n">defaultValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;10&#34;</span><span class="p">)</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">pageSize</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                       </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">gender</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                       </span><span class="nd">@DateTimeFormat</span><span class="p">(</span><span class="n">pattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;yyyy-MM-dd&#34;</span><span class="p">)</span><span class="w"> </span><span class="n">LocalDate</span><span class="w"> </span><span class="n">begin</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                       </span><span class="nd">@DateTimeFormat</span><span class="p">(</span><span class="n">pattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;yyyy-MM-dd&#34;</span><span class="p">)</span><span class="w"> </span><span class="n">LocalDate</span><span class="w"> </span><span class="n">end</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;分页查询：{}, {}, {}, {}, {}, {}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">page</span><span class="p">,</span><span class="w"> </span><span class="n">pageSize</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">gender</span><span class="p">,</span><span class="w"> </span><span class="n">begin</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">PageResult</span><span class="o">&lt;</span><span class="n">Emp</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pageResult</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">empService</span><span class="p">.</span><span class="na">page</span><span class="p">(</span><span class="n">page</span><span class="p">,</span><span class="w"> </span><span class="n">pageSize</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">gender</span><span class="p">,</span><span class="w"> </span><span class="n">begin</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">success</span><span class="p">(</span><span class="n">pageResult</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>日期时间类型参数接收时，需要通过 <code>@DateTimeFormat</code> 注解指定前端传递的日期格式</p>
+</blockquote>
+<p><strong>2). 修改EmpService及EmpServiceImpl中的代码逻辑</strong></p>
+<p>EmpService：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">EmpService</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * 分页查询
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * @param page 页码
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * @param pageSize 每页记录数
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">PageResult</span><span class="o">&lt;</span><span class="n">Emp</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">page</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">page</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">pageSize</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">gender</span><span class="p">,</span><span class="w"> </span><span class="n">LocalDate</span><span class="w"> </span><span class="n">begin</span><span class="p">,</span><span class="n">LocalDate</span><span class="w"> </span><span class="n">end</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>EmpServiceImpl:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EmpServiceImpl</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">EmpService</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * PageHelper分页查询
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param page 页码
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param pageSize 每页记录数
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @return
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">EmpMapper</span><span class="w"> </span><span class="n">empMapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">PageResult</span><span class="o">&lt;</span><span class="n">Emp</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">page</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">page</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">pageSize</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">gender</span><span class="p">,</span><span class="w"> </span><span class="n">LocalDate</span><span class="w"> </span><span class="n">begin</span><span class="p">,</span><span class="w"> </span><span class="n">LocalDate</span><span class="w"> </span><span class="n">end</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//1.设置分页参数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">PageHelper</span><span class="p">.</span><span class="na">startPage</span><span class="p">(</span><span class="n">page</span><span class="p">,</span><span class="n">pageSize</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//2.调佣Mapper接口方法</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Emp</span><span class="o">&gt;</span><span class="w"> </span><span class="n">empList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">empMapper</span><span class="p">.</span><span class="na">list</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">gender</span><span class="p">,</span><span class="w"> </span><span class="n">begin</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//3.解析并封装结果</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Page</span><span class="o">&lt;</span><span class="n">Emp</span><span class="o">&gt;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">Page</span><span class="o">&lt;</span><span class="n">Emp</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="n">empList</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PageResult</span><span class="o">&lt;</span><span class="n">Emp</span><span class="o">&gt;</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="na">getTotal</span><span class="p">(),</span><span class="n">p</span><span class="p">.</span><span class="na">getResult</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>3). 调整EmpMapper接口方法</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Mapper</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">EmpMapper</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * 查询所有的员工及其对应的部门名称
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Emp</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">gender</span><span class="p">,</span><span class="w"> </span><span class="n">LocalDate</span><span class="w"> </span><span class="n">begin</span><span class="p">,</span><span class="w"> </span><span class="n">LocalDate</span><span class="w"> </span><span class="n">end</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>由于SQL语句比较复杂，建议将SQL语句配置在XML映射文件中。</p>
+<p><strong>4). 新增Mapper映射文件EmpMapper.xml</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="o">&lt;!--</span><span class="n">定义Mapper映射文件的约束和基本结构</span><span class="o">--&gt;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="o">&lt;!</span><span class="n">DOCTYPE</span><span class="w"> </span><span class="n">mapper</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">PUBLIC</span><span class="w"> </span><span class="s">&#34;-//mybatis.org//DTD Mapper 3.0//EN&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="s">&#34;http://mybatis.org/dtd/mybatis-3-mapper.dtd&#34;</span><span class="o">&gt;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">mapper</span><span class="w"> </span><span class="n">namespace</span><span class="o">=</span><span class="s">&#34;com.itheima.mapper.EmpMapper&#34;</span><span class="o">&gt;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">&lt;</span><span class="n">select</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="s">&#34;list&#34;</span><span class="w"> </span><span class="n">resultType</span><span class="o">=</span><span class="s">&#34;com.itheima.pojo.Emp&#34;</span><span class="o">&gt;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">select</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="n">deptName</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">emp</span><span class="w"> </span><span class="n">as</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="n">left</span><span class="w"> </span><span class="n">join</span><span class="w"> </span><span class="n">dept</span><span class="w"> </span><span class="n">as</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">dept_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="na">id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//注意不能像下面注释这行这样书写，否则会变成&#39;%?%&#39;，就会报错</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//where e.name like (&#39;%#{name},%&#39;)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//此时就可以用到concat函数进行字符串的拼接</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">where</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="n">like</span><span class="w"> </span><span class="nf">concat</span><span class="p">(</span><span class="sc">&#39;%&#39;</span><span class="p">,</span><span class="err">#</span><span class="p">{</span><span class="n">name</span><span class="p">},</span><span class="sc">&#39;%&#39;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="n">and</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">gender</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">#</span><span class="p">{</span><span class="n">gender</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="n">and</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">entry_date</span><span class="w"> </span><span class="n">between</span><span class="w"> </span><span class="err">#</span><span class="p">{</span><span class="n">begin</span><span class="p">}</span><span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="err">#</span><span class="p">{</span><span class="n">end</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">&lt;/</span><span class="n">select</span><span class="o">&gt;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="n">mapper</span><span class="o">&gt;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>功能测试：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E6%9D%A1%E4%BB%B6%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C.png"
+	width="2560"
+	height="1330"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E6%9D%A1%E4%BB%B6%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C_hu_882863fde1218ac8.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E6%9D%A1%E4%BB%B6%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C_hu_ddf860de004fbfd0.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="461px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E6%9D%A1%E4%BB%B6%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C1.png"
+	width="2439"
+	height="462"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E6%9D%A1%E4%BB%B6%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C1_hu_59e5a6d65831149c.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E6%9D%A1%E4%BB%B6%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C1_hu_ef923412bbd3f7b0.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="527"
+		data-flex-basis="1267px"
+	
+></p>
 
 </section>
 
