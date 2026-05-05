@@ -272,6 +272,12 @@
             <li><a href="#思路">思路</a></li>
           </ol>
         </li>
+        <li><a href="#程序优化1">程序优化1</a></li>
+        <li><a href="#程序优化2">程序优化2</a>
+          <ol>
+            <li><a href="#动态sql">动态SQL</a></li>
+          </ol>
+        </li>
       </ol>
     </li>
   </ol>
@@ -3160,7 +3166,455 @@
 		data-flex-basis="1267px"
 	
 ></p>
-
+<h3 id="程序优化1">程序优化1
+</h3><p>在上述分页条件查询中，请求参数比较多，有6个，如下所示：</p>
+<ul>
+<li>请求参数：/emps?name=张&amp;gender=1&amp;begin=2007-09-01&amp;end=2022-09-01&amp;page=1&amp;pageSize=10</li>
+</ul>
+<p>那我们在controller层方法中，接收请求参数的时候，直接在controller方法中声明这样6个参数即可，这样做，功能可以实现，但是不方便维护和管理。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E7%A8%8B%E5%BA%8F%E4%BC%98%E5%8C%961.png"
+	width="2308"
+	height="638"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E7%A8%8B%E5%BA%8F%E4%BC%98%E5%8C%961_hu_55840c4dcc70ed87.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E7%A8%8B%E5%BA%8F%E4%BC%98%E5%8C%961_hu_f04089cd5f91aa93.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="361"
+		data-flex-basis="868px"
+	
+></p>
+<ul>
+<li>如果controller方法的参数较多，且未来可能继续增加，这会使得方法签名变得复杂难以维护，此时可以考虑将多个请求参数封装为一个对象。</li>
+<li>请求参数：/emps?name=张&amp;gender=1&amp;begin=2007-09-01&amp;end=2022-09-01&amp;page=1&amp;pageSize=10</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E7%A8%8B%E5%BA%8F%E4%BC%98%E5%8C%962.png"
+	width="2364"
+	height="777"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E7%A8%8B%E5%BA%8F%E4%BC%98%E5%8C%962_hu_793e2085b51f0c8e.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E7%A8%8B%E5%BA%8F%E4%BC%98%E5%8C%962_hu_1f342ecaf60b52d9.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="304"
+		data-flex-basis="730px"
+	
+></p>
+<p>优化思路：定义一个实体类，来封装这几个请求参数。 <strong>【需要保证，前端传递的请求参数和实体类的属性名是一样的】</strong></p>
+<p><strong>1). 定义实体类：EmpQueryParam</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.pojo</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.Data</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.format.annotation.DateTimeFormat</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.time.LocalDate</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EmpQueryParam</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">page</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">1</span><span class="p">;</span><span class="w"> </span><span class="c1">//页码</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">pageSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">10</span><span class="p">;</span><span class="w"> </span><span class="c1">//每页展示记录数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w"> </span><span class="c1">//姓名</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">gender</span><span class="p">;</span><span class="w"> </span><span class="c1">//性别</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@DateTimeFormat</span><span class="p">(</span><span class="n">pattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;yyyy-MM-dd&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">LocalDate</span><span class="w"> </span><span class="n">begin</span><span class="p">;</span><span class="w"> </span><span class="c1">//入职开始时间</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@DateTimeFormat</span><span class="p">(</span><span class="n">pattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;yyyy-MM-dd&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">LocalDate</span><span class="w"> </span><span class="n">end</span><span class="p">;</span><span class="w"> </span><span class="c1">//入职结束时间</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>2). EmpController接收请求参数</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@GetMapping</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">page</span><span class="p">(</span><span class="n">EmpQueryParam</span><span class="w"> </span><span class="n">empQueryParam</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;查询请求参数： {}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">empQueryParam</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">PageResult</span><span class="w"> </span><span class="n">pageResult</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">empService</span><span class="p">.</span><span class="na">page</span><span class="p">(</span><span class="n">empQueryParam</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">success</span><span class="p">(</span><span class="n">pageResult</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>3). 修改EmpService接口方法</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">EmpService</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * 分页查询
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//PageResult page(Integer page, Integer pageSize, String name, Integer gender, LocalDate begin, LocalDate end);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">PageResult</span><span class="w"> </span><span class="nf">page</span><span class="p">(</span><span class="n">EmpQueryParam</span><span class="w"> </span><span class="n">empQueryParam</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>4). 修改EmpServiceImpl中的page方法</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EmpServiceImpl</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">EmpService</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">EmpMapper</span><span class="w"> </span><span class="n">empMapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/*@Override
+</span></span></span><span class="line"><span class="cl"><span class="cm">    public PageResult page(Integer page, Integer pageSize, String name, Integer gender, LocalDate begin, LocalDate end) {
+</span></span></span><span class="line"><span class="cl"><span class="cm">        //1. 设置PageHelper分页参数
+</span></span></span><span class="line"><span class="cl"><span class="cm">        PageHelper.startPage(page, pageSize);
+</span></span></span><span class="line"><span class="cl"><span class="cm">        //2. 执行查询
+</span></span></span><span class="line"><span class="cl"><span class="cm">        List&lt;Emp&gt; empList = empMapper.list(name, gender, begin, end);
+</span></span></span><span class="line"><span class="cl"><span class="cm">        //3. 封装分页结果
+</span></span></span><span class="line"><span class="cl"><span class="cm">        Page&lt;Emp&gt; p = (Page&lt;Emp&gt;) empList;
+</span></span></span><span class="line"><span class="cl"><span class="cm">        return new PageResult(p.getTotal(), p.getResult());
+</span></span></span><span class="line"><span class="cl"><span class="cm">    }*/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">PageResult</span><span class="w"> </span><span class="nf">page</span><span class="p">(</span><span class="n">EmpQueryParam</span><span class="w"> </span><span class="n">empQueryParam</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//1. 设置PageHelper分页参数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">PageHelper</span><span class="p">.</span><span class="na">startPage</span><span class="p">(</span><span class="n">empQueryParam</span><span class="p">.</span><span class="na">getPage</span><span class="p">(),</span><span class="w"> </span><span class="n">empQueryParam</span><span class="p">.</span><span class="na">getPageSize</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//2. 执行查询</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Emp</span><span class="o">&gt;</span><span class="w"> </span><span class="n">empList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">empMapper</span><span class="p">.</span><span class="na">list</span><span class="p">(</span><span class="n">empQueryParam</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//3. 封装分页结果</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Page</span><span class="o">&lt;</span><span class="n">Emp</span><span class="o">&gt;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">Page</span><span class="o">&lt;</span><span class="n">Emp</span><span class="o">&gt;</span><span class="p">)</span><span class="n">empList</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PageResult</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="na">getTotal</span><span class="p">(),</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="na">getResult</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>5). 修改EmpMapper接口方法</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Mapper</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">EmpMapper</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * 查询所有的员工及其对应的部门名称
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">//    @Select(&#34;select e.*, d.name as deptName from emp e left join dept d on e.dept_id = d.id&#34;)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">//    public List&lt;Emp&gt; list(String name, Integer gender, LocalDate begin, LocalDate end);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * 根据查询条件查询员工
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Emp</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">EmpQueryParam</span><span class="w"> </span><span class="n">empQueryParam</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>EmpMapper.xml 中的配置无需修改。</p>
+<p>代码优化完毕之后，重新启动运行测试，依然正常运行：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E7%A8%8B%E5%BA%8F%E4%BC%98%E5%8C%96%E7%BB%93%E6%9E%9C.png"
+	width="2560"
+	height="1329"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E7%A8%8B%E5%BA%8F%E4%BC%98%E5%8C%96%E7%BB%93%E6%9E%9C_hu_ac0ed8c418bd9fa9.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E7%A8%8B%E5%BA%8F%E4%BC%98%E5%8C%96%E7%BB%93%E6%9E%9C_hu_25d95ef50b7a9812.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="462px"
+	
+></p>
+<p>此时我们如果想要单独根据某一条件进行查询，就会发现条件被写死了</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E7%A8%8B%E5%BA%8F%E4%BC%98%E5%8C%963.png"
+	width="2458"
+	height="1220"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E7%A8%8B%E5%BA%8F%E4%BC%98%E5%8C%963_hu_94648818f739d83.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E7%A8%8B%E5%BA%8F%E4%BC%98%E5%8C%963_hu_18945afc468b9130.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="201"
+		data-flex-basis="483px"
+	
+></p>
+<p>这时就需要用到动态SQL</p>
+<h3 id="程序优化2">程序优化2
+</h3><h4 id="动态sql">动态SQL
+</h4><ul>
+<li>
+<p><strong>随着用户的输入或外部条件的变化而变化的SQL语句</strong>，我们称为<strong>动态SQL</strong>。</p>
+</li>
+<li>
+<p>&lt; if &gt;：判断条件是否成立，如果条件为true，则拼接SQL。</p>
+</li>
+<li>
+<p>&lt; where &gt;：根据查询条件，来生成where关键字，并会自动去除条件前面多余的and或or。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/if%E6%A0%87%E7%AD%BE.png"
+	width="873"
+	height="316"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/if%E6%A0%87%E7%AD%BE_hu_9841270ecf5cbccb.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/if%E6%A0%87%E7%AD%BE_hu_cdc0f17d9508a1af.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="276"
+		data-flex-basis="663px"
+	
+></p>
+<p>​</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/if%E6%A0%87%E7%AD%BE2.png"
+	width="1904"
+	height="999"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/if%E6%A0%87%E7%AD%BE2_hu_a83e2fe957a114c2.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/if%E6%A0%87%E7%AD%BE2_hu_2274ec160fe1b1ab.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="190"
+		data-flex-basis="457px"
+	
+></p>
+</li>
+<li>
+<p>如果只输入 <strong>姓名</strong> 这个查询条件，则SQL语句中只根据name字段查询，SQL如下：</p>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="n">deptName</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">emp</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">left</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">dept</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">dept_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="n">concat</span><span class="p">(</span><span class="s1">&#39;%&#39;</span><span class="p">,</span><span class="o">#</span><span class="err">{</span><span class="n">name</span><span class="err">}</span><span class="p">,</span><span class="s1">&#39;%&#39;</span><span class="p">)</span><span class="err">；</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>如果只输入 <strong>性别</strong> 这个查询条件，则SQL语句中只根据gender字段查询，SQL如下：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="n">deptName</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">emp</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">left</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">dept</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">dept_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">gender</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">#</span><span class="err">{</span><span class="n">gender</span><span class="err">}；</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>如果输入 <strong>姓名</strong> 和 <strong>性别</strong> 这两个查询条件，则SQL语句中要根据name、gender两个字段查询，SQL如下：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="n">deptName</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">emp</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">left</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">dept</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">dept_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">where</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="n">concat</span><span class="p">(</span><span class="s1">&#39;%&#39;</span><span class="p">,</span><span class="o">#</span><span class="err">{</span><span class="n">name</span><span class="err">}</span><span class="p">,</span><span class="s1">&#39;%&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">gender</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">#</span><span class="err">{</span><span class="n">gender</span><span class="err">}；</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>具体的代码实现如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="c">&lt;!--定义Mapper映射文件的约束和基本结构--&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">&lt;!DOCTYPE mapper
+</span></span></span><span class="line"><span class="cl"><span class="cp">        PUBLIC &#34;-//mybatis.org//DTD Mapper 3.0//EN&#34;
+</span></span></span><span class="line"><span class="cl"><span class="cp">        &#34;http://mybatis.org/dtd/mybatis-3-mapper.dtd&#34;&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;mapper</span> <span class="na">namespace=</span><span class="s">&#34;com.itheima.mapper.EmpMapper&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;list&#34;</span> <span class="na">resultType=</span><span class="s">&#34;com.itheima.pojo.Emp&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        select e.*, d.name deptName from emp as e left join dept as d on e.dept_id = d.id
+</span></span><span class="line"><span class="cl">        where
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;name != null and name != &#39;&#39;&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">                e.name like concat(&#39;%&#39;,#{name},&#39;%&#39;)
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;/if&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;gender != null&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">                and e.gender = #{gender}
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;/if&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;begin != null and end != null&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">                and e.entry_date between #{begin} and #{end}
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;/if&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/select&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/mapper&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>此时取消勾选Apifox中的某些参数会发现依旧能查询成功，并且在idea控制台中也会显示根据哪几个条件进行模糊匹配</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%8A%A8%E6%80%81SQL1.png"
+	width="2560"
+	height="1329"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%8A%A8%E6%80%81SQL1_hu_36d8dcb8049338f1.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%8A%A8%E6%80%81SQL1_hu_2c72e434dc86a5c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="462px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%8A%A8%E6%80%81SQL2.png"
+	width="2461"
+	height="446"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%8A%A8%E6%80%81SQL2_hu_3de97ac90ebe6e9a.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%8A%A8%E6%80%81SQL2_hu_293728b162deb1a8.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="551"
+		data-flex-basis="1324px"
+	
+></p>
+<p>但是此时如果将name删除，就会报出500的错误</p>
+<p>所以就需要用到上面介绍的where标签</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/where%E6%A0%87%E7%AD%BE.png"
+	width="1849"
+	height="912"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/where%E6%A0%87%E7%AD%BE_hu_260ba4a17d23b5da.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/where%E6%A0%87%E7%AD%BE_hu_27fc7f1b5f18979a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="202"
+		data-flex-basis="486px"
+	
+></p>
+<p>完整代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="c">&lt;!--定义Mapper映射文件的约束和基本结构--&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">&lt;!DOCTYPE mapper
+</span></span></span><span class="line"><span class="cl"><span class="cp">        PUBLIC &#34;-//mybatis.org//DTD Mapper 3.0//EN&#34;
+</span></span></span><span class="line"><span class="cl"><span class="cp">        &#34;http://mybatis.org/dtd/mybatis-3-mapper.dtd&#34;&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;mapper</span> <span class="na">namespace=</span><span class="s">&#34;com.itheima.mapper.EmpMapper&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;list&#34;</span> <span class="na">resultType=</span><span class="s">&#34;com.itheima.pojo.Emp&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        select e.*, d.name deptName from emp as e left join dept as d on e.dept_id = d.id
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;where&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;name != null and name != &#39;&#39;&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">                e.name like concat(&#39;%&#39;,#{name},&#39;%&#39;)
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;/if&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;gender != null&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">                and e.gender = #{gender}
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;/if&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;begin != null and end != null&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">                and e.entry_date between #{begin} and #{end}
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;/if&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/where&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/select&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/mapper&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
 </section>
 
 
