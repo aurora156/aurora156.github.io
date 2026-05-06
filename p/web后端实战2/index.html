@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="tlias智能学习辅助系统 实现了部门管理的功能之后，接下来我们再来实现员工管理的功能。\n从页面原型中，我们可以看到，在查询员工信息的时候，除了要展示 姓名、性别、头像、职位、入职日期、最后操作时间这些员工信息外，还要展示出所属部门，那此时就需要从两张表中查询数据，一张是部门表，一张是员工表，此时就会涉及到多表操作。 所以这章的内容如下：\n">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Tlias智能学习辅助系统 实现了部门管理的功能之后，接下来我们再来实现员工管理的功能。\n从页面原型中，我们可以看到，在查询员工信息的时候，除了要展示 姓名、性别、头像、职位、入职日期、最后操作时间这些员工信息外，还要展示出所属部门，那此时就需要从两张表中查询数据，一张是部门表，一张是员工表，此时就会涉及到多表操作。 所以这章的内容如下：\n">
 <title>Web后端实战（2）</title>
 
 <link rel='canonical' href='https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/'>
 
 <link rel="stylesheet" href="/scss/style.min.6a692fd055deae459f2a9767f57f3855ba80cafd5041317f24f7360f6ca47cdf.css"><meta property='og:title' content="Web后端实战（2）">
-<meta property='og:description' content="tlias智能学习辅助系统 实现了部门管理的功能之后，接下来我们再来实现员工管理的功能。\n从页面原型中，我们可以看到，在查询员工信息的时候，除了要展示 姓名、性别、头像、职位、入职日期、最后操作时间这些员工信息外，还要展示出所属部门，那此时就需要从两张表中查询数据，一张是部门表，一张是员工表，此时就会涉及到多表操作。 所以这章的内容如下：\n">
+<meta property='og:description' content="Tlias智能学习辅助系统 实现了部门管理的功能之后，接下来我们再来实现员工管理的功能。\n从页面原型中，我们可以看到，在查询员工信息的时候，除了要展示 姓名、性别、头像、职位、入职日期、最后操作时间这些员工信息外，还要展示出所属部门，那此时就需要从两张表中查询数据，一张是部门表，一张是员工表，此时就会涉及到多表操作。 所以这章的内容如下：\n">
 <meta property='og:url' content='https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/'>
 <meta property='og:site_name' content='凉介的笔记'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-04-19T22:07:05&#43;08:00'/><meta property='article:modified_time' content='2026-04-19T22:07:05&#43;08:00'/>
 <meta name="twitter:title" content="Web后端实战（2）">
-<meta name="twitter:description" content="tlias智能学习辅助系统 实现了部门管理的功能之后，接下来我们再来实现员工管理的功能。\n从页面原型中，我们可以看到，在查询员工信息的时候，除了要展示 姓名、性别、头像、职位、入职日期、最后操作时间这些员工信息外，还要展示出所属部门，那此时就需要从两张表中查询数据，一张是部门表，一张是员工表，此时就会涉及到多表操作。 所以这章的内容如下：\n">
+<meta name="twitter:description" content="Tlias智能学习辅助系统 实现了部门管理的功能之后，接下来我们再来实现员工管理的功能。\n从页面原型中，我们可以看到，在查询员工信息的时候，除了要展示 姓名、性别、头像、职位、入职日期、最后操作时间这些员工信息外，还要展示出所属部门，那此时就需要从两张表中查询数据，一张是部门表，一张是员工表，此时就会涉及到多表操作。 所以这章的内容如下：\n">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -337,7 +337,7 @@
     <section class="article-content">
     
     
-    <h1 id="tlias智能学习辅助系统">tlias智能学习辅助系统
+    <h1 id="tlias智能学习辅助系统">Tlias智能学习辅助系统
 </h1><p>实现了部门管理的功能之后，接下来我们再来实现员工管理的功能。<img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%91%98%E5%B7%A5%E7%AE%A1%E7%90%86.png"
 	width="1026"
 	height="565"
