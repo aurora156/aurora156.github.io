@@ -249,9 +249,16 @@
         <li><a href="#问题分析">问题分析</a></li>
         <li><a href="#介绍">介绍</a></li>
         <li><a href="#操作">操作</a></li>
+        <li><a href="#spring事务管理">Spring事务管理</a>
+          <ol>
+            <li><a href="#transactional注解">Transactional注解</a></li>
+            <li><a href="#事物进阶">事物进阶</a></li>
+          </ol>
+        </li>
+        <li><a href="#事务四大特性">事务四大特性</a></li>
       </ol>
     </li>
-    <li><a href="#spring事务管理">Spring事务管理</a></li>
+    <li><a href="#文件上传">文件上传</a></li>
   </ol>
 </nav>
         </div>
@@ -1078,7 +1085,854 @@
 <li>银行转账</li>
 <li>下单扣减库存</li>
 </ul>
-<h2 id="spring事务管理">Spring事务管理
+<h3 id="spring事务管理">Spring事务管理
+</h3><p>在上述实现的新增员工的功能中，一旦在保存员工基本信息后出现异常。 我们就会发现，员工信息保存成功，但是工作经历信息保存失败，造成了数据的不完整不一致。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E4%BA%8B%E7%89%A9%E6%8E%A7%E5%88%B6.png"
+	width="2235"
+	height="1151"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E4%BA%8B%E7%89%A9%E6%8E%A7%E5%88%B6_hu_f0c1f992c4b95546.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E4%BA%8B%E7%89%A9%E6%8E%A7%E5%88%B6_hu_21358b2acc87143d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="194"
+		data-flex-basis="466px"
+	
+></p>
+<p>产生原因：</p>
+<ul>
+<li>先执行新增员工的操作，这步执行完毕，就已经往员工表 <code>emp</code> 插入了数据。</li>
+<li>执行 1/0 操作，抛出异常</li>
+<li>抛出异常之前，下面所有的代码都不会执行了，批量保存工作经历信息，这个操作也不会执行 。</li>
+</ul>
+<p>此时就出现问题了，员工基本信息保存了，员工的工作经历信息未保存，业务操作前后数据不一致。</p>
+<p>而要想保证操作前后，数据的一致性，就需要让新增员工中涉及到的两个业务操作，要么全部成功，要么全部失败 。 那我们如何，让这两个操作要么全部成功，要么全部失败呢 ？</p>
+<p>那就可以通过事务来实现，因为一个事务中的多个业务操作，要么全部成功，要么全部失败。</p>
+<p>此时，我们就需要在新增员工功能中添加事务。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E4%BA%8B%E7%89%A9%E7%AE%A1%E7%90%86.png"
+	width="2038"
+	height="1079"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E4%BA%8B%E7%89%A9%E7%AE%A1%E7%90%86_hu_ae53f7e9807e7e77.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E4%BA%8B%E7%89%A9%E7%AE%A1%E7%90%86_hu_f72ffb7a448d1157.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="188"
+		data-flex-basis="453px"
+	
+>在方法运行之前，开启事务，如果方法成功执行，就提交事务，如果方法执行的过程当中出现异常了，就回滚事务。</p>
+<p>**思考：**开发中所有的业务操作，一旦我们要进行控制事务，是不是都是这样的套路？</p>
+<p>**答案：**是的。</p>
+<p>所以在spring框架当中就已经把事务控制的代码都已经封装好了，并不需要我们手动实现。我们使用了spring框架，我们只需要通过一个简单的注解@Transactional就搞定了。</p>
+<h4 id="transactional注解">Transactional注解
+</h4><ul>
+<li><strong>注解：</strong>@Transactional</li>
+<li>**作用：**就是在当前这个方法执行开始之前来开启事务，方法执行完毕之后提交事务。如果在这个方法执行的过程当中出现了异常，就会进行事务的回滚操作。</li>
+<li>**位置：**业务层的方法上、类上、接口上
+<ul>
+<li>方法上：当前方法交给spring进行事务管理</li>
+<li>类上：当前类中所有的方法都交由spring进行事务管理</li>
+<li>接口上：接口下所有的实现类当中所有的方法都交给spring 进行事务管理</li>
+</ul>
+</li>
+</ul>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E4%BA%8B%E7%89%A9%E6%8E%A7%E5%88%B61.png"
+	width="2342"
+	height="674"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E4%BA%8B%E7%89%A9%E6%8E%A7%E5%88%B61_hu_6a2ce1d344f32074.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E4%BA%8B%E7%89%A9%E6%8E%A7%E5%88%B61_hu_a60c2daca4561208.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="347"
+		data-flex-basis="833px"
+	
+></p>
+<p>接下来，我们就可以在业务方法save上加上 <code>@Transactional</code> 来控制事务 。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Transactional</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="n">Emp</span><span class="w"> </span><span class="n">emp</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//1.补全基础属性</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">emp</span><span class="p">.</span><span class="na">setCreateTime</span><span class="p">(</span><span class="n">LocalDateTime</span><span class="p">.</span><span class="na">now</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">emp</span><span class="p">.</span><span class="na">setUpdateTime</span><span class="p">(</span><span class="n">LocalDateTime</span><span class="p">.</span><span class="na">now</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//2.保存员工基本信息</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">empMapper</span><span class="p">.</span><span class="na">insert</span><span class="p">(</span><span class="n">emp</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">1</span><span class="o">/</span><span class="n">0</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//3. 保存员工的工作经历信息 - 批量</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Integer</span><span class="w"> </span><span class="n">empId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">emp</span><span class="p">.</span><span class="na">getId</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">EmpExpr</span><span class="o">&gt;</span><span class="w"> </span><span class="n">exprList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">emp</span><span class="p">.</span><span class="na">getExprList</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">CollectionUtils</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">(</span><span class="n">exprList</span><span class="p">)){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">exprList</span><span class="p">.</span><span class="na">forEach</span><span class="p">(</span><span class="n">empExpr</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">empExpr</span><span class="p">.</span><span class="na">setEmpId</span><span class="p">(</span><span class="n">empId</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">empExprMapper</span><span class="p">.</span><span class="na">insertBatch</span><span class="p">(</span><span class="n">exprList</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>@Transactional注解：我们一般会在业务层当中来控制事务，因为在业务层当中，一个业务功能可能会包含多个数据访问的操作。在业务层来控制事务，我们就可以将多个数据访问操作控制在一个事务范围内。</p>
+<p>说明：可以在<code>application.yml</code>配置文件中开启事务管理日志，这样就可以在控制看到和事务相关的日志信息了</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c">#spring事务管理日志</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">logging</span><span class="p">:</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">level</span><span class="p">:</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">org.springframework.jdbc.support.JdbcTransactionManager</span><span class="p">:</span><span class="w"> </span><span class="l">debug</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>接下来，我们再次添加员工，看看控制台输出的日志信息。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97.png"
+	width="1026"
+	height="491"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97_hu_477e5b787819004a.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97_hu_45eb9492f52ab2d9.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="208"
+		data-flex-basis="501px"
+	
+>添加Spring事务管理后，由于服务端程序引发了异常，所以事务进行回滚。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97%E5%9B%9E%E6%BB%9A.png"
+	width="1026"
+	height="452"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97%E5%9B%9E%E6%BB%9A_hu_b38927be5752f598.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97%E5%9B%9E%E6%BB%9A_hu_4759e71575e77afb.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="226"
+		data-flex-basis="544px"
+	
+></p>
+<p>打开数据库，我们会看到 <code>emp</code> 表 与 <code>emp_expr</code> 表中都没有对应的数据信息，保证了数据的一致性、完整性。</p>
+<h4 id="事物进阶">事物进阶
+</h4><p>前面我们通过spring事务管理注解@Transactional已经控制了业务层方法的事务。接下来我们要来详细的介绍一下@Transactional事务管理注解的使用细节。我们这里主要介绍@Transactional注解当中的两个常见的属性：</p>
+<ul>
+<li>异常回滚的属性：<code>rollbackFor </code></li>
+<li>事务传播行为：<code>propagation</code></li>
+</ul>
+<p>我们先来学习下rollbackFor属性。</p>
+<h5 id="rollbackfor">rollbackFor
+</h5><ul>
+<li>rollbackFor属性用于控制出现何种异常类型，回滚事务。</li>
+</ul>
+<p>我们在之前编写的业务方法上添加了@Transactional注解，来实现事务管理。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Transactional</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="n">Emp</span><span class="w"> </span><span class="n">emp</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//1.补全基础属性</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">emp</span><span class="p">.</span><span class="na">setCreateTime</span><span class="p">(</span><span class="n">LocalDateTime</span><span class="p">.</span><span class="na">now</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">emp</span><span class="p">.</span><span class="na">setUpdateTime</span><span class="p">(</span><span class="n">LocalDateTime</span><span class="p">.</span><span class="na">now</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//2.保存员工基本信息</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">empMapper</span><span class="p">.</span><span class="na">insert</span><span class="p">(</span><span class="n">emp</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">1</span><span class="o">/</span><span class="n">0</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//3. 保存员工的工作经历信息 - 批量</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Integer</span><span class="w"> </span><span class="n">empId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">emp</span><span class="p">.</span><span class="na">getId</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">EmpExpr</span><span class="o">&gt;</span><span class="w"> </span><span class="n">exprList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">emp</span><span class="p">.</span><span class="na">getExprList</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">CollectionUtils</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">(</span><span class="n">exprList</span><span class="p">)){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">exprList</span><span class="p">.</span><span class="na">forEach</span><span class="p">(</span><span class="n">empExpr</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">empExpr</span><span class="p">.</span><span class="na">setEmpId</span><span class="p">(</span><span class="n">empId</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">empExprMapper</span><span class="p">.</span><span class="na">insertBatch</span><span class="p">(</span><span class="n">exprList</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>以上业务功能save方法在运行时，会引发除0的算术运算异常(运行时异常)，出现异常之后，由于我们在方法上加了<code>@Transactional</code>注解进行事务管理，所以发生异常会执行rollback回滚操作，从而保证事务操作前后数据是一致的。</p>
+<p>下面我们在做一个测试，我们修改业务功能代码，在模拟异常的位置上直接抛出Exception异常（编译时异常）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Transactional</span><span class="w">	</span><span class="c1">//默认出现RuntimeException才会回滚。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="n">Emp</span><span class="w"> </span><span class="n">emp</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//1.补全基础属性</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">emp</span><span class="p">.</span><span class="na">setCreateTime</span><span class="p">(</span><span class="n">LocalDateTime</span><span class="p">.</span><span class="na">now</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">emp</span><span class="p">.</span><span class="na">setUpdateTime</span><span class="p">(</span><span class="n">LocalDateTime</span><span class="p">.</span><span class="na">now</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//2.保存员工基本信息</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">empMapper</span><span class="p">.</span><span class="na">insert</span><span class="p">(</span><span class="n">emp</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//模拟：异常发生</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="kc">true</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Exception</span><span class="p">(</span><span class="s">&#34;出现异常了~~~&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//3. 保存员工的工作经历信息 - 批量</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Integer</span><span class="w"> </span><span class="n">empId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">emp</span><span class="p">.</span><span class="na">getId</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">EmpExpr</span><span class="o">&gt;</span><span class="w"> </span><span class="n">exprList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">emp</span><span class="p">.</span><span class="na">getExprList</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">CollectionUtils</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">(</span><span class="n">exprList</span><span class="p">)){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">exprList</span><span class="p">.</span><span class="na">forEach</span><span class="p">(</span><span class="n">empExpr</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">empExpr</span><span class="p">.</span><span class="na">setEmpId</span><span class="p">(</span><span class="n">empId</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">empExprMapper</span><span class="p">.</span><span class="na">insertBatch</span><span class="p">(</span><span class="n">exprList</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>说明：在service中向上抛出一个Exception编译时异常之后，由于是controller调用service，所以在controller中要有异常处理代码，此时我们选择在controller中继续把异常向上抛。</p>
+</blockquote>
+<p>重新启动服务后，打开Apifox进行测试，请求添加员工的接口：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/rbf.png"
+	width="2550"
+	height="1275"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/rbf_hu_cb11d79289a2c0a.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/rbf_hu_2c3668735728bc9b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="200"
+		data-flex-basis="480px"
+	
+></p>
+<p>通过Apifox返回的结果，我们看到抛出异常了。然后我们在回到IDEA的控制台来看一下。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B8.png"
+	width="2444"
+	height="479"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B8_hu_479ede94fbfe41f7.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B8_hu_b035c04a8b8caf6e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="510"
+		data-flex-basis="1224px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B81.png"
+	width="1632"
+	height="202"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B81_hu_d93d61d276fd70ae.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B81_hu_c74266ee723363e2.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="807"
+		data-flex-basis="1939px"
+	
+></p>
+<p>我们看到数据库的事务居然提交了，并没有进行回滚。[员工表提交成功，员工经历表并没有]</p>
+<p>通过以上测试可以得出一个结论：<strong>默认情况下，只有出现RuntimeException(运行时异常)才会回滚事务。</strong></p>
+<p>假如我们想让所有的异常都回滚，需要来配置@Transactional注解当中的rollbackFor属性，通过rollbackFor这个属性可以指定出现何种异常类型回滚事务。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Transactional</span><span class="p">(</span><span class="n">rollbackFor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Exception</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="n">Emp</span><span class="w"> </span><span class="n">emp</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//1.补全基础属性</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">emp</span><span class="p">.</span><span class="na">setCreateTime</span><span class="p">(</span><span class="n">LocalDateTime</span><span class="p">.</span><span class="na">now</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">emp</span><span class="p">.</span><span class="na">setUpdateTime</span><span class="p">(</span><span class="n">LocalDateTime</span><span class="p">.</span><span class="na">now</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//2.保存员工基本信息</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">empMapper</span><span class="p">.</span><span class="na">insert</span><span class="p">(</span><span class="n">emp</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//int i = 1/0;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//为什么这里的1/0异常会回滚</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//因为该异常属于RuntimeExceptiony异常</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="kc">true</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Exception</span><span class="p">(</span><span class="s">&#34;出异常啦....&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//3. 保存员工的工作经历信息 - 批量</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Integer</span><span class="w"> </span><span class="n">empId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">emp</span><span class="p">.</span><span class="na">getId</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">EmpExpr</span><span class="o">&gt;</span><span class="w"> </span><span class="n">exprList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">emp</span><span class="p">.</span><span class="na">getExprList</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">CollectionUtils</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">(</span><span class="n">exprList</span><span class="p">)){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">exprList</span><span class="p">.</span><span class="na">forEach</span><span class="p">(</span><span class="n">empExpr</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">empExpr</span><span class="p">.</span><span class="na">setEmpId</span><span class="p">(</span><span class="n">empId</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">empExprMapper</span><span class="p">.</span><span class="na">insertBatch</span><span class="p">(</span><span class="n">exprList</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>接下来我们重新启动服务，测试新增员工的操作：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/rbf%E5%9B%9E%E6%BB%9A%E5%BC%82%E5%B8%B8.png"
+	width="2550"
+	height="1275"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/rbf%E5%9B%9E%E6%BB%9A%E5%BC%82%E5%B8%B8_hu_6c758fb9f109c950.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/rbf%E5%9B%9E%E6%BB%9A%E5%BC%82%E5%B8%B8_hu_cc67a4d0713b0d8b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="200"
+		data-flex-basis="480px"
+	
+></p>
+<p>控制台日志，可以看到因为出现了异常又进行了事务回滚。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B82.png"
+	width="2419"
+	height="420"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B82_hu_23b55470bc7dc813.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B82_hu_99fe25156f9a03e1.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="575"
+		data-flex-basis="1382px"
+	
+></p>
+<blockquote>
+<p><strong>结论：</strong></p>
+<ul>
+<li>在Spring的事务管理中，默认只有运行时异常 RuntimeException才会回滚。</li>
+<li>如果还需要回滚指定类型的异常，可以通过rollbackFor属性来指定。</li>
+</ul>
+</blockquote>
+<h5 id="propagation">propagation
+</h5><h6 id="介绍-1">介绍
+</h6><p>我们接着继续学习@Transactional注解当中的第二个属性propagation，这个属性是用来配置事务的传播行为的。</p>
+<p>什么是事务的传播行为呢？</p>
+<ul>
+<li>就是当一个事务方法被另一个事务方法调用时，这个事务方法应该如何进行事务控制。</li>
+</ul>
+<p>例如：两个事务方法，一个A方法，一个B方法。在这两个方法上都添加了@Transactional注解，就代表这两个方法都具有事务，而在A方法当中又去调用了B方法。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/A%E8%B0%83%E7%94%A8B.png"
+	width="1026"
+	height="205"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/A%E8%B0%83%E7%94%A8B_hu_70dfe21123b15673.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/A%E8%B0%83%E7%94%A8B_hu_47b70f32a330a5ce.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="500"
+		data-flex-basis="1201px"
+	
+></p>
+<p>所谓事务的传播行为，指的就是在A方法运行的时候，首先会开启一个事务，在A方法当中又调用了B方法， B方法自身也具有事务，<u>那么B方法在运行的时候，到底是加入到A方法的事务当中来，还是B方法在运行的时候新建一个事务？</u>这个就涉及到了事务的传播行为。</p>
+<p>我们要想控制事务的传播行为，在@Transactional注解的后面指定一个属性propagation，通过 propagation 属性来指定传播行为。接下来我们就来介绍一下常见的事务传播行为。</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: center">属性值</th>
+          <th style="text-align: center">含义</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center"><strong>REQUIRED</strong></td>
+          <td style="text-align: center"><strong>【默认值】需要事务，有则加入，无则创建新事务</strong></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><strong>REQUIRES_NEW</strong></td>
+          <td style="text-align: center"><strong>需要新事务，无论有无，总是创建新事务</strong></td>
+      </tr>
+      <tr>
+          <td style="text-align: center">SUPPORTS</td>
+          <td style="text-align: center">支持事务，有则加入，无则在无事务状态中运行</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">NOT_SUPPORTED</td>
+          <td style="text-align: center">不支持事务，在无事务状态下运行,如果当前存在已有事务,则挂起当前事务</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">MANDATORY</td>
+          <td style="text-align: center">必须有事务，否则抛异常</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">NEVER</td>
+          <td style="text-align: center">必须没事务，否则抛异常</td>
+      </tr>
+  </tbody>
+</table></div>
+<blockquote>
+<p>对于这些事务传播行为，我们只需要关注以下两个就可以了：</p>
+<ol>
+<li>REQUIRED（默认值）</li>
+<li>REQUIRES_NEW</li>
+</ol>
+</blockquote>
+<h6 id="案例">案例
+</h6><p>接下来我们就通过一个案例来演示下事务传播行为propagation属性的使用。</p>
+<p>**需求：**在新增员工信息时，无论是成功还是失败，都要记录操作日志。</p>
+<p><strong>步骤：</strong></p>
+<ol>
+<li>准备日志表 emp_log、实体类EmpLog、Mapper接口EmpLogMapper</li>
+<li>在新增员工时记录日志</li>
+</ol>
+<p><strong>准备工作：</strong></p>
+<p>1). 创建数据库表 <code>emp_log</code> 日志表</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 创建员工日志表
+</span></span></span><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">emp_log</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="n">auto_increment</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;ID, 主键&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">operate_time</span><span class="w"> </span><span class="n">datetime</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;操作时间&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">info</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;日志信息&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;员工日志表&#39;</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>2). 引入资料中提供的实体类：EmpLog</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@NoArgsConstructor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@AllArgsConstructor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EmpLog</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">id</span><span class="p">;</span><span class="w"> </span><span class="c1">//ID</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">LocalDateTime</span><span class="w"> </span><span class="n">operateTime</span><span class="p">;</span><span class="w"> </span><span class="c1">//操作时间</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">info</span><span class="p">;</span><span class="w"> </span><span class="c1">//详细信息</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>3). 引入资料中提供的Mapper接口：EmpLogMapper</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Mapper</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">EmpLogMapper</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//插入日志</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Insert</span><span class="p">(</span><span class="s">&#34;insert into emp_log (operate_time, info) values (#{operateTime}, #{info})&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">insert</span><span class="p">(</span><span class="n">EmpLog</span><span class="w"> </span><span class="n">empLog</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>4). 引入资料中提供的业务接口：EmpLogService</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">EmpLogService</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//记录新增员工日志</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">insertLog</span><span class="p">(</span><span class="n">EmpLog</span><span class="w"> </span><span class="n">empLog</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>5). 引入资料中提供的业务实现类：EmpLogServiceImpl</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EmpLogServiceImpl</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">EmpLogService</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">EmpLogMapper</span><span class="w"> </span><span class="n">empLogMapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Transactional</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">insertLog</span><span class="p">(</span><span class="n">EmpLog</span><span class="w"> </span><span class="n">empLog</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">empLogMapper</span><span class="p">.</span><span class="na">insert</span><span class="p">(</span><span class="n">empLog</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>代码实现:</strong></p>
+<p>业务实现类：EmpServiceImpl</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">private</span><span class="w"> </span><span class="n">EmpMapper</span><span class="w"> </span><span class="n">empMapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">private</span><span class="w"> </span><span class="n">EmpExprMapper</span><span class="w"> </span><span class="n">empExprMapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">private</span><span class="w"> </span><span class="n">EmpLogService</span><span class="w"> </span><span class="n">empLogService</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Transactional</span><span class="p">(</span><span class="n">rollbackFor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">Exception</span><span class="p">.</span><span class="na">class</span><span class="p">})</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="n">Emp</span><span class="w"> </span><span class="n">emp</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//1.补全基础属性</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">emp</span><span class="p">.</span><span class="na">setCreateTime</span><span class="p">(</span><span class="n">LocalDateTime</span><span class="p">.</span><span class="na">now</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">emp</span><span class="p">.</span><span class="na">setUpdateTime</span><span class="p">(</span><span class="n">LocalDateTime</span><span class="p">.</span><span class="na">now</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//2.保存员工基本信息</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">empMapper</span><span class="p">.</span><span class="na">insert</span><span class="p">(</span><span class="n">emp</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//测试失败时</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//测试成功案例时需要将这行代码删去或注释</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">1</span><span class="o">/</span><span class="n">0</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//3. 保存员工的工作经历信息 - 批量</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Integer</span><span class="w"> </span><span class="n">empId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">emp</span><span class="p">.</span><span class="na">getId</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">EmpExpr</span><span class="o">&gt;</span><span class="w"> </span><span class="n">exprList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">emp</span><span class="p">.</span><span class="na">getExprList</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">CollectionUtils</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">(</span><span class="n">exprList</span><span class="p">)){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">exprList</span><span class="p">.</span><span class="na">forEach</span><span class="p">(</span><span class="n">empExpr</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">empExpr</span><span class="p">.</span><span class="na">setEmpId</span><span class="p">(</span><span class="n">empId</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">empExprMapper</span><span class="p">.</span><span class="na">insertBatch</span><span class="p">(</span><span class="n">exprList</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//记录操作日志</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">EmpLog</span><span class="w"> </span><span class="n">empLog</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EmpLog</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="n">LocalDateTime</span><span class="p">.</span><span class="na">now</span><span class="p">(),</span><span class="w"> </span><span class="n">emp</span><span class="p">.</span><span class="na">toString</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">empLogService</span><span class="p">.</span><span class="na">insertLog</span><span class="p">(</span><span class="n">empLog</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>try-finally</code> 结构的主要作用是<strong>确保代码的“收尾”工作一定会被执行</strong>，无论 <code>try</code> 代码块中的程序是正常运行结束，还是因为遇到了错误（异常）而中断。</p>
+<p><code>finally</code> 块中的代码具有“无论如何都会执行”的特性，这在以下场景中至关重要：</p>
+<ul>
+<li><strong>try 块正常执行完毕</strong>：<code>finally</code> 块会执行。</li>
+<li><strong>try 块中发生异常</strong>：无论异常是否被 <code>catch</code> 捕获，<code>finally</code> 块都会执行。</li>
+<li><strong>try 或 catch 块中有 return 语句</strong>：在方法真正返回之前，<code>finally</code> 块会抢先执行。</li>
+</ul>
+<p><strong>测试:</strong></p>
+<p>成功时：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%88%90%E5%8A%9F%E6%A1%88%E4%BE%8B.png"
+	width="1977"
+	height="137"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%88%90%E5%8A%9F%E6%A1%88%E4%BE%8B_hu_cf214f4b3ed2daca.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%88%90%E5%8A%9F%E6%A1%88%E4%BE%8B_hu_1790d4b590a4b85b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1443"
+		data-flex-basis="3463px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%88%90%E5%8A%9F%E6%A1%88%E4%BE%8B1.png"
+	width="1480"
+	height="96"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%88%90%E5%8A%9F%E6%A1%88%E4%BE%8B1_hu_411b67bef62922ab.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%88%90%E5%8A%9F%E6%A1%88%E4%BE%8B1_hu_f3abe87f507284dc.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1541"
+		data-flex-basis="3700px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%88%90%E5%8A%9F%E6%A1%88%E4%BE%8B2.png"
+	width="1104"
+	height="108"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%88%90%E5%8A%9F%E6%A1%88%E4%BE%8B2_hu_6b389388ef008dc0.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%88%90%E5%8A%9F%E6%A1%88%E4%BE%8B2_hu_cfa5c2a599941884.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1022"
+		data-flex-basis="2453px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%88%90%E5%8A%9F%E6%A1%88%E4%BE%8B3.png"
+	width="1838"
+	height="255"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%88%90%E5%8A%9F%E6%A1%88%E4%BE%8B3_hu_7c4af71e81dbf66a.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%88%90%E5%8A%9F%E6%A1%88%E4%BE%8B3_hu_f089115f681c7944.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="720"
+		data-flex-basis="1729px"
+	
+></p>
+<p>失败时：</p>
+<p>重新启动SpringBoot服务，测试新增员工操作 。我们可以看到控制台中输出的日志：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%A1%88%E4%BE%8B%E6%97%A5%E5%BF%97.png"
+	width="2409"
+	height="654"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%A1%88%E4%BE%8B%E6%97%A5%E5%BF%97_hu_eab62c2b22c50da2.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%A1%88%E4%BE%8B%E6%97%A5%E5%BF%97_hu_bf0e7c2a9f0def82.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="368"
+		data-flex-basis="884px"
+	
+></p>
+<p>从日志中我们可以看到：</p>
+<ul>
+<li>执行了插入员工数据的操作</li>
+<li>执行了插入日志操作</li>
+<li>程序发生Exception异常</li>
+<li>执行事务回滚（保存员工数据、插入操作日志 因为在一个事务范围内，两个操作都会被回滚）</li>
+</ul>
+<p>然后在 <code>emp_log</code> 表中没有记录日志数据 。</p>
+<p><strong>原因分析</strong>:</p>
+<p>接下来我们就需要来分析一下具体是什么原因导致的日志没有成功的记录。</p>
+<ul>
+<li>在执行 <code>save</code> 方法时开启了一个事务</li>
+<li>当执行 <code>empLogService.insertLog</code> 操作时，<code>insertLog</code>设置的事务传播行是默认值REQUIRED，表示有事务就加入，没有则新建事务</li>
+<li>此时：<code>save</code> 和 <code>insertLog</code> 操作使用了同一个事务，同一个事务中的多个操作，要么同时成功，要么同时失败，所以当异常发生时进行事务回滚，就会回滚 <code>save</code> 和  <code>insertLog</code> 操作</li>
+</ul>
+<p><strong>解决方案：</strong></p>
+<p>在<code>EmpLogServiceImpl</code>类中insertLog方法上，添加 <code>@Transactional(propagation = Propagation.REQUIRES_NEW)</code></p>
+<blockquote>
+<p>Propagation.REQUIRES_NEW  ：不论是否有事务，都创建新事务  ，运行在一个独立的事务中。</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EmpLogServiceImpl</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">EmpLogService</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">EmpLogMapper</span><span class="w"> </span><span class="n">empLogMapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Transactional</span><span class="p">(</span><span class="n">propagation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Propagation</span><span class="p">.</span><span class="na">REQUIRES_NEW</span><span class="p">)</span><span class="c1">//需要在一个新的事务中运行</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">insertLog</span><span class="p">(</span><span class="n">EmpLog</span><span class="w"> </span><span class="n">empLog</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">empLogMapper</span><span class="p">.</span><span class="na">insert</span><span class="p">(</span><span class="n">empLog</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>重启SpringBoot服务，再次测试新增员工的操作 ：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%96%B0%E5%A2%9E%E5%91%98%E5%B7%A5.png"
+	width="2041"
+	height="994"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%96%B0%E5%A2%9E%E5%91%98%E5%B7%A5_hu_860b49877e8519b2.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%96%B0%E5%A2%9E%E5%91%98%E5%B7%A5_hu_467953bf889cb7d2.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="205"
+		data-flex-basis="492px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%96%B0%E5%A2%9E%E5%91%98%E5%B7%A5%E6%97%A5%E5%BF%971.png"
+	width="1295"
+	height="305"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%96%B0%E5%A2%9E%E5%91%98%E5%B7%A5%E6%97%A5%E5%BF%971_hu_431cbff258d2a641.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%96%B0%E5%A2%9E%E5%91%98%E5%B7%A5%E6%97%A5%E5%BF%971_hu_83e4f81be1ff4e65.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="424"
+		data-flex-basis="1019px"
+	
+></p>
+<p>会看到具体的日志如下：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%96%B0%E5%A2%9E%E5%91%98%E5%B7%A5%E6%97%A5%E5%BF%97.png"
+	width="2388"
+	height="1056"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%96%B0%E5%A2%9E%E5%91%98%E5%B7%A5%E6%97%A5%E5%BF%97_hu_b9b8a62b0e66ed34.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%96%B0%E5%A2%9E%E5%91%98%E5%B7%A5%E6%97%A5%E5%BF%97_hu_6b56f4aeb1a62d3c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="226"
+		data-flex-basis="542px"
+	
+></p>
+<p>那此时，<code>EmpServiceImpl</code> 中的 <code>save</code> 方法运行时，会开启一个事务。 当调用<code>empLogService.insertLog(empLog)</code>  时，也会创建一个新的事务，那此时，当 <code>insertLog</code> 方法运行完毕之后，事务就已经提交了。 即使外部的事务出现异常，内部已经提交的事务，也不会回滚了，因为是两个独立的事务。</p>
+<p>到此事务传播行为已演示完成，事务的传播行为我们只需要掌握两个：REQUIRED、REQUIRES_NEW。</p>
+<blockquote>
+<ul>
+<li>**REQUIRED：**大部分情况下都是用该传播行为即可。</li>
+<li>**REQUIRES_NEW：**当我们不希望事务之间相互影响时，可以使用该传播行为。比如：下订单前需要记录日志，不论订单保存成功与否，都需要保证日志记录能够记录成功。</li>
+</ul>
+</blockquote>
+<h3 id="事务四大特性">事务四大特性
+</h3><p>事务有哪些特性？</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E4%BA%8B%E5%8A%A1%E5%9B%9B%E5%A4%A7%E7%89%B9%E6%80%A7.png"
+	width="1026"
+	height="312"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E4%BA%8B%E5%8A%A1%E5%9B%9B%E5%A4%A7%E7%89%B9%E6%80%A7_hu_df444cef5f6e802a.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E4%BA%8B%E5%8A%A1%E5%9B%9B%E5%A4%A7%E7%89%B9%E6%80%A7_hu_bf4e7cbd0c201f30.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="328"
+		data-flex-basis="789px"
+	
+></p>
+<blockquote>
+<p>事务的四大特性简称为：ACID</p>
+</blockquote>
+<ul>
+<li><strong>原子性（Atomicity）</strong> ：原子性是指事务包装的一组sql是一个不可分割的工作单元，事务中的操作要么全部成功，要么全部失败。</li>
+<li><strong>一致性（Consistency）</strong>：一个事务完成之后数据都必须处于一致性状态。
+<ul>
+<li>如果事务成功的完成，那么数据库的所有变化将生效。</li>
+<li>如果事务执行出现错误，那么数据库的所有变化将会被回滚(撤销)，返回到原始状态。</li>
+</ul>
+</li>
+<li><strong>隔离性（Isolation）</strong>：多个用户并发的访问数据库时，一个用户的事务不能被其他用户的事务干扰，多个并发的事务之间要相互隔离。
+<ul>
+<li>一个事务的成功或者失败对于其他的事务是没有影响。</li>
+</ul>
+</li>
+<li><strong>持久性（Durability）</strong>：一个事务一旦被提交或回滚，它对数据库的改变将是永久性的，哪怕数据库发生异常，重启之后数据亦然存在。</li>
+</ul>
+<h2 id="文件上传">文件上传
 </h2>
 </section>
 
