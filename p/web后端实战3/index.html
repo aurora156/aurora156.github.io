@@ -268,6 +268,13 @@
           </ol>
         </li>
         <li><a href="#入门">入门</a></li>
+        <li><a href="#集成">集成</a>
+          <ol>
+            <li><a href="#介绍-3">介绍</a></li>
+            <li><a href="#实现-1">实现</a></li>
+            <li><a href="#功能优化">功能优化</a></li>
+          </ol>
+        </li>
       </ol>
     </li>
   </ol>
@@ -2638,7 +2645,1110 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="入门">入门
-</h3>
+</h3><p>阿里云oss 对象存储服务的准备工作我们已经完成了，接下来我们就来完成第二步操作：参照官方所提供的sdk示例来编写入门程序。</p>
+<p>首先我们需要来打开阿里云OSS的官方文档，在官方文档中找到 SDK 的示例代码：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/SDK%E7%A4%BA%E4%BE%8B.png"
+	width="2488"
+	height="1213"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/SDK%E7%A4%BA%E4%BE%8B_hu_a93a4f2b84e5b5f8.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/SDK%E7%A4%BA%E4%BE%8B_hu_61ac9d21d5ab0a70.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="205"
+		data-flex-basis="492px"
+	
+></p>
+<p>参照文档，引入依赖：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E5%BC%95%E5%85%A5%E4%BE%9D%E8%B5%96.png"
+	width="1773"
+	height="1116"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E5%BC%95%E5%85%A5%E4%BE%9D%E8%B5%96_hu_32bea7435f176fd5.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E5%BC%95%E5%85%A5%E4%BE%9D%E8%B5%96_hu_8cc7f8aa0d9913a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="158"
+		data-flex-basis="381px"
+	
+></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="c">&lt;!--阿里云OSS依赖--&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;groupId&gt;</span>com.aliyun.oss<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;artifactId&gt;</span>aliyun-sdk-oss<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;version&gt;</span>3.17.4<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;groupId&gt;</span>javax.xml.bind<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;artifactId&gt;</span>jaxb-api<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;version&gt;</span>2.3.1<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;groupId&gt;</span>javax.activation<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;artifactId&gt;</span>activation<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;version&gt;</span>1.1.1<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c">&lt;!-- no more than 2.3.3--&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;groupId&gt;</span>org.glassfish.jaxb<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;artifactId&gt;</span>jaxb-runtime<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;version&gt;</span>2.3.3<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>参照文档，编写入门程序：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E4%B8%8A%E4%BC%A0%E4%BB%A3%E7%A0%81.png"
+	width="2086"
+	height="1281"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E4%B8%8A%E4%BC%A0%E4%BB%A3%E7%A0%81_hu_25f032767fb2a96a.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E4%B8%8A%E4%BC%A0%E4%BB%A3%E7%A0%81_hu_cff5332973b02522.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="162"
+		data-flex-basis="390px"
+	
+></p>
+<p>将官方提供的入门程序，复制过来，将里面的参数值改造成我们自己的即可。代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.common.auth.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.common.comm.SignVersion</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.model.PutObjectRequest</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.model.PutObjectResult</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.File</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Demo</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// Endpoint以华东1（杭州）为例，其它Region请按实际情况填写。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;https://oss-cn-hangzhou.aliyuncs.com&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 从环境变量中获取访问凭证。运行本代码示例之前，请确保已设置环境变量OSS_ACCESS_KEY_ID和OSS_ACCESS_KEY_SECRET。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">EnvironmentVariableCredentialsProvider</span><span class="w"> </span><span class="n">credentialsProvider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CredentialsProviderFactory</span><span class="p">.</span><span class="na">newEnvironmentVariableCredentialsProvider</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 填写Bucket名称，例如examplebucket。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">bucketName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;examplebucket&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 填写Object完整路径，完整路径中不能包含Bucket名称，例如exampledir/exampleobject.txt。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">objectName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;exampledir/exampleobject.txt&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 填写本地文件的完整路径，例如D:\\localpath\\examplefile.txt。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 如果未指定本地路径，则默认从示例程序所属项目对应本地路径中上传文件。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">filePath</span><span class="o">=</span><span class="w"> </span><span class="s">&#34;D:\\localpath\\examplefile.txt&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 填写Bucket所在地域。以华东1（杭州）为例，Region填写为cn-hangzhou。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;cn-hangzhou&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 创建OSSClient实例。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 当OSSClient实例不再使用时，调用shutdown方法以释放资源。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">ClientBuilderConfiguration</span><span class="w"> </span><span class="n">clientBuilderConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ClientBuilderConfiguration</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">clientBuilderConfiguration</span><span class="p">.</span><span class="na">setSignatureVersion</span><span class="p">(</span><span class="n">SignVersion</span><span class="p">.</span><span class="na">V4</span><span class="p">);</span><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">OSS</span><span class="w"> </span><span class="n">ossClient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OSSClientBuilder</span><span class="p">.</span><span class="na">create</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="na">endpoint</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="na">credentialsProvider</span><span class="p">(</span><span class="n">credentialsProvider</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="na">clientConfiguration</span><span class="p">(</span><span class="n">clientBuilderConfiguration</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="na">region</span><span class="p">(</span><span class="n">region</span><span class="p">)</span><span class="w">               
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="na">build</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// 创建PutObjectRequest对象。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">PutObjectRequest</span><span class="w"> </span><span class="n">putObjectRequest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PutObjectRequest</span><span class="p">(</span><span class="n">bucketName</span><span class="p">,</span><span class="w"> </span><span class="n">objectName</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">File</span><span class="p">(</span><span class="n">filePath</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// 如果需要上传时设置存储类型和访问权限，请参考以下示例代码。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// ObjectMetadata metadata = new ObjectMetadata();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// metadata.setHeader(OSSHeaders.OSS_STORAGE_CLASS, StorageClass.Standard.toString());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// metadata.setObjectAcl(CannedAccessControlList.Private);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// putObjectRequest.setMetadata(metadata);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// 上传文件。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">PutObjectResult</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ossClient</span><span class="p">.</span><span class="na">putObject</span><span class="p">(</span><span class="n">putObjectRequest</span><span class="p">);</span><span class="w">           
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">OSSException</span><span class="w"> </span><span class="n">oe</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Caught an OSSException, which means your request made it to OSS, &#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                    </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;but was rejected with an error response for some reason.&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Error Message:&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">oe</span><span class="p">.</span><span class="na">getErrorMessage</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Error Code:&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">oe</span><span class="p">.</span><span class="na">getErrorCode</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Request ID:&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">oe</span><span class="p">.</span><span class="na">getRequestId</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Host ID:&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">oe</span><span class="p">.</span><span class="na">getHostId</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">ClientException</span><span class="w"> </span><span class="n">ce</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Caught an ClientException, which means the client encountered &#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                    </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;a serious internal problem while trying to communicate with OSS, &#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                    </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;such as not being able to access the network.&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Error Message:&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ce</span><span class="p">.</span><span class="na">getMessage</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ossClient</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">ossClient</span><span class="p">.</span><span class="na">shutdown</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>切记，大家需要将上面的 <code>endpoint</code> ，<code>bucketName</code>，<code>objectName</code>，<code>file</code> 都需要改成自己的。</p>
+<p>在以上代码中，需要替换的内容为：</p>
+<ul>
+<li>endpoint：阿里云OSS中的bucket对应的域名</li>
+<li>bucketName：Bucket名称</li>
+<li>objectName：对象名称，在Bucket中存储的对象的名称</li>
+<li>region：bucket所属区域</li>
+</ul>
+<p>这是我的代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.common.auth.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.common.comm.SignVersion</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.model.PutObjectRequest</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.model.PutObjectResult</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.ByteArrayInputStream</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.File</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.nio.file.Files</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Demo</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;https://oss-cn-beijing.aliyuncs.com&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">EnvironmentVariableCredentialsProvider</span><span class="w"> </span><span class="n">credentialsProvider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CredentialsProviderFactory</span><span class="p">.</span><span class="na">newEnvironmentVariableCredentialsProvider</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">bucketName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;java-ai-26-5-07&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">objectName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;111.jpg&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;cn-beijing&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">ClientBuilderConfiguration</span><span class="w"> </span><span class="n">clientBuilderConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ClientBuilderConfiguration</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">clientBuilderConfiguration</span><span class="p">.</span><span class="na">setSignatureVersion</span><span class="p">(</span><span class="n">SignVersion</span><span class="p">.</span><span class="na">V4</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">OSS</span><span class="w"> </span><span class="n">ossClient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OSSClientBuilder</span><span class="p">.</span><span class="na">create</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">endpoint</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">credentialsProvider</span><span class="p">(</span><span class="n">credentialsProvider</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">clientConfiguration</span><span class="p">(</span><span class="n">clientBuilderConfiguration</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">region</span><span class="p">(</span><span class="n">region</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">build</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">File</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">File</span><span class="p">(</span><span class="s">&#34;D:\\picture\\111.jpg&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Files</span><span class="p">.</span><span class="na">readAllBytes</span><span class="p">(</span><span class="n">file</span><span class="p">.</span><span class="na">toPath</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">ossClient</span><span class="p">.</span><span class="na">putObject</span><span class="p">(</span><span class="n">bucketName</span><span class="p">,</span><span class="w"> </span><span class="n">objectName</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ByteArrayInputStream</span><span class="p">(</span><span class="n">content</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">OSSException</span><span class="w"> </span><span class="n">oe</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Caught an OSSException, which means your request made it to OSS, &#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                    </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;but was rejected with an error response for some reason.&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Error Message:&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">oe</span><span class="p">.</span><span class="na">getErrorMessage</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Error Code:&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">oe</span><span class="p">.</span><span class="na">getErrorCode</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Request ID:&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">oe</span><span class="p">.</span><span class="na">getRequestId</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Host ID:&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">oe</span><span class="p">.</span><span class="na">getHostId</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">ClientException</span><span class="w"> </span><span class="n">ce</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Caught an ClientException, which means the client encountered &#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                    </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;a serious internal problem while trying to communicate with OSS, &#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                    </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;such as not being able to access the network.&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Error Message:&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ce</span><span class="p">.</span><span class="na">getMessage</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ossClient</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">ossClient</span><span class="p">.</span><span class="na">shutdown</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>运行以上程序后，会把本地的文件上传到阿里云OSS服务器上。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%88%90%E5%8A%9F.png"
+	width="2198"
+	height="674"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%88%90%E5%8A%9F_hu_f03c224f570d8ba9.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%88%90%E5%8A%9F_hu_e1929dc3f358c565.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="326"
+		data-flex-basis="782px"
+	
+></p>
+<h3 id="集成">集成
+</h3><h4 id="介绍-3">介绍
+</h4><p>阿里云oss对象存储服务的准备工作以及入门程序我们都已经完成了，接下来我们就需要在案例当中集成oss对象存储服务，来存储和管理案例中上传的图片。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E9%9B%86%E6%88%90%E4%BB%8B%E7%BB%8D.png"
+	width="1026"
+	height="291"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E9%9B%86%E6%88%90%E4%BB%8B%E7%BB%8D_hu_b1a52a573d47e4a0.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E9%9B%86%E6%88%90%E4%BB%8B%E7%BB%8D_hu_bbbf9efee4e43b09.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="352"
+		data-flex-basis="846px"
+	
+></p>
+<blockquote>
+<p>在新增员工的时候，上传员工的图像，而之所以需要上传员工的图像，是因为将来我们需要在系统页面当中访问并展示员工的图像。而要想完成这个操作，需要做两件事：</p>
+<ol>
+<li>需要上传员工的图像，并把图像保存起来（存储到阿里云OSS）</li>
+<li>访问员工图像（通过图像在阿里云OSS的存储地址访问图像）
+<ul>
+<li>OSS中的每一个文件都会分配一个访问的url，通过这个url就可以访问到存储在阿里云上的图片。所以需要把url返回给前端，这样前端就可以通过url获取到图像。</li>
+</ul>
+</li>
+</ol>
+</blockquote>
+<p>我们参照接口文档来开发文件上传功能：</p>
+<p><strong>基本信息</strong></p>
+<ul>
+<li>
+<p>请求路径：/upload</p>
+</li>
+<li>
+<p>请求方式：POST</p>
+</li>
+<li>
+<p>接口描述：上传图片接口</p>
+<p><strong>请求参数</strong></p>
+<ul>
+<li>
+<p>参数格式：multipart/form-data</p>
+</li>
+<li>
+<p>参数说明：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: center">参数名称</th>
+          <th style="text-align: center">参数类型</th>
+          <th style="text-align: center">是否必须</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">image</td>
+          <td style="text-align: center">file</td>
+          <td style="text-align: center">是</td>
+      </tr>
+  </tbody>
+</table></div>
+</li>
+</ul>
+<p><strong>响应数据</strong></p>
+<ul>
+<li>参数格式：application/json</li>
+<li>参数说明：</li>
+</ul>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: center">参数名</th>
+          <th style="text-align: center">类型</th>
+          <th style="text-align: center">是否必须</th>
+          <th style="text-align: center">备注</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">code</td>
+          <td style="text-align: center">number</td>
+          <td style="text-align: center">必须</td>
+          <td style="text-align: center">响应码，1代表成功，0代表失败</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">msg</td>
+          <td style="text-align: center">string</td>
+          <td style="text-align: center">非必须</td>
+          <td style="text-align: center">提示信息</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">data</td>
+          <td style="text-align: center">object</td>
+          <td style="text-align: center">非必须</td>
+          <td style="text-align: center">返回的数据，上传图片的访问路径</td>
+      </tr>
+  </tbody>
+</table></div>
+<ul>
+<li>
+<p>响应数据样例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;code&#34;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;msg&#34;</span><span class="p">:</span> <span class="s2">&#34;success&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;data&#34;</span><span class="p">:</span> <span class="s2">&#34;https://web-framework.oss-cn-hangzhou.aliyuncs.com/2022-09-02-00-27-0400.jpg&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+</li>
+</ul>
+<h4 id="实现-1">实现
+</h4><p><strong>1). 引入阿里云OSS上传文件工具类（由官方的示例代码改造而来）</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.utils</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.common.auth.CredentialsProviderFactory</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.common.auth.EnvironmentVariableCredentialsProvider</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.common.comm.SignVersion</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Component</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.ByteArrayInputStream</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.time.LocalDate</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.time.format.DateTimeFormatter</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.UUID</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Component</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AliyunOSSOperator</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;https://oss-cn-beijing.aliyuncs.com&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">bucketName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;java-ai&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;cn-beijing&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">upload</span><span class="p">(</span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">content</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">originalFilename</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 从环境变量中获取访问凭证。运行本代码示例之前，请确保已设置环境变量OSS_ACCESS_KEY_ID和OSS_ACCESS_KEY_SECRET。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">EnvironmentVariableCredentialsProvider</span><span class="w"> </span><span class="n">credentialsProvider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CredentialsProviderFactory</span><span class="p">.</span><span class="na">newEnvironmentVariableCredentialsProvider</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 填写Object完整路径，例如202406/1.png。Object完整路径中不能包含Bucket名称。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//获取当前系统日期的字符串,格式为 yyyy/MM</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LocalDate</span><span class="p">.</span><span class="na">now</span><span class="p">().</span><span class="na">format</span><span class="p">(</span><span class="n">DateTimeFormatter</span><span class="p">.</span><span class="na">ofPattern</span><span class="p">(</span><span class="s">&#34;yyyy/MM&#34;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//生成一个新的不重复的文件名</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">newFileName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UUID</span><span class="p">.</span><span class="na">randomUUID</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">originalFilename</span><span class="p">.</span><span class="na">substring</span><span class="p">(</span><span class="n">originalFilename</span><span class="p">.</span><span class="na">lastIndexOf</span><span class="p">(</span><span class="s">&#34;.&#34;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">objectName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dir</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;/&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">newFileName</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 创建OSSClient实例。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">ClientBuilderConfiguration</span><span class="w"> </span><span class="n">clientBuilderConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ClientBuilderConfiguration</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">clientBuilderConfiguration</span><span class="p">.</span><span class="na">setSignatureVersion</span><span class="p">(</span><span class="n">SignVersion</span><span class="p">.</span><span class="na">V4</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">OSS</span><span class="w"> </span><span class="n">ossClient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OSSClientBuilder</span><span class="p">.</span><span class="na">create</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">endpoint</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">credentialsProvider</span><span class="p">(</span><span class="n">credentialsProvider</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">clientConfiguration</span><span class="p">(</span><span class="n">clientBuilderConfiguration</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">region</span><span class="p">(</span><span class="n">region</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">build</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">ossClient</span><span class="p">.</span><span class="na">putObject</span><span class="p">(</span><span class="n">bucketName</span><span class="p">,</span><span class="w"> </span><span class="n">objectName</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ByteArrayInputStream</span><span class="p">(</span><span class="n">content</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">ossClient</span><span class="p">.</span><span class="na">shutdown</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">endpoint</span><span class="p">.</span><span class="na">split</span><span class="p">(</span><span class="s">&#34;//&#34;</span><span class="p">)</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;//&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">bucketName</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;.&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">endpoint</span><span class="p">.</span><span class="na">split</span><span class="p">(</span><span class="s">&#34;//&#34;</span><span class="p">)</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;/&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">objectName</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>2). 修改UploadController代码</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.controller</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.Result</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.utils.AliyunOSSOperator</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.extern.slf4j.Slf4j</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.PostMapping</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.multipart.MultipartFile</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.File</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.UUID</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Slf4j</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@RestController</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">UploadController</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">AliyunOSSOperator</span><span class="w"> </span><span class="n">aliyunOSSOperator</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@PostMapping</span><span class="p">(</span><span class="s">&#34;/upload&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">upload</span><span class="p">(</span><span class="n">MultipartFile</span><span class="w"> </span><span class="n">file</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;上传文件：{}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">file</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">file</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// 生成唯一文件名</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">originalFilename</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">file</span><span class="p">.</span><span class="na">getOriginalFilename</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">extName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">originalFilename</span><span class="p">.</span><span class="na">substring</span><span class="p">(</span><span class="n">originalFilename</span><span class="p">.</span><span class="na">lastIndexOf</span><span class="p">(</span><span class="s">&#34;.&#34;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">uniqueFileName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UUID</span><span class="p">.</span><span class="na">randomUUID</span><span class="p">().</span><span class="na">toString</span><span class="p">().</span><span class="na">replace</span><span class="p">(</span><span class="s">&#34;-&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;&#34;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">extName</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// 上传文件</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aliyunOSSOperator</span><span class="p">.</span><span class="na">upload</span><span class="p">(</span><span class="n">file</span><span class="p">.</span><span class="na">getBytes</span><span class="p">(),</span><span class="w"> </span><span class="n">uniqueFileName</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">success</span><span class="p">(</span><span class="n">url</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">error</span><span class="p">(</span><span class="s">&#34;上传失败&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用 Apifox 测试：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0.png"
+	width="2560"
+	height="960"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0_hu_efd60424bd53f592.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0_hu_f3bed54bae691a5d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="266"
+		data-flex-basis="640px"
+	
+></p>
+<p>上传成功后就可以在浏览器中输入图片地址进行下载了</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%A1%88%E4%BE%8B%E9%98%BF%E9%87%8C%E4%BA%91%E4%B8%8A%E4%BC%A0.png"
+	width="1558"
+	height="698"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%A1%88%E4%BE%8B%E9%98%BF%E9%87%8C%E4%BA%91%E4%B8%8A%E4%BC%A0_hu_f25273d3a95a2566.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%A1%88%E4%BE%8B%E9%98%BF%E9%87%8C%E4%BA%91%E4%B8%8A%E4%BC%A0_hu_f534a91c397ab7c8.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="223"
+		data-flex-basis="535px"
+	
+></p>
+<p>打开阿里云可以发现已经上传成功了</p>
+<p>此时进行前后端联调测试发现测试成功了</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%A1%88%E4%BE%8B%E5%89%8D%E7%AB%AF%E6%B5%8B%E8%AF%95.png"
+	width="2057"
+	height="87"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%A1%88%E4%BE%8B%E5%89%8D%E7%AB%AF%E6%B5%8B%E8%AF%95_hu_c3ae4a643094b116.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%A1%88%E4%BE%8B%E5%89%8D%E7%AB%AF%E6%B5%8B%E8%AF%95_hu_5827be88010c22ac.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="2364"
+		data-flex-basis="5674px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%A1%88%E4%BE%8B%E5%9B%BE%E7%89%87%E6%B5%8B%E8%AF%95.png"
+	width="2025"
+	height="71"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%A1%88%E4%BE%8B%E5%9B%BE%E7%89%87%E6%B5%8B%E8%AF%95_hu_10e70744c80e5d7e.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%A1%88%E4%BE%8B%E5%9B%BE%E7%89%87%E6%B5%8B%E8%AF%95_hu_fa5bd44bcfa0797e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="2852"
+		data-flex-basis="6845px"
+	
+></p>
+<h4 id="功能优化">功能优化
+</h4><p>员工管理的新增功能我们已开发完成，但在我们所开发的程序中还有一些小问题，下面我们就来分析一下当前案例中存在的问题以及如何优化解决。</p>
+<p>在刚才我们制作的AliyunOSS操作的工具类中，我们直接将 endpoint、bucketName参数直接在java文件中写死了。如下所示：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E5%8A%9F%E8%83%BD%E4%BC%98%E5%8C%96.png"
+	width="1026"
+	height="260"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E5%8A%9F%E8%83%BD%E4%BC%98%E5%8C%96_hu_36e777241fe190e8.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E5%8A%9F%E8%83%BD%E4%BC%98%E5%8C%96_hu_145197e00ddac041.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="394"
+		data-flex-basis="947px"
+	
+></p>
+<p>如果后续，项目要部署到测试环境、上生产环境，我们需要来修改这两个参数。 而如果开发一个大型项目，所有用到的技术涉及到的这些个参数全部写死在java代码中，是非常不便于维护和管理的。</p>
+<p>那么对于这些容易变动的参数，我们可以将其配置在配置文件中，然后通过 <code>@Value</code> 注解来注解外部配置的属性。如下所示：<img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E5%8A%9F%E8%83%BD%E4%BC%98%E5%8C%961.png"
+	width="1026"
+	height="658"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E5%8A%9F%E8%83%BD%E4%BC%98%E5%8C%961_hu_aad720ba91706fa.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E5%8A%9F%E8%83%BD%E4%BC%98%E5%8C%961_hu_587b7fecd8846372.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="155"
+		data-flex-basis="374px"
+	
+></p>
+<p>具体实现代码如下：</p>
+<p><strong>1). application.yml</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c">#阿里云OSS</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">aliyun</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">oss</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l">https://oss-cn-beijing.aliyuncs.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">bucketName</span><span class="p">:</span><span class="w"> </span><span class="l">java-ai-26-5-07</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l">cn-beijing</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>2). AliyunOSSOperator</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.utils</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.common.auth.CredentialsProviderFactory</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.common.auth.EnvironmentVariableCredentialsProvider</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.common.comm.SignVersion</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Value</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Component</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.ByteArrayInputStream</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.time.LocalDate</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.time.format.DateTimeFormatter</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.UUID</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Component</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AliyunOSSOperator</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//方式一: 通过@Value注解一个属性一个属性的注入</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Value</span><span class="p">(</span><span class="s">&#34;${aliyun.oss.endpoint}&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">endpoint</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Value</span><span class="p">(</span><span class="s">&#34;${aliyun.oss.bucketName}&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">bucketName</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Value</span><span class="p">(</span><span class="s">&#34;${aliyun.oss.region}&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">region</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">upload</span><span class="p">(</span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">content</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">originalFilename</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 从环境变量中获取访问凭证。运行本代码示例之前，请确保已设置环境变量OSS_ACCESS_KEY_ID和OSS_ACCESS_KEY_SECRET。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">EnvironmentVariableCredentialsProvider</span><span class="w"> </span><span class="n">credentialsProvider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CredentialsProviderFactory</span><span class="p">.</span><span class="na">newEnvironmentVariableCredentialsProvider</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 填写Object完整路径，例如2024/06/1.png。Object完整路径中不能包含Bucket名称。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//获取当前系统日期的字符串,格式为 yyyy/MM</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LocalDate</span><span class="p">.</span><span class="na">now</span><span class="p">().</span><span class="na">format</span><span class="p">(</span><span class="n">DateTimeFormatter</span><span class="p">.</span><span class="na">ofPattern</span><span class="p">(</span><span class="s">&#34;yyyy/MM&#34;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//生成一个新的不重复的文件名</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">newFileName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UUID</span><span class="p">.</span><span class="na">randomUUID</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">originalFilename</span><span class="p">.</span><span class="na">substring</span><span class="p">(</span><span class="n">originalFilename</span><span class="p">.</span><span class="na">lastIndexOf</span><span class="p">(</span><span class="s">&#34;.&#34;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">objectName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dir</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;/&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">newFileName</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 创建OSSClient实例。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">ClientBuilderConfiguration</span><span class="w"> </span><span class="n">clientBuilderConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ClientBuilderConfiguration</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">clientBuilderConfiguration</span><span class="p">.</span><span class="na">setSignatureVersion</span><span class="p">(</span><span class="n">SignVersion</span><span class="p">.</span><span class="na">V4</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">OSS</span><span class="w"> </span><span class="n">ossClient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OSSClientBuilder</span><span class="p">.</span><span class="na">create</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">endpoint</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">credentialsProvider</span><span class="p">(</span><span class="n">credentialsProvider</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">clientConfiguration</span><span class="p">(</span><span class="n">clientBuilderConfiguration</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">region</span><span class="p">(</span><span class="n">region</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">build</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">ossClient</span><span class="p">.</span><span class="na">putObject</span><span class="p">(</span><span class="n">bucketName</span><span class="p">,</span><span class="w"> </span><span class="n">objectName</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ByteArrayInputStream</span><span class="p">(</span><span class="n">content</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">ossClient</span><span class="p">.</span><span class="na">shutdown</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">endpoint</span><span class="p">.</span><span class="na">split</span><span class="p">(</span><span class="s">&#34;//&#34;</span><span class="p">)</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;//&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">bucketName</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;.&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">endpoint</span><span class="p">.</span><span class="na">split</span><span class="p">(</span><span class="s">&#34;//&#34;</span><span class="p">)</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;/&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">objectName</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果只有一两个属性需要注入，而且不需要考虑复用性，使用<code>@Value</code>注解就可以了。<strong>@Value(&quot;${key}&quot;)</strong></p>
+<p>但是使用@Value注解注入配置文件的配置项，**如果配置项多，注入繁琐，不便于维护管理和复用。**如下所示:</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E5%8A%9F%E8%83%BD%E4%BC%98%E5%8C%962.png"
+	width="1026"
+	height="480"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E5%8A%9F%E8%83%BD%E4%BC%98%E5%8C%962_hu_e7ed96e6fc1cff74.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E5%8A%9F%E8%83%BD%E4%BC%98%E5%8C%962_hu_eed3cf661c2ff6c6.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="213"
+		data-flex-basis="513px"
+	
+></p>
+<p>那么有没有一种方式可以简化这些配置参数的注入呢？答案是肯定有，在Spring中给我们提供了一种简化方式，可以直接将配置文件中配置项的值自动的注入到对象的属性中。</p>
+<p>Spring提供的简化方式套路：</p>
+<p>1). 需要创建一个实现类，且实体类中的属性名和配置文件当中key的名字必须要一致</p>
+<p>​     比如：配置文件当中叫endpoint，实体类当中的属性也得叫endpoint，另外实体类当中的属性还需要提供 getter / setter方法</p>
+<p>2). 需要将实体类交给Spring的IOC容器管理，成为IOC容器当中的bean对象</p>
+<p>3). 在实体类上添加<code>@ConfigurationProperties</code>注解，并通过prefix属性来指定配置参数项的前缀<img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E5%8A%9F%E8%83%BD%E4%BC%98%E5%8C%963.png"
+	width="1026"
+	height="220"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E5%8A%9F%E8%83%BD%E4%BC%98%E5%8C%963_hu_4c4e099a49484ac7.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E5%8A%9F%E8%83%BD%E4%BC%98%E5%8C%963_hu_aa731ff43a5a6ffd.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="466"
+		data-flex-basis="1119px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E5%8A%9F%E8%83%BD%E4%BC%98%E5%8C%964.png"
+	width="1632"
+	height="499"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E5%8A%9F%E8%83%BD%E4%BC%98%E5%8C%964_hu_744b989922588690.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E5%8A%9F%E8%83%BD%E4%BC%98%E5%8C%964_hu_912342ee43a41143.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="327"
+		data-flex-basis="784px"
+	
+></p>
+<p><strong>具体实现步骤:</strong></p>
+<p>1). 定义实体类AliyunOSSProperties ，并交给IOC容器管理</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.utils</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.Data</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.context.properties.ConfigurationProperties</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Component</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Component</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@ConfigurationProperties</span><span class="p">(</span><span class="n">prefix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;aliyun.oss&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AliyunOSSProperties</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">endpoint</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">bucketName</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">region</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>2). 修改AliyunOSSOperator</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.utils</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.common.auth.CredentialsProviderFactory</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.common.auth.EnvironmentVariableCredentialsProvider</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.aliyun.oss.common.comm.SignVersion</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Value</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Component</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.ByteArrayInputStream</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.time.LocalDate</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.time.format.DateTimeFormatter</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.UUID</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Component</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AliyunOSSOperator</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//方式一: 通过@Value注解一个属性一个属性的注入</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//@Value(&#34;${aliyun.oss.endpoint}&#34;)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//private String endpoint;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//@Value(&#34;${aliyun.oss.bucketName}&#34;)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//private String bucketName;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//@Value(&#34;${aliyun.oss.region}&#34;)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//private String region;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">AliyunOSSProperties</span><span class="w"> </span><span class="n">aliyunOSSProperties</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">upload</span><span class="p">(</span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">content</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">originalFilename</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aliyunOSSProperties</span><span class="p">.</span><span class="na">getEndpoint</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">bucketName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aliyunOSSProperties</span><span class="p">.</span><span class="na">getBucketName</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aliyunOSSProperties</span><span class="p">.</span><span class="na">getRegion</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 从环境变量中获取访问凭证。运行本代码示例之前，请确保已设置环境变量OSS_ACCESS_KEY_ID和OSS_ACCESS_KEY_SECRET。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">EnvironmentVariableCredentialsProvider</span><span class="w"> </span><span class="n">credentialsProvider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CredentialsProviderFactory</span><span class="p">.</span><span class="na">newEnvironmentVariableCredentialsProvider</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 填写Object完整路径，例如2024/06/1.png。Object完整路径中不能包含Bucket名称。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//获取当前系统日期的字符串,格式为 yyyy/MM</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LocalDate</span><span class="p">.</span><span class="na">now</span><span class="p">().</span><span class="na">format</span><span class="p">(</span><span class="n">DateTimeFormatter</span><span class="p">.</span><span class="na">ofPattern</span><span class="p">(</span><span class="s">&#34;yyyy/MM&#34;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//生成一个新的不重复的文件名</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">newFileName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UUID</span><span class="p">.</span><span class="na">randomUUID</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">originalFilename</span><span class="p">.</span><span class="na">substring</span><span class="p">(</span><span class="n">originalFilename</span><span class="p">.</span><span class="na">lastIndexOf</span><span class="p">(</span><span class="s">&#34;.&#34;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">objectName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dir</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;/&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">newFileName</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 创建OSSClient实例。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">ClientBuilderConfiguration</span><span class="w"> </span><span class="n">clientBuilderConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ClientBuilderConfiguration</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">clientBuilderConfiguration</span><span class="p">.</span><span class="na">setSignatureVersion</span><span class="p">(</span><span class="n">SignVersion</span><span class="p">.</span><span class="na">V4</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">OSS</span><span class="w"> </span><span class="n">ossClient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OSSClientBuilder</span><span class="p">.</span><span class="na">create</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">endpoint</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">credentialsProvider</span><span class="p">(</span><span class="n">credentialsProvider</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">clientConfiguration</span><span class="p">(</span><span class="n">clientBuilderConfiguration</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">region</span><span class="p">(</span><span class="n">region</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">build</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">ossClient</span><span class="p">.</span><span class="na">putObject</span><span class="p">(</span><span class="n">bucketName</span><span class="p">,</span><span class="w"> </span><span class="n">objectName</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ByteArrayInputStream</span><span class="p">(</span><span class="n">content</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">ossClient</span><span class="p">.</span><span class="na">shutdown</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">endpoint</span><span class="p">.</span><span class="na">split</span><span class="p">(</span><span class="s">&#34;//&#34;</span><span class="p">)</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;//&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">bucketName</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;.&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">endpoint</span><span class="p">.</span><span class="na">split</span><span class="p">(</span><span class="s">&#34;//&#34;</span><span class="p">)</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;/&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">objectName</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div>
 </section>
 
 
