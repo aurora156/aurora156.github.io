@@ -241,6 +241,35 @@
         <li><a href="#前后端联调">前后端联调</a></li>
       </ol>
     </li>
+    <li><a href="#修改员工">修改员工</a>
+      <ol>
+        <li><a href="#查询回显">查询回显</a>
+          <ol>
+            <li><a href="#接口文档-1">接口文档</a></li>
+            <li><a href="#思路分析-1">思路分析</a></li>
+            <li><a href="#代码实现">代码实现</a></li>
+            <li><a href="#功能测试-1">功能测试</a></li>
+            <li><a href="#前后端联调测试">前后端联调测试</a></li>
+          </ol>
+        </li>
+        <li><a href="#修改员工-1">修改员工</a>
+          <ol>
+            <li><a href="#接口文档-2">接口文档</a></li>
+            <li><a href="#思路分析-2">思路分析</a></li>
+            <li><a href="#代码实现-1">代码实现</a></li>
+            <li><a href="#功能测试-2">功能测试</a></li>
+            <li><a href="#前后端联调测试-1">前后端联调测试</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#异常处理">异常处理</a>
+      <ol>
+        <li><a href="#问题分析">问题分析</a></li>
+        <li><a href="#解决方案">解决方案</a></li>
+        <li><a href="#全局异常处理器">全局异常处理器</a></li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -650,6 +679,827 @@
 		class="gallery-image" 
 		data-flex-grow="372"
 		data-flex-basis="894px"
+	
+></p>
+<h2 id="修改员工">修改员工
+</h2><h3 id="查询回显">查询回显
+</h3><h4 id="接口文档-1">接口文档
+</h4><p>地址：<a class="link" href="https://heuqqdmbyk.feishu.cn/wiki/GyZVwpRf6ir89qkKtFqc0HlTnhg"  target="_blank" rel="noopener"
+    >接口文档 - 飞书云文档</a></p>
+<p>参照资料中提供的接口文档，查看 <strong>员工管理</strong>  -&gt; <strong>根据ID查询</strong> 接口的描述。</p>
+<h4 id="思路分析-1">思路分析
+</h4><p>在查询回显时，既需要查询出员工的基本信息，又需要查询出该员工的工作经历信息。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%9F%A5%E8%AF%A2%E6%80%9D%E8%B7%AF.png"
+	width="1026"
+	height="518"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%9F%A5%E8%AF%A2%E6%80%9D%E8%B7%AF_hu_a103288aa5a5f2a3.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%9F%A5%E8%AF%A2%E6%80%9D%E8%B7%AF_hu_c6f78eb42d971891.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="198"
+		data-flex-basis="475px"
+	
+></p>
+<p>我们可以先通过一条SQL语句（根据id进行查询员工信息），查询出指定员工的基本信息，及其员工的工作经历信息。SQL如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="o">*</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">ee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="n">ee_id</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">ee</span><span class="p">.</span><span class="k">begin</span><span class="w"> </span><span class="n">ee_begin</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">ee</span><span class="p">.</span><span class="k">end</span><span class="w"> </span><span class="n">ee_end</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">ee</span><span class="p">.</span><span class="n">company</span><span class="w"> </span><span class="n">ee_company</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">ee</span><span class="p">.</span><span class="n">job</span><span class="w"> </span><span class="n">ee_job</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">from</span><span class="w"> </span><span class="n">emp</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">left</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">emp_expr</span><span class="w"> </span><span class="n">ee</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ee</span><span class="p">.</span><span class="n">emp_id</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">39</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>具体的实现思路如下：<img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%9F%A5%E8%AF%A2%E6%80%9D%E8%B7%AF1.png"
+	width="1026"
+	height="255"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%9F%A5%E8%AF%A2%E6%80%9D%E8%B7%AF1_hu_18bba8df3dd0a165.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%9F%A5%E8%AF%A2%E6%80%9D%E8%B7%AF1_hu_fc805003cb16ce69.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="402"
+		data-flex-basis="965px"
+	
+></p>
+<h4 id="代码实现">代码实现
+</h4><p>1). <code>EmpController</code> 添加 <code>getInfo</code> 用来根据ID查询员工数据，用于页面回显</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 查询回显
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&#34;/{id}&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">getInfo</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">id</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;根据id查询员工的详细信息&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Emp</span><span class="w"> </span><span class="n">emp</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">empService</span><span class="p">.</span><span class="na">getInfo</span><span class="p">(</span><span class="n">id</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">success</span><span class="p">(</span><span class="n">emp</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>2). <code>EmpService</code> 接口中增加 <code>getInfo</code> 方法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 根据ID查询员工的详细信息
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">Emp</span><span class="w"> </span><span class="nf">getInfo</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">id</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>3). <code>EmpServiceImpl</code> 实现类中实现 <code>getInfo</code> 方法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">Emp</span><span class="w"> </span><span class="nf">getInfo</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">empMapper</span><span class="p">.</span><span class="na">getById</span><span class="p">(</span><span class="n">id</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>4). <code>EmpMapper</code> 接口中增加 <code>getById</code> 方法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 根据ID查询员工详细信息
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">Emp</span><span class="w"> </span><span class="nf">getById</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">id</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>5).  <code>EmpMapper.xml</code> 配置文件中定义对应的SQL</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="c">&lt;!--自定义结果集ResultMap--&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c">&lt;!--通过resultMap进行手动结果封装--&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">&#34;empResultMap&#34;</span> <span class="na">type=</span><span class="s">&#34;com.itheima.pojo.Emp&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="c">&lt;!-- id用于封装id --&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">&#34;id&#34;</span> <span class="na">property=</span><span class="s">&#34;id&#34;</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="c">&lt;!-- result用于封装普通属性 --&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="c">&lt;!-- property用于往这个字段里面进行封装 --&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&#34;username&#34;</span> <span class="na">property=</span><span class="s">&#34;username&#34;</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&#34;password&#34;</span> <span class="na">property=</span><span class="s">&#34;password&#34;</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&#34;name&#34;</span> <span class="na">property=</span><span class="s">&#34;name&#34;</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&#34;gender&#34;</span> <span class="na">property=</span><span class="s">&#34;gender&#34;</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&#34;phone&#34;</span> <span class="na">property=</span><span class="s">&#34;phone&#34;</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&#34;job&#34;</span> <span class="na">property=</span><span class="s">&#34;job&#34;</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&#34;salary&#34;</span> <span class="na">property=</span><span class="s">&#34;salary&#34;</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&#34;image&#34;</span> <span class="na">property=</span><span class="s">&#34;image&#34;</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&#34;entry_date&#34;</span> <span class="na">property=</span><span class="s">&#34;entryDate&#34;</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&#34;dept_id&#34;</span> <span class="na">property=</span><span class="s">&#34;deptId&#34;</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&#34;create_time&#34;</span> <span class="na">property=</span><span class="s">&#34;createTime&#34;</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&#34;update_time&#34;</span> <span class="na">property=</span><span class="s">&#34;updateTime&#34;</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c">&lt;!--封装exprList--&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="c">&lt;!-- collection用于封装集合 --&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;collection</span> <span class="na">property=</span><span class="s">&#34;exprList&#34;</span> <span class="na">ofType=</span><span class="s">&#34;com.itheima.pojo.EmpExpr&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">&#34;ee_id&#34;</span> <span class="na">property=</span><span class="s">&#34;id&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&#34;ee_company&#34;</span> <span class="na">property=</span><span class="s">&#34;company&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&#34;ee_job&#34;</span> <span class="na">property=</span><span class="s">&#34;job&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&#34;ee_begin&#34;</span> <span class="na">property=</span><span class="s">&#34;begin&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&#34;ee_end&#34;</span> <span class="na">property=</span><span class="s">&#34;end&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&#34;ee_empid&#34;</span> <span class="na">property=</span><span class="s">&#34;empId&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/collection&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/resultMap&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c">&lt;!--根据ID查询员工的详细信息--&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;getById&#34;</span> <span class="na">resultMap=</span><span class="s">&#34;empResultMap&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    select e.*,
+</span></span><span class="line"><span class="cl">        ee.id ee_id,
+</span></span><span class="line"><span class="cl">        ee.emp_id ee_empid,
+</span></span><span class="line"><span class="cl">        ee.begin ee_begin,
+</span></span><span class="line"><span class="cl">        ee.end ee_end,
+</span></span><span class="line"><span class="cl">        ee.company ee_company,
+</span></span><span class="line"><span class="cl">        ee.job ee_job
+</span></span><span class="line"><span class="cl">    from emp e left join emp_expr ee on e.id = ee.emp_id
+</span></span><span class="line"><span class="cl">    where e.id = #{id}
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/select&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在这一步中我们先按之前的操作步骤只将sql语句复制粘贴进<code>EmpMapper.xml</code> 配置文件中，此时打开apifox就会发现报了500的错误，如果要解决这种步骤就需要按照上述步骤进行手动结果封装</p>
+<p>我们需要将结果封装到一个Emp对象当中，但是这条sql语句执行完后发现了两条数据，两条数据是没有办法往一个对象当中封装的，所以此时就报错了，但是根据id查询员工信息只能返回一个员工对象（id是主键，唯一的），之所以返回两条数据是因为这个员工有两段工作经历，最终结果应该封装到一个Emp员工对象当中，但是我们使用Mybatis将结果自动封装，那么两条数据就会封装到两个对象当中，如果返回的结果是单个对象，那么就会报错</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E9%94%99%E8%AF%AF%E4%BF%A1%E6%81%AF.png"
+	width="1991"
+	height="885"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E9%94%99%E8%AF%AF%E4%BF%A1%E6%81%AF_hu_f31f87dad4a4b85e.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E9%94%99%E8%AF%AF%E4%BF%A1%E6%81%AF_hu_30dff8564a35cd53.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="224"
+		data-flex-basis="539px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E9%94%99%E8%AF%AF%E4%BF%A1%E6%81%AF1.png"
+	width="2348"
+	height="235"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E9%94%99%E8%AF%AF%E4%BF%A1%E6%81%AF1_hu_d46c3d48f4aff758.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E9%94%99%E8%AF%AF%E4%BF%A1%E6%81%AF1_hu_27081ca461729917.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="999"
+		data-flex-basis="2397px"
+	
+></p>
+<p>在这种一对多的查询中，我们要想成功的封装的结果，需要手动的基于 <code>&lt;resultMap&gt;</code> 来进行封装结果。</p>
+<blockquote>
+<p>Mybatis中封装查询结果，什么时候用 resultType，什么时候用resultMap ？</p>
+<ul>
+<li>如果查询返回的字段名与实体的属性名可以直接对应上，用resultType 自动封装。</li>
+<li>如果查询返回的字段名与实体的属性名对应不上，或实体属性比较复杂，可以通过resultMap手动封装 。</li>
+</ul>
+</blockquote>
+<h4 id="功能测试-1">功能测试
+</h4><p>重新启动服务，基于Apifox进行接口测试。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%9F%A5%E8%AF%A2%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95.png"
+	width="2560"
+	height="1329"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%9F%A5%E8%AF%A2%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95_hu_bf0bf5d0b9fd8a42.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%9F%A5%E8%AF%A2%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95_hu_25a6789b4eb5e68.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="462px"
+	
+></p>
+<h4 id="前后端联调测试">前后端联调测试
+</h4><p>打开浏览器，进行前后端联调测试。</p>
+<p>选择与我们刚刚查询id相同的员工信息，点击编辑，发现员工的信息都展示出来了</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%9F%A5%E8%AF%A2%E5%89%8D%E7%AB%AF%E6%B5%8B%E8%AF%95.png"
+	width="1276"
+	height="744"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%9F%A5%E8%AF%A2%E5%89%8D%E7%AB%AF%E6%B5%8B%E8%AF%95_hu_ffc8c5b54dc8bf20.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%9F%A5%E8%AF%A2%E5%89%8D%E7%AB%AF%E6%B5%8B%E8%AF%95_hu_5b33fad2cea92830.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="171"
+		data-flex-basis="411px"
+	
+></p>
+<h3 id="修改员工-1">修改员工
+</h3><p>查询回显之后，就可以在页面上修改员工的信息了。</p>
+<ul>
+<li>当用户修改完数据之后，点击保存按钮，就需要将数据提交到服务端，然后服务端需要将修改后的数据更新到数据库中 。</li>
+<li>而此次更新的时候，既需要更新员工的基本信息； 又需要更新员工的工作经历信息 。</li>
+</ul>
+<h4 id="接口文档-2">接口文档
+</h4><p>地址：<a class="link" href="https://heuqqdmbyk.feishu.cn/wiki/GyZVwpRf6ir89qkKtFqc0HlTnhg"  target="_blank" rel="noopener"
+    >接口文档 - 飞书云文档</a></p>
+<p>参照资料中提供的接口文档，查看 <strong>员工管理</strong>  -&gt; <strong>修改员工</strong> 接口的描述。</p>
+<h4 id="思路分析-2">思路分析
+</h4><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E4%BF%AE%E6%94%B9%E6%80%9D%E8%B7%AF.png"
+	width="1026"
+	height="270"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E4%BF%AE%E6%94%B9%E6%80%9D%E8%B7%AF_hu_7006c3b7a8ce4dc2.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E4%BF%AE%E6%94%B9%E6%80%9D%E8%B7%AF_hu_9606b8281dd0aee4.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="380"
+		data-flex-basis="912px"
+	
+></p>
+<p>在修改员工经历的操作时，有三种情况：增加员工信息，删除员工信息，修改员工信息，对于修改员工信息，我们可以先删再加</p>
+<h4 id="代码实现-1">代码实现
+</h4><p>1). <code>EmpController</code> 增加 <code>update</code> 方法接收请求参数，响应数据</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 更新员工信息
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@PutMapping</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">Emp</span><span class="w"> </span><span class="n">emp</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;修改员工信息, {}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">emp</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">empService</span><span class="p">.</span><span class="na">update</span><span class="p">(</span><span class="n">emp</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">success</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>2). <code>EmpService</code> 接口增加 <code>update</code> 方法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 更新员工信息
+</span></span></span><span class="line"><span class="cl"><span class="cm">* @param emp
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">Emp</span><span class="w"> </span><span class="n">emp</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>3).  <code>EmpServiceImpl</code>实现类实现 <code>update</code> 方法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Transactional</span><span class="p">(</span><span class="n">rollbackFor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">Exception</span><span class="p">.</span><span class="na">class</span><span class="p">})</span><span class="c1">//只有一个元素可以省略{}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">Emp</span><span class="w"> </span><span class="n">emp</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//1. 根据ID更新员工基本信息</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">emp</span><span class="p">.</span><span class="na">setUpdateTime</span><span class="p">(</span><span class="n">LocalDateTime</span><span class="p">.</span><span class="na">now</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">empMapper</span><span class="p">.</span><span class="na">updateById</span><span class="p">(</span><span class="n">emp</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//2. 根据员工ID删除员工的工作经历信息 【先删除原有的】</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//Arrays.asList：快速将一个数组（或一组元素）转换成一个 List 集合。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">empExprMapper</span><span class="p">.</span><span class="na">deleteByEmpIds</span><span class="p">(</span><span class="n">Arrays</span><span class="p">.</span><span class="na">asList</span><span class="p">(</span><span class="n">emp</span><span class="p">.</span><span class="na">getId</span><span class="p">()));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//3. 新增员工的工作经历数据 【再新增新的】</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Integer</span><span class="w"> </span><span class="n">empId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">emp</span><span class="p">.</span><span class="na">getId</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">EmpExpr</span><span class="o">&gt;</span><span class="w"> </span><span class="n">exprList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">emp</span><span class="p">.</span><span class="na">getExprList</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">CollectionUtils</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">(</span><span class="n">exprList</span><span class="p">)){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">exprList</span><span class="p">.</span><span class="na">forEach</span><span class="p">(</span><span class="n">empExpr</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">empExpr</span><span class="p">.</span><span class="na">setEmpId</span><span class="p">(</span><span class="n">empId</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">empExprMapper</span><span class="p">.</span><span class="na">insertBatch</span><span class="p">(</span><span class="n">exprList</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>4). <code>EmpMapper</code> 接口中增加 <code>updateById</code> 方法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 更新员工基本信息
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="w"> </span><span class="nf">updateById</span><span class="p">(</span><span class="n">Emp</span><span class="w"> </span><span class="n">emp</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>5). <code>EmpMapper.xml</code> 配置文件中定义对应的SQL语句，基于动态SQL更新员工信息</p>
+<p>程序优化后：基于动态SQL优化</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="c">&lt;!--根据ID更新员工信息--&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;update</span> <span class="na">id=</span><span class="s">&#34;updateById&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    update emp
+</span></span><span class="line"><span class="cl">    <span class="c">&lt;!--set标签：会自动生成set关键字；会自动的删除更新后多余的&#34;,&#34;--&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;set&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;username != null and username != &#39;&#39;&#34;</span><span class="nt">&gt;</span>username = #{username},<span class="nt">&lt;/if&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;password != null and password != &#39;&#39;&#34;</span><span class="nt">&gt;</span>password = #{password},<span class="nt">&lt;/if&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;name != null and name != &#39;&#39;&#34;</span><span class="nt">&gt;</span>name = #{name},<span class="nt">&lt;/if&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;gender != null&#34;</span><span class="nt">&gt;</span>gender = #{gender},<span class="nt">&lt;/if&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;phone != null and phone != &#39;&#39;&#34;</span><span class="nt">&gt;</span>phone = #{phone},<span class="nt">&lt;/if&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;job != null&#34;</span><span class="nt">&gt;</span>job = #{job},<span class="nt">&lt;/if&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;salary != null&#34;</span><span class="nt">&gt;</span>salary = #{salary},<span class="nt">&lt;/if&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;image != null and image != &#39;&#39;&#34;</span><span class="nt">&gt;</span>image = #{image},<span class="nt">&lt;/if&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;entryDate != null&#34;</span><span class="nt">&gt;</span>entry_date = #{entryDate},<span class="nt">&lt;/if&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;deptId != null&#34;</span><span class="nt">&gt;</span>dept_id = #{deptId},<span class="nt">&lt;/if&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;updateTime != null&#34;</span><span class="nt">&gt;</span>update_time = #{updateTime},<span class="nt">&lt;/if&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/set&gt;</span>
+</span></span><span class="line"><span class="cl">    where id = #{id}
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/update&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>初版的配置文件如下：【不灵活、扩展性差】</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;update</span> <span class="na">id=</span><span class="s">&#34;updateById&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        UPDATE emp
+</span></span><span class="line"><span class="cl">	    SET username = &#39;#{username}&#39;,
+</span></span><span class="line"><span class="cl">        	password = &#39;#{password}&#39;,
+</span></span><span class="line"><span class="cl">        	name = &#39;#{name}&#39;,
+</span></span><span class="line"><span class="cl">        	gender = #{gender},
+</span></span><span class="line"><span class="cl">        	phone = &#39;#{phone}&#39;,
+</span></span><span class="line"><span class="cl">        	job = #{job},
+</span></span><span class="line"><span class="cl">        	salary = #{salary}
+</span></span><span class="line"><span class="cl">        	image = #{image},
+</span></span><span class="line"><span class="cl">        	entry_date = #{entryDate},
+</span></span><span class="line"><span class="cl">        	dept_id = #{deptId},	
+</span></span><span class="line"><span class="cl">        	update_time = #{updateTime}
+</span></span><span class="line"><span class="cl">        where id = #{id}
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/update&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="功能测试-2">功能测试
+</h4><p>重新启动服务，打开 Apifox 进行接口测试。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E4%BF%AE%E6%94%B9%E5%91%98%E5%B7%A5.png"
+	width="2113"
+	height="1065"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E4%BF%AE%E6%94%B9%E5%91%98%E5%B7%A5_hu_800105951c73da92.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E4%BF%AE%E6%94%B9%E5%91%98%E5%B7%A5_hu_118f5b6d1604a71b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="198"
+		data-flex-basis="476px"
+	
+></p>
+<h4 id="前后端联调测试-1">前后端联调测试
+</h4><p>修改前：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E4%BF%AE%E6%94%B9%E5%89%8D.png"
+	width="1276"
+	height="677"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E4%BF%AE%E6%94%B9%E5%89%8D_hu_83a36c5668f28b3.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E4%BF%AE%E6%94%B9%E5%89%8D_hu_b0accf0a5c13856c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="188"
+		data-flex-basis="452px"
+	
+></p>
+<p>修改后再次点击编辑进行查看信息：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E4%BF%AE%E6%94%B9%E5%90%8E.png"
+	width="1275"
+	height="844"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E4%BF%AE%E6%94%B9%E5%90%8E_hu_28b940668447ce68.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E4%BF%AE%E6%94%B9%E5%90%8E_hu_ac40b3d3072ae598.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="151"
+		data-flex-basis="362px"
+	
+></p>
+<h2 id="异常处理">异常处理
+</h2><h3 id="问题分析">问题分析
+</h3><p>当我们在修改部门数据的时候，如果输入一个在数据库表中已经存在的手机号，点击保存按钮之后，前端提示了错误信息，但是返回的结果并不是统一的响应结果，而是框架默认返回的错误结果 。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90.png"
+	width="2550"
+	height="1151"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90_hu_64940f959365751.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90_hu_2297be8157a0fd65.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="221"
+		data-flex-basis="531px"
+	
+></p>
+<p>状态码为500，表示服务器端异常，我们打开idea，来看一下，服务器端出了什么问题。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%901.png"
+	width="2382"
+	height="509"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%901_hu_d8d7b048c008eb5b.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%901_hu_41a1a0e0e98989f.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="467"
+		data-flex-basis="1123px"
+	
+></p>
+<p>上述错误信息的含义是，<code>emp</code>员工表的<code>phone</code>手机号字段的值重复了，因为在数据库表<code>emp</code>中已经有了<code>13390901232</code>这个手机号了，我们之前设计这张表时，为<code>phone</code>字段建议了唯一约束，所以该字段的值是不能重复的。</p>
+<p>而当我们再将该员工的手机号也设置为 <code>13390901232</code>，就违反了唯一约束，此时就会报错。</p>
+<p>我们来看一下出现异常之后，最终服务端给前端响应回来的数据长什么样。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%902.png"
+	width="663"
+	height="213"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%902_hu_2415d5d508799744.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%902_hu_437247b4d30dc11d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="311"
+		data-flex-basis="747px"
+	
+></p>
+<p>响应回来的数据是一个JSON格式的数据。但这种JSON格式的数据还是我们开发规范当中所提到的统一响应结果Result吗？显然并不是。由于返回的数据不符合开发规范，所以前端并不能解析出响应的JSON数据 。</p>
+<p>接下来我们需要思考的是出现异常之后，当前案例项目的异常是怎么处理的？ 答案：没有做任何的异常处理</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%903.png"
+	width="416"
+	height="438"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%903_hu_ee0a1c5c2d95fcbf.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%903_hu_6aff299288789c7a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="94"
+		data-flex-basis="227px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%903.1.png"
+	width="1227"
+	height="1028"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%903.1_hu_75a005000f288a9e.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%903.1_hu_f60700102d82ae7b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="119"
+		data-flex-basis="286px"
+	
+></p>
+<p>当我们没有做任何的异常处理时，我们三层架构处理异常的方案：</p>
+<ul>
+<li>Mapper接口在操作数据库的时候出错了，此时异常会往上抛(谁调用Mapper就抛给谁)，会抛给service。</li>
+<li>service 中也存在异常了，会抛给controller。</li>
+<li>而在controller当中，我们也没有做任何的异常处理，所以最终异常会再往上抛。最终抛给前端框架之后，框架就会返回一个JSON格式的数据，里面封装的就是错误的信息，但是框架返回的JSON格式的数据并不符合我们的开发规范。</li>
+</ul>
+<h3 id="解决方案">解决方案
+</h3><p>那么在三层构架项目中，出现了异常，该如何处理?</p>
+<ul>
+<li><strong>方案一：在所有Controller的所有方法中进行try…catch处理</strong></li>
+</ul>
+<p>缺点：代码臃肿（不推荐）</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%881.png"
+	width="565"
+	height="561"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%881_hu_7770a16e490071e5.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%881_hu_4900d34d352cc98.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="100"
+		data-flex-basis="241px"
+	
+></p>
+<ul>
+<li><strong>方案二：全局异常处理器</strong></li>
+</ul>
+<p>好处：简单、优雅（推荐）</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%882.png"
+	width="552"
+	height="453"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%882_hu_d29220c7a1c2943d.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%882_hu_9e8f901e6fb12f14.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="121"
+		data-flex-basis="292px"
+	
+></p>
+<h3 id="全局异常处理器">全局异常处理器
+</h3><p>我们该怎么样定义全局异常处理器？</p>
+<ul>
+<li>定义全局异常处理器非常简单，就是定义一个类，在类上加上一个注解@RestControllerAdvice，加上这个注解就代表我们定义了一个全局异常处理器。</li>
+<li>在全局异常处理器当中，需要定义一个方法来捕获异常，在这个方法上需要加上注解@ExceptionHandler。通过@ExceptionHandler注解当中的value属性来指定我们要捕获的是哪一类型的异常。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 全局异常处理器
+</span></span></span><span class="line"><span class="cl"><span class="cm">* */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">//记录日志</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Slf4j</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@RestControllerAdvice</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">GlobalExceptionHandler</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//处理异常</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@ExceptionHandler</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">ex</span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">){</span><span class="c1">//方法形参中指定能够处理的异常类型</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//使用日志</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">log</span><span class="p">.</span><span class="na">error</span><span class="p">(</span><span class="s">&#34;程序出错啦~&#34;</span><span class="p">,</span><span class="n">e</span><span class="p">);</span><span class="c1">//注意：这里的error方法要使用第二个带两个参数的才可以抛出异常</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//e.printStackTrace();//打印堆栈中的异常信息</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//捕获到异常之后，响应一个标准的Result</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">error</span><span class="p">(</span><span class="s">&#34;对不起,操作失败,请联系管理员&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>@RestControllerAdvice = @ControllerAdvice + @ResponseBody</p>
+<p>处理异常的方法返回值会转换为json后再响应给前端</p>
+</blockquote>
+<p>重新启动SpringBoot服务，打开浏览器，再来测试一下 修改员工 这个操作，我们依然设置已存在的 <code>13390901232</code>这个手机号：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%8D%95%E8%8E%B7%E5%BC%82%E5%B8%B8.png"
+	width="1305"
+	height="888"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%8D%95%E8%8E%B7%E5%BC%82%E5%B8%B8_hu_b9453e6041870d9a.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%8D%95%E8%8E%B7%E5%BC%82%E5%B8%B8_hu_ba8a0a527d2c06b5.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="146"
+		data-flex-basis="352px"
+	
+></p>
+<p>此时，我们可以看到，出现异常之后，异常已经被全局异常处理器捕获了。然后返回的错误信息，被前端程序正常解析，然后提示出了对应的错误提示信息。</p>
+<blockquote>
+<p>以上就是全局异常处理器的使用，主要涉及到两个注解：</p>
+<ul>
+<li>@RestControllerAdvice  //表示当前类为全局异常处理器</li>
+<li>@ExceptionHandler  //指定可以捕获哪种类型的异常进行处理</li>
+</ul>
+</blockquote>
+<p>那么我们可不可以让这个异常捕获的更精准一点呢？具体是哪里出现异常了？ 答案是可以的</p>
+<p>打开控制台我们发现了下面这个异常，可以对其进行捕获，然后获取这个异常的堆栈信息，之后可以捕获到这个异常的手机号，再对其进行提示手机号重复了</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%8D%95%E8%8E%B7%E5%BC%82%E5%B8%B81.png"
+	width="2354"
+	height="636"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%8D%95%E8%8E%B7%E5%BC%82%E5%B8%B81_hu_72017da2e077e622.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%8D%95%E8%8E%B7%E5%BC%82%E5%B8%B81_hu_cec4441c5066b96d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="370"
+		data-flex-basis="888px"
+	
+></p>
+<p>按照继承关系从下往上匹配</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%8D%95%E8%8E%B7%E5%BC%82%E5%B8%B82.png"
+	width="541"
+	height="1281"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%8D%95%E8%8E%B7%E5%BC%82%E5%B8%B82_hu_99299904abc4ad5f.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%8D%95%E8%8E%B7%E5%BC%82%E5%B8%B82_hu_9012630db570940d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="42"
+		data-flex-basis="101px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%8D%95%E8%8E%B7%E5%BC%82%E5%B8%B82.1.png"
+	width="1761"
+	height="43"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%8D%95%E8%8E%B7%E5%BC%82%E5%B8%B82.1_hu_aa7f9b977ecad0b4.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%8D%95%E8%8E%B7%E5%BC%82%E5%B8%B82.1_hu_c509c09153784ce8.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="4095"
+		data-flex-basis="9828px"
+	
+></p>
+<p>根据这个异常进行编写代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@ExceptionHandler</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">//如果是DuplicateKeyException，那么这个处理器就会生效，如果是别的上面的Exception就会生效</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">handleDuplicateKeyException</span><span class="p">(</span><span class="n">DuplicateKeyException</span><span class="w"> </span><span class="n">e</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">log</span><span class="p">.</span><span class="na">error</span><span class="p">(</span><span class="s">&#34;程序出错啦~&#34;</span><span class="p">,</span><span class="n">e</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 获取异常的具体描述信息，通常包含 &#34;Duplicate entry &#39;xxx&#39; for key &#39;xxx&#39;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">getMessage</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 定位 &#34;Duplicate entry&#34; 关键字的位置，作为截取错误信息的起点</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">message</span><span class="p">.</span><span class="na">indexOf</span><span class="p">(</span><span class="s">&#34;Duplicate entry&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 从关键字位置开始截取字符串，获取包含具体重复值的片段</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">errMsg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">message</span><span class="p">.</span><span class="na">substring</span><span class="p">(</span><span class="n">i</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 按照空格将截取的字符串分割成数组</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">arr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">errMsg</span><span class="p">.</span><span class="na">split</span><span class="p">(</span><span class="s">&#34; &#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 数组下标为2的元素通常是具体的重复值（如 &#39;admin&#39;），拼接提示语后返回</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 注意：这里假设了异常信息的格式是固定的，且重复值在数组的第三个位置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">error</span><span class="p">(</span><span class="n">arr</span><span class="o">[</span><span class="n">2</span><span class="o">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;已存在&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>此时再来测试上面的手机号就会出现以下报错信息：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%89%8B%E6%9C%BA%E5%8F%B7%E5%87%BA%E9%94%99.png"
+	width="1466"
+	height="948"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%89%8B%E6%9C%BA%E5%8F%B7%E5%87%BA%E9%94%99_hu_b13cd3fd9a27d5dd.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%89%8B%E6%9C%BA%E5%8F%B7%E5%87%BA%E9%94%99_hu_d1a5bf8e7390d3c5.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="154"
+		data-flex-basis="371px"
+	
+></p>
+<p>再来测试用户名重复：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E7%94%A8%E6%88%B7%E5%90%8D%E5%87%BA%E9%94%99.png"
+	width="1411"
+	height="968"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E7%94%A8%E6%88%B7%E5%90%8D%E5%87%BA%E9%94%99_hu_4fa404b24ac0c8d.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E7%94%A8%E6%88%B7%E5%90%8D%E5%87%BA%E9%94%99_hu_f5f9633424936ff6.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="145"
+		data-flex-basis="349px"
 	
 ></p>
 
