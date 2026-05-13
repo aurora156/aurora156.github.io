@@ -270,6 +270,28 @@
         <li><a href="#全局异常处理器">全局异常处理器</a></li>
       </ol>
     </li>
+    <li><a href="#员工信息统计">员工信息统计</a>
+      <ol>
+        <li><a href="#职位统计">职位统计</a>
+          <ol>
+            <li><a href="#需求-1">需求</a></li>
+            <li><a href="#接口描述">接口描述</a></li>
+            <li><a href="#代码实现-2">代码实现</a></li>
+            <li><a href="#功能测试-3">功能测试</a></li>
+            <li><a href="#前后端联调测试-2">前后端联调测试</a></li>
+          </ol>
+        </li>
+        <li><a href="#性别统计">性别统计</a>
+          <ol>
+            <li><a href="#需求-2">需求</a></li>
+            <li><a href="#接口描述-1">接口描述</a></li>
+            <li><a href="#代码实现-3">代码实现</a></li>
+            <li><a href="#功能测试-4">功能测试</a></li>
+            <li><a href="#前后端联调测试-3">前后端联调测试</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -346,9 +368,9 @@
 <p>问题：我们需要开发两个功能接口吗？一个删除单个员工，一个删除多个员工</p>
 <p>答案：不需要。 只需要开发一个功能接口即可（删除多个员工包含只删除一个员工）</p>
 <h3 id="接口文档">接口文档
-</h3><p>参照资料中提供的接口文档，查看 <strong>员工管理</strong>  -&gt; <strong>删除员工</strong> 接口的描述。</p>
-<p>地址：<a class="link" href="https://heuqqdmbyk.feishu.cn/wiki/GyZVwpRf6ir89qkKtFqc0HlTnhg"  target="_blank" rel="noopener"
+</h3><p>地址：<a class="link" href="https://heuqqdmbyk.feishu.cn/wiki/GyZVwpRf6ir89qkKtFqc0HlTnhg"  target="_blank" rel="noopener"
     >接口文档 - 飞书云文档</a></p>
+<p>查看 <strong>员工管理</strong>  -&gt; <strong>删除员工</strong> 接口的描述。</p>
 <p>sql语句：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -686,7 +708,7 @@
 </h3><h4 id="接口文档-1">接口文档
 </h4><p>地址：<a class="link" href="https://heuqqdmbyk.feishu.cn/wiki/GyZVwpRf6ir89qkKtFqc0HlTnhg"  target="_blank" rel="noopener"
     >接口文档 - 飞书云文档</a></p>
-<p>参照资料中提供的接口文档，查看 <strong>员工管理</strong>  -&gt; <strong>根据ID查询</strong> 接口的描述。</p>
+<p>查看 <strong>员工管理</strong>  -&gt; <strong>根据ID查询</strong> 接口的描述。</p>
 <h4 id="思路分析-1">思路分析
 </h4><p>在查询回显时，既需要查询出员工的基本信息，又需要查询出该员工的工作经历信息。</p>
 <p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%9F%A5%E8%AF%A2%E6%80%9D%E8%B7%AF.png"
@@ -972,7 +994,7 @@
 <h4 id="接口文档-2">接口文档
 </h4><p>地址：<a class="link" href="https://heuqqdmbyk.feishu.cn/wiki/GyZVwpRf6ir89qkKtFqc0HlTnhg"  target="_blank" rel="noopener"
     >接口文档 - 飞书云文档</a></p>
-<p>参照资料中提供的接口文档，查看 <strong>员工管理</strong>  -&gt; <strong>修改员工</strong> 接口的描述。</p>
+<p>查看 <strong>员工管理</strong>  -&gt; <strong>修改员工</strong> 接口的描述。</p>
 <h4 id="思路分析-2">思路分析
 </h4><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E4%BF%AE%E6%94%B9%E6%80%9D%E8%B7%AF.png"
 	width="1026"
@@ -1500,6 +1522,446 @@
 		class="gallery-image" 
 		data-flex-grow="145"
 		data-flex-basis="349px"
+	
+></p>
+<h2 id="员工信息统计">员工信息统计
+</h2><p>员工管理的增删改查功能我们已开发完成，接下来，我们再来完成员工信息统计的接口开发。   对于这些图形报表的开发，其实呢，都是基于现成的一些图形报表的组件开发的，比如：Echarts、HighCharts等。</p>
+<p>而报表的制作，主要是前端人员开发，引入对应的组件（比如：ECharts）即可。  服务端开发人员仅为其提供数据即可。</p>
+<p>官网：https://echarts.apache.org/zh/index.html<img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/AE%E5%AE%98%E7%BD%91.png"
+	width="2053"
+	height="1033"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/AE%E5%AE%98%E7%BD%91_hu_50ec4ad5f6d78976.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/AE%E5%AE%98%E7%BD%91_hu_2ff22d4b17befb0c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="198"
+		data-flex-basis="476px"
+	
+></p>
+<h3 id="职位统计">职位统计
+</h3><h4 id="需求-1">需求
+</h4><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E5%91%98%E5%B7%A5%E8%81%8C%E4%BD%8D%E7%BB%9F%E8%AE%A1.png"
+	width="569"
+	height="402"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E5%91%98%E5%B7%A5%E8%81%8C%E4%BD%8D%E7%BB%9F%E8%AE%A1_hu_b1c9cd709e331f2.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E5%91%98%E5%B7%A5%E8%81%8C%E4%BD%8D%E7%BB%9F%E8%AE%A1_hu_ed53c4905eb79d8a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="141"
+		data-flex-basis="339px"
+	
+></p>
+<p>对于这类的图形报表，服务端要做的，就是为其提供数据即可。 我们可以通过官方的示例，看到提供的数据其实就是X轴展示的信息，和对应的数据。<img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E5%9B%BE%E7%89%87%E7%A4%BA%E4%BE%8B.png"
+	width="1026"
+	height="464"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E5%9B%BE%E7%89%87%E7%A4%BA%E4%BE%8B_hu_bcdc34f12ca7658a.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E5%9B%BE%E7%89%87%E7%A4%BA%E4%BE%8B_hu_3d0a8afe22a537ea.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="221"
+		data-flex-basis="530px"
+	
+></p>
+<p>三层架构每层的职责：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84.png"
+	width="2342"
+	height="622"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84_hu_ca0220cecf1ee93c.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84_hu_5760d0039bfa6919.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="376"
+		data-flex-basis="903px"
+	
+></p>
+<h4 id="接口描述">接口描述
+</h4><p>地址：<a class="link" href="https://heuqqdmbyk.feishu.cn/wiki/GyZVwpRf6ir89qkKtFqc0HlTnhg"  target="_blank" rel="noopener"
+    >接口文档 - 飞书云文档</a></p>
+<p>查看 <strong>数据统计</strong>  -&gt; <strong>员工职位统计</strong> 接口的描述。</p>
+<h4 id="代码实现-2">代码实现
+</h4><p><strong>1). 定义封装结果对象JobOption</strong></p>
+<p>在 <code>com.itheima.pojo</code> 包中定义实体类 <code>JobOption</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.pojo</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.AllArgsConstructor</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.Data</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.NoArgsConstructor</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@NoArgsConstructor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@AllArgsConstructor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">JobOption</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">List</span><span class="w"> </span><span class="n">jobList</span><span class="p">;</span><span class="w">	</span><span class="c1">// 职位列表</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">List</span><span class="w"> </span><span class="n">dataList</span><span class="p">;</span><span class="w">	</span><span class="c1">// 数据列表</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>2). 定义ReportController，并添加方法。</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Slf4j</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">&#34;/report&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@RestController</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ReportController</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">ReportService</span><span class="w"> </span><span class="n">reportService</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * 统计各个职位的员工人数
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&#34;/empJobData&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">getEmpJobData</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;统计各个职位的员工人数&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">JobOption</span><span class="w"> </span><span class="n">jobOption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reportService</span><span class="p">.</span><span class="na">getEmpJobData</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">success</span><span class="p">(</span><span class="n">jobOption</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>2). 定义ReportService接口，并添加接口方法。</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">ReportService</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * 统计各个职位的员工人数
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @return
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">JobOption</span><span class="w"> </span><span class="nf">getEmpJobData</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>3). 定义ReportServiceImpl实现类，并实现方法</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ReportServiceImpl</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">ReportService</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">EmpMapper</span><span class="w"> </span><span class="n">empMapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">JobOption</span><span class="w"> </span><span class="nf">getEmpJobData</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="n">Object</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">empMapper</span><span class="p">.</span><span class="na">countEmpJobData</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">jobList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">.</span><span class="na">stream</span><span class="p">().</span><span class="na">map</span><span class="p">(</span><span class="n">dataMap</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">dataMap</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">&#34;pos&#34;</span><span class="p">)).</span><span class="na">toList</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">dataList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">.</span><span class="na">stream</span><span class="p">().</span><span class="na">map</span><span class="p">(</span><span class="n">dataMap</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">dataMap</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">&#34;total&#34;</span><span class="p">)).</span><span class="na">toList</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">JobOption</span><span class="p">(</span><span class="n">jobList</span><span class="p">,</span><span class="w"> </span><span class="n">dataList</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>4). 定义EmpMapper 接口</strong></p>
+<p>统计的是员工的信息，所以需要操作的是员工表。 所以代码我们就写在 <code>EmpMapper</code> 接口中即可。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 统计各个职位的员工人数
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@MapKey</span><span class="p">(</span><span class="s">&#34;pos&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">//先将集合封装到Map中，再将Map封装到集合当中</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">List</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="n">Object</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nf">countEmpJobData</span><span class="p">();</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>如果查询的记录往Map中封装，可以通过@MapKey注解指定返回的map中的唯一标识是那个字段。【也可以不指定】</p>
+</blockquote>
+<p><strong>5). 定义EmpMapper.xml</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="c">&lt;!-- 统计各个职位的员工人数 --&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;countEmpJobData&#34;</span> <span class="na">resultType=</span><span class="s">&#34;java.util.Map&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    select
+</span></span><span class="line"><span class="cl">    (case job when 1 then &#39;班主任&#39; 
+</span></span><span class="line"><span class="cl">                     when 2 then &#39;讲师&#39; 
+</span></span><span class="line"><span class="cl">                     when 3 then &#39;学工主管&#39; 
+</span></span><span class="line"><span class="cl">                     when 4 then &#39;教研主管&#39; 
+</span></span><span class="line"><span class="cl">                     when 5 then &#39;咨询师&#39; 
+</span></span><span class="line"><span class="cl">                     else &#39;其他&#39; end)  pos,
+</span></span><span class="line"><span class="cl">    count(*) total
+</span></span><span class="line"><span class="cl">    from emp group by job
+</span></span><span class="line"><span class="cl">    order by total
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/select&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p><strong>case流程控制函数：</strong></p>
+<ul>
+<li>
+<p>语法一：case when 表达式1 then res1 [ when 表达式2 then res2 ] else res end ;</p>
+</li>
+<li>
+<p>含义：如果 表达式1 成立， 取 res1。  如果 表达式2 成立，取 res2。 如果前面的条件都不成立，则取 res。</p>
+</li>
+<li>
+<p>语法二（仅适用于等值匹配）：case expr when val1 then res1 [ when val2 then res2 ] else res end ;</p>
+</li>
+<li>
+<p>含义：如果 expr 的值为 val1 ， 取 res1。  如果  expr 的值为 val2 ，取 res2。 如果前面的条件都不成立，则取 res。</p>
+</li>
+</ul>
+</blockquote>
+<h4 id="功能测试-3">功能测试
+</h4><p>重新启动服务，打开Apifox进行测试。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E5%91%98%E5%B7%A5%E8%81%8C%E4%BD%8D%E7%BB%9F%E8%AE%A1Af.png"
+	width="2105"
+	height="1266"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E5%91%98%E5%B7%A5%E8%81%8C%E4%BD%8D%E7%BB%9F%E8%AE%A1Af_hu_c75c6d0f5768d6bd.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E5%91%98%E5%B7%A5%E8%81%8C%E4%BD%8D%E7%BB%9F%E8%AE%A1Af_hu_bd3cf74a64bba025.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="166"
+		data-flex-basis="399px"
+	
+></p>
+<h4 id="前后端联调测试-2">前后端联调测试
+</h4><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E5%91%98%E5%B7%A5%E8%81%8C%E4%BD%8D%E7%BB%9F%E8%AE%A1%E5%89%8D%E7%AB%AF.png"
+	width="1500"
+	height="981"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E5%91%98%E5%B7%A5%E8%81%8C%E4%BD%8D%E7%BB%9F%E8%AE%A1%E5%89%8D%E7%AB%AF_hu_74b1c77ce5900cdf.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E5%91%98%E5%B7%A5%E8%81%8C%E4%BD%8D%E7%BB%9F%E8%AE%A1%E5%89%8D%E7%AB%AF_hu_f307b29a2c248e42.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="152"
+		data-flex-basis="366px"
+	
+></p>
+<h3 id="性别统计">性别统计
+</h3><h4 id="需求-2">需求
+</h4><p>对于这类的图形报表，服务端要做的，就是为其提供数据即可。 我们可以通过官方的示例，看到提供的数据就是一个json格式的数据。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%80%A7%E5%88%AB%E5%9B%BE%E8%A1%A8.png"
+	width="2253"
+	height="935"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%80%A7%E5%88%AB%E5%9B%BE%E8%A1%A8_hu_4c671028f6a73edc.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%80%A7%E5%88%AB%E5%9B%BE%E8%A1%A8_hu_d69e54ad2bd289da.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="240"
+		data-flex-basis="578px"
+	
+></p>
+<h4 id="接口描述-1">接口描述
+</h4><p>地址：<a class="link" href="https://heuqqdmbyk.feishu.cn/wiki/GyZVwpRf6ir89qkKtFqc0HlTnhg"  target="_blank" rel="noopener"
+    >接口文档 - 飞书云文档</a></p>
+<p>查看 <strong>数据统计</strong>  -&gt; <strong>员工性别统计</strong> 接口的描述。</p>
+<h4 id="代码实现-3">代码实现
+</h4><p><strong>1). 在ReportController，添加方法。</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 统计员工性别信息
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&#34;/empGenderData&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">getEmpGenderData</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;统计员工性别信息&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&gt;</span><span class="w"> </span><span class="n">genderList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reportService</span><span class="p">.</span><span class="na">getEmpGenderData</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">success</span><span class="p">(</span><span class="n">genderList</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>2). 在ReportService接口，添加接口方法。</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 统计员工性别信息
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">List</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getEmpGenderData</span><span class="p">();</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>3). 在ReportServiceImpl实现类，实现方法</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getEmpGenderData</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">empMapper</span><span class="p">.</span><span class="na">countEmpGenderData</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>4). 定义EmpMapper 接口</strong></p>
+<p>统计的是员工的信息，所以需要操作的是员工表。 所以代码我们就写在 <code>EmpMapper</code> 接口中即可。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 统计员工性别信息
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@MapKey</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">List</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">countEmpGenderData</span><span class="p">();</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>5). 定义EmpMapper.xml</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="c">&lt;!-- 统计员工的性别信息 --&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;countEmpGenderData&#34;</span> <span class="na">resultType=</span><span class="s">&#34;java.util.Map&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    select
+</span></span><span class="line"><span class="cl">    if(gender = 1, &#39;男&#39;, &#39;女&#39;) as name,
+</span></span><span class="line"><span class="cl">    count(*) as value
+</span></span><span class="line"><span class="cl">    from emp group by gender ;
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/select&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>if函数语法：<code>if(条件, 条件为true取值, 条件为false取值)</code></p>
+<p>ifnull函数语法：<code>ifnull(expr, val1)</code>    如果expr不为null，取自身，否则取val1</p>
+</blockquote>
+<h4 id="功能测试-4">功能测试
+</h4><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%80%A7%E5%88%AB%E4%BA%BA%E6%95%B0%E7%BB%9F%E8%AE%A1.png"
+	width="2032"
+	height="1136"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%80%A7%E5%88%AB%E4%BA%BA%E6%95%B0%E7%BB%9F%E8%AE%A1_hu_e1303e6b3428731a.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%80%A7%E5%88%AB%E4%BA%BA%E6%95%B0%E7%BB%9F%E8%AE%A1_hu_f1b77ab8cbb8ca0b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="178"
+		data-flex-basis="429px"
+	
+></p>
+<h4 id="前后端联调测试-3">前后端联调测试
+</h4><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%80%A7%E5%88%AB%E7%BB%9F%E8%AE%A1%E5%89%8D%E7%AB%AF.png"
+	width="2388"
+	height="1003"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%80%A7%E5%88%AB%E7%BB%9F%E8%AE%A1%E5%89%8D%E7%AB%AF_hu_770f797e15d49a6c.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E6%80%A7%E5%88%AB%E7%BB%9F%E8%AE%A1%E5%89%8D%E7%AB%AF_hu_a8fa98dac4231fce.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="238"
+		data-flex-basis="571px"
 	
 ></p>
 
