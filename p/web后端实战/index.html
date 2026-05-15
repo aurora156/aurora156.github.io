@@ -264,7 +264,7 @@
     <li><a href="#新增部门">新增部门</a>
       <ol>
         <li><a href="#需求-2">需求</a></li>
-        <li><a href="#思路分析-2">思路分析：</a></li>
+        <li><a href="#思路分析-2">思路分析</a></li>
         <li><a href="#json参数接收">json参数接收</a></li>
         <li><a href="#代码实现-2">代码实现</a></li>
         <li><a href="#前后端联调测试-2">前后端联调测试</a></li>
@@ -1899,7 +1899,7 @@
 	
 ></p>
 <p>接口文档：添加部门</p>
-<h3 id="思路分析-2">思路分析：
+<h3 id="思路分析-2">思路分析
 </h3><p>明确了删除部门的需求之后，再来梳理一下实现该功能时，三层架构每一次的职责：</p>
 <p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/assets/%E6%96%B0%E5%A2%9E%E6%80%9D%E8%B7%AF.png"
 	width="2437"
@@ -1971,7 +1971,7 @@
 <pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
 </span></span></span><span class="line"><span class="cl"><span class="cm"> * 新增部门
 </span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="n">Dept</span><span class="w"> </span><span class="n">dept</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="w"> </span><span class="nf">addDept</span><span class="p">(</span><span class="n">Dept</span><span class="w"> </span><span class="n">dept</span><span class="p">);</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>在<code>DeptServiceImpl</code>中增加save方法，完成添加部门的操作，具体代码如下：</p>
@@ -1987,7 +1987,7 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="n">Dept</span><span class="w"> </span><span class="n">dept</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">addDept</span><span class="p">(</span><span class="n">Dept</span><span class="w"> </span><span class="n">dept</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//补全基础属性 - createTime,updateTime</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">dept</span><span class="p">.</span><span class="na">setCreateTime</span><span class="p">(</span><span class="n">LocalDateTime</span><span class="p">.</span><span class="na">now</span><span class="p">());</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">dept</span><span class="p">.</span><span class="na">setUpdateTime</span><span class="p">(</span><span class="n">LocalDateTime</span><span class="p">.</span><span class="na">now</span><span class="p">());</span><span class="w">
