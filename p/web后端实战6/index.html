@@ -261,6 +261,10 @@
         <li><a href="#拦截器interceptor">拦截器Interceptor</a>
           <ol>
             <li><a href="#快速入门">快速入门</a></li>
+            <li><a href="#令牌校验interceptor">令牌校验Interceptor</a></li>
+            <li><a href="#interceptor详解">Interceptor详解</a></li>
+            <li><a href="#拦截路径-1">拦截路径</a></li>
+            <li><a href="#执行流程-1">执行流程</a></li>
           </ol>
         </li>
       </ol>
@@ -2322,7 +2326,7 @@
 <p>在拦截器当中，我们通常也是做一些通用性的操作，比如：我们可以通过拦截器来拦截前端发起的请求，将登录校验的逻辑全部编写在拦截器当中。在校验的过程当中，如发现用户登录了(携带JWT令牌且是合法令牌)，就可以直接放行，去访问spring当中的资源。如果校验时发现并没有登录或是非法令牌，就可以直接给前端响应未登录的错误信息。</p>
 <p>下面我们通过快速入门程序，来学习下拦截器的基本使用。拦截器的使用步骤和过滤器类似，也分为两步：</p>
 <ol>
-<li>定义拦截器</li>
+<li>定义拦截器，实现HandleInterceptor接口，并实现其所有方法</li>
 <li>注册配置拦截器</li>
 </ol>
 <p><strong>1). 自定义拦截器</strong></p>
@@ -2354,27 +2358,27 @@
 </span><span class="lnt">23
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="c1">//自定义拦截器</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="nd">@Component</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Slf4j</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Component</span><span class="w">  </span><span class="c1">//自定义拦截器</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DemoInterceptor</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">HandlerInterceptor</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//目标资源方法执行前执行。 返回true：放行    返回false：不放行</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">preHandle</span><span class="p">(</span><span class="n">HttpServletRequest</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">HttpServletResponse</span><span class="w"> </span><span class="n">response</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="n">handler</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;preHandle .... &#34;</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w"> </span><span class="c1">//true表示放行</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//目标资源方法执行前执行。 返回true：放行    返回false：不放行</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;preHandle...&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//目标资源方法执行后执行</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">postHandle</span><span class="p">(</span><span class="n">HttpServletRequest</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">HttpServletResponse</span><span class="w"> </span><span class="n">response</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="n">handler</span><span class="p">,</span><span class="w"> </span><span class="n">ModelAndView</span><span class="w"> </span><span class="n">modelAndView</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;postHandle ... &#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">postHandle</span><span class="p">(</span><span class="n">HttpServletRequest</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">HttpServletResponse</span><span class="w"> </span><span class="n">response</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="n">handler</span><span class="p">,</span><span class="w"> </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">ModelAndView</span><span class="w"> </span><span class="n">modelAndView</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;postHandle...&#34;</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//视图渲染完毕后执行，最后执行</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">afterCompletion</span><span class="p">(</span><span class="n">HttpServletRequest</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">HttpServletResponse</span><span class="w"> </span><span class="n">response</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="n">handler</span><span class="p">,</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;afterCompletion .... &#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">afterCompletion</span><span class="p">(</span><span class="n">HttpServletRequest</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">HttpServletResponse</span><span class="w"> </span><span class="n">response</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="n">handler</span><span class="p">,</span><span class="w"> </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;afterCompletion...&#34;</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
@@ -2421,10 +2425,369 @@
 </span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>重新启动SpringBoot服务，打开Apifox测试：</p>
+</div><p><code>注意：使用拦截器时需要将过滤器全部注释掉~</code></p>
+<p>重新启动SpringBoot服务，打开Apifox测试：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E6%8B%A6%E6%88%AA%E5%99%A8%E5%89%8D%E7%AB%AF.png"
+	width="1989"
+	height="1248"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E6%8B%A6%E6%88%AA%E5%99%A8%E5%89%8D%E7%AB%AF_hu_30bf5f434f8defc2.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E6%8B%A6%E6%88%AA%E5%99%A8%E5%89%8D%E7%AB%AF_hu_4acb676595c55d8.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="159"
+		data-flex-basis="382px"
+	
+></p>
 <p>可以看到控制台输出的日志：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E6%8B%A6%E6%88%AA%E5%99%A8%E5%90%8E%E7%AB%AF.png"
+	width="2282"
+	height="787"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E6%8B%A6%E6%88%AA%E5%99%A8%E5%90%8E%E7%AB%AF_hu_b4b5ed7be93fe44.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E6%8B%A6%E6%88%AA%E5%99%A8%E5%90%8E%E7%AB%AF_hu_9cb0ac0b31643a58.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="289"
+		data-flex-basis="695px"
+	
+></p>
 <p>接下来我们再来做一个测试：将拦截器中返回值改为false</p>
 <p>使用Apifox，再次点击send发送请求后，没有响应数据，说明请求被拦截了没有放行</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E6%8B%A6%E6%88%AA%E6%97%A0%E6%94%BE%E8%A1%8C.png"
+	width="1670"
+	height="864"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E6%8B%A6%E6%88%AA%E6%97%A0%E6%94%BE%E8%A1%8C_hu_821d22129d6bcb94.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E6%8B%A6%E6%88%AA%E6%97%A0%E6%94%BE%E8%A1%8C_hu_a7ffab4241aec426.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="193"
+		data-flex-basis="463px"
+	
+></p>
+<h4 id="令牌校验interceptor">令牌校验Interceptor
+</h4><p>讲解完了拦截器的基本操作之后，接下来我们需要完成最后一步操作：通过拦截器来完成案例当中的登录校验功能。</p>
+<p>登录校验的业务逻辑以及操作步骤我们前面已经分析过了，和登录校验Filter过滤器当中的逻辑是完全一致的。现在我们只需要把这个技术方案由原来的过滤器换成拦截器interceptor就可以了。</p>
+<p><strong>1). TokenInterceptor</strong></p>
+<p>在 <code>com.itheima.interceptor</code> 包下创建 <code>TokenInterceptor</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Slf4j</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Component</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TokenInterceptor</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">HandlerInterceptor</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">preHandle</span><span class="p">(</span><span class="n">HttpServletRequest</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">HttpServletResponse</span><span class="w"> </span><span class="n">response</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="n">handler</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//1. 获取请求url。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="na">getRequestURL</span><span class="p">().</span><span class="na">toString</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//2. 判断请求url中是否包含login，如果包含，说明是登录操作，放行。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="na">contains</span><span class="p">(</span><span class="s">&#34;login&#34;</span><span class="p">)){</span><span class="w"> </span><span class="c1">//登录请求</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;登录请求 , 直接放行&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//3. 获取请求头中的令牌（token）。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="na">getHeader</span><span class="p">(</span><span class="s">&#34;token&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//4. 判断令牌是否存在，如果不存在，返回错误结果（未登录）。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">StringUtils</span><span class="p">.</span><span class="na">hasLength</span><span class="p">(</span><span class="n">token</span><span class="p">)){</span><span class="w"> </span><span class="c1">//token为空</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;获取到token令牌为空, 返回错误结果&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">response</span><span class="p">.</span><span class="na">setStatus</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">SC_UNAUTHORIZED</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//5. 解析token，如果解析失败，返回错误结果（未登录）。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">JwtUtils</span><span class="p">.</span><span class="na">parseToken</span><span class="p">(</span><span class="n">token</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;解析令牌失败, 返回错误结果&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">response</span><span class="p">.</span><span class="na">setStatus</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">SC_UNAUTHORIZED</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//6. 放行。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;令牌合法, 放行&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>2).</strong> <strong>配置拦截器</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Configuration</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">WebConfig</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">WebMvcConfigurer</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//拦截器对象</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">TokenInterceptor</span><span class="w"> </span><span class="n">tokenInterceptor</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">addInterceptors</span><span class="p">(</span><span class="n">InterceptorRegistry</span><span class="w"> </span><span class="n">registry</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="c1">//注册自定义拦截器对象</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">registry</span><span class="p">.</span><span class="na">addInterceptor</span><span class="p">(</span><span class="n">tokenInterceptor</span><span class="p">).</span><span class="na">addPathPatterns</span><span class="p">(</span><span class="s">&#34;/**&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>登录校验的拦截器编写完成后，接下来我们就可以重新启动服务来做一个测试： （<strong>关闭登录校验Filter过滤器</strong>）</p>
+<ul>
+<li>测试1：未登录是否可以访问部门管理页面</li>
+</ul>
+<p>首先关闭浏览器，重新打开浏览器，在地址栏中输入：http://localhost:90/dept</p>
+<p>由于用户没有登录，校验机制返回错误信息，前端页面根据返回的错误信息结果，自动跳转到登录页面了</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E6%8B%A6%E6%88%AA%E5%99%A8%E7%99%BB%E5%BD%95%E5%A4%B1%E8%B4%A5.png"
+	width="1200"
+	height="826"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E6%8B%A6%E6%88%AA%E5%99%A8%E7%99%BB%E5%BD%95%E5%A4%B1%E8%B4%A5_hu_59d8f9e05cfd5f7f.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E6%8B%A6%E6%88%AA%E5%99%A8%E7%99%BB%E5%BD%95%E5%A4%B1%E8%B4%A5_hu_766953cffcd24148.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="145"
+		data-flex-basis="348px"
+	
+></p>
+<ul>
+<li>测试2：先进行登录操作，再访问部门管理页面</li>
+</ul>
+<p>登录校验成功之后，可以正常访问相关业务操作页面</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E6%8B%A6%E6%88%AA%E5%99%A8%E7%99%BB%E5%BD%95%E6%88%90%E5%8A%9F.png"
+	width="2494"
+	height="741"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E6%8B%A6%E6%88%AA%E5%99%A8%E7%99%BB%E5%BD%95%E6%88%90%E5%8A%9F_hu_3a3f89cd8c09f34f.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E6%8B%A6%E6%88%AA%E5%99%A8%E7%99%BB%E5%BD%95%E6%88%90%E5%8A%9F_hu_b8cf62393aae14fc.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="336"
+		data-flex-basis="807px"
+	
+></p>
+<p>到此我们也就验证了所开发的登录校验的拦截器也是没问题的。登录校验的过滤器和拦截器，我们只需要使用其中的一种就可以了</p>
+<p>如果想要在apifox中直接测试其他接口未登录访问，可以先使用登录接口进行测试获取到token令牌，再将token令牌复制到其他接口中进行测试（先将Headers中的token置为空，然后输入错误，最后输入正确token），测试过程中可以分别在TokenInterceptor的步骤中打断点进行观察。</p>
+<h4 id="interceptor详解">Interceptor详解
+</h4><p>拦截器的入门程序完成之后，接下来我们来介绍拦截器的使用细节。拦截器的使用细节我们主要介绍两个部分：</p>
+<ol>
+<li>拦截器的拦截路径配置</li>
+<li>拦截器的执行流程</li>
+</ol>
+<h4 id="拦截路径-1">拦截路径
+</h4><p>首先我们先来看拦截器的拦截路径的配置，在注册配置拦截器的时候，我们要指定拦截器的拦截路径，通过<code>addPathPatterns(&quot;要拦截路径&quot;)</code>方法，就可以指定要拦截哪些资源。</p>
+<p>在入门程序中我们配置的是<code>/**</code>，表示拦截所有资源，而在配置拦截器时，不仅可以指定要拦截哪些资源，还可以指定不拦截哪些资源，只需要调用<code>excludePathPatterns(&quot;不拦截路径&quot;)</code>方法，指定哪些资源不需要拦截。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 拦截器配置类
+</span></span></span><span class="line"><span class="cl"><span class="cm">* */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Configuration</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">WebConfig</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">WebMvcConfigurer</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">TokenInterceptor</span><span class="w"> </span><span class="n">tokenInterceptor</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">addInterceptors</span><span class="p">(</span><span class="n">InterceptorRegistry</span><span class="w"> </span><span class="n">registry</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//注册自定义拦截器对象</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">registry</span><span class="p">.</span><span class="na">addInterceptor</span><span class="p">(</span><span class="n">tokenInterceptor</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">addPathPatterns</span><span class="p">(</span><span class="s">&#34;/**&#34;</span><span class="p">)</span><span class="c1">//设置拦截器拦截的请求路径（ /** 表示拦截所有请求）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">excludePathPatterns</span><span class="p">(</span><span class="s">&#34;/login&#34;</span><span class="p">);</span><span class="c1">//设置不拦截的请求路径</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>在拦截器中除了可以设置<code>/**</code>拦截所有资源外，还有一些常见拦截路径设置：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: center">拦截路径</th>
+          <th style="text-align: center">含义</th>
+          <th style="text-align: center">举例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">/*</td>
+          <td style="text-align: center">一级路径</td>
+          <td style="text-align: center">能匹配/depts，/emps，/login，不能匹配 /depts/1</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">/**</td>
+          <td style="text-align: center">任意级路径</td>
+          <td style="text-align: center">能匹配/depts，/depts/1，/depts/1/2</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">/depts/*</td>
+          <td style="text-align: center">/depts下的一级路径</td>
+          <td style="text-align: center">能匹配/depts/1，不能匹配/depts/1/2，/depts</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">/depts/**</td>
+          <td style="text-align: center">/depts下的任意级路径</td>
+          <td style="text-align: center">能匹配/depts，/depts/1，/depts/1/2，不能匹配/emps/1</td>
+      </tr>
+  </tbody>
+</table></div>
+<h4 id="执行流程-1">执行流程
+</h4><p>介绍完拦截路径的配置之后，接下来我们再来介绍拦截器的执行流程。通过执行流程，大家就能够清晰的知道过滤器与拦截器的执行时机。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E6%8B%A6%E6%88%AA%E5%99%A8%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B.png"
+	width="1026"
+	height="349"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E6%8B%A6%E6%88%AA%E5%99%A8%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B_hu_43c2c2b67abc1473.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E6%8B%A6%E6%88%AA%E5%99%A8%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B_hu_7de29db9b5dbb439.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="293"
+		data-flex-basis="705px"
+	
+></p>
+<ul>
+<li>当我们打开浏览器来访问部署在web服务器当中的web应用时，此时我们所定义的过滤器会拦截到这次请求。拦截到这次请求之后，它会先执行放行前的逻辑，然后再执行放行操作。而由于我们当前是基于springboot开发的，所以放行之后是进入到了spring的环境当中，也就是要来访问我们所定义的controller当中的接口方法。</li>
+<li>Tomcat并不识别所编写的Controller程序，但是它识别Servlet程序，所以在Spring的Web环境中提供了一个非常核心的Servlet：DispatcherServlet（前端控制器），所有请求都会先进行到DispatcherServlet，再将请求转给Controller。</li>
+<li>当我们定义了拦截器后，会在执行Controller的方法之前，请求被拦截器拦截住。执行<code>preHandle()</code>方法，这个方法执行完成后需要返回一个布尔类型的值，如果返回true，就表示放行本次操作，才会继续访问controller中的方法；如果返回false，则不会放行（controller中的方法也不会执行）。</li>
+<li>在controller当中的方法执行完毕之后，再回过来执行<code>postHandle()</code>这个方法以及<code>afterCompletion()</code> 方法，然后再返回给DispatcherServlet，最终再来执行过滤器当中放行后的这一部分逻辑的逻辑。执行完毕之后，最终给浏览器响应数据。</li>
+</ul>
+<p>以上就是拦截器的执行流程。通过执行流程分析，大家应该已经清楚了过滤器和拦截器之间的区别，其实它们之间的区别主要是两点：</p>
+<ul>
+<li>
+<p><strong>接口规范不同：过滤器需要实现Filter接口，而拦截器需要实现HandlerInterceptor接口。</strong></p>
+</li>
+<li>
+<p><strong>拦截范围不同：过滤器Filter会拦截所有的资源，而Interceptor只会拦截Spring环境中的资源。</strong></p>
+<p>将DemoInterceptor中的preHandle设置为false，</p>
+<p>通过同时打开DemoFilter和DemoInterceptor来进行测试：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E5%90%8C%E6%97%B6%E6%B5%8B%E8%AF%95.png"
+	width="1689"
+	height="888"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E5%90%8C%E6%97%B6%E6%B5%8B%E8%AF%95_hu_35a51e85bafd6e1f.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E5%90%8C%E6%97%B6%E6%B5%8B%E8%AF%95_hu_229e1086bd675bce.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="190"
+		data-flex-basis="456px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E5%90%8C%E6%97%B6%E6%94%BE%E8%A1%8C1.png"
+	width="2273"
+	height="455"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E5%90%8C%E6%97%B6%E6%94%BE%E8%A1%8C1_hu_7cd34ef62a9784f8.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E5%90%8C%E6%97%B6%E6%94%BE%E8%A1%8C1_hu_e10976c5b762ad95.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="499"
+		data-flex-basis="1198px"
+	
+></p>
+<p>可以发现DemoFilter已经放行了，但是由于DemoInterceptor中的preHandle设置为false，所以并没有放行拦截到了请求</p>
+<p>现在将preHandles设置为true，可以在apifox中查询到了，而此时的拦截顺序就是DemoFilter先执行，但是放行顺序是反过来的</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E5%90%8C%E6%97%B6%E6%8B%A6%E6%88%AA1.png"
+	width="1942"
+	height="290"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E5%90%8C%E6%97%B6%E6%8B%A6%E6%88%AA1_hu_ded1e6a995a3e5b8.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E5%90%8C%E6%97%B6%E6%8B%A6%E6%88%AA1_hu_308d4ab5387ebb67.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="669"
+		data-flex-basis="1607px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E5%90%8C%E6%97%B6%E6%94%BE%E8%A1%8C.png"
+	width="1664"
+	height="145"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E5%90%8C%E6%97%B6%E6%94%BE%E8%A1%8C_hu_3c403c960f63bd53.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E5%90%8C%E6%97%B6%E6%94%BE%E8%A1%8C_hu_773dec37a35d9847.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1147"
+		data-flex-basis="2754px"
+	
+></p>
+<p><code>注意：在学完这部分内容后记得关掉多余的拦截器或过滤器，只需要其中生效一个就可以了，我这里开的是TokenFilter过滤器</code></p>
+<p>【小tips】在本次学习过程中，我发现我没有登录直接访问http://localhost:90是能够直接进入到前端页面中的，但是进入到的是http://localhost:90/index页面，而这个页面似乎并没有接口来实现它（由于我没有学习前端课程，不知道前端页面的代码是怎样的），我在前面课程一键导入的apifox接口中没有发现index页面，我不确定是不是因为index页面不属于这个系统中的页面所以才能直接访问，而当我在这个页面中直接点击其他接口的页面就会直接跳转到登录页面并提示错误信息，这时候就会被/**给拦截了。</p>
+</li>
+</ul>
 
 </section>
 
