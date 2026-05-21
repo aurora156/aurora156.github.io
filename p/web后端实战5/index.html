@@ -266,6 +266,24 @@
         </li>
       </ol>
     </li>
+    <li><a href="#需求学员管理">需求：学员管理</a>
+      <ol>
+        <li><a href="#查询所有班级接口">查询所有班级接口</a></li>
+        <li><a href="#条件分页查询接口-1">条件分页查询接口</a></li>
+        <li><a href="#新增学生信息接口">新增学生信息接口</a></li>
+        <li><a href="#根据id查询学生接口">根据ID查询学生接口</a></li>
+        <li><a href="#修改学生信息接口">修改学生信息接口</a></li>
+        <li><a href="#删除学生信息接口">删除学生信息接口</a></li>
+        <li><a href="#违纪处理接口">违纪处理接口</a></li>
+      </ol>
+    </li>
+    <li><a href="#需求学员信息统计">需求：学员信息统计</a>
+      <ol>
+        <li><a href="#班级人数统计接口">班级人数统计接口：</a></li>
+        <li><a href="#学员学历信息统计接口">学员学历信息统计接口：</a></li>
+      </ol>
+    </li>
+    <li><a href="#需求功能完善">需求：功能完善</a></li>
   </ol>
 </nav>
         </div>
@@ -1471,6 +1489,1457 @@
 		class="gallery-image" 
 		data-flex-grow="240"
 		data-flex-basis="576px"
+	
+></p>
+<h2 id="需求学员管理">需求：学员管理
+</h2><p>由于该部分为学习了后面知识后回来补充的，而后面有些功能会影响到这个部分的测试（如测试时无Token令牌会导致报错，测试起来比较麻烦），所以该部分就不进行前后端联调测试了，仅为完成功能实现</p>
+<p>需要开发如下几个接口，建议按照如下顺序开发接口：</p>
+<h3 id="查询所有班级接口">查询所有班级接口
+</h3><p>地址：<a class="link" href="https://heuqqdmbyk.feishu.cn/wiki/GyZVwpRf6ir89qkKtFqc0HlTnhg"  target="_blank" rel="noopener"
+    >接口文档 - 飞书云文档</a></p>
+<p>参照接口文档 <strong>班级管理</strong> -&gt; <strong>查询所有班级</strong></p>
+<p>在新增学员的时候，要展示出所有的班级信息。</p>
+<p>ClazzController：新增 @GetMapping(&quot;/list&quot;) 端点，返回所有班级</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 查询所有班级数据
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&#34;/list&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">list</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;查询所有班级数据&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Clazz</span><span class="o">&gt;</span><span class="w"> </span><span class="n">clazzList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clazzService</span><span class="p">.</span><span class="na">findAll</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">success</span><span class="p">(</span><span class="n">clazzList</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>ClazzService：新增 List<Clazz> findAll() 接口方法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 查询所有班级
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">List</span><span class="o">&lt;</span><span class="n">Clazz</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findAll</span><span class="p">();</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>ClazzServiceImpl：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Clazz</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findAll</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">clazzMapper</span><span class="p">.</span><span class="na">findall</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>由于ClazzMapper.findall() 已经存在（@Select(&ldquo;select * from clazz;&quot;)），所以 Mapper 层无需改动。</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%96%B0%E5%A2%9E%E5%AD%A6%E5%91%98%E7%8F%AD%E7%BA%A7%E4%BF%A1%E6%81%AF.png"
+	width="1417"
+	height="875"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%96%B0%E5%A2%9E%E5%AD%A6%E5%91%98%E7%8F%AD%E7%BA%A7%E4%BF%A1%E6%81%AF_hu_87f843d2c3b0e5dc.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%96%B0%E5%A2%9E%E5%AD%A6%E5%91%98%E7%8F%AD%E7%BA%A7%E4%BF%A1%E6%81%AF_hu_c2f3dafea36498dd.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="161"
+		data-flex-basis="388px"
+	
+></p>
+<h3 id="条件分页查询接口-1">条件分页查询接口
+</h3><p>接口描述：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E5%AD%A6%E5%91%98%E5%88%97%E8%A1%A8%E6%9F%A5%E8%AF%A2%E6%8E%A5%E5%8F%A3.png"
+	width="1065"
+	height="735"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E5%AD%A6%E5%91%98%E5%88%97%E8%A1%A8%E6%9F%A5%E8%AF%A2%E6%8E%A5%E5%8F%A3_hu_8e805ded3d8618dc.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E5%AD%A6%E5%91%98%E5%88%97%E8%A1%A8%E6%9F%A5%E8%AF%A2%E6%8E%A5%E5%8F%A3_hu_c4bf6bf9a3cff7df.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="144"
+		data-flex-basis="347px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E5%AD%A6%E5%91%98%E5%88%97%E8%A1%A8%E6%9F%A5%E8%AF%A2%E6%8E%A5%E5%8F%A31.png"
+	width="1172"
+	height="997"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E5%AD%A6%E5%91%98%E5%88%97%E8%A1%A8%E6%9F%A5%E8%AF%A2%E6%8E%A5%E5%8F%A31_hu_f3eed25970e52925.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E5%AD%A6%E5%91%98%E5%88%97%E8%A1%A8%E6%9F%A5%E8%AF%A2%E6%8E%A5%E5%8F%A31_hu_c4d92f96e3f08644.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="117"
+		data-flex-basis="282px"
+	
+></p>
+<p>在pojo层创建StudentQueryParam.java ：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.pojo</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.Data</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">StudentQueryParam</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">page</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">1</span><span class="p">;</span><span class="w"> </span><span class="c1">//页码</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">pageSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">10</span><span class="p">;</span><span class="w"> </span><span class="c1">//每页展示记录数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w"> </span><span class="c1">//姓名</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">degree</span><span class="p">;</span><span class="w"> </span><span class="c1">//最高学历</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">clazzId</span><span class="p">;</span><span class="w"> </span><span class="c1">//班级ID</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>在mapper层创建StudentMapper.java</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.mapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.Student</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.StudentQueryParam</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.apache.ibatis.annotations.Mapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Mapper</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">StudentMapper</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * 条件分页查询学员列表
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Student</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">StudentQueryParam</span><span class="w"> </span><span class="n">studentQueryParam</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>在resource目录下的mapper层创建StudentMapper.xml ，基于动态SQL，通过left join clazz 表获取班级名称</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34; ?&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">&lt;!DOCTYPE mapper
+</span></span></span><span class="line"><span class="cl"><span class="cp">        PUBLIC &#34;-//mybatis.org//DTD Mapper 3.0//EN&#34;
+</span></span></span><span class="line"><span class="cl"><span class="cp">        &#34;https://mybatis.org/dtd/mybatis-3-mapper.dtd&#34;&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;mapper</span> <span class="na">namespace=</span><span class="s">&#34;com.itheima.mapper.StudentMapper&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;list&#34;</span> <span class="na">resultType=</span><span class="s">&#34;com.itheima.pojo.Student&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        select s.*, c.name clazzName
+</span></span><span class="line"><span class="cl">        from student s left join clazz c on s.clazz_id = c.id
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;where&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;name != null and name != &#39;&#39;&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">                s.name like concat(&#39;%&#39;,#{name},&#39;%&#39;)
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;/if&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;degree != null&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">                and s.degree = #{degree}
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;/if&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;clazzId != null&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">                and s.clazz_id = #{clazzId}
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;/if&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/where&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/select&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/mapper&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在service层创建StudentService.java ：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.service</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.PageResult</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.Student</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.StudentQueryParam</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">StudentService</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * 学员分页查询
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">PageResult</span><span class="o">&lt;</span><span class="n">Student</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">page</span><span class="p">(</span><span class="n">StudentQueryParam</span><span class="w"> </span><span class="n">studentQueryParam</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>在service层创建StudentServiceImpl.java ：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.service.impl</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.github.pagehelper.Page</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.github.pagehelper.PageHelper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.mapper.StudentMapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.PageResult</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.Student</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.StudentQueryParam</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.service.StudentService</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Service</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">StudentServiceImpl</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">StudentService</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">StudentMapper</span><span class="w"> </span><span class="n">studentMapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">PageResult</span><span class="o">&lt;</span><span class="n">Student</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">page</span><span class="p">(</span><span class="n">StudentQueryParam</span><span class="w"> </span><span class="n">studentQueryParam</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//1. 设置分页参数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">PageHelper</span><span class="p">.</span><span class="na">startPage</span><span class="p">(</span><span class="n">studentQueryParam</span><span class="p">.</span><span class="na">getPage</span><span class="p">(),</span><span class="w"> </span><span class="n">studentQueryParam</span><span class="p">.</span><span class="na">getPageSize</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//2. 执行查询</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Student</span><span class="o">&gt;</span><span class="w"> </span><span class="n">studentList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">studentMapper</span><span class="p">.</span><span class="na">list</span><span class="p">(</span><span class="n">studentQueryParam</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//3. 封装分页结果</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Page</span><span class="o">&lt;</span><span class="n">Student</span><span class="o">&gt;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">Page</span><span class="o">&lt;</span><span class="n">Student</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="n">studentList</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PageResult</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="na">getTotal</span><span class="p">(),</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="na">getResult</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>在controller层创建StudentController.java</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.controller</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.PageResult</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.Result</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.Student</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.StudentQueryParam</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.service.StudentService</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.extern.slf4j.Slf4j</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.GetMapping</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.RequestMapping</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 学员管理
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Slf4j</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">&#34;/students&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@RestController</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">StudentController</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">StudentService</span><span class="w"> </span><span class="n">studentService</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * 条件分页查询学员列表
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@GetMapping</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">page</span><span class="p">(</span><span class="n">StudentQueryParam</span><span class="w"> </span><span class="n">studentQueryParam</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;学员查询请求参数：{}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">studentQueryParam</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">PageResult</span><span class="o">&lt;</span><span class="n">Student</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pageResult</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">studentService</span><span class="p">.</span><span class="na">page</span><span class="p">(</span><span class="n">studentQueryParam</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">success</span><span class="p">(</span><span class="n">pageResult</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%9D%A1%E4%BB%B6%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E5%AD%A6%E5%91%98.png"
+	width="2410"
+	height="1107"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%9D%A1%E4%BB%B6%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E5%AD%A6%E5%91%98_hu_2e20c8a45914cf18.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%9D%A1%E4%BB%B6%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E5%AD%A6%E5%91%98_hu_9fc8b680a4bf2183.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="217"
+		data-flex-basis="522px"
+	
+></p>
+<h3 id="新增学生信息接口">新增学生信息接口
+</h3><p>接口文档：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%B7%BB%E5%8A%A0%E5%AD%A6%E5%91%98%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0.png"
+	width="1358"
+	height="939"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%B7%BB%E5%8A%A0%E5%AD%A6%E5%91%98%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0_hu_be4817e41c4ff275.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%B7%BB%E5%8A%A0%E5%AD%A6%E5%91%98%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0_hu_d10aab6fbb686115.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="144"
+		data-flex-basis="347px"
+	
+><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%B7%BB%E5%8A%A0%E5%AD%A6%E5%91%98%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE.png"
+	width="1429"
+	height="451"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%B7%BB%E5%8A%A0%E5%AD%A6%E5%91%98%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE_hu_c1fe1ed80fe3dde0.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%B7%BB%E5%8A%A0%E5%AD%A6%E5%91%98%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE_hu_7ac8ca9c4da90cb0.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="316"
+		data-flex-basis="760px"
+	
+></p>
+<p>StudentController：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 新增学员
+</span></span></span><span class="line"><span class="cl"><span class="cm">* */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@PostMapping</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">Student</span><span class="w"> </span><span class="n">student</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;新增学员: {}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">student</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">studentService</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">student</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">success</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>StudentService：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 新增学员
+</span></span></span><span class="line"><span class="cl"><span class="cm">* */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="n">Student</span><span class="w"> </span><span class="n">student</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>StudentServiceImpl：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="n">Student</span><span class="w"> </span><span class="n">student</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//补全基础属性</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">student</span><span class="p">.</span><span class="na">setCreateTime</span><span class="p">(</span><span class="n">LocalDateTime</span><span class="p">.</span><span class="na">now</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">student</span><span class="p">.</span><span class="na">setUpdateTime</span><span class="p">(</span><span class="n">LocalDateTime</span><span class="p">.</span><span class="na">now</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//调用Mapper接口方法插入数据</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">studentMapper</span><span class="p">.</span><span class="na">insert</span><span class="p">(</span><span class="n">student</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>StudentMapper：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="o">*</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="o">*</span><span class="w"> </span><span class="n">新增学员</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="o">*</span><span class="w"> </span><span class="o">*/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Options</span><span class="p">(</span><span class="n">useGeneratedKeys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">keyProperty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;id&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Insert</span><span class="p">(</span><span class="s">&#34;insert into student(name, no, gender, phone, id_card, is_college, address, degree, graduation_date, clazz_id, create_time, update_time) &#34;</span><span class="w"> </span><span class="o">+</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="s">&#34;values(#{name}, #{no}, #{gender}, #{phone}, #{idCard}, #{isCollege}, #{address}, #{degree}, #{graduationDate}, #{clazzId}, #{createTime}, #{updateTime})&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="w"> </span><span class="nf">insert</span><span class="p">(</span><span class="n">Student</span><span class="w"> </span><span class="n">student</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%96%B0%E5%A2%9E%E5%AD%A6%E5%91%981.png"
+	width="2183"
+	height="994"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%96%B0%E5%A2%9E%E5%AD%A6%E5%91%981_hu_7f24a2eed22d15b9.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%96%B0%E5%A2%9E%E5%AD%A6%E5%91%981_hu_49da05b661067fb.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="219"
+		data-flex-basis="527px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%96%B0%E5%A2%9E%E5%AD%A6%E5%91%982.png"
+	width="2010"
+	height="141"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%96%B0%E5%A2%9E%E5%AD%A6%E5%91%982_hu_82114adabd1ac2d8.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%96%B0%E5%A2%9E%E5%AD%A6%E5%91%982_hu_c2db7ac01a0bab28.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1425"
+		data-flex-basis="3421px"
+	
+></p>
+<h3 id="根据id查询学生接口">根据ID查询学生接口
+</h3><p>接口文档：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%A0%B9%E6%8D%AEID%E6%9F%A5%E8%AF%A2%E5%AD%A6%E7%94%9F%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0.png"
+	width="1396"
+	height="580"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%A0%B9%E6%8D%AEID%E6%9F%A5%E8%AF%A2%E5%AD%A6%E7%94%9F%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0_hu_a3bac576394ab6.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%A0%B9%E6%8D%AEID%E6%9F%A5%E8%AF%A2%E5%AD%A6%E7%94%9F%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0_hu_84b42642b25b8ffa.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="240"
+		data-flex-basis="577px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%A0%B9%E6%8D%AEID%E4%BF%AE%E6%94%B9%E5%AD%A6%E5%91%98%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE.png"
+	width="1479"
+	height="1081"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%A0%B9%E6%8D%AEID%E4%BF%AE%E6%94%B9%E5%AD%A6%E5%91%98%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE_hu_8f1ab0d9087779f6.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%A0%B9%E6%8D%AEID%E4%BF%AE%E6%94%B9%E5%AD%A6%E5%91%98%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE_hu_94eaeefac481a00.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="136"
+		data-flex-basis="328px"
+	
+></p>
+<p>StudentController：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 根据ID查询学员
+</span></span></span><span class="line"><span class="cl"><span class="cm">* */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&#34;/{id}&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">getInfo</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;根据id查询学员信息: {}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Student</span><span class="w"> </span><span class="n">student</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">studentService</span><span class="p">.</span><span class="na">getInfo</span><span class="p">(</span><span class="n">id</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">success</span><span class="p">(</span><span class="n">student</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>StudentService：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 根据ID查询学员
+</span></span></span><span class="line"><span class="cl"><span class="cm">* */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">Student</span><span class="w"> </span><span class="nf">getInfo</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">id</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>StudentServiceImpl：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">Student</span><span class="w"> </span><span class="nf">getInfo</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">studentMapper</span><span class="p">.</span><span class="na">getById</span><span class="p">(</span><span class="n">id</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>StudentMapper.java：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 根据ID查询学员
+</span></span></span><span class="line"><span class="cl"><span class="cm">* */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">Student</span><span class="w"> </span><span class="nf">getById</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">id</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>StudentMapper.xml：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;getById&#34;</span> <span class="na">resultType=</span><span class="s">&#34;com.itheima.pojo.Student&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    select s.*, c.name clazzName
+</span></span><span class="line"><span class="cl">    from student s left join clazz c on s.clazz_id = c.id
+</span></span><span class="line"><span class="cl">    where s.id = #{id}
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/select&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%A0%B9%E6%8D%AEID%E6%9F%A5%E8%AF%A2%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF.png"
+	width="2160"
+	height="1011"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%A0%B9%E6%8D%AEID%E6%9F%A5%E8%AF%A2%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF_hu_fceda5ee012eedc.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E6%A0%B9%E6%8D%AEID%E6%9F%A5%E8%AF%A2%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF_hu_68cc55120aab94ac.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="213"
+		data-flex-basis="512px"
+	
+></p>
+<h3 id="修改学生信息接口">修改学生信息接口
+</h3><p>接口文档：</p>
+<p><img src="/assets/%E4%BF%AE%E6%94%B9%E5%AD%A6%E5%91%98%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E4%BF%AE%E6%94%B9%E5%AD%A6%E5%91%98%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE.png"
+	width="1363"
+	height="390"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E4%BF%AE%E6%94%B9%E5%AD%A6%E5%91%98%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE_hu_3c5d91ea7d70f070.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E4%BF%AE%E6%94%B9%E5%AD%A6%E5%91%98%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE_hu_2ef4b0bd4c6c42ca.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="349"
+		data-flex-basis="838px"
+	
+></p>
+<p>StudentController：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 修改学员
+</span></span></span><span class="line"><span class="cl"><span class="cm">* */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@PutMapping</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">Student</span><span class="w"> </span><span class="n">student</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;修改学员信息: {}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">student</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">studentService</span><span class="p">.</span><span class="na">update</span><span class="p">(</span><span class="n">student</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">success</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>StudentService：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 修改学员
+</span></span></span><span class="line"><span class="cl"><span class="cm">* */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">Student</span><span class="w"> </span><span class="n">student</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>StudentServiceImpl：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">Student</span><span class="w"> </span><span class="n">student</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//补全基础属性</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">student</span><span class="p">.</span><span class="na">setUpdateTime</span><span class="p">(</span><span class="n">LocalDateTime</span><span class="p">.</span><span class="na">now</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//调用Mapper接口方法更新数据</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">studentMapper</span><span class="p">.</span><span class="na">update</span><span class="p">(</span><span class="n">student</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>StudentMapper：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 修改学员
+</span></span></span><span class="line"><span class="cl"><span class="cm">* */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Update</span><span class="p">(</span><span class="s">&#34;update student set name=#{name}, no=#{no}, gender=#{gender}, phone=#{phone}, id_card=#{idCard}, is_college=#{isCollege}, &#34;</span><span class="w"> </span><span class="o">+</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="s">&#34;address=#{address}, degree=#{degree}, graduation_date=#{graduationDate}, clazz_id=#{clazzId}, update_time=#{updateTime} where id = #{id}&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">Student</span><span class="w"> </span><span class="n">student</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>修改前：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E4%BF%AE%E6%94%B9%E5%89%8D.png"
+	width="2067"
+	height="957"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E4%BF%AE%E6%94%B9%E5%89%8D_hu_696e9763feea36bc.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E4%BF%AE%E6%94%B9%E5%89%8D_hu_523505b356985b65.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="215"
+		data-flex-basis="518px"
+	
+></p>
+<p>修改后：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E4%BF%AE%E6%94%B9%E5%90%8E1.png"
+	width="2182"
+	height="989"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E4%BF%AE%E6%94%B9%E5%90%8E1_hu_16ff623973a76fc5.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E4%BF%AE%E6%94%B9%E5%90%8E1_hu_295e9b3077d31fc7.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="220"
+		data-flex-basis="529px"
+	
+></p>
+<h3 id="删除学生信息接口">删除学生信息接口
+</h3><p>接口文档：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E5%88%A0%E9%99%A4%E5%AD%A6%E5%91%98%E6%8E%A5%E5%8F%A3.png"
+	width="1472"
+	height="1071"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E5%88%A0%E9%99%A4%E5%AD%A6%E5%91%98%E6%8E%A5%E5%8F%A3_hu_461b627737daac01.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E5%88%A0%E9%99%A4%E5%AD%A6%E5%91%98%E6%8E%A5%E5%8F%A3_hu_7763ed100724e089.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="137"
+		data-flex-basis="329px"
+	
+></p>
+<p>StudentController：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 删除学员
+</span></span></span><span class="line"><span class="cl"><span class="cm">* */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@DeleteMapping</span><span class="p">(</span><span class="s">&#34;/{ids}&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">ids</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;删除学员: id={}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">ids</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">studentService</span><span class="p">.</span><span class="na">delete</span><span class="p">(</span><span class="n">ids</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">success</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>StudentService：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="o">*</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="o">*</span><span class="w"> </span><span class="n">删除学员</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="o">*</span><span class="w"> </span><span class="o">*/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">id</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>StudentServiceImpl：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">studentMapper</span><span class="p">.</span><span class="na">deleteById</span><span class="p">(</span><span class="n">id</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>StudentMapper：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="o">*</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="o">*</span><span class="w"> </span><span class="n">删除学员</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="o">*</span><span class="w"> </span><span class="o">*/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Delete</span><span class="p">(</span><span class="s">&#34;delete from student where id = #{id}&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="w"> </span><span class="nf">deleteById</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">id</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>删除前：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E5%88%A0%E9%99%A4%E5%89%8D.png"
+	width="2043"
+	height="197"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E5%88%A0%E9%99%A4%E5%89%8D_hu_55ef84942203d33a.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E5%88%A0%E9%99%A4%E5%89%8D_hu_f6e991f5b238ac36.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1037"
+		data-flex-basis="2488px"
+	
+></p>
+<p>删除后：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E5%88%A0%E9%99%A4%E5%90%8E.png"
+	width="2033"
+	height="126"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E5%88%A0%E9%99%A4%E5%90%8E_hu_f2aa1f16b3b3f4e2.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E5%88%A0%E9%99%A4%E5%90%8E_hu_50cb17997cb6fae1.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1613"
+		data-flex-basis="3872px"
+	
+></p>
+<h3 id="违纪处理接口">违纪处理接口
+</h3><p>接口文档：</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E8%BF%9D%E7%BA%AA%E5%A4%84%E7%90%86%E6%8E%A5%E5%8F%A3.png"
+	width="1372"
+	height="986"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E8%BF%9D%E7%BA%AA%E5%A4%84%E7%90%86%E6%8E%A5%E5%8F%A3_hu_d45936fa180277a1.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E8%BF%9D%E7%BA%AA%E5%A4%84%E7%90%86%E6%8E%A5%E5%8F%A3_hu_75a02ff1a4be9061.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="139"
+		data-flex-basis="333px"
+	
+></p>
+<p>违纪处理一次，需要将违纪次数+1，违纪扣分+前端输入的分数。</p>
+<p>StudentController：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Java" data-lang="Java"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 违纪处理
+</span></span></span><span class="line"><span class="cl"><span class="cm">* */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@PutMapping</span><span class="p">(</span><span class="s">&#34;/violation/{id}/{score}&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">violation</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">score</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;违纪处理: id={}, score={}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">score</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">studentService</span><span class="p">.</span><span class="na">violation</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">score</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">success</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>StudentService：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="o">*</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="o">*</span><span class="w"> </span><span class="n">违纪处理</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="o">*</span><span class="w"> </span><span class="o">*/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="w"> </span><span class="nf">violation</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">score</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>StudentServiceImpl：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">violation</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">score</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">studentMapper</span><span class="p">.</span><span class="na">updateViolation</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">score</span><span class="p">,</span><span class="w"> </span><span class="n">LocalDateTime</span><span class="p">.</span><span class="na">now</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>StudentMapper：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 违纪处理
+</span></span></span><span class="line"><span class="cl"><span class="cm">* */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Update</span><span class="p">(</span><span class="s">&#34;update student set violation_count = violation_count + 1, violation_score = violation_score + #{score}, update_time = #{updateTime} where id = #{id}&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="w"> </span><span class="nf">updateViolation</span><span class="p">(</span><span class="nd">@Param</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">)</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="nd">@Param</span><span class="p">(</span><span class="s">&#34;score&#34;</span><span class="p">)</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">score</span><span class="p">,</span><span class="w"> </span><span class="nd">@Param</span><span class="p">(</span><span class="s">&#34;updateTime&#34;</span><span class="p">)</span><span class="w"> </span><span class="n">LocalDateTime</span><span class="w"> </span><span class="n">updateTime</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E8%BF%9D%E7%BA%AA1.png"
+	width="2120"
+	height="826"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E8%BF%9D%E7%BA%AA1_hu_4e797afcb2f100dc.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E8%BF%9D%E7%BA%AA1_hu_a499b22c95dfbc59.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="256"
+		data-flex-basis="615px"
+	
+></p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E8%BF%9D%E7%BA%AA2.png"
+	width="1987"
+	height="640"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E8%BF%9D%E7%BA%AA2_hu_dc15137f86e8c741.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E8%BF%9D%E7%BA%AA2_hu_f9e1cc9c9959b2c8.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="310"
+		data-flex-basis="745px"
+	
+></p>
+<p>再添加一次违纪记录，分值为1分</p>
+<p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E8%BF%9D%E7%BA%AA3.png"
+	width="2131"
+	height="785"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E8%BF%9D%E7%BA%AA3_hu_46f9e82f258ef9d2.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E8%BF%9D%E7%BA%AA3_hu_ee610572a2b803c3.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="271"
+		data-flex-basis="651px"
+	
+></p>
+<p>到此，关于学生管理的增删改查功能，我们就已经全部实现了。</p>
+<h2 id="需求学员信息统计">需求：学员信息统计
+</h2><p>需要开发如下几个接口：</p>
+<ul>
+<li>班级人数统计接口开发：参照接口文档 <strong>数据统计</strong> -&gt; <strong>班级人数统计</strong></li>
+<li>学员学历信息统计接口开发：参照接口文档 <strong>数据统计</strong> -&gt; <strong>学员学历统计</strong></li>
+</ul>
+<h3 id="班级人数统计接口">班级人数统计接口：
+</h3><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E7%8F%AD%E7%BA%A7%E4%BA%BA%E6%95%B0%E7%BB%9F%E8%AE%A1%E6%8E%A5%E5%8F%A3.png"
+	width="1427"
+	height="842"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E7%8F%AD%E7%BA%A7%E4%BA%BA%E6%95%B0%E7%BB%9F%E8%AE%A1%E6%8E%A5%E5%8F%A3_hu_5309bd592d88e3f.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E7%8F%AD%E7%BA%A7%E4%BA%BA%E6%95%B0%E7%BB%9F%E8%AE%A1%E6%8E%A5%E5%8F%A3_hu_a2baa14735e02e26.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="169"
+		data-flex-basis="406px"
+	
+></p>
+<p>ClazzOption：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.pojo</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.AllArgsConstructor</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.Data</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.NoArgsConstructor</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@NoArgsConstructor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@AllArgsConstructor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ClazzOption</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">List</span><span class="w"> </span><span class="n">clazzList</span><span class="p">;</span><span class="w"> </span><span class="c1">// 班级列表</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">List</span><span class="w"> </span><span class="n">dataList</span><span class="p">;</span><span class="w">  </span><span class="c1">// 数据列表</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>ReportController：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="w"> </span><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * 统计班级人数
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&#34;/studentCountData&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">getStudentCountData</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;统计班级人数&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">ClazzOption</span><span class="w"> </span><span class="n">clazzOption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reportService</span><span class="p">.</span><span class="na">getStudentCountData</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">success</span><span class="p">(</span><span class="n">clazzOption</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>ReportService：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 统计班级人数
+</span></span></span><span class="line"><span class="cl"><span class="cm">* */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">List</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getStudentCountData</span><span class="p">();</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>ReportServiceImpl：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ClazzOption</span><span class="w"> </span><span class="nf">getStudentCountData</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//1.调用mapper接口，获取统计数据</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&gt;</span><span class="w"> </span><span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">studentMapper</span><span class="p">.</span><span class="na">countStudentByClazz</span><span class="p">();</span><span class="w"> </span><span class="c1">// map：name 班级名称，value = 班级人数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//2.组装结果并返回</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">clazzList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">.</span><span class="na">stream</span><span class="p">().</span><span class="na">map</span><span class="p">(</span><span class="n">dataMap</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">dataMap</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)).</span><span class="na">toList</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">dataList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">.</span><span class="na">stream</span><span class="p">().</span><span class="na">map</span><span class="p">(</span><span class="n">dataMap</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">dataMap</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">&#34;value&#34;</span><span class="p">)).</span><span class="na">toList</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ClazzOption</span><span class="p">(</span><span class="n">clazzList</span><span class="p">,</span><span class="w"> </span><span class="n">dataList</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>StudentMapper.java：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 统计班级人数
+</span></span></span><span class="line"><span class="cl"><span class="cm">* */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">List</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">countStudentByClazz</span><span class="p">();</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>StudentMapper.xml：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl">   <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;countStudentByClazz&#34;</span> <span class="na">resultType=</span><span class="s">&#34;java.util.Map&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        select c.name as name, count(s.id) as value
+</span></span><span class="line"><span class="cl">        from clazz c left join student s on c.id = s.clazz_id
+</span></span><span class="line"><span class="cl">        group by c.id, c.name
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/select&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>结果与学历统计一起放在下面了</p>
+<h3 id="学员学历信息统计接口">学员学历信息统计接口：
+</h3><p>ReportController：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 统计学历分布
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&#34;/studentDegreeData&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">getStudentDegreeData</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;统计学历分布&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&gt;</span><span class="w"> </span><span class="n">degreeList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reportService</span><span class="p">.</span><span class="na">getStudentDegreeData</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">success</span><span class="p">(</span><span class="n">degreeList</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>ReportService：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 统计学历分布
+</span></span></span><span class="line"><span class="cl"><span class="cm">* */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">List</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getStudentDegreeData</span><span class="p">();</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>ReportServiceImpl：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getStudentDegreeData</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">studentMapper</span><span class="p">.</span><span class="na">countStudentByDegree</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>StudentMapper.java：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 统计学历分布
+</span></span></span><span class="line"><span class="cl"><span class="cm">* */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">List</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">countStudentByDegree</span><span class="p">();</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>StudentMapper.xml：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;countStudentByDegree&#34;</span> <span class="na">resultType=</span><span class="s">&#34;java.util.Map&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    select
+</span></span><span class="line"><span class="cl">        case when degree = 1 then &#39;初中&#39;
+</span></span><span class="line"><span class="cl">             when degree = 2 then &#39;高中&#39;
+</span></span><span class="line"><span class="cl">             when degree = 3 then &#39;大专&#39;
+</span></span><span class="line"><span class="cl">             when degree = 4 then &#39;本科&#39;
+</span></span><span class="line"><span class="cl">             when degree = 5 then &#39;硕士&#39;
+</span></span><span class="line"><span class="cl">             when degree = 6 then &#39;博士&#39;
+</span></span><span class="line"><span class="cl">        end as name,
+</span></span><span class="line"><span class="cl">        count(*) as value
+</span></span><span class="line"><span class="cl">    from student group by degree order by degree
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/select&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E7%BB%9F%E8%AE%A1%E9%A1%B5%E9%9D%A2.png"
+	width="2042"
+	height="953"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E7%BB%9F%E8%AE%A1%E9%A1%B5%E9%9D%A2_hu_8138b72f531216b3.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E7%BB%9F%E8%AE%A1%E9%A1%B5%E9%9D%A2_hu_920bcf99b0029e88.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="214"
+		data-flex-basis="514px"
+	
+></p>
+<h2 id="需求功能完善">需求：功能完善
+</h2><ul>
+<li><strong>删除部门时</strong>：如果部门下有员工，则不允许删除该部门，并给前端提示错误信息：对不起，当前部门下有员工，不能直接删除！</li>
+</ul>
+<p>DeptHasEmployeesException.java：新建，RuntimeException，提示消息：&ldquo;对不起，当前部门下有员工，不能直接删除！&rdquo;</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.exception</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 部门下有员工时抛出的异常
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DeptHasEmployeesException</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">RuntimeException</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">DeptHasEmployeesException</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">super</span><span class="p">(</span><span class="s">&#34;对不起，当前部门下有员工，不能直接删除！&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">DeptHasEmployeesException</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">super</span><span class="p">(</span><span class="n">message</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>GlobalExceptionHandler.java：新增 handleDeptHasEmployeesException() 处理器</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.exception</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 班级下有学生时抛出的异常
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ClassHasStudentsException</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">RuntimeException</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">ClassHasStudentsException</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">super</span><span class="p">(</span><span class="s">&#34;对不起，该班级下有学生，不能直接删除&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">ClassHasStudentsException</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">super</span><span class="p">(</span><span class="n">message</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>DeptMapper.java：新增 countEmployeesByDeptId(Integer deptId)</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 根据部门ID统计员工数量
+</span></span></span><span class="line"><span class="cl"><span class="cm">* */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Select</span><span class="p">(</span><span class="s">&#34;select count(*) from emp where dept_id = #{deptId}&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span><span class="w"> </span><span class="nf">countEmployeesByDeptId</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">deptId</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">*删除部门
+</span></span></span><span class="line"><span class="cl"><span class="cm">* */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Delete</span><span class="p">(</span><span class="s">&#34;delete from dept where id = #{id}&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="w"> </span><span class="nf">deleteById</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">id</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>DeptServiceImpl.java：deleteById() 中新增检查逻辑</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">deleteById</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//1. 检查部门下是否有员工</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">deptMapper</span><span class="p">.</span><span class="na">countEmployeesByDeptId</span><span class="p">(</span><span class="n">id</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">count</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DeptHasEmployeesException</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//2. 根据ID删除部门</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">deptMapper</span><span class="p">.</span><span class="na">deleteById</span><span class="p">(</span><span class="n">id</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E5%88%A0%E9%99%A4%E9%83%A8%E9%97%A8%E5%AE%8C%E5%96%84.png"
+	width="1890"
+	height="779"
+	srcset="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E5%88%A0%E9%99%A4%E9%83%A8%E9%97%A8%E5%AE%8C%E5%96%84_hu_e56d4b0f68940a11.png 480w, /p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/assets/%E5%88%A0%E9%99%A4%E9%83%A8%E9%97%A8%E5%AE%8C%E5%96%84_hu_78bf730b0364a7cf.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="242"
+		data-flex-basis="582px"
 	
 ></p>
 

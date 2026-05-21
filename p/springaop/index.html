@@ -246,7 +246,20 @@
         <li><a href="#分析">分析</a></li>
         <li><a href="#步骤">步骤</a></li>
         <li><a href="#代码实现">代码实现</a></li>
-        <li><a href="#获取当前登录员工">获取当前登录员工</a></li>
+        <li><a href="#获取当前登录员工">获取当前登录员工</a>
+          <ol>
+            <li><a href="#threadlocal">ThreadLocal</a></li>
+            <li><a href="#记录当前登录员工">记录当前登录员工</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#新增日志管理">新增日志管理</a>
+      <ol>
+        <li><a href="#接口描述">接口描述</a></li>
+        <li><a href="#代码实现-1">代码实现</a></li>
+        <li><a href="#前后端联调测试">前后端联调测试</a></li>
+        <li><a href="#功能测试">功能测试</a></li>
       </ol>
     </li>
   </ol>
@@ -2535,6 +2548,689 @@
 <li>如何从JWT令牌中获取当前登录用户的信息呢？ <strong>获取请求头中传递的jwt令牌，并解析</strong></li>
 <li>TokenFilter 中已经解析了令牌的信息，如何传递给AOP程序、Controller、Service呢？<strong>ThreadLocal</strong></li>
 </ul>
+<h4 id="threadlocal">ThreadLocal
+</h4><ul>
+<li>ThreadLocal 并不是一个Thread，而是Thread的局部变量。</li>
+<li>ThreadLocal为每个线程提供一份单独的存储空间，具有线程隔离的效果，不同的线程之间不会相互干扰。</li>
+</ul>
+<p><img src="/p/springaop/assets/Thread.png"
+	width="1026"
+	height="200"
+	srcset="/p/springaop/assets/Thread_hu_bbf9ba6e2ed100d3.png 480w, /p/springaop/assets/Thread_hu_7a7d6579a89785a7.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="513"
+		data-flex-basis="1231px"
+	
+></p>
+<ul>
+<li>常见方法：
+<ul>
+<li><code>public void set(T value) </code>  设置当前线程的线程局部变量的值</li>
+<li><code>public T get() </code>                    返回当前线程所对应的线程局部变量的值</li>
+<li><code>public void remove()</code>         移除当前线程的线程局部变量</li>
+</ul>
+</li>
+</ul>
+<p>示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ThreadLocalTest</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">ThreadLocal</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">local</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ThreadLocal</span><span class="o">&lt;&gt;</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//主线程</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">local</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="s">&#34;Main Message&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//创建线程</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//子线程</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">new</span><span class="w"> </span><span class="n">Thread</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Runnable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">local</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="s">&#34;Child Message&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">getName</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">local</span><span class="p">.</span><span class="na">get</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}).</span><span class="na">start</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">getName</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">local</span><span class="p">.</span><span class="na">get</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">local</span><span class="p">.</span><span class="na">remove</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">getName</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">local</span><span class="p">.</span><span class="na">get</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/springaop/assets/%E7%BA%BF%E7%A8%8B%E7%A4%BA%E4%BE%8B.png"
+	width="563"
+	height="180"
+	srcset="/p/springaop/assets/%E7%BA%BF%E7%A8%8B%E7%A4%BA%E4%BE%8B_hu_672614b45e740d19.png 480w, /p/springaop/assets/%E7%BA%BF%E7%A8%8B%E7%A4%BA%E4%BE%8B_hu_2ab59bb31eb963c1.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="312"
+		data-flex-basis="750px"
+	
+></p>
+<h4 id="记录当前登录员工">记录当前登录员工
+</h4><p>增删改的执行流程：</p>
+<p>前端发起请求，请求到达我们的web服务器（Tomcat服务器），服务器接收到这次请求，它就会从线程池当中获取一个线程来处理这次请求，直到这次请求处理完成，也就意味着一次请求对应一个线程，每一次请求都会有一个独立的线程来处理这次请求</p>
+<p><img src="/p/springaop/assets/%E7%99%BB%E5%BD%95%E5%91%98%E5%B7%A5.png"
+	width="1026"
+	height="328"
+	srcset="/p/springaop/assets/%E7%99%BB%E5%BD%95%E5%91%98%E5%B7%A5_hu_539e6bed2ee2d185.png 480w, /p/springaop/assets/%E7%99%BB%E5%BD%95%E5%91%98%E5%B7%A5_hu_611af5dcff813b74.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="312"
+		data-flex-basis="750px"
+	
+></p>
+<p>我们可以来进行一个测试：在前端刷新一下部门管理页面（相当于查询部门）：</p>
+<p><img src="/p/springaop/assets/%E7%BA%BF%E7%A8%8B.png"
+	width="1307"
+	height="48"
+	srcset="/p/springaop/assets/%E7%BA%BF%E7%A8%8B_hu_307e883c04c7cb38.png 480w, /p/springaop/assets/%E7%BA%BF%E7%A8%8B_hu_b0efee6ff069c350.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="2722"
+		data-flex-basis="6535px"
+	
+></p>
+<p>这便是线程池当中的线程</p>
+<p>具体操作步骤：</p>
+<ol>
+<li><strong>定义ThreadLocal操作的工具类，用于操作当前登录员工ID。</strong></li>
+</ol>
+<p>在 <code>com.itheima.utils</code> 引入工具类 <code>CurrentHolder</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.utils</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">CurrentHolder</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">ThreadLocal</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span><span class="w"> </span><span class="n">CURRENT_LOCAL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ThreadLocal</span><span class="o">&lt;&gt;</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setCurrentId</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">employeeId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">CURRENT_LOCAL</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="n">employeeId</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="nf">getCurrentId</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">CURRENT_LOCAL</span><span class="p">.</span><span class="na">get</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">remove</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">CURRENT_LOCAL</span><span class="p">.</span><span class="na">remove</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li><strong>在<code>TokenFilter</code>中，解析完当前登录员工ID，将其存入ThreadLocal（用完之后需将其删除）</strong>。</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.filter</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.utils.CurrentHolder</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.utils.JwtUtils</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">io.jsonwebtoken.Claims</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">jakarta.servlet.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">jakarta.servlet.annotation.WebFilter</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">jakarta.servlet.http.HttpServletRequest</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">jakarta.servlet.http.HttpServletResponse</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.extern.slf4j.Slf4j</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Slf4j</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@WebFilter</span><span class="p">(</span><span class="n">urlPatterns</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;/*&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TokenFilter</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Filter</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doFilter</span><span class="p">(</span><span class="n">ServletRequest</span><span class="w"> </span><span class="n">servletRequest</span><span class="p">,</span><span class="w"> </span><span class="n">ServletResponse</span><span class="w"> </span><span class="n">servletResponse</span><span class="p">,</span><span class="w"> </span><span class="n">FilterChain</span><span class="w"> </span><span class="n">filterChain</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">ServletException</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">HttpServletRequest</span><span class="w"> </span><span class="n">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">HttpServletRequest</span><span class="p">)</span><span class="w"> </span><span class="n">servletRequest</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">HttpServletResponse</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">HttpServletResponse</span><span class="p">)</span><span class="w"> </span><span class="n">servletResponse</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//1. 获取请求的url地址</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">uri</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="na">getRequestURI</span><span class="p">();</span><span class="w"> </span><span class="c1">// /employee/login</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//String url = request.getRequestURL().toString(); // http://localhost:8080/employee/login</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//2. 判断是否是登录请求, 如果url地址中包含 login, 则说明是登录请求, 放行</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">uri</span><span class="p">.</span><span class="na">contains</span><span class="p">(</span><span class="s">&#34;login&#34;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;登录请求, 放行&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">filterChain</span><span class="p">.</span><span class="na">doFilter</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">response</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//3. 获取请求中的token</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="na">getHeader</span><span class="p">(</span><span class="s">&#34;token&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//4. 判断token是否为空, 如果为空, 响应401状态码</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">token</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">token</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;token为空, 响应401状态码&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">response</span><span class="p">.</span><span class="na">setStatus</span><span class="p">(</span><span class="n">401</span><span class="p">);</span><span class="w"> </span><span class="c1">// 响应401状态码</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//5. 如果token不为空, 调用JWtUtils工具类的方法解析token, 如果解析失败, 响应401状态码</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">Claims</span><span class="w"> </span><span class="n">claims</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JwtUtils</span><span class="p">.</span><span class="na">parseJWT</span><span class="p">(</span><span class="n">token</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">Integer</span><span class="w"> </span><span class="n">empId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Integer</span><span class="p">.</span><span class="na">valueOf</span><span class="p">(</span><span class="n">claims</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">).</span><span class="na">toString</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">CurrentHolder</span><span class="p">.</span><span class="na">setCurrentId</span><span class="p">(</span><span class="n">empId</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;token解析成功, 放行&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;token解析失败, 响应401状态码&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">response</span><span class="p">.</span><span class="na">setStatus</span><span class="p">(</span><span class="n">401</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//6. 放行</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">filterChain</span><span class="p">.</span><span class="na">doFilter</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">response</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//7. 清空当前线程绑定的id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">CurrentHolder</span><span class="p">.</span><span class="na">remove</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li><strong>在AOP程序中，从ThreadLocal中获取当前登录员工的ID</strong>。</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.aop</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.anno.LogOperation</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.mapper.OperateLogMapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.OperateLog</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.utils.CurrentHolder</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.aspectj.lang.ProceedingJoinPoint</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.aspectj.lang.annotation.Around</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.aspectj.lang.annotation.Aspect</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Component</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.time.LocalDateTime</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Arrays</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Aspect</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Component</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">OperationLogAspect</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">OperateLogMapper</span><span class="w"> </span><span class="n">operateLogMapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 环绕通知</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Around</span><span class="p">(</span><span class="s">&#34;@annotation(log)&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="nf">around</span><span class="p">(</span><span class="n">ProceedingJoinPoint</span><span class="w"> </span><span class="n">joinPoint</span><span class="p">,</span><span class="w"> </span><span class="n">LogOperation</span><span class="w"> </span><span class="n">log</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Throwable</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 记录开始时间</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">long</span><span class="w"> </span><span class="n">startTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">currentTimeMillis</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 执行方法</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Object</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">joinPoint</span><span class="p">.</span><span class="na">proceed</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 当前时间</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">long</span><span class="w"> </span><span class="n">endTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">currentTimeMillis</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 耗时</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">long</span><span class="w"> </span><span class="n">costTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">endTime</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">startTime</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 构建日志对象</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">OperateLog</span><span class="w"> </span><span class="n">operateLog</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">OperateLog</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">operateLog</span><span class="p">.</span><span class="na">setOperateEmpId</span><span class="p">(</span><span class="n">getCurrentUserId</span><span class="p">());</span><span class="w"> </span><span class="c1">// 需要实现 getCurrentUserId 方法</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">operateLog</span><span class="p">.</span><span class="na">setOperateTime</span><span class="p">(</span><span class="n">LocalDateTime</span><span class="p">.</span><span class="na">now</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">operateLog</span><span class="p">.</span><span class="na">setClassName</span><span class="p">(</span><span class="n">joinPoint</span><span class="p">.</span><span class="na">getTarget</span><span class="p">().</span><span class="na">getClass</span><span class="p">().</span><span class="na">getName</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">operateLog</span><span class="p">.</span><span class="na">setMethodName</span><span class="p">(</span><span class="n">joinPoint</span><span class="p">.</span><span class="na">getSignature</span><span class="p">().</span><span class="na">getName</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">operateLog</span><span class="p">.</span><span class="na">setMethodParams</span><span class="p">(</span><span class="n">Arrays</span><span class="p">.</span><span class="na">toString</span><span class="p">(</span><span class="n">joinPoint</span><span class="p">.</span><span class="na">getArgs</span><span class="p">()));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">operateLog</span><span class="p">.</span><span class="na">setReturnValue</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="na">toString</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">operateLog</span><span class="p">.</span><span class="na">setCostTime</span><span class="p">(</span><span class="n">costTime</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 插入日志</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">operateLogMapper</span><span class="p">.</span><span class="na">insert</span><span class="p">(</span><span class="n">operateLog</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 示例方法，获取当前用户ID</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">getCurrentUserId</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">CurrentHolder</span><span class="p">.</span><span class="na">getCurrentId</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>代码优化完毕之后，我们重新启动服务测试。就可以看到，可以获取到不同的登录用户信息了。</p>
+<p><img src="/p/springaop/assets/%E8%8E%B7%E5%8F%96%E4%B8%8D%E5%90%8C%E4%BF%A1%E6%81%AF.png"
+	width="1898"
+	height="341"
+	srcset="/p/springaop/assets/%E8%8E%B7%E5%8F%96%E4%B8%8D%E5%90%8C%E4%BF%A1%E6%81%AF_hu_4b240875a7174714.png 480w, /p/springaop/assets/%E8%8E%B7%E5%8F%96%E4%B8%8D%E5%90%8C%E4%BF%A1%E6%81%AF_hu_f09bff55838efb48.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="556"
+		data-flex-basis="1335px"
+	
+></p>
+<p><img src="/p/springaop/assets/%E8%8E%B7%E5%8F%96%E4%B8%8D%E5%90%8C%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF.png"
+	width="1938"
+	height="380"
+	srcset="/p/springaop/assets/%E8%8E%B7%E5%8F%96%E4%B8%8D%E5%90%8C%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF_hu_d02dbe79d04ab77b.png 480w, /p/springaop/assets/%E8%8E%B7%E5%8F%96%E4%B8%8D%E5%90%8C%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF_hu_385cf6279da43e3a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="510"
+		data-flex-basis="1224px"
+	
+></p>
+<blockquote>
+<p>在同一个线程/同一个请求中，进行数据共享就可以使用 ThreadLocal。</p>
+</blockquote>
+<h2 id="新增日志管理">新增日志管理
+</h2><p>此节为完善日志管理功能模块</p>
+<h3 id="接口描述">接口描述
+</h3><p><img src="/p/springaop/assets/%E6%97%A5%E5%BF%97%E6%8E%A5%E5%8F%A31.png"
+	width="1108"
+	height="625"
+	srcset="/p/springaop/assets/%E6%97%A5%E5%BF%97%E6%8E%A5%E5%8F%A31_hu_5df9a54bb7ce6caf.png 480w, /p/springaop/assets/%E6%97%A5%E5%BF%97%E6%8E%A5%E5%8F%A31_hu_78eb511eb6c6e158.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="177"
+		data-flex-basis="425px"
+	
+></p>
+<p><img src="/p/springaop/assets/%E6%97%A5%E5%BF%97%E6%8E%A5%E5%8F%A32.png"
+	width="1237"
+	height="813"
+	srcset="/p/springaop/assets/%E6%97%A5%E5%BF%97%E6%8E%A5%E5%8F%A32_hu_22b4b9f8ce26185e.png 480w, /p/springaop/assets/%E6%97%A5%E5%BF%97%E6%8E%A5%E5%8F%A32_hu_b0f55786944f2735.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="152"
+		data-flex-basis="365px"
+	
+></p>
+<h3 id="代码实现-1">代码实现
+</h3><p>OperateLogController：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.controller</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.OperateLog</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.PageResult</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.Result</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.service.OperateLogService</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.extern.slf4j.Slf4j</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.GetMapping</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.RequestMapping</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.RequestParam</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 操作日志
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Slf4j</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">&#34;/log&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@RestController</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">OperateLogController</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">OperateLogService</span><span class="w"> </span><span class="n">operateLogService</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * 分页查询日志
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&#34;/page&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">page</span><span class="p">(</span><span class="nd">@RequestParam</span><span class="p">(</span><span class="n">defaultValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;1&#34;</span><span class="p">)</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">page</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                       </span><span class="nd">@RequestParam</span><span class="p">(</span><span class="n">defaultValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;10&#34;</span><span class="p">)</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">pageSize</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;日志分页查询：page={}, pageSize={}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">page</span><span class="p">,</span><span class="w"> </span><span class="n">pageSize</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">PageResult</span><span class="o">&lt;</span><span class="n">OperateLog</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pageResult</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">operateLogService</span><span class="p">.</span><span class="na">page</span><span class="p">(</span><span class="n">page</span><span class="p">,</span><span class="w"> </span><span class="n">pageSize</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">success</span><span class="p">(</span><span class="n">pageResult</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>OperateLogService：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.service</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.OperateLog</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.PageResult</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">OperateLogService</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * 分页查询日志
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">PageResult</span><span class="o">&lt;</span><span class="n">OperateLog</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">page</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">page</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">pageSize</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>OperateLogServiceImpl：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.service.impl</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.github.pagehelper.Page</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.github.pagehelper.PageHelper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.mapper.OperateLogMapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.OperateLog</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.pojo.PageResult</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.service.OperateLogService</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Service</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">OperateLogServiceImpl</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">OperateLogService</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">OperateLogMapper</span><span class="w"> </span><span class="n">operateLogMapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">PageResult</span><span class="o">&lt;</span><span class="n">OperateLog</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">page</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">page</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">pageSize</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//1. 设置分页参数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">PageHelper</span><span class="p">.</span><span class="na">startPage</span><span class="p">(</span><span class="n">page</span><span class="p">,</span><span class="w"> </span><span class="n">pageSize</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//2. 执行查询</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">OperateLog</span><span class="o">&gt;</span><span class="w"> </span><span class="n">logList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">operateLogMapper</span><span class="p">.</span><span class="na">list</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//3. 封装分页结果</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Page</span><span class="o">&lt;</span><span class="n">OperateLog</span><span class="o">&gt;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">Page</span><span class="o">&lt;</span><span class="n">OperateLog</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="n">logList</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PageResult</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="na">getTotal</span><span class="p">(),</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="na">getResult</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>OperateLogMapper接口：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="c1">//分页查询日志数据</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Select</span><span class="p">(</span><span class="s">&#34;select * from operate_log order by operate_time desc&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">OperateLog</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">list</span><span class="p">();</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="前后端联调测试">前后端联调测试
+</h3><p><img src="/p/springaop/assets/%E6%97%A5%E5%BF%97%E6%8E%A5%E5%8F%A3%E5%90%8E%E7%AB%AF.png"
+	width="2560"
+	height="1330"
+	srcset="/p/springaop/assets/%E6%97%A5%E5%BF%97%E6%8E%A5%E5%8F%A3%E5%90%8E%E7%AB%AF_hu_770b7576e5f233bf.png 480w, /p/springaop/assets/%E6%97%A5%E5%BF%97%E6%8E%A5%E5%8F%A3%E5%90%8E%E7%AB%AF_hu_25f48966d3abde18.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="461px"
+	
+></p>
+<h3 id="功能测试">功能测试
+</h3><p><img src="/p/springaop/assets/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86%E5%90%8E%E7%AB%AF.png"
+	width="2529"
+	height="870"
+	srcset="/p/springaop/assets/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86%E5%90%8E%E7%AB%AF_hu_c989277ba8416096.png 480w, /p/springaop/assets/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86%E5%90%8E%E7%AB%AF_hu_f4af9395eca0247a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="290"
+		data-flex-basis="697px"
+	
+></p>
 
 </section>
 
