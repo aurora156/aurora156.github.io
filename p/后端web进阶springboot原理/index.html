@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="后端web进阶(SpringBoot原理) 在前面的课程当中，我们学习的都是web开发的技术使用，都是面向应用层面的，我们学会了怎么样去用。而我们今天所要学习的是web后端开发的最后一个篇章springboot原理篇，主要偏向于底层原理。\n">
+<title>后端web进阶（SpringBoot原理）</title>
+
+<link rel='canonical' href='https://aurora156.github.io/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/'>
+
+<link rel="stylesheet" href="/scss/style.min.6a692fd055deae459f2a9767f57f3855ba80cafd5041317f24f7360f6ca47cdf.css"><meta property='og:title' content="后端web进阶（SpringBoot原理）">
+<meta property='og:description' content="后端web进阶(SpringBoot原理) 在前面的课程当中，我们学习的都是web开发的技术使用，都是面向应用层面的，我们学会了怎么样去用。而我们今天所要学习的是web后端开发的最后一个篇章springboot原理篇，主要偏向于底层原理。\n">
+<meta property='og:url' content='https://aurora156.github.io/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/'>
+<meta property='og:site_name' content='凉介的笔记'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-05-21T20:52:49&#43;08:00'/><meta property='article:modified_time' content='2026-05-21T20:52:49&#43;08:00'/>
+<meta name="twitter:title" content="后端web进阶（SpringBoot原理）">
+<meta name="twitter:description" content="后端web进阶(SpringBoot原理) 在前面的课程当中，我们学习的都是web开发的技术使用，都是面向应用层面的，我们学会了怎么样去用。而我们今天所要学习的是web后端开发的最后一个篇章springboot原理篇，主要偏向于底层原理。\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_39194fe8d5906e9f.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🌆</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">凉介的笔记</a></h1>
+            <h2 class="site-description">凉介的博客</h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#配置优先级">配置优先级</a></li>
+    <li><a href="#bean的管理">Bean的管理</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/">后端web进阶（SpringBoot原理）</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2026-05-21</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="后端web进阶springboot原理">后端web进阶(SpringBoot原理)
+</h1><p>在前面的课程当中，我们学习的都是web开发的技术使用，都是面向应用层面的，我们学会了怎么样去用。而我们今天所要学习的是web后端开发的最后一个篇章springboot原理篇，主要偏向于底层原理。</p>
+<p>这一篇的内容包括这么三个部分：</p>
+<ol>
+<li>配置优先级</li>
+<li>Bean的管理</li>
+<li>剖析Springboot的底层原理</li>
+</ol>
+<h2 id="配置优先级">配置优先级
+</h2><p>在我们前面的课程当中，我们已经讲解了SpringBoot项目当中支持的三类配置文件：</p>
+<ul>
+<li>application.properties</li>
+<li>application.yml</li>
+<li>application.yaml</li>
+</ul>
+<p>在SpringBoot项目当中，我们要想配置一个属性，可以通过这三种方式当中的任意一种来配置都可以，那么如果项目中同时存在这三种配置文件，且都配置了同一个属性，如：Tomcat端口号，到底哪一份配置文件生效呢？</p>
+<ul>
+<li>application.properties</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-properties" data-lang="properties"><span class="line"><span class="cl"><span class="na">server.port</span><span class="o">=</span><span class="s">8081</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>application.yml</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yml" data-lang="yml"><span class="line"><span class="cl"><span class="nt">server</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8082</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>application.yaml</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">server</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8082</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>我们启动SpringBoot程序，测试下三个配置文件中哪个Tomcat端口号生效：</p>
+<ul>
+<li>properties、yaml、yml三种配置文件同时存在。 配置好了，启动服务，测试一下：</li>
+</ul>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/P%E4%BC%98%E5%85%88%E7%BA%A7.png"
+	width="2298"
+	height="342"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/P%E4%BC%98%E5%85%88%E7%BA%A7_hu_815a7407545195d0.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/P%E4%BC%98%E5%85%88%E7%BA%A7_hu_7624a5cd1954f7aa.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="671"
+		data-flex-basis="1612px"
+	
+></p>
+<blockquote>
+<p>properties、yaml、yml三种配置文件，优先级最高的是properties</p>
+</blockquote>
+<ul>
+<li>yaml、yml两种配置文件同时存在</li>
+</ul>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/yml%E4%BC%98%E5%85%88%E7%BA%A7.png"
+	width="2092"
+	height="305"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/yml%E4%BC%98%E5%85%88%E7%BA%A7_hu_b19175db97dd587c.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/yml%E4%BC%98%E5%85%88%E7%BA%A7_hu_2e5ca960eb403f35.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="685"
+		data-flex-basis="1646px"
+	
+></p>
+<blockquote>
+<p>aml、yml 两种配置文件，优先级最高的是yml。</p>
+<p><strong>配置文件优先级排名（从高到低）：</strong></p>
+<ol>
+<li>properties配置文件</li>
+<li>yml配置文件</li>
+<li>yaml配置文件</li>
+</ol>
+</blockquote>
+<blockquote>
+<p><strong>注意事项</strong>：虽然springboot支持多种格式配置文件，但是在项目开发时，推荐统一使用一种格式的配置。（yml是主流）</p>
+</blockquote>
+<p>在SpringBoot项目当中除了以上3种配置文件外，SpringBoot为了增强程序的扩展性，除了支持配置文件的配置方式以外，还支持另外两种常见的配置方式：</p>
+<ol>
+<li>Java系统属性配置 （格式： -Dkey=value）</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl">-<span class="l">Dserver.port=9000</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ol>
+<li>命令行参数 （格式：&ndash;key=value）</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl">--<span class="l">server.port=10010</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>那在idea当中运行程序时，如何来指定Java系统属性和命令行参数呢？</p>
+<ul>
+<li>编辑启动程序的配置信息</li>
+</ul>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF.png"
+	width="589"
+	height="389"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF_hu_54614141b5d65c16.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF_hu_5201cc5ef699708.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="151"
+		data-flex-basis="363px"
+	
+></p>
+<p>打开之后，选择 <code>Modify options</code> , 选择 <code>Add VM options</code>, <code>Program arguments</code></p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF1.png"
+	width="1332"
+	height="1069"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF1_hu_4f14b2fe7c1ea665.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF1_hu_d390cfcd069b02da.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="124"
+		data-flex-basis="299px"
+	
+></p>
+<p>重启服务，同时配置Tomcat端口(系统属性、命令行参数)，测试哪个Tomcat端口号生效：</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%94%9F%E6%95%88.png"
+	width="2147"
+	height="364"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%94%9F%E6%95%88_hu_d65ba0e9a43e0c4d.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%94%9F%E6%95%88_hu_1db78109245a3977.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="589"
+		data-flex-basis="1415px"
+	
+></p>
+<blockquote>
+<p>说明，命令行参数的优先级是大于系统属性的，同时配置的情况下，命令行参数的配置项生效</p>
+</blockquote>
+<p>重启服务，同时配置Tomcat端口(application.properties、系统属性)，测试哪个Tomcat端口号生效：</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E7%B3%BB%E7%BB%9F%E5%B1%9E%E6%80%A7.png"
+	width="2271"
+	height="315"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E7%B3%BB%E7%BB%9F%E5%B1%9E%E6%80%A7_hu_61883bdf9f753e99.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E7%B3%BB%E7%BB%9F%E5%B1%9E%E6%80%A7_hu_788a3d6ca9bd4c11.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="720"
+		data-flex-basis="1730px"
+	
+></p>
+<blockquote>
+<p>说明，系统属性的优先级是大于application.properties的，同时配置的情况下，系统属性的配置项生效</p>
+</blockquote>
+<blockquote>
+<p><strong>五种配置方式的优先级：</strong> 命令行参数 &gt;  系统属性参数 &gt; properties参数 &gt; yml参数 &gt; yaml参数</p>
+</blockquote>
+<p>思考：如果项目已经打包上线了，这个时候我们又如何来设置Java系统属性和命令行参数呢？</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="l">java -Dserver.port=9000 -jar XXXXX.jar --server.port=10010</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>下面我们来演示下打包程序运行时指定Java系统属性和命令行参数：</p>
+<ol>
+<li>执行maven打包指令package，把项目打成jar文件</li>
+</ol>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E6%89%93%E6%88%90jar%E5%8C%85.png"
+	width="2506"
+	height="785"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E6%89%93%E6%88%90jar%E5%8C%85_hu_517b97109a7a5782.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E6%89%93%E6%88%90jar%E5%8C%85_hu_f3277d68321df652.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="319"
+		data-flex-basis="766px"
+	
+></p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/jar%E5%8C%85.png"
+	width="1073"
+	height="536"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/jar%E5%8C%85_hu_6860ffe1531b4280.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/jar%E5%8C%85_hu_5298eb07178ad302.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="200"
+		data-flex-basis="480px"
+	
+></p>
+<p>此处打好的jar包并没有我们刚刚配置的命令行参数和系统属性</p>
+<ol start="2">
+<li>
+<p>在当前目录下打开cmd命令行，使用命令：java -jar 方式运行jar文件程序。</p>
+<p>如果不知道该如何操作可以先执行一个指令：java，执行之后就会给我们输出一个对应的帮助文档</p>
+</li>
+</ol>
+<p>系统属性和命令行参数两个都不设置</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/cmd1.png"
+	width="2507"
+	height="768"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/cmd1_hu_f540af0374167647.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/cmd1_hu_84d37698aeb7f94b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="326"
+		data-flex-basis="783px"
+	
+></p>
+<p>此时端口号就是我们刚刚设置的properties的端口号</p>
+<p>仅设置Java系统属性</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/cmd2.png"
+	width="2554"
+	height="1141"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/cmd2_hu_4bc5e4392a03b319.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/cmd2_hu_daadf1e90e5151a8.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="223"
+		data-flex-basis="537px"
+	
+></p>
+<p>但此时会发现下面报错了，说端口号9000已经被占用了，这是因为我们的idea此时还开着，且端口号就是9000</p>
+<p>同时设置Java系统属性和命令行参数</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/cmd3.png"
+	width="2507"
+	height="712"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/cmd3_hu_724ab85677d18b80.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/cmd3_hu_bc10158516cc93ce.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="352"
+		data-flex-basis="845px"
+	
+></p>
+<blockquote>
+<p><strong>注意事项：</strong></p>
+<ul>
+<li>Springboot项目进行打包时，需要引入插件 <code>spring-boot-maven-plugin</code> (基于官网骨架创建项目，会自动添加该插件)</li>
+</ul>
+</blockquote>
+<p>在SpringBoot项目当中，常见的属性配置方式有5种， 3种配置文件，加上2种外部属性的配置(Java系统属性、命令行参数)。通过以上的测试，我们也得出了优先级(从低到高)：</p>
+<ul>
+<li>application.yaml（忽略）</li>
+<li>application.yml</li>
+<li>application.properties</li>
+<li>java系统属性（-Dxxx=xxx）</li>
+<li>命令行参数（&ndash;xxx=xxx）</li>
+</ul>
+<h2 id="bean的管理">Bean的管理
+</h2>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <script src="https://utteranc.es/client.js" 
+        repo="IAmYuanyu/IAmYuanyu.github.io"
+        issue-term="pathname"
+        
+        crossorigin="anonymous"
+        async
+        >
+</script>
+
+<style>
+    .utterances {
+        max-width: unset;
+    }
+</style>
+
+<script>
+    let utterancesLoaded = false;
+
+    function setUtterancesTheme(theme) {
+        let utterances = document.querySelector('.utterances iframe');
+        if (utterances) {
+            utterances.contentWindow.postMessage(
+                {
+                    type: 'set-theme',
+                    theme: `github-${theme}`
+                },
+                'https://utteranc.es'
+            );
+        }
+    }
+
+    addEventListener('message', event => {
+        if (event.origin !== 'https://utteranc.es') return;
+
+        
+        utterancesLoaded = true;
+        setUtterancesTheme(document.documentElement.dataset.scheme)
+    });
+
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (!utterancesLoaded) return;
+        setUtterancesTheme(e.detail)
+    })
+</script>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2025 - 
+        
+        2026 凉介
+    </section>
+    
+    <section class="powerby">
+        
+            本站于2026年3月31日建立 <br/>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
