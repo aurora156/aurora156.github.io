@@ -227,6 +227,18 @@
   <ol>
     <li><a href="#配置优先级">配置优先级</a></li>
     <li><a href="#bean的管理">Bean的管理</a></li>
+    <li><a href="#第三方bean">第三方bean</a></li>
+    <li><a href="#springboot原理">SpringBoot原理</a>
+      <ol>
+        <li><a href="#起步依赖">起步依赖</a></li>
+        <li><a href="#自动配置">自动配置</a>
+          <ol>
+            <li><a href="#实现方案">实现方案</a></li>
+            <li><a href="#原理分析">原理分析</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -570,7 +582,1304 @@
 <li>命令行参数（&ndash;xxx=xxx）</li>
 </ul>
 <h2 id="bean的管理">Bean的管理
-</h2>
+</h2><p>在前面的课程当中，我们已经讲过了我们可以通过Spring当中提供的注解@Component以及它的三个衍生注解（@Controller、@Service、@Repository）来声明IOC容器中的bean对象，同时我们也学习了如何为应用程序注入运行时所需要依赖的bean对象，也就是依赖注入DI。</p>
+<p>我们今天主要学习IOC容器中Bean的其他使用细节，主要学习以下三方面：</p>
+<ol>
+<li>bean的作用域配置</li>
+<li>管理第三方的bean对象</li>
+</ol>
+<p>接下来我们先来学习第一方面，Bean的作用域。</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: center">作用域</th>
+          <th style="text-align: center">说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center"><strong>singleton</strong></td>
+          <td style="text-align: center">容器内同名称的bean只有一个实例（单例）（默认）</td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><strong>prototype</strong></td>
+          <td style="text-align: center">每次使用bean时会创建新的实例（非单例）</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">request</td>
+          <td style="text-align: center">每个请求范围内会创建新的实例（web环境中，了解）</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">session</td>
+          <td style="text-align: center">每个会话范围内会创建新的实例（web环境中，了解）</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">application</td>
+          <td style="text-align: center">每个应用范围内会创建新的实例（web环境中，了解）</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>知道了bean的5种作用域了，我们要怎么去设置一个bean的作用域呢？</p>
+<ul>
+<li>可以借助Spring中的@Scope注解来进行配置作用域</li>
+</ul>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/scope.png"
+	width="475"
+	height="250"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/scope_hu_9979368c27599dc0.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/scope_hu_266e5d0ebca2a743.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="190"
+		data-flex-basis="456px"
+	
+></p>
+<p><strong>1). 测试一</strong>:如果循环结果拿到的是同一个对象，那么就是单例的，否则是非单例的</p>
+<ul>
+<li>控制器</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="c1">//默认bean的作用域为：singleton (单例)：默认单例的bean是在项目启动时创建的，创建完毕后，会将bean存入IOC容器中</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Lazy</span><span class="w">	</span><span class="c1">//延迟初始化 --&gt; 延迟到第一次使用的时候，再来创建这个bean</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@RestController</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">&#34;/depts&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DeptController</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">DeptService</span><span class="w"> </span><span class="n">deptService</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">DeptController</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;DeptController constructor ....&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//省略其他代码...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>测试类</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.junit.jupiter.api.Test</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.test.context.SpringBootTest</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.ApplicationContext</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@SpringBootTest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">SpringbootWebConfig2ApplicationTests</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">ApplicationContext</span><span class="w"> </span><span class="n">applicationContext</span><span class="p">;</span><span class="w"> </span><span class="c1">//IOC容器对象</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//bean的作用域</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">testScope</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">10</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">Object</span><span class="w"> </span><span class="n">deptController</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">applicationContext</span><span class="p">.</span><span class="na">getBean</span><span class="p">(</span><span class="s">&#34;deptController&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">deptController</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>重启SpringBoot服务，运行测试方法，查看控制台打印的日志：</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E5%8D%95%E4%BE%8B%E6%97%A5%E5%BF%97.png"
+	width="1268"
+	height="893"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E5%8D%95%E4%BE%8B%E6%97%A5%E5%BF%97_hu_9863cf018dee9aa4.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E5%8D%95%E4%BE%8B%E6%97%A5%E5%BF%97_hu_7a6646794959e19.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="141"
+		data-flex-basis="340px"
+	
+></p>
+<p>默认单例是在项目启动时构建的（图中报红仅为一个JVM警告，不影响实际运行）</p>
+<p><strong>注意事项：</strong></p>
+<ul>
+<li>IOC容器中的bean默认使用的作用域：singleton (单例)</li>
+<li>默认singleton的bean，在容器启动时被创建，可以使用@Lazy注解来延迟初始化(延迟到第一次使用时)</li>
+</ul>
+<p><strong>2). 测试二</strong></p>
+<p>修改控制器DeptController代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Scope</span><span class="p">(</span><span class="s">&#34;![rototype日](assets/prototype日志.png)&#34;</span><span class="p">)</span><span class="w"> </span><span class="c1">//bean作用域为非单例</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@RestController</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">&#34;/depts&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DeptController</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">DeptService</span><span class="w"> </span><span class="n">deptService</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">DeptController</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;DeptController constructor ....&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//省略其他代码...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>重启SpringBoot服务，再次执行测试方法，查看控制台打印的日志：</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/prototype%E6%97%A5%E5%BF%97.png"
+	width="1576"
+	height="611"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/prototype%E6%97%A5%E5%BF%97_hu_60195b6140ff32e3.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/prototype%E6%97%A5%E5%BF%97_hu_37717de495828ed6.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="257"
+		data-flex-basis="619px"
+	
+></p>
+<blockquote>
+<p><strong>注意事项：</strong></p>
+<ul>
+<li>prototype的bean，每一次使用该bean的时候都会创建一个新的实例</li>
+<li>实际开发当中，绝大部分的Bean是单例的，也就是说绝大部分Bean不需要配置scope属性</li>
+</ul>
+</blockquote>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/bean%E4%BD%9C%E7%94%A8%E5%9F%9F.png"
+	width="2424"
+	height="1037"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/bean%E4%BD%9C%E7%94%A8%E5%9F%9F_hu_7c3e7711e21eef9c.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/bean%E4%BD%9C%E7%94%A8%E5%9F%9F_hu_6b95333c4ed3d23b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="233"
+		data-flex-basis="561px"
+	
+></p>
+<p><strong>小结：</strong></p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/bean%E5%B0%8F%E7%BB%93.png"
+	width="2507"
+	height="932"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/bean%E5%B0%8F%E7%BB%93_hu_4ff91b6accb7c59b.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/bean%E5%B0%8F%E7%BB%93_hu_aa89f7c377be2671.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="268"
+		data-flex-basis="645px"
+	
+></p>
+<h2 id="第三方bean">第三方bean
+</h2><p>学习完bean的获取、bean的作用域之后，接下来我们再来学习第三方bean的配置。</p>
+<p>之前我们所配置的bean，像controller、service，dao三层体系下编写的类，这些类都是我们在项目当中自己定义的类(自定义类)。当我们要声明这些bean，也非常简单，我们只需要在类上加上<code>@Component</code>以及它的这三个衍生注解（<code>@Controller</code>、<code>@Service</code>、<code>@Repository</code>），就可以来声明这个bean对象了。</p>
+<p>但是在我们项目开发当中，还有一种情况就是这个类它不是我们自己编写的，而是我们引入的第三方依赖当中提供的，那么此时我们是无法使用 <code>@Component</code> 及其衍生注解来声明bean的，此时就需要使用**@Bean**注解来声明bean 了。</p>
+<p><strong>演示1：</strong></p>
+<ul>
+<li>在启动类中直接声明这个Bean。比如：我们可以将我们之前使用的阿里云OSS操作的工具类，基于@Bean注解的方式来声明Bean。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.utils.AliyunOSSOperator</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.utils.AliyunOSSProperties</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.SpringApplication</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.autoconfigure.SpringBootApplication</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Bean</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@SpringBootApplication</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SpringbootWebConfigApplication</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">SpringApplication</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">SpringbootWebConfigApplication</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Bean</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">AliyunOSSOperator</span><span class="w"> </span><span class="nf">aliyunOSSOperator</span><span class="p">(</span><span class="n">AliyunOSSProperties</span><span class="w"> </span><span class="n">ossProperties</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">AliyunOSSOperator</span><span class="p">(</span><span class="n">ossProperties</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>测试：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">cn.hutool.core.io.FileUtil</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.utils.AliyunOSSOperator</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.junit.jupiter.api.Test</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.test.context.SpringBootTest</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.ApplicationContext</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.File</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@SpringBootTest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">SpringbootWebConfig2ApplicationTests</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">ApplicationContext</span><span class="w"> </span><span class="n">applicationContext</span><span class="p">;</span><span class="w"> </span><span class="c1">//IOC容器对象</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">AliyunOSSOperator</span><span class="w"> </span><span class="n">aliyunOSSOperator</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//bean的作用域</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">testScope</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">10</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">Object</span><span class="w"> </span><span class="n">deptController</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">applicationContext</span><span class="p">.</span><span class="na">getBean</span><span class="p">(</span><span class="s">&#34;deptController&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">deptController</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">testupload</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">File</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">File</span><span class="p">(</span><span class="s">&#34;D:\\picture\\111.jpg&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aliyunOSSOperator</span><span class="p">.</span><span class="na">upload</span><span class="p">(</span><span class="n">FileUtil</span><span class="p">.</span><span class="na">readBytes</span><span class="p">(</span><span class="n">file</span><span class="p">),</span><span class="w"> </span><span class="s">&#34;111.jpg&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">url</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>演示2：</strong></p>
+<p>若要管理的第三方 bean 对象，建议对这些bean进行集中分类配置，可以通过 <code>@Configuration</code> 注解声明一个配置类。【推荐】</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.config</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.utils.AliyunOSSOperator</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.utils.AliyunOSSProperties</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Bean</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Configuration</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Configuration</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">OSSConfig</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Bean</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">AliyunOSSOperator</span><span class="w"> </span><span class="nf">aliyunOSSOperator</span><span class="p">(</span><span class="n">AliyunOSSProperties</span><span class="w"> </span><span class="n">ossProperties</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">AliyunOSSOperator</span><span class="p">(</span><span class="n">ossProperties</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="springboot原理">SpringBoot原理
+</h2><p>SpringBoot使我们能够集中精力地去关注业务功能的开发，而不用过多地关注框架本身的配置使用。而我们前面所讲解的都是面向应用层面的技术，接下来我们开始学习SpringBoot的原理，这部分内容偏向于底层的原理分析。</p>
+<p>在剖析SpringBoot的原理之前，我们先来快速回顾一下我们前面所讲解的Spring家族的框架。</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/SF.png"
+	width="570"
+	height="276"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/SF_hu_d3d03dcb53ffc626.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/SF_hu_6b1092e8577d369e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="206"
+		data-flex-basis="495px"
+	
+></p>
+<p>Spring是目前世界上最流行的Java框架，它可以帮助我们更加快速、更加容易的来构建Java项目。而在Spring家族当中提供了很多优秀的框架，而所有的框架都是基于一个基础框架的SpringFramework(也就是Spring框架)。而前面我们也提到，如果我们直接基于Spring框架进行项目的开发，会比较繁琐。</p>
+<p>这个繁琐主要体现在两个地方：</p>
+<ol>
+<li>
+<p>在pom.xml中依赖配置比较繁琐，在项目开发时，需要自己去找到对应的依赖，还需要找到依赖它所配套的依赖以及对应版本，否则就会出现版本冲突问题。</p>
+</li>
+<li>
+<p>在使用Spring框架进行项目开发时，需要在Spring的配置文件中做大量的配置，这就造成Spring框架入门难度较大，学习成本较高。<img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/FB%E5%AF%B9%E6%AF%94.png"
+	width="1026"
+	height="288"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/FB%E5%AF%B9%E6%AF%94_hu_3c142ef3d051c64.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/FB%E5%AF%B9%E6%AF%94_hu_32b843faef091605.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="356"
+		data-flex-basis="855px"
+	
+></p>
+<blockquote>
+<ul>
+<li>基于Spring存在的问题，官方在Spring框架4.0版本之后，又推出了一个全新的框架：SpringBoot。</li>
+<li>通过 SpringBoot来简化Spring框架的开发(是简化不是替代)。我们直接基于SpringBoot来构建Java项目，会让我们的项目开发更加简单，更加快捷。</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+<p>SpringBoot框架之所以使用起来更简单更快捷，是因为SpringBoot框架底层提供了两个非常重要的功能：一个是起步依赖，一个是自动配置。</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/SB.png"
+	width="547"
+	height="313"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/SB_hu_48ae8449f9cbbf97.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/SB_hu_4cb79d6ea812b8b4.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="174"
+		data-flex-basis="419px"
+	
+></p>
+<blockquote>
+<ul>
+<li>通过SpringBoot所提供的起步依赖，就可以大大的简化pom文件当中依赖的配置，从而解决了Spring框架当中依赖配置繁琐的问题。</li>
+<li>通过自动配置的功能就可以大大的简化框架在使用时bean的声明以及bean的配置。我们只需要引入程序开发时所需要的起步依赖，项目开发时所用到常见的配置都已经有了，我们直接使用就可以了。</li>
+</ul>
+</blockquote>
+<p>简单回顾之后，接下来我们来学习下SpringBoot的原理。其实学习SpringBoot的原理就是来解析SpringBoot当中的起步依赖与自动配置的原理。我们首先来学习SpringBoot当中起步依赖的原理。</p>
+<h3 id="起步依赖">起步依赖
+</h3><p>假如我们没有使用SpringBoot，用的是Spring框架进行web程序的开发，此时我们就需要引入web程序开发所需要的一些依赖。</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E8%B5%B7%E6%AD%A5%E4%BE%9D%E8%B5%961.png"
+	width="974"
+	height="945"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E8%B5%B7%E6%AD%A5%E4%BE%9D%E8%B5%961_hu_4baa40db7efe13bb.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E8%B5%B7%E6%AD%A5%E4%BE%9D%E8%B5%961_hu_bf9216c6ffb87b02.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="103"
+		data-flex-basis="247px"
+	
+></p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E8%B5%B7%E6%AD%A5%E4%BE%9D%E8%B5%96.png"
+	width="697"
+	height="786"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E8%B5%B7%E6%AD%A5%E4%BE%9D%E8%B5%96_hu_55f3ffb2d4e81a98.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E8%B5%B7%E6%AD%A5%E4%BE%9D%E8%B5%96_hu_419b216e8bf522e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="88"
+		data-flex-basis="212px"
+	
+></p>
+<p>当我们引入了 spring-boot-starter-web 之后，maven会通过<strong>依赖传递</strong>特性，将web开发所需的常见依赖都传递下来。</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E4%BE%9D%E8%B5%96%E4%BC%A0%E9%80%92.png"
+	width="1026"
+	height="765"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E4%BE%9D%E8%B5%96%E4%BC%A0%E9%80%92_hu_473ec67af26a1b77.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E4%BE%9D%E8%B5%96%E4%BC%A0%E9%80%92_hu_5404dd1f45e59d27.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="134"
+		data-flex-basis="321px"
+	
+></p>
+<p>所以，起步依赖的原理就是Maven的依赖传递。</p>
+<blockquote>
+<ul>
+<li>在SpringBoot给我们提供的这些起步依赖当中，已提供了当前程序开发所需要的所有的常见依赖(官网地址：https://docs.spring.io/spring-boot/docs/2.7.7/reference/htmlsingle/#using.build-systems.starters)。</li>
+<li>比如：springboot-starter-web，这是web开发的起步依赖，在web开发的起步依赖当中，就集成了web开发中常见的依赖：json、web、webmvc、tomcat等。我们只需要引入这一个起步依赖，其他的依赖都会自动的通过Maven的依赖传递进来。</li>
+</ul>
+</blockquote>
+<h3 id="自动配置">自动配置
+</h3><p>SpringBoot的自动配置就是当spring容器启动后，一些配置类、bean对象就自动存入到了IOC容器中，不需要我们手动去声明，从而简化了开发，省去了繁琐的配置操作。<img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE.png"
+	width="1026"
+	height="427"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE_hu_dffc21fdb740f375.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE_hu_8d2db703ffdb1ccb.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="240"
+		data-flex-basis="576px"
+	
+></p>
+<p>比如，在我们前面讲解AOP记录日志的那个案例中，我们要将一个对象转为json，直接注入一个Gson，然后就可以直接使用了。而我们在我们整个项目中，也并未配置Gson这个类型的bean，为什么可以直接注入使用呢？ 原因就是因为这个bean，springboot中已经帮我们自动配置完毕了，我们是可以直接使用的。</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/gson%E4%BE%9D%E8%B5%96.png"
+	width="883"
+	height="943"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/gson%E4%BE%9D%E8%B5%96_hu_8cbd96fd1f2694a7.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/gson%E4%BE%9D%E8%B5%96_hu_6f22cc22b57c3ec8.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="93"
+		data-flex-basis="224px"
+	
+></p>
+<p>我们可以在SpringBootWebTests中进行一个测试：在文件中添加这几行代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">private</span><span class="w"> </span><span class="n">Gson</span><span class="w"> </span><span class="n">gson</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">testJson</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">gson</span><span class="p">.</span><span class="na">toJson</span><span class="p">(</span><span class="n">Result</span><span class="p">.</span><span class="na">success</span><span class="p">(</span><span class="s">&#34;Hello Gson&#34;</span><span class="p">)));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/Gs%E6%B5%8B%E8%AF%95.png"
+	width="659"
+	height="114"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/Gs%E6%B5%8B%E8%AF%95_hu_e11389cbba28db0a.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/Gs%E6%B5%8B%E8%AF%95_hu_c5ef64d899c00ff5.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="578"
+		data-flex-basis="1387px"
+	
+></p>
+<p>可以发现当前项目中我们没有去声明gson这个bean，但是我们却可以直接将这个bean注入进来使用它，这是Springboot给我们提供的功能</p>
+<p>那接下来，我们就要来解析，SpringBoot中到底是如何完成自动配置的。</p>
+<h4 id="实现方案">实现方案
+</h4><p>我们知道了什么是自动配置之后，接下来我们就要来剖析自动配置的原理。解析自动配置的原理就是分析在 SpringBoot项目当中，我们引入对应的依赖之后，是如何将依赖jar包当中所提供的bean以及配置类直接加载到当前项目的SpringIOC容器当中的。</p>
+<p>接下来，我们就直接通过代码来分析自动配置原理。</p>
+<ul>
+<li>准备工作：在Idea中导入&quot;资料\03. 自动配置原理&quot; 下的 <code>itheima-utils</code> 工程</li>
+<li>在SpringBoot项目 <code>spring-boot-web-config</code> 工程中，通过坐标引入<code>itheima-utils</code>依赖</li>
+</ul>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E8%87%AA%E5%AE%9A%E4%B9%89.png"
+	width="2077"
+	height="825"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E8%87%AA%E5%AE%9A%E4%B9%89_hu_8b2d27067b489695.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E8%87%AA%E5%AE%9A%E4%B9%89_hu_e0133da475c180fa.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="251"
+		data-flex-basis="604px"
+	
+></p>
+<p>1、引入的 <code>itheima-utils</code> 中配置如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Component</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TokenParser</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">parse</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;TokenParser ... parse ...&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>2、在测试类中，添加测试方法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@SpringBootTest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AutoConfigurationTests</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">ApplicationContext</span><span class="w"> </span><span class="n">applicationContext</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">testTokenParse</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">tokenParser</span><span class="p">.</span><span class="na">parse</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//省略其他代码...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>3、执行测试方法</p>
+<p>（框架报的错一定要从下往上看）</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E6%8A%A5%E9%94%99.png"
+	width="1935"
+	height="528"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E6%8A%A5%E9%94%99_hu_2939cf9412cb6324.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E6%8A%A5%E9%94%99_hu_3091e9d9137be8b0.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="366"
+		data-flex-basis="879px"
+	
+></p>
+<blockquote>
+<p>异常信息描述： 没有com.example.TokenParse类型的bean</p>
+<p>说明：在Spring容器中没有找到com.example.TokenParse类型的bean对象</p>
+</blockquote>
+<p><strong>思考：引入进来的第三方依赖当中的bean以及配置类为什么没有生效？</strong></p>
+<ul>
+<li>原因在我们之前讲解IOC的时候有提到过，在类上添加<code>@Component</code>注解来声明bean对象时，还需要保证<code>@Component</code>注解能被Spring的组件扫描到。</li>
+<li>SpringBoot项目中的<code>@SpringBootApplication</code>注解，具有包扫描的作用，但是它只会扫描启动类所在的当前包以及子包。</li>
+<li>当前包：com.itheima， 第三方依赖中提供的包：com.example（扫描不到）</li>
+</ul>
+<p><strong>那么如何解决以上问题的呢？</strong></p>
+<ul>
+<li>方案1：<code>@ComponentScan</code> 组件扫描</li>
+<li>方案2：<code>@Import</code> 导入（使用<code>@Import</code>导入的类会被Spring加载到IOC容器</li>
+</ul>
+<h5 id="方案一">方案一
+</h5><p><code>@ComponentScan</code>组件扫描【在启动类上添加@ComponentScan要扫描的包】</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@SpringBootApplication</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@ComponentScan</span><span class="p">({</span><span class="s">&#34;com.itheima&#34;</span><span class="p">,</span><span class="s">&#34;com.example&#34;</span><span class="p">})</span><span class="w"> </span><span class="c1">//指定要扫描的包</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SpringbootWebConfigApplication</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">SpringApplication</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">SpringbootWebConfigApplication</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>重新执行测试方法，控制台日志输出：</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/CS%E6%B5%8B%E8%AF%95.png"
+	width="1613"
+	height="203"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/CS%E6%B5%8B%E8%AF%95_hu_f849702d7091c68a.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/CS%E6%B5%8B%E8%AF%95_hu_b55f629b240cd10.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="794"
+		data-flex-basis="1906px"
+	
+></p>
+<blockquote>
+<p>如果采用以上这种方式来完成自动配置，那我们进行项目开发时，就需要引入大量的第三方的依赖，就需要在启动类上配置N多要扫描的包，这种方式会很繁琐。而且这种大面积的扫描性能也比较低。</p>
+<p><strong>缺点：</strong></p>
+<ol>
+<li>使用繁琐</li>
+<li>性能低</li>
+</ol>
+<p><strong>结论：SpringBoot中并没有采用以上这种方案。</strong></p>
+</blockquote>
+<h5 id="方案二">方案二
+</h5><p>@Import导入</p>
+<ul>
+<li>导入形式主要有以下几种：
+<ul>
+<li>导入普通类</li>
+<li>导入配置类</li>
+<li>导入ImportSelector接口实现类</li>
+</ul>
+</li>
+</ul>
+<p><strong>1). 使用@Import导入普通类</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Import</span><span class="p">(</span><span class="n">TokenParser</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"> </span><span class="c1">//导入的类会被Spring加载到IOC容器中</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@SpringBootApplication</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SpringbootWebConfigApplication</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">SpringApplication</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">SpringbootWebConfigApplication</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>重新执行测试方法，控制台日志输出：</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/import%E6%99%AE%E9%80%9A%E7%B1%BB.png"
+	width="2118"
+	height="300"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/import%E6%99%AE%E9%80%9A%E7%B1%BB_hu_efd414efcb1e3da0.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/import%E6%99%AE%E9%80%9A%E7%B1%BB_hu_30f14db0cd4d3b90.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="706"
+		data-flex-basis="1694px"
+	
+></p>
+<p><strong>2). 使用@Import导入配置类：</strong></p>
+<ul>
+<li>配置类</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Configuration</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">HeaderConfig</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Bean</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">HeaderParser</span><span class="w"> </span><span class="nf">headerParser</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HeaderParser</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Bean</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">HeaderGenerator</span><span class="w"> </span><span class="nf">headerGenerator</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HeaderGenerator</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>启动类</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Import</span><span class="p">(</span><span class="n">HeaderConfig</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"> </span><span class="c1">//导入配置类</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@SpringBootApplication</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SpringbootWebConfig2Application</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">SpringApplication</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">SpringbootWebConfig2Application</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>测试类</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@SpringBootTest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AutoConfigurationTests</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">ApplicationContext</span><span class="w"> </span><span class="n">applicationContext</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">testHeaderParser</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">applicationContext</span><span class="p">.</span><span class="na">getBean</span><span class="p">(</span><span class="n">HeaderParser</span><span class="p">.</span><span class="na">class</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">testHeaderGenerator</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">applicationContext</span><span class="p">.</span><span class="na">getBean</span><span class="p">(</span><span class="n">HeaderGenerator</span><span class="p">.</span><span class="na">class</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//省略其他代码...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>执行测试方法：</p>
+<p>这里就测试testHeaderParser，第二个方法结果一样就不展示了</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/import%E9%85%8D%E7%BD%AE%E7%B1%BB.png"
+	width="2332"
+	height="489"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/import%E9%85%8D%E7%BD%AE%E7%B1%BB_hu_64a96baf75838bfa.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/import%E9%85%8D%E7%BD%AE%E7%B1%BB_hu_779b9bb13ea18464.png 1024w"
+	loading="lazy"
+	
+		alt="m"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="476"
+		data-flex-basis="1144px"
+	
+></p>
+<p><strong>3). 使用@Import导入ImportSelector接口实现类：</strong></p>
+<ul>
+<li>ImportSelector接口实现类</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyImportSelector</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">ImportSelector</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="nf">selectImports</span><span class="p">(</span><span class="n">AnnotationMetadata</span><span class="w"> </span><span class="n">importingClassMetadata</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//返回值字符串数组（数组中封装了全限定名称的类，可以一次性导入多个类）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">String</span><span class="o">[]</span><span class="p">{</span><span class="s">&#34;com.example.HeaderConfig&#34;</span><span class="p">,</span><span class="s">&#34;com.example.TokenParser&#34;</span><span class="p">};</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>启动类</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Import</span><span class="p">(</span><span class="n">MyImportSelector</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"> </span><span class="c1">//导入ImportSelector接口实现类</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@SpringBootApplication</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SpringbootWebConfig2Application</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">SpringApplication</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">SpringbootWebConfig2Application</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>执行测试方法：</p>
+<p>我们就拿上面的配置类的测试方案来测试，虽然注释掉了配置类的@import会导致报错，但是由于我们导入了接口实现类，而接口实现类中又有配置类的方法，所以此时报错是误报，直接运行即可</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/import%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0%E7%B1%BB.png"
+	width="2354"
+	height="457"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/import%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0%E7%B1%BB_hu_997e824890fcd45b.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/import%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0%E7%B1%BB_hu_ec3d1d8f6b405c80.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="515"
+		data-flex-basis="1236px"
+	
+></p>
+<p>我们使用@Import注解通过这三种方式都可以导入第三方依赖中所提供的bean或者是配置类。</p>
+<p>思考：如果基于以上方式完成自动配置，当要引入一个第三方依赖时，是不是还要知道第三方依赖中有哪些配置类和哪些Bean对象？</p>
+<ul>
+<li>答案：是的。 （对程序员来讲，很不友好，而且比较繁琐）</li>
+</ul>
+<p>思考：当我们要使用第三方依赖，依赖中到底有哪些bean和配置类，谁最清楚？</p>
+<ul>
+<li>答案：第三方依赖自身最清楚。</li>
+</ul>
+<blockquote>
+<p>结论：我们不用自己指定要导入哪些bean对象和配置类了，让第三方依赖它自己来指定。</p>
+</blockquote>
+<p>怎么让第三方依赖自己指定bean对象和配置类？</p>
+<ul>
+<li>比较常见的方案就是第三方依赖给我们提供一个注解，这个注解一般都以@EnableXxxx开头的注解，注解中封装的就是@Import注解</li>
+</ul>
+<p><strong>4). 使用第三方依赖提供的 @EnableXxxxx注解</strong></p>
+<ul>
+<li>第三方依赖中提供的注解</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Retention</span><span class="p">(</span><span class="n">RetentionPolicy</span><span class="p">.</span><span class="na">RUNTIME</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Target</span><span class="p">(</span><span class="n">ElementType</span><span class="p">.</span><span class="na">TYPE</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Import</span><span class="p">(</span><span class="n">MyImportSelector</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="c1">//指定要导入哪些bean对象或配置类</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="nd">@interface</span><span class="w"> </span><span class="n">EnableHeaderConfig</span><span class="w"> </span><span class="p">{</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>在使用时只需在启动类上加上@EnableXxxxx注解即可</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="o">![</span><span class="n">HC注</span><span class="o">]</span><span class="p">(</span><span class="n">assets</span><span class="o">/</span><span class="n">EHC注解</span><span class="p">.</span><span class="na">png</span><span class="p">)</span><span class="w"> </span><span class="c1">//使用第三方依赖提供的Enable开头的注解</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@SpringBootApplication</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SpringbootWebConfig2Application</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">SpringApplication</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">SpringbootWebConfig2Application</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>执行测试方法：</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/EHC%E6%B3%A8%E8%A7%A3.png"
+	width="2310"
+	height="336"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/EHC%E6%B3%A8%E8%A7%A3_hu_511dc6b8065dc6e0.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/EHC%E6%B3%A8%E8%A7%A3_hu_f8d78988992ce630.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="687"
+		data-flex-basis="1650px"
+	
+></p>
+<p>以上四种方式都可以完成导入操作，但是第4种方式会更方便更优雅，而这种方式也是SpringBoot当中所采用的方式。</p>
+<h4 id="原理分析">原理分析
+</h4><h5 id="源码跟踪">源码跟踪
+</h5><p>前面我们讲解了在项目当中引入第三方依赖之后，如何加载第三方依赖中定义好的bean对象以及配置类，从而完成自动配置操作。那下面我们通过源码跟踪的形式来剖析下SpringBoot底层到底是如何完成自动配置的。</p>
+<blockquote>
+<p><strong>源码跟踪技巧：</strong></p>
+<p>在跟踪框架源码的时候，一定要抓住关键点，找到核心流程。一定不要从头到尾一行代码去看，一个方法的去研究，一定要找到关键流程，抓住关键点，先在宏观上对整个流程或者整个原理有一个认识，有精力再去研究其中的细节。</p>
+</blockquote>
+<p>要搞清楚SpringBoot的自动配置原理，要从SpringBoot启动类上使用的核心注解<code>@SpringBootApplication</code>开始分析：【按住Ctrl点击@SpringBootApplication】</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E6%BA%90%E7%A0%81%E8%B7%9F%E8%B8%AA.png"
+	width="1026"
+	height="280"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E6%BA%90%E7%A0%81%E8%B7%9F%E8%B8%AA_hu_d19c10ae23c96e5b.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E6%BA%90%E7%A0%81%E8%B7%9F%E8%B8%AA_hu_c944564b78f52da2.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="366"
+		data-flex-basis="879px"
+	
+></p>
+<p>在<code>@SpringBootApplication</code>注解中包含了：</p>
+<ul>
+<li>
+<p>元注解（详见博客&lt;元注解&gt;）</p>
+</li>
+<li>
+<p><code>@SpringBootConfiguration</code></p>
+</li>
+<li>
+<p><code>@EnableAutoConfiguration</code></p>
+</li>
+<li>
+<p><code>@ComponentScan</code></p>
+</li>
+<li>
+<p><strong>我们先来看第一个注解：@SpringBootConfiguration</strong></p>
+</li>
+</ul>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/SBC%E6%B3%A8%E8%A7%A3.png"
+	width="1026"
+	height="303"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/SBC%E6%B3%A8%E8%A7%A3_hu_8b44d991eaca1ec7.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/SBC%E6%B3%A8%E8%A7%A3_hu_74a25e496fa585b5.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="338"
+		data-flex-basis="812px"
+	
+></p>
+<blockquote>
+<p>@SpringBootConfiguration注解上使用了@Configuration，表明SpringBoot启动类就是一个配置类。</p>
+<p>@Indexed注解，是用来加速应用启动的（不用关心）。</p>
+</blockquote>
+<ul>
+<li><strong>接下来再先看@ComponentScan注解</strong>：</li>
+</ul>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/CS%E6%B3%A8%E8%A7%A3.png"
+	width="1026"
+	height="148"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/CS%E6%B3%A8%E8%A7%A3_hu_cecba4343790971e.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/CS%E6%B3%A8%E8%A7%A3_hu_9c476284a564e177.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="693"
+		data-flex-basis="1663px"
+	
+></p>
+<blockquote>
+<p>@ComponentScan注解是用来进行组件扫描的，扫描启动类所在的包及其子包下所有被@Component及其衍生注解声明的类。</p>
+<p>SpringBoot启动类，之所以具备扫描包功能，就是因为包含了@ComponentScan注解。</p>
+</blockquote>
+<ul>
+<li><strong>最后我们来看看@EnableAutoConfiguration注解（自动配置核心注解）</strong>：</li>
+</ul>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/EAC%E6%B3%A8%E8%A7%A3.png"
+	width="1026"
+	height="205"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/EAC%E6%B3%A8%E8%A7%A3_hu_91c091a77bf66968.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/EAC%E6%B3%A8%E8%A7%A3_hu_e4dc30acfb3c94f8.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="500"
+		data-flex-basis="1201px"
+	
+></p>
+<p>使用<code>@Import</code>注解，导入了实现<code>ImportSelector</code>接口的实现类。</p>
+<p><code>AutoConfigurationImportSelector</code>类是<code>ImportSelector</code>接口的实现类。</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/ACI%E6%B3%A8%E8%A7%A3.png"
+	width="1026"
+	height="263"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/ACI%E6%B3%A8%E8%A7%A3_hu_5a5f54940da9cd59.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/ACI%E6%B3%A8%E8%A7%A3_hu_547c3bfa19b0861a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="390"
+		data-flex-basis="936px"
+	
+></p>
+<p><code>AutoConfigurationImportSelector</code>类中重写了<code>ImportSelector</code>接口的<code>selectImports()</code>方法：</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/sI%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99.png"
+	width="1026"
+	height="228"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/sI%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99_hu_7548090b97563fcb.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/sI%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99_hu_6dd23886bcf59017.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="450"
+		data-flex-basis="1080px"
+	
+></p>
+<blockquote>
+<p>selectImports()方法底层调用getAutoConfigurationEntry()方法，获取可自动配置的配置类信息集合</p>
+</blockquote>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/gACE%E6%96%B9%E6%B3%95.png"
+	width="1026"
+	height="496"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/gACE%E6%96%B9%E6%B3%95_hu_9a3d49bb43916c59.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/gACE%E6%96%B9%E6%B3%95_hu_70648e8599ce3214.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="206"
+		data-flex-basis="496px"
+	
+></p>
+<blockquote>
+<p>getAutoConfigurationEntry()方法通过调用getCandidateConfigurations(annotationMetadata, attributes)方法获取在配置文件中配置的所有自动配置类的集合</p>
+</blockquote>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/gCC%E5%8A%9F%E8%83%BD.png"
+	width="1026"
+	height="273"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/gCC%E5%8A%9F%E8%83%BD_hu_84622bf138e16da8.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/gCC%E5%8A%9F%E8%83%BD_hu_a884ab0ad9026b0d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="375"
+		data-flex-basis="901px"
+	
+></p>
+<blockquote>
+<p><code>getCandidateConfigurations</code>方法的功能：</p>
+<p>获取所有基于 <code>META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports</code>文件中配置类的集合</p>
+</blockquote>
+<p><code>META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports</code>文件这两个文件在哪里呢？</p>
+<ul>
+<li>通常在引入的起步依赖中，都有包含以上文件</li>
+</ul>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E6%96%87%E4%BB%B6.png"
+	width="1026"
+	height="547"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E6%96%87%E4%BB%B6_hu_e3347390fdd30b42.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E6%96%87%E4%BB%B6_hu_4443f2a932a54dc2.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="187"
+		data-flex-basis="450px"
+	
+></p>
+<p>在前面在给大家演示自动配置的时候，我们直接在测试类当中注入了一个叫<code>gson</code>的bean对象，进行JSON格式转换。虽然我们没有配置bean对象，但是我们是可以直接注入使用的。原因就是因为在自动配置类当中做了自动配置。到底是在哪个自动配置类当中做的自动配置呢？我们通过搜索来查询一下。</p>
+<p>在<code>META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports</code> 配置文件中指定了第三方依赖Gson的配置类：<code>GsonAutoConfiguration</code></p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/GAC%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.png"
+	width="1026"
+	height="602"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/GAC%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6_hu_4c197ffde97416bb.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/GAC%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6_hu_40d72b6e3510ccf7.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="170"
+		data-flex-basis="409px"
+	
+></p>
+<p>打开上面的第三方依赖中提供的 <code>GsonAutoConfiguration</code> 类：【按两下shift搜索完双击进入】</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/GAC%E7%B1%BB.png"
+	width="1026"
+	height="497"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/GAC%E7%B1%BB_hu_5eb4d28d9c6086d3.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/GAC%E7%B1%BB_hu_9277093136e1e711.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="206"
+		data-flex-basis="495px"
+	
+></p>
+<p>在<code>GsonAutoConfiguration</code>类上，添加了注解<code>@AutoConfiguration</code>，通过查看源码，可以明确：<code>GsonAutoConfiguration</code> 类是一个配置。</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/AC%E6%B3%A8%E8%A7%A3.png"
+	width="1026"
+	height="439"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/AC%E6%B3%A8%E8%A7%A3_hu_1490696b7245be7f.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/AC%E6%B3%A8%E8%A7%A3_hu_83013d26da097ee7.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="233"
+		data-flex-basis="560px"
+	
+></p>
+<p>完成自动配置的原理就是在配置类中定义一个<code>@Bean</code>标识的方法，而Spring会自动调用配置类中使用<code>@Bean</code>标识的方法，并把方法的返回值注册到IOC容器中。</p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E6%80%BB%E7%BB%93.png"
+	width="2458"
+	height="1214"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E6%80%BB%E7%BB%93_hu_7bf331d973b3912d.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E6%80%BB%E7%BB%93_hu_caaf8b738433c59d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="202"
+		data-flex-basis="485px"
+	
+></p>
+<p><img src="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E6%80%BB%E7%BB%931.png"
+	width="2419"
+	height="1049"
+	srcset="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E6%80%BB%E7%BB%931_hu_fe176dbe3d4043a6.png 480w, /p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/assets/%E6%80%BB%E7%BB%931_hu_2278f8328eb0eebe.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="230"
+		data-flex-basis="553px"
+	
+></p>
+<blockquote>
+<p>注意：在低版本(2.7.0以前)的springboot中，自动配置类(XxxAutoConfiguration)是定义在spring.factories文件中</p>
+</blockquote>
+<p><strong>自动配置源码小结</strong></p>
+<p>自动配置原理源码入口就是 <code>@SpringBootApplication</code> 注解，在这个注解中封装了3个注解，分别是：</p>
+<ul>
+<li>
+<p>@SpringBootConfiguration</p>
+<ul>
+<li>声明当前类是一个配置类</li>
+</ul>
+</li>
+<li>
+<p>@ComponentScan</p>
+<ul>
+<li>进行组件扫描（SpringBoot中默认扫描的是启动类所在的当前包及其子包）</li>
+</ul>
+</li>
+<li>
+<p>@EnableAutoConfiguration</p>
+<ul>
+<li>
+<p>封装了@Import注解（Import注解中指定了一个ImportSelector接口的实现类）</p>
+</li>
+<li>
+<p>在实现类重写的selectImports()方法，读取当前项目下所有依赖jar包中<code>META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports</code>两个文件里面定义的配置类（配置类中定义了@Bean注解标识的方法）。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>当SpringBoot程序启动时，就会加载配置文件当中所定义的配置类，并将这些配置类信息(类的全限定名)封装到String类型的数组中，最终通过@Import注解将这些配置类全部加载到Spring的IOC容器中，交给IOC容器管理。</p>
+<blockquote>
+<p>在 <code>META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports</code> 文件中定义的配置类非常多，而且每个配置类中又可以定义很多的bean，那这些bean都会注册到Spring的IOC容器中吗？</p>
+<p>答案：并不是。 在声明bean对象时，上面有加一个 <code>@ConditionalOnMissingBean</code> 注解，这种注解的作用就是按照条件进行装配，只有满足条件之后，才会将bean注册到Spring的IOC容器中（下面会详细来讲解）</p>
+</blockquote>
+<h5 id="conditional">@Conditional
+</h5>
 </section>
 
 
