@@ -591,34 +591,34 @@
 </ol>
 <p>接下来我们先来学习第一方面，Bean的作用域。</p>
 <div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th style="text-align: center">作用域</th>
-          <th style="text-align: center">说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: center"><strong>singleton</strong></td>
-          <td style="text-align: center">容器内同名称的bean只有一个实例（单例）（默认）</td>
-      </tr>
-      <tr>
-          <td style="text-align: center"><strong>prototype</strong></td>
-          <td style="text-align: center">每次使用bean时会创建新的实例（非单例）</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">request</td>
-          <td style="text-align: center">每个请求范围内会创建新的实例（web环境中，了解）</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">session</td>
-          <td style="text-align: center">每个会话范围内会创建新的实例（web环境中，了解）</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">application</td>
-          <td style="text-align: center">每个应用范围内会创建新的实例（web环境中，了解）</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: center">作用域</th>
+					<th style="text-align: center">说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: center"><strong>singleton</strong></td>
+					<td style="text-align: center">容器内同名称的bean只有一个实例（单例）（默认）</td>
+			</tr>
+			<tr>
+					<td style="text-align: center"><strong>prototype</strong></td>
+					<td style="text-align: center">每次使用bean时会创建新的实例（非单例）</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">request</td>
+					<td style="text-align: center">每个请求范围内会创建新的实例（web环境中，了解）</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">session</td>
+					<td style="text-align: center">每个会话范围内会创建新的实例（web环境中，了解）</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">application</td>
+					<td style="text-align: center">每个应用范围内会创建新的实例（web环境中，了解）</td>
+			</tr>
+	</tbody>
 </table></div>
 <p>知道了bean的5种作用域了，我们要怎么去设置一个bean的作用域呢？</p>
 <ul>

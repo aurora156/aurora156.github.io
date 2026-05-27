@@ -1515,38 +1515,38 @@
 <p>所谓事务的传播行为，指的就是在A方法运行的时候，首先会开启一个事务，在A方法当中又调用了B方法， B方法自身也具有事务，<u>那么B方法在运行的时候，到底是加入到A方法的事务当中来，还是B方法在运行的时候新建一个事务？</u>这个就涉及到了事务的传播行为。</p>
 <p>我们要想控制事务的传播行为，在@Transactional注解的后面指定一个属性propagation，通过 propagation 属性来指定传播行为。接下来我们就来介绍一下常见的事务传播行为。</p>
 <div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th style="text-align: center">属性值</th>
-          <th style="text-align: center">含义</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: center"><strong>REQUIRED</strong></td>
-          <td style="text-align: center"><strong>【默认值】需要事务，有则加入，无则创建新事务</strong></td>
-      </tr>
-      <tr>
-          <td style="text-align: center"><strong>REQUIRES_NEW</strong></td>
-          <td style="text-align: center"><strong>需要新事务，无论有无，总是创建新事务</strong></td>
-      </tr>
-      <tr>
-          <td style="text-align: center">SUPPORTS</td>
-          <td style="text-align: center">支持事务，有则加入，无则在无事务状态中运行</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">NOT_SUPPORTED</td>
-          <td style="text-align: center">不支持事务，在无事务状态下运行,如果当前存在已有事务,则挂起当前事务</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">MANDATORY</td>
-          <td style="text-align: center">必须有事务，否则抛异常</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">NEVER</td>
-          <td style="text-align: center">必须没事务，否则抛异常</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: center">属性值</th>
+					<th style="text-align: center">含义</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: center"><strong>REQUIRED</strong></td>
+					<td style="text-align: center"><strong>【默认值】需要事务，有则加入，无则创建新事务</strong></td>
+			</tr>
+			<tr>
+					<td style="text-align: center"><strong>REQUIRES_NEW</strong></td>
+					<td style="text-align: center"><strong>需要新事务，无论有无，总是创建新事务</strong></td>
+			</tr>
+			<tr>
+					<td style="text-align: center">SUPPORTS</td>
+					<td style="text-align: center">支持事务，有则加入，无则在无事务状态中运行</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">NOT_SUPPORTED</td>
+					<td style="text-align: center">不支持事务，在无事务状态下运行,如果当前存在已有事务,则挂起当前事务</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">MANDATORY</td>
+					<td style="text-align: center">必须有事务，否则抛异常</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">NEVER</td>
+					<td style="text-align: center">必须没事务，否则抛异常</td>
+			</tr>
+	</tbody>
 </table></div>
 <blockquote>
 <p>对于这些事务传播行为，我们只需要关注以下两个就可以了：</p>
@@ -3053,20 +3053,20 @@
 <li>
 <p>参数说明：</p>
 <div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th style="text-align: center">参数名称</th>
-          <th style="text-align: center">参数类型</th>
-          <th style="text-align: center">是否必须</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: center">image</td>
-          <td style="text-align: center">file</td>
-          <td style="text-align: center">是</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: center">参数名称</th>
+					<th style="text-align: center">参数类型</th>
+					<th style="text-align: center">是否必须</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: center">image</td>
+					<td style="text-align: center">file</td>
+					<td style="text-align: center">是</td>
+			</tr>
+	</tbody>
 </table></div>
 </li>
 </ul>
@@ -3076,34 +3076,34 @@
 <li>参数说明：</li>
 </ul>
 <div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th style="text-align: center">参数名</th>
-          <th style="text-align: center">类型</th>
-          <th style="text-align: center">是否必须</th>
-          <th style="text-align: center">备注</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: center">code</td>
-          <td style="text-align: center">number</td>
-          <td style="text-align: center">必须</td>
-          <td style="text-align: center">响应码，1代表成功，0代表失败</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">msg</td>
-          <td style="text-align: center">string</td>
-          <td style="text-align: center">非必须</td>
-          <td style="text-align: center">提示信息</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">data</td>
-          <td style="text-align: center">object</td>
-          <td style="text-align: center">非必须</td>
-          <td style="text-align: center">返回的数据，上传图片的访问路径</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: center">参数名</th>
+					<th style="text-align: center">类型</th>
+					<th style="text-align: center">是否必须</th>
+					<th style="text-align: center">备注</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: center">code</td>
+					<td style="text-align: center">number</td>
+					<td style="text-align: center">必须</td>
+					<td style="text-align: center">响应码，1代表成功，0代表失败</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">msg</td>
+					<td style="text-align: center">string</td>
+					<td style="text-align: center">非必须</td>
+					<td style="text-align: center">提示信息</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">data</td>
+					<td style="text-align: center">object</td>
+					<td style="text-align: center">非必须</td>
+					<td style="text-align: center">返回的数据，上传图片的访问路径</td>
+			</tr>
+	</tbody>
 </table></div>
 <ul>
 <li>

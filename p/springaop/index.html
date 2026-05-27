@@ -701,34 +701,34 @@
 </div>
 </div><p>只要我们在通知方法上加上了<code>@Around</code>注解，就代表当前通知是一个环绕通知。</p>
 <div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th style="text-align: center"><strong>Spring AOP 通知类型</strong></th>
-          <th>说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: center">@Around</td>
-          <td>环绕通知，此注解标注的通知方法在目标方法前、后都被执行</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">@Before</td>
-          <td>前置通知，此注解标注的通知方法在目标方法前被执行</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">@After</td>
-          <td>后置通知，此注解标注的通知方法在目标方法后被执行，无论是否有异常都会执行</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">@AfterReturning</td>
-          <td>返回后通知，此注解标注的通知方法在目标方法后被执行，有异常不会执行</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">@AfterThrowing</td>
-          <td>异常后通知，此注解标注的通知方法发生异常后执行</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: center"><strong>Spring AOP 通知类型</strong></th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: center">@Around</td>
+					<td>环绕通知，此注解标注的通知方法在目标方法前、后都被执行</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">@Before</td>
+					<td>前置通知，此注解标注的通知方法在目标方法前被执行</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">@After</td>
+					<td>后置通知，此注解标注的通知方法在目标方法后被执行，无论是否有异常都会执行</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">@AfterReturning</td>
+					<td>返回后通知，此注解标注的通知方法在目标方法后被执行，有异常不会执行</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">@AfterThrowing</td>
+					<td>异常后通知，此注解标注的通知方法发生异常后执行</td>
+			</tr>
+	</tbody>
 </table></div>
 <p>五种类型标志：前置、环绕、后置、返回后、异常后</p>
 <p><img src="/p/springaop/assets/%E5%89%8D%E7%BD%AE.png"

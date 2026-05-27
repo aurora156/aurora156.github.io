@@ -13,7 +13,2165 @@
         <pubDate>Tue, 26 May 2026 21:31:09 +0800</pubDate>
         
         <guid>https://aurora156.github.io/p/linux/</guid>
-        <description></description>
+        <description>&lt;h1 id=&#34;linux&#34;&gt;Linux
+&lt;/h1&gt;&lt;h2 id=&#34;linux概述&#34;&gt;Linux概述
+&lt;/h2&gt;&lt;h3 id=&#34;主流操作系统&#34;&gt;主流操作系统
+&lt;/h3&gt;&lt;p&gt;不同领域的主流操作系统，主要分为以下这么几类： 桌面操作系统、服务器操作系统、移动设备操作系统、嵌入式操作系统。接下来，这几个领域中，代表性的操作系统是那些?&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1). 桌面操作系统&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;操作系统&lt;/th&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;特点&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;Windows&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;用户数量多&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;MacOS&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;操作体验好，办公人士首选&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;Linux&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;用户数量少（桌面操作系统，Linux使用较少）&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;2). 服务器操作系统&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;操作系统&lt;/th&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;特点&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;Unix&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;安全、稳定、付费&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;Linux&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;安全、稳定、免费、占有率高&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;Windows Server&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;付费、占有率低&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;3). 移动设备操作系统&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;操作系统&lt;/th&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;特点&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;Android&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;基于 Linux 、开源，主要用于智能手机、平板电脑和智能电视&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;IOS&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;苹果公司开发、不开源，用于苹果公司的产品，例如：iPhone、 iPad&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;HarmonyOS&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;华为公司开发、开源，目前用于华为公司的产品&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;linux系统版本&#34;&gt;Linux系统版本
+&lt;/h3&gt;&lt;p&gt;Linux系统的版本分为两种，分别是： 内核版 和 发行版。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1). 内核版&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;由Linus Torvalds及其团队开发、维护&lt;/li&gt;
+&lt;li&gt;免费、开源&lt;/li&gt;
+&lt;li&gt;负责控制硬件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;2). 发行版&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;基于Linux内核版进行扩展&lt;/li&gt;
+&lt;li&gt;由各个Linux厂商开发、维护&lt;/li&gt;
+&lt;li&gt;有收费版本和免费版本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;我们使用Linux操作系统，实际上选择的是Linux的发行版本。在linux系统中，有各种各样的发行版本，具体如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/Linux%E7%89%88%E6%9C%AC.png&#34;
+	width=&#34;1026&#34;
+	height=&#34;327&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/Linux%E7%89%88%E6%9C%AC_hu_48eb3b0ba2978f70.png 480w, https://aurora156.github.io/p/linux/assets/Linux%E7%89%88%E6%9C%AC_hu_f232b113ea5dda02.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;313&#34;
+		data-flex-basis=&#34;753px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;除了上述罗列出来的发行版，还有很多Linux发行版，这里，我们就不再一一列举了。&lt;/p&gt;
+&lt;h3 id=&#34;系统安装&#34;&gt;系统安装
+&lt;/h3&gt;&lt;h4 id=&#34;安装方式&#34;&gt;安装方式
+&lt;/h4&gt;&lt;p&gt;Linux系统的安装方式，主要包含以下两种：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E5%AE%89%E8%A3%85%E6%96%B9%E5%BC%8F.png&#34;
+	width=&#34;492&#34;
+	height=&#34;228&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E5%AE%89%E8%A3%85%E6%96%B9%E5%BC%8F_hu_fd6fa06d30292a4e.png 480w, https://aurora156.github.io/p/linux/assets/%E5%AE%89%E8%A3%85%E6%96%B9%E5%BC%8F_hu_9dd7b3fe8a154ac0.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;215&#34;
+		data-flex-basis=&#34;517px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E5%AE%89%E8%A3%85%E6%96%B9%E5%BC%8F1.png&#34;
+	width=&#34;1026&#34;
+	height=&#34;117&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E5%AE%89%E8%A3%85%E6%96%B9%E5%BC%8F1_hu_f78721f67194d56a.png 480w, https://aurora156.github.io/p/linux/assets/%E5%AE%89%E8%A3%85%E6%96%B9%E5%BC%8F1_hu_e1bd3339ad0dc1c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;876&#34;
+		data-flex-basis=&#34;2104px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;虚拟机&lt;/strong&gt;（Virtual Machine）指通过软件模拟的具有完整硬件系统功能、运行在完全隔离环境中的完整计算机系统。常用虚拟机软件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;VMWare&lt;/li&gt;
+&lt;li&gt;VirtualBox&lt;/li&gt;
+&lt;li&gt;VMLite WorkStation&lt;/li&gt;
+&lt;li&gt;Qemu&lt;/li&gt;
+&lt;li&gt;HopeddotVOS&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;那么我们就可以在课程中将Linux操作系统安装在虚拟机中，我们学习选择的虚拟机软件是&lt;strong&gt;VMware&lt;/strong&gt;。&lt;/p&gt;
+&lt;h4 id=&#34;安装vmware&#34;&gt;安装VMware
+&lt;/h4&gt;&lt;p&gt;可以自行去网上查找安装程序&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;安装步骤:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4.png&#34;
+	width=&#34;1026&#34;
+	height=&#34;528&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4_hu_156ff4e62445f5e0.png 480w, https://aurora156.github.io/p/linux/assets/%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4_hu_213c3c633f00ce31.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;194&#34;
+		data-flex-basis=&#34;466px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;以上就是VMware在安装时的每一步操作，基本上就是点击 &amp;ldquo;下一步&amp;rdquo; 一直进行安装。&lt;/p&gt;
+&lt;h4 id=&#34;挂载linux系统&#34;&gt;挂载Linux系统
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;1). 打开Vmware虚拟机，打开&lt;/strong&gt; &lt;code&gt;编辑&lt;/code&gt; &lt;strong&gt;-&amp;gt;&lt;/strong&gt;&lt;code&gt; 虚拟网络编辑器(N)...&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD.png&#34;
+	width=&#34;930&#34;
+	height=&#34;390&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD_hu_20aea9407fe9b8d2.png 480w, https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD_hu_a0ab1e3a6f3b9f2.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;238&#34;
+		data-flex-basis=&#34;572px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;选择 &lt;code&gt;NAT模式&lt;/code&gt;，然后选择右下角的 &lt;code&gt;更改设置&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD1.png&#34;
+	width=&#34;732&#34;
+	height=&#34;715&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD1_hu_6303f8273730fead.png 480w, https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD1_hu_dfbfc417c791a516.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;102&#34;
+		data-flex-basis=&#34;245px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;设置子网IP为 &lt;strong&gt;192.168.100.0&lt;/strong&gt;，然后选择 &lt;code&gt;应用&lt;/code&gt; -&amp;gt; &lt;code&gt;确定&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD2.png&#34;
+	width=&#34;816&#34;
+	height=&#34;750&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD2_hu_be4e9c2bd494fe4e.png 480w, https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD2_hu_9fa0b32dffdccc1c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;108&#34;
+		data-flex-basis=&#34;261px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;由于学习上课需要使用到虚拟机所以我的ip是上课使用的ip就不是教程中所展示的ip了&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2). 解压CentOS7-1.zip到一个比较大的磁盘中 (没有中文的目录)。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD3.png&#34;
+	width=&#34;997&#34;
+	height=&#34;245&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD3_hu_56ee8cdad0a56625.png 480w, https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD3_hu_e06cf53e4d1a83f0.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;406&#34;
+		data-flex-basis=&#34;976px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3). 打开解压目录，双击.vmx文件，选择以Vmware Workstation打开这个文件。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD4.png&#34;
+	width=&#34;765&#34;
+	height=&#34;411&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD4_hu_dd058efe4c91ec50.png 480w, https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD4_hu_500c0b7c0d735413.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;186&#34;
+		data-flex-basis=&#34;446px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;4). 挂载完毕之后，启动Linux服务器。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD5.png&#34;
+	width=&#34;2344&#34;
+	height=&#34;1176&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD5_hu_64d03ff166a9ffa8.png 480w, https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD5_hu_b77b4ae5c6336fb.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;199&#34;
+		data-flex-basis=&#34;478px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;启动过程中，如果出现如下界面，选择 &lt;strong&gt;我已移动该虚拟机&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD6.png&#34;
+	width=&#34;720&#34;
+	height=&#34;261&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD6_hu_fb1ed5ab089c0763.png 480w, https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD6_hu_9cb58e4eab6f75cd.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;275&#34;
+		data-flex-basis=&#34;662px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;5). 启动完毕之后，登录服务器。 输入用户名：root，密码：1234 （注意：linux系统输入密码是不显示的，输入完毕，回车即可登录）&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD7.png&#34;
+	width=&#34;929&#34;
+	height=&#34;176&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD7_hu_36b15269813e5657.png 480w, https://aurora156.github.io/p/linux/assets/%E6%8C%82%E8%BD%BD7_hu_41db5fcd950a94ac.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;527&#34;
+		data-flex-basis=&#34;1266px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;安装ssh连接工具&#34;&gt;安装SSH连接工具
+&lt;/h3&gt;&lt;h4 id=&#34;ssh连接工具介绍&#34;&gt;SSH连接工具介绍
+&lt;/h4&gt;&lt;p&gt;Linux已经安装并且配置好了，接下来我们要来学习Linux的基本操作指令。而在学习之前，我们还需要做一件事情，由于我们企业开发时，Linux服务器一般都是在远程的机房部署的，我们要操作服务器，不会每次都跑到远程的机房里面操作，而是会直接通过SSH连接工具进行连接操作。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/SSH.png&#34;
+	width=&#34;1344&#34;
+	height=&#34;320&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/SSH_hu_973e6142bd93e06d.png 480w, https://aurora156.github.io/p/linux/assets/SSH_hu_b31e5995e6ad92ce.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;420&#34;
+		data-flex-basis=&#34;1008px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;SSH（Secure Shell），建立在应用层基础上的安全协议。常用的SSH连接工具:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/SSH%E5%B7%A5%E5%85%B7.png&#34;
+	width=&#34;1415&#34;
+	height=&#34;435&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/SSH%E5%B7%A5%E5%85%B7_hu_f7ec27f1d544b29c.png 480w, https://aurora156.github.io/p/linux/assets/SSH%E5%B7%A5%E5%85%B7_hu_dd360b0f2d40185d.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;325&#34;
+		data-flex-basis=&#34;780px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;finalshell安装&#34;&gt;FinalShell安装
+&lt;/h4&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/FS.png&#34;
+	width=&#34;480&#34;
+	height=&#34;95&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/FS_hu_4ce08ef2827d03ad.png 480w, https://aurora156.github.io/p/linux/assets/FS_hu_c016d65cf1986c2d.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;505&#34;
+		data-flex-basis=&#34;1212px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;双击.exe文件，然后进行正常的安装即可。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/FS1.png&#34;
+	width=&#34;613&#34;
+	height=&#34;448&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/FS1_hu_b7bcf3d214c53c9b.png 480w, https://aurora156.github.io/p/linux/assets/FS1_hu_55a7baec39c285c3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;136&#34;
+		data-flex-basis=&#34;328px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;连接linux&#34;&gt;连接Linux
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;打开FinalShell，选择SSH连接。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/FS2.png&#34;
+	width=&#34;1167&#34;
+	height=&#34;669&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/FS2_hu_5f0f0bbb9b586f7e.png 480w, https://aurora156.github.io/p/linux/assets/FS2_hu_95da8e38b5e3b720.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;174&#34;
+		data-flex-basis=&#34;418px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;连接服务器，输入服务器的信息，IP固定的：&lt;strong&gt;192.168.100.128&lt;/strong&gt;，用户名：&lt;strong&gt;root&lt;/strong&gt;，密码：&lt;strong&gt;1234&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;我的ip为&lt;strong&gt;192.168.240.128&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E8%BF%9E%E6%8E%A5.png&#34;
+	width=&#34;743&#34;
+	height=&#34;667&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E8%BF%9E%E6%8E%A5_hu_fa5b75055d68a7db.png 480w, https://aurora156.github.io/p/linux/assets/%E8%BF%9E%E6%8E%A5_hu_7c1b57aab1ed3188.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;111&#34;
+		data-flex-basis=&#34;267px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;配置完毕后,双击即可连接服务器。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E8%BF%9E%E6%8E%A51.png&#34;
+	width=&#34;833&#34;
+	height=&#34;323&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E8%BF%9E%E6%8E%A51_hu_81a6a49c4397c140.png 480w, https://aurora156.github.io/p/linux/assets/%E8%BF%9E%E6%8E%A51_hu_72c72778401b633.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;257&#34;
+		data-flex-basis=&#34;618px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E8%BF%9E%E6%8E%A52.png&#34;
+	width=&#34;851&#34;
+	height=&#34;396&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E8%BF%9E%E6%8E%A52_hu_466f9bc198424dd6.png 480w, https://aurora156.github.io/p/linux/assets/%E8%BF%9E%E6%8E%A52_hu_1e36067ea43a84f7.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;214&#34;
+		data-flex-basis=&#34;515px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;如果一直连接失败，可以参考我下面的截图进行操作&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E8%BF%9E%E6%8E%A5%E5%A4%B1%E8%B4%A5%E6%96%B9%E6%B3%95.png&#34;
+	width=&#34;1367&#34;
+	height=&#34;4728&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E8%BF%9E%E6%8E%A5%E5%A4%B1%E8%B4%A5%E6%96%B9%E6%B3%95_hu_42bc2227ec57ed90.png 480w, https://aurora156.github.io/p/linux/assets/%E8%BF%9E%E6%8E%A5%E5%A4%B1%E8%B4%A5%E6%96%B9%E6%B3%95_hu_e194f6d56f36fe67.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;28&#34;
+		data-flex-basis=&#34;69px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;目录结构&#34;&gt;目录结构
+&lt;/h3&gt;&lt;p&gt;登录到Linux系统之后，我们需要先来熟悉一下Linux的目录结构。在Linux系统中，也是存在目录的概念的，但是Linux的目录结构和Windows的目录结构是存在比较多的差异的 在Windows目录下，是一个一个的盘符(C盘、D盘、E盘)，目录是归属于某一个盘符的。Linux系统中的目录有以下特点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;/ 是所有目录的顶点&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;目录结构像一颗倒挂的树&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Linux 和 Windows的目录结构对比:&lt;/strong&gt; &lt;img src=&#34;https://aurora156.github.io/p/linux/assets/LW%E5%AF%B9%E6%AF%94.png&#34;
+	width=&#34;1415&#34;
+	height=&#34;810&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/LW%E5%AF%B9%E6%AF%94_hu_93d7dbfaa249f2be.png 480w, https://aurora156.github.io/p/linux/assets/LW%E5%AF%B9%E6%AF%94_hu_8f412bf5d8c063b4.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;174&#34;
+		data-flex-basis=&#34;419px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;u&gt;Linux的目录结构&lt;/u&gt;，如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.png&#34;
+	width=&#34;1248&#34;
+	height=&#34;655&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84_hu_32d692989380202c.png 480w, https://aurora156.github.io/p/linux/assets/%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84_hu_6e03465720d8d306.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;190&#34;
+		data-flex-basis=&#34;457px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;u&gt;根目录 / 下各个目录的作用及含义说明:&lt;/u&gt;&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;编号&lt;/th&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;目录&lt;/th&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;含义&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;1&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;/bin&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;存放二进制可执行文件&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;2&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;/boot&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;存放系统引导时使用的各种文件&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;3&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;/dev&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;存放设备文件&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;4&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;/etc&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;存放系统配置文件&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;5&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;/home&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;存放系统用户的文件&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;6&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;/lib&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;存放程序运行所需的共享库和内核模块&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;7&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;/opt&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;额外安装的可选应用程序包所放置的位置&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;8&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;/root&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;超级用户目录&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;9&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;/sbin&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;存放二进制可执行文件，只有root用户才能访问&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;10&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;/tmp&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;存放临时文件&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;11&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;/usr&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;存放系统应用程序&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;12&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;/var&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;存放运行时需要改变数据的文件，例如日志文件&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;linux常用命令&#34;&gt;Linux常用命令
+&lt;/h2&gt;&lt;h3 id=&#34;linux命令初体验&#34;&gt;Linux命令初体验
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Linux 命令格式：&lt;code&gt;command [-options] [parameter]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;说明：
+&lt;ul&gt;
+&lt;li&gt;command：命令名&lt;/li&gt;
+&lt;li&gt;[-options]：选项，可用来对命令进行控制，也可以省略 （可选）&lt;/li&gt;
+&lt;li&gt;[parameter]：参数，可以是零个、一个或多个（可选）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;例如：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E5%91%BD%E4%BB%A4.png&#34;
+	width=&#34;1591&#34;
+	height=&#34;274&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E5%91%BD%E4%BB%A4_hu_c6088b7cc5f7899c.png 480w, https://aurora156.github.io/p/linux/assets/%E5%91%BD%E4%BB%A4_hu_496c59f4d6717b3c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;580&#34;
+		data-flex-basis=&#34;1393px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;使用技巧：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Tab键自动补全&lt;/li&gt;
+&lt;li&gt;连续两次Tab键，给出操作提示&lt;/li&gt;
+&lt;li&gt;使用上下箭头快速调出曾经使用过的命令&lt;/li&gt;
+&lt;li&gt;使用clear命令或Ctrl+l快捷键实现清屏&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;目录操作命令&#34;&gt;目录操作命令
+&lt;/h3&gt;&lt;h4 id=&#34;ls&#34;&gt;ls
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;用: 显示指定目录下的内容&lt;/li&gt;
+&lt;li&gt;语法: &lt;code&gt;ls [-al] [dir]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;说明:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;​        &lt;code&gt;-a&lt;/code&gt; 显示所有文件及目录 (. 开头的隐藏文件也会列出)&lt;/p&gt;
+&lt;p&gt;​        &lt;code&gt;-l&lt;/code&gt; 除文件名称外，同时将文件型态(d表示目录，-表示文件)、权限、拥有者、文件大小等信息详细列出&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;注意:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;​        由于我们使用ls命令时经常需要加入-l选项，所以Linux为 &lt;code&gt;ls -l&lt;/code&gt; 命令提供了一种简写方式，即 &lt;code&gt;ll&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;常见用法:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;​        &lt;code&gt;ls -al&lt;/code&gt;           查看当前目录的所有文件及目录详细信息&lt;/p&gt;
+&lt;p&gt;​        &lt;code&gt;ls -al /etc&lt;/code&gt;  查看/etc目录下所有文件及目录详细信息&lt;/p&gt;
+&lt;p&gt;​        &lt;code&gt;ll&lt;/code&gt;                 查看当前目录文件及目录的详细信息&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;操作示例：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/ls1.png&#34;
+	width=&#34;821&#34;
+	height=&#34;232&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/ls1_hu_11f9e29730773c15.png 480w, https://aurora156.github.io/p/linux/assets/ls1_hu_3bca26788a3fc56a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;353&#34;
+		data-flex-basis=&#34;849px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/ls2.png&#34;
+	width=&#34;821&#34;
+	height=&#34;516&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/ls2_hu_e650dde6166e926f.png 480w, https://aurora156.github.io/p/linux/assets/ls2_hu_1d902fb246252baa.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;159&#34;
+		data-flex-basis=&#34;381px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/ls3.png&#34;
+	width=&#34;821&#34;
+	height=&#34;169&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/ls3_hu_431e71137c008afd.png 480w, https://aurora156.github.io/p/linux/assets/ls3_hu_96812807bed73f6c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;485&#34;
+		data-flex-basis=&#34;1165px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/ls4.png&#34;
+	width=&#34;821&#34;
+	height=&#34;142&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/ls4_hu_dbb3b51fc00e1e2d.png 480w, https://aurora156.github.io/p/linux/assets/ls4_hu_7ab1e9fb3c6e90be.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;578&#34;
+		data-flex-basis=&#34;1387px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;cd&#34;&gt;cd
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;作用: 用于切换当前工作目录，即进入指定目录&lt;/li&gt;
+&lt;li&gt;语法: cd [dirName]&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;​&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;特殊说明:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;​        ~        表示用户的home目录&lt;/p&gt;
+&lt;p&gt;​        .         表示目前所在的目录&lt;/p&gt;
+&lt;p&gt;​        ..        表示目前目录位置的上级目录&lt;/p&gt;
+&lt;p&gt;​&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;举例:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;​        cd         ..                切换到当前目录的上级目录&lt;/p&gt;
+&lt;p&gt;​        cd         ~                切换到用户的home目录&lt;/p&gt;
+&lt;p&gt;​        cd         /usr/local     切换到/usr/local目录&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;备注:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;​       用户的home目录&lt;/p&gt;
+&lt;p&gt;​       root用户        /root&lt;/p&gt;
+&lt;p&gt;​       其他用户        /home/xxx&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;操作示例:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/cd1.png&#34;
+	width=&#34;821&#34;
+	height=&#34;271&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/cd1_hu_f1f268a39ef7f9f2.png 480w, https://aurora156.github.io/p/linux/assets/cd1_hu_2272f21516c1c90e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;302&#34;
+		data-flex-basis=&#34;727px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/cd2.png&#34;
+	width=&#34;821&#34;
+	height=&#34;69&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/cd2_hu_217aba487ac2b1a8.png 480w, https://aurora156.github.io/p/linux/assets/cd2_hu_1b996ce4a2660f18.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;1189&#34;
+		data-flex-basis=&#34;2855px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;cd .. 切换到当前目录位置的上级目录; 可以通过 cd ../.. 来切换到上级目录的上级目录&lt;/code&gt;&lt;/p&gt;
+&lt;h4 id=&#34;mkdir&#34;&gt;mkdir
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;作用: 创建目录&lt;/li&gt;
+&lt;li&gt;语法: &lt;code&gt;mkdir [-p] dirName&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;说明:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;​        -p: 确保目录名称存在，不存在的就创建一个。通过此选项，可以实现多层目录同时创建&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;举例:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;​    mkdir itcast  在当前目录下，建立一个名为itcast的子目录&lt;/p&gt;
+&lt;p&gt;​    mkdir -p itcast/test   在工作目录下的itcast目录中建立一个名为test的子目录，若itcast目录不存在，则建立一个&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;操作演示:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/mkdir.png&#34;
+	width=&#34;1912&#34;
+	height=&#34;233&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/mkdir_hu_4f6dcea58eadd839.png 480w, https://aurora156.github.io/p/linux/assets/mkdir_hu_4fc4553ab7c58b5a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;820&#34;
+		data-flex-basis=&#34;1969px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;rm&#34;&gt;rm
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;作用: 删除文件或者目录&lt;/li&gt;
+&lt;li&gt;语法: &lt;code&gt;rm [-rf] name&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;说明:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;​    -r: 将目录及目录中所有文件（目录）逐一删除，即递归删除&lt;/p&gt;
+&lt;p&gt;​    -f: 无需确认，直接删除&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;举例:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;​    &lt;code&gt;rm -r itcast/&lt;/code&gt;    删除名为itcast的目录和目录中所有文件，删除前需确认&lt;/p&gt;
+&lt;p&gt;​    &lt;code&gt;rm -rf itcast/&lt;/code&gt;    无需确认，直接删除名为itcast的目录和目录中所有文件&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;rm -f hello.txt&lt;/code&gt;   无需确认，直接删除hello.txt文件&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;操作演示：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/rm.png&#34;
+	width=&#34;1425&#34;
+	height=&#34;80&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/rm_hu_fe1be3784c2ef9bb.png 480w, https://aurora156.github.io/p/linux/assets/rm_hu_32155003d8e58820.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;1781&#34;
+		data-flex-basis=&#34;4275px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;注意: 对于 &lt;/code&gt;rm -rf xxx&lt;code&gt; 这样的指令，在执行的时候，一定要慎重，确认无误后再进行删除，避免误删。&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;文件操作命令&#34;&gt;文件操作命令
+&lt;/h3&gt;&lt;h4 id=&#34;cat&#34;&gt;cat
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;作用: 用于显示文件内容&lt;/li&gt;
+&lt;li&gt;语法: &lt;code&gt;cat [-n] fileName&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;说明:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;​        &lt;code&gt;-n&lt;/code&gt;: 由1开始对所有输出的行数编号&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;举例:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;​        &lt;code&gt;cat /etc/profile&lt;/code&gt;                查看/etc目录下的profile文件内容&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;操作演示:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/cat.png&#34;
+	width=&#34;1342&#34;
+	height=&#34;396&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/cat_hu_b71682fe0c6134a5.png 480w, https://aurora156.github.io/p/linux/assets/cat_hu_12f2ef3f26999a5f.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;338&#34;
+		data-flex-basis=&#34;813px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;cat 指令会一次性查看文件的所有内容，如果文件内容比较多，这个时候查看起来就不是很方便了，这个时候我们可以通过一个新的指令more。&lt;/code&gt;&lt;/p&gt;
+&lt;h4 id=&#34;more&#34;&gt;more
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;作用: 以分页的形式显示文件内容&lt;/li&gt;
+&lt;li&gt;语法: &lt;code&gt;more fileName&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;操作说明:
+&lt;ul&gt;
+&lt;li&gt;回车键               向下滚动一行&lt;/li&gt;
+&lt;li&gt;空格键               向下滚动一屏&lt;/li&gt;
+&lt;li&gt;b                       返回上一屏&lt;/li&gt;
+&lt;li&gt;q或者Ctrl+C        退出more&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;举例：
+&lt;ul&gt;
+&lt;li&gt;more /etc/profile                以分页方式显示/etc目录下的profile文件内容&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;操作示例&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/more.png&#34;
+	width=&#34;1265&#34;
+	height=&#34;876&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/more_hu_6a6b725339c689ff.png 480w, https://aurora156.github.io/p/linux/assets/more_hu_744621c0f12508e0.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;144&#34;
+		data-flex-basis=&#34;346px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;当我们在查看一些比较大的文件时，我们可能需要经常查询文件尾部的数据信息，那这个时候如果文件很大，我们要一直向下翻页，直到最后一页，去看最新添加的数据，这种方式就比较繁琐了，此时，我们可以借助于tail指令。&lt;/p&gt;
+&lt;h4 id=&#34;head&#34;&gt;head
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;作用：查看文件开头的内容&lt;/li&gt;
+&lt;li&gt;语法：&lt;code&gt;head [-n] fileName&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;说明:
+&lt;ul&gt;
+&lt;li&gt;-n ：输出文件开头的n行内容&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;举例：
+&lt;ul&gt;
+&lt;li&gt;head 1.log  默认显示1.log文件开头的10行内容&lt;/li&gt;
+&lt;li&gt;head -20 1.log  显示1.log文件开头的20行内容&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;tail&#34;&gt;tail
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;作用: 查看文件末尾的内容&lt;/li&gt;
+&lt;li&gt;语法: tail [-f] fileName&lt;/li&gt;
+&lt;li&gt;说明:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;​        -f : 动态读取文件末尾内容并显示，通常用于日志文件的内容输出&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;举例:
+&lt;ul&gt;
+&lt;li&gt;tail /etc/profile                显示/etc目录下的profile文件末尾10行的内容&lt;/li&gt;
+&lt;li&gt;tail -20 /etc/profile           显示/etc目录下的profile文件末尾20行的内容&lt;/li&gt;
+&lt;li&gt;tail -f /itcast/my.log          动态读取/itcast目录下的my.log文件末尾内容并显示&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;操作示例：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;A. 默认查询文件尾部10行记录&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/tail1.png&#34;
+	width=&#34;821&#34;
+	height=&#34;181&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/tail1_hu_ec5d662ca65262bf.png 480w, https://aurora156.github.io/p/linux/assets/tail1_hu_9751057c80443527.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;453&#34;
+		data-flex-basis=&#34;1088px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;B. 可以通过指定参数设置查询尾部指定行数的数据&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/tail2.png&#34;
+	width=&#34;821&#34;
+	height=&#34;107&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/tail2_hu_4787f058ba8bcbff.png 480w, https://aurora156.github.io/p/linux/assets/tail2_hu_b31c0f2b67edf279.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;767&#34;
+		data-flex-basis=&#34;1841px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;C. 动态读取文件尾部的数据&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/tail3.png&#34;
+	width=&#34;821&#34;
+	height=&#34;138&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/tail3_hu_e1e28c0fb62790e2.png 480w, https://aurora156.github.io/p/linux/assets/tail3_hu_d442f9212b7945a1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;594&#34;
+		data-flex-basis=&#34;1427px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;在窗口1中执行指令 &lt;code&gt;tail -f 1.txt&lt;/code&gt; 动态查看文件尾部的数据。然后在顶部的标签中右键选择 &amp;ldquo;复制标签&amp;rdquo;，打开新的窗口2 , 此时再新打开的窗口2中执行指令 &lt;code&gt;echo 1 &amp;gt;&amp;gt; 1.txt&lt;/code&gt; , 往1.txt文件尾部追加内容，然后我们就可以在窗口1中看到最新的文件尾部的数据。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;echo：&lt;strong&gt;将指定的文本、字符串或变量的值输出到终端屏幕（标准输出）&lt;/strong&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;如果我们不想查看文件尾部的数据了，可以直接使用快捷键 Ctrl+C ， 结束当前进程。&lt;/p&gt;
+&lt;h3 id=&#34;拷贝移动命令&#34;&gt;拷贝移动命令
+&lt;/h3&gt;&lt;h4 id=&#34;cp&#34;&gt;cp
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;作用: 用于复制文件或目录&lt;/li&gt;
+&lt;li&gt;语法: cp [-r] source dest&lt;/li&gt;
+&lt;li&gt;说明:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;​        -r: 如果复制的是目录需要使用此选项，此时将复制该目录下所有的子目录和文件&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;举例:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;​    cp hello.txt itcast/            将hello.txt复制到itcast目录中&lt;/p&gt;
+&lt;p&gt;​    cp hello.txt ./hi.txt           将hello.txt复制到当前目录，并改名为hi.txt&lt;/p&gt;
+&lt;p&gt;​    cp -r itcast/ ./itheima/            将itcast目录和目录下所有文件复制到itheima目录下&lt;/p&gt;
+&lt;p&gt;​    cp -r itcast/* ./itheima/                  将itcast目录下所有文件复制到itheima目录下&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;操作示例:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/cp1.png&#34;
+	width=&#34;821&#34;
+	height=&#34;109&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/cp1_hu_c177e5612361f05c.png 480w, https://aurora156.github.io/p/linux/assets/cp1_hu_bd95c7ef262b6c91.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;753&#34;
+		data-flex-basis=&#34;1807px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/cp2.png&#34;
+	width=&#34;821&#34;
+	height=&#34;180&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/cp2_hu_5da1af083d816fbc.png 480w, https://aurora156.github.io/p/linux/assets/cp2_hu_6b3d9dc1fe8c35ce.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;456&#34;
+		data-flex-basis=&#34;1094px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/cp3.png&#34;
+	width=&#34;821&#34;
+	height=&#34;110&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/cp3_hu_7d640a74f66b0d4f.png 480w, https://aurora156.github.io/p/linux/assets/cp3_hu_2f755c0571058285.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;746&#34;
+		data-flex-basis=&#34;1791px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;如果拷贝的内容是目录，需要加上参数 -r&lt;/p&gt;
+&lt;h4 id=&#34;mv&#34;&gt;mv
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;作用: 为文件或目录改名、或将文件或目录移动到其它位置&lt;/li&gt;
+&lt;li&gt;语法: mv source dest&lt;/li&gt;
+&lt;li&gt;举例:
+&lt;ul&gt;
+&lt;li&gt;mv hello.txt hi.txt                   将hello.txt改名为hi.txt&lt;/li&gt;
+&lt;li&gt;mv hi.txt itheima/                   将文件hi.txt移动到itheima目录中&lt;/li&gt;
+&lt;li&gt;mv hi.txt itheima/hello.txt        将hi.txt移动到itheima目录中，并改名为hello.txt&lt;/li&gt;
+&lt;li&gt;mv itcast/ itheima/                 如果itheima目录不存在，将itcast目录改名为itheima&lt;/li&gt;
+&lt;li&gt;mv itcast/ itheima/                 如果itheima目录存在，将itcast目录移动到itheima目录中&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;操作示例:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;mv 命令既能够改名，又可以移动，具体是改名还是移动,系统会根据我们输入的参数进行判定(如果第二个参数dest是一个已存在的目录,将执行移动操作,其他情况都是改名)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/mv.png&#34;
+	width=&#34;821&#34;
+	height=&#34;344&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/mv_hu_c4a1ddd28849235.png 480w, https://aurora156.github.io/p/linux/assets/mv_hu_65ef911020e72034.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;238&#34;
+		data-flex-basis=&#34;572px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;打包压缩命令&#34;&gt;打包压缩命令
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;作用: 对文件进行打包、解包、压缩、解压&lt;/li&gt;
+&lt;li&gt;语法: &lt;code&gt;tar  [-zcxvf]  ``fileName  ``[files]&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;​    包文件后缀为.tar表示只是完成了打包，并没有压缩&lt;/p&gt;
+&lt;p&gt;​    包文件后缀为.tar.gz表示打包的同时还进行了压缩&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;说明:
+&lt;ul&gt;
+&lt;li&gt;-z: z代表的是gzip，通过gzip命令处理文件，gzip可以对文件压缩或者解压&lt;/li&gt;
+&lt;li&gt;-c: c代表的是create，即创建新的包文件&lt;/li&gt;
+&lt;li&gt;-x: x代表的是extract，实现从包文件中还原文件&lt;/li&gt;
+&lt;li&gt;-v: v代表的是verbose，显示命令的执行过程&lt;/li&gt;
+&lt;li&gt;-f: f代表的是file，用于指定包文件的名称&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;举例：
+&lt;ul&gt;
+&lt;li&gt;打包
+&lt;ul&gt;
+&lt;li&gt;tar -cvf hello.tar ./*                             将当前目录下所有文件打包，打包后的文件名为hello.tar&lt;/li&gt;
+&lt;li&gt;tar -zcvf hello.tar.gz ./*                      将当前目录下所有文件打包并压缩，打包后的文件名为                         hello.tar.gz&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;解包
+&lt;ul&gt;
+&lt;li&gt;tar -xvf hello.tar                             将hello.tar文件进行解包，并将解包后的文件放在当前目录&lt;/li&gt;
+&lt;li&gt;tar -zxvf hello.tar.gz                      将hello.tar.gz文件进行解压，并将解压后的文件放在当前目录&lt;/li&gt;
+&lt;li&gt;tar -zxvf hello.tar.gz -C /usr/local     将hello.tar.gz文件进行解压，并将解压后的文件放  在/usr/local目录&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;操作示例:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;A. 打包&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E6%89%93%E5%8C%85.png&#34;
+	width=&#34;821&#34;
+	height=&#34;256&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E6%89%93%E5%8C%85_hu_1b2187a0262974ca.png 480w, https://aurora156.github.io/p/linux/assets/%E6%89%93%E5%8C%85_hu_8838a4d69c1198cd.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;320&#34;
+		data-flex-basis=&#34;769px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;B. 打包并压缩&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E6%89%93%E5%8E%8B.png&#34;
+	width=&#34;821&#34;
+	height=&#34;254&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E6%89%93%E5%8E%8B_hu_426e50705271afc9.png 480w, https://aurora156.github.io/p/linux/assets/%E6%89%93%E5%8E%8B_hu_f2805422cf8ab4a3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;323&#34;
+		data-flex-basis=&#34;775px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;C. 解包&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E8%A7%A3%E5%8C%85.png&#34;
+	width=&#34;821&#34;
+	height=&#34;449&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E8%A7%A3%E5%8C%85_hu_eb968948f0ad1083.png 480w, https://aurora156.github.io/p/linux/assets/%E8%A7%A3%E5%8C%85_hu_5d0d34a428996418.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;182&#34;
+		data-flex-basis=&#34;438px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;D. 解压&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E8%A7%A3%E5%8E%8B.png&#34;
+	width=&#34;821&#34;
+	height=&#34;153&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E8%A7%A3%E5%8E%8B_hu_c9d53d9aca9c87bd.png 480w, https://aurora156.github.io/p/linux/assets/%E8%A7%A3%E5%8E%8B_hu_7981aa70a2a2539f.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;536&#34;
+		data-flex-basis=&#34;1287px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;解压到指定目录,需要加上参数 -C&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E8%A7%A3%E5%8E%8B1.png&#34;
+	width=&#34;821&#34;
+	height=&#34;189&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E8%A7%A3%E5%8E%8B1_hu_18e283f9ace5aaa0.png 480w, https://aurora156.github.io/p/linux/assets/%E8%A7%A3%E5%8E%8B1_hu_536ede8a089b8db9.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;434&#34;
+		data-flex-basis=&#34;1042px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;区别：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E5%8C%BA%E5%88%AB.png&#34;
+	width=&#34;1124&#34;
+	height=&#34;959&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E5%8C%BA%E5%88%AB_hu_54a621df842be2ed.png 480w, https://aurora156.github.io/p/linux/assets/%E5%8C%BA%E5%88%AB_hu_c17e6097f05a0536.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;117&#34;
+		data-flex-basis=&#34;281px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;文本编辑命令&#34;&gt;文本编辑命令
+&lt;/h3&gt;&lt;p&gt;文本编辑的命令，主要包含两个: &lt;code&gt;vi&lt;/code&gt; 和 &lt;code&gt;vim&lt;/code&gt;，两个命令的用法类似，我们课程中主要讲解vim的使用。&lt;/p&gt;
+&lt;h4 id=&#34;vi--vim介绍&#34;&gt;vi &amp;amp; vim介绍
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;作用: vi命令是Linux系统提供的一个文本编辑工具，可以对文件内容进行编辑，类似于Windows中的记事本&lt;/li&gt;
+&lt;li&gt;语法: vi fileName&lt;/li&gt;
+&lt;li&gt;说明:
+&lt;ul&gt;
+&lt;li&gt;1). vim是从vi发展来的一个功能更加强大的文本编辑工具，编辑文件时可以对文本内容进行着色，方便我们对文件进行编辑处理，所以实际工作中vim更加常用。&lt;/li&gt;
+&lt;li&gt;2). 要使用vim命令，需要我们自己完成安装。可以使用下面的命令来完成安装：&lt;code&gt;yum install vim&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;vim安装&#34;&gt;vim安装
+&lt;/h4&gt;&lt;p&gt;命令： &lt;code&gt;yum install vim&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/vim1.png&#34;
+	width=&#34;821&#34;
+	height=&#34;167&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/vim1_hu_8d5c862830ef080a.png 480w, https://aurora156.github.io/p/linux/assets/vim1_hu_d1d260fbd5691028.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;491&#34;
+		data-flex-basis=&#34;1179px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;安装过程中，会有确认提示，此时输入 y，然后回车，继续安装：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/vim2.png&#34;
+	width=&#34;821&#34;
+	height=&#34;125&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/vim2_hu_ae2c754c3d48ae7a.png 480w, https://aurora156.github.io/p/linux/assets/vim2_hu_4204b0346f6c5d33.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;656&#34;
+		data-flex-basis=&#34;1576px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/vim3.png&#34;
+	width=&#34;821&#34;
+	height=&#34;138&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/vim3_hu_1c1af15017a94609.png 480w, https://aurora156.github.io/p/linux/assets/vim3_hu_cfa6f0c93670e031.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;594&#34;
+		data-flex-basis=&#34;1427px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;想要知道自己是否已经安装过vim可以使用命令：&lt;code&gt;which vim&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/vim4.png&#34;
+	width=&#34;353&#34;
+	height=&#34;44&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/vim4_hu_a5fbbd37f7d6749d.png 480w, https://aurora156.github.io/p/linux/assets/vim4_hu_a08ad924a472a7.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;802&#34;
+		data-flex-basis=&#34;1925px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;vim使用&#34;&gt;vim使用
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;作用: 对文件内容进行编辑，vim其实就是一个文本编辑器&lt;/li&gt;
+&lt;li&gt;语法: vim fileName&lt;/li&gt;
+&lt;li&gt;说明:
+&lt;ul&gt;
+&lt;li&gt;1). 在使用vim命令编辑文件时，如果指定的文件存在则直接打开此文件。如果指定的文件不存在则新建文件。&lt;/li&gt;
+&lt;li&gt;2). vim在进行文本编辑时共分为三种模式，分别是 命令模式（Command mode），插入模式（Insert mode）和底行模式（Last line mode）。这三种模式之间可以相互切换。我们在使用vim时一定要注意我们当前所处的是哪种模式。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;三种模式:
+&lt;ul&gt;
+&lt;li&gt;命令模式
+&lt;ul&gt;
+&lt;li&gt;A. 命令模式下可以查看文件内容、移动光标（上下左右箭头、gg、G)&lt;/li&gt;
+&lt;li&gt;B. 通过vim命令打开文件后，默认进入命令模式&lt;/li&gt;
+&lt;li&gt;C. 另外两种模式需要首先进入命令模式，才能进入彼此&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;命令模式指令&lt;/th&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;含义&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;gg&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;定位到文本内容的第一行&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;G&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;定位到文本内容的最后一行&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;dd&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;删除光标所在行的数据&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;ndd&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;删除当前光标所在行及之后的n行数据&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;u&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;撤销操作&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;i或a或o&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;进入插入模式(进入后光标所处的位置不同而已)&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;插入模式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A. 插入模式下可以对文件内容进行编辑&lt;/li&gt;
+&lt;li&gt;B. 在命令模式下按下[i,a,o]任意一个，可以进入插入模式。进入插入模式后，下方会出现【insert】字样&lt;/li&gt;
+&lt;li&gt;C. 在插入模式下按下ESC键，回到命令模式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;底行模式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A. 底行模式下可以通过命令对文件内容进行查找、显示行号、退出等操作&lt;/li&gt;
+&lt;li&gt;B. 在命令模式下按下[:,/]任意一个，可以进入底行模式&lt;/li&gt;
+&lt;li&gt;C. 通过/方式进入底行模式后，可以对文件内容进行查找&lt;/li&gt;
+&lt;li&gt;D. 通过:方式进入底行模式后，可以输入wq（保存并退出）、q!（不保存退出）、set nu（显示行号）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;底行模式指令&lt;/th&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;含义&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;:wq&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;保存并退出&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;:q!&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;不保存退出&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;:set nu&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;显示行号&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;:set nonu&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;取消行号显示&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;:n&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;定位到第n行，如 :10 就是定位到第10行&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/vim.png&#34;
+	width=&#34;742&#34;
+	height=&#34;393&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/vim_hu_53046992c74f5948.png 480w, https://aurora156.github.io/p/linux/assets/vim_hu_dc8188dc4ec80921.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;188&#34;
+		data-flex-basis=&#34;453px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;查找命令&#34;&gt;查找命令
+&lt;/h3&gt;&lt;h4 id=&#34;find&#34;&gt;find
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;作用: 在指定目录下查找文件&lt;/li&gt;
+&lt;li&gt;语法: find dirName -option fileName&lt;/li&gt;
+&lt;li&gt;举例:
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;find . –name &amp;quot;*.java&amp;quot;&lt;/code&gt;                      &lt;em&gt;在当前目录及其子目录下查找.java结尾文件&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;find /itcast -name &amp;quot;*.java&amp;quot;&lt;/code&gt;             在/itcast目录及其子目录下查找.java结尾的文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;操作示例:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/find.png&#34;
+	width=&#34;821&#34;
+	height=&#34;143&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/find_hu_3df12d3d4cc51fad.png 480w, https://aurora156.github.io/p/linux/assets/find_hu_613e3b0c51fa9113.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;574&#34;
+		data-flex-basis=&#34;1377px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;grep&#34;&gt;grep
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;作用: 从指定文件中查找指定的文本内容&lt;/li&gt;
+&lt;li&gt;语法: &lt;code&gt;grep word fileName&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;选项：
+&lt;ul&gt;
+&lt;li&gt;-i: 检索的关键字忽略(ignore)大小写&lt;/li&gt;
+&lt;li&gt;-n: 显示关键字所在的这一行的行号&lt;/li&gt;
+&lt;li&gt;-A: 输出关键字所在行及之后(After)的几行记录 (如:-A5 表示输出关键字所在行之后的5行记录)&lt;/li&gt;
+&lt;li&gt;-B: 输出关键字所在行及之前(Before)的几行记录 (如:-B5 表示输出关键字所在行之前的5行记录)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;举例:
+&lt;ul&gt;
+&lt;li&gt;grep Hello HelloWorld.java        查找HelloWorld.java文件中出现的Hello字符串的位置&lt;/li&gt;
+&lt;li&gt;grep hello *.java                        查找当前目录中所有.java结尾的文件中包含hello字符串的位置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;操作示例:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/grep.png&#34;
+	width=&#34;821&#34;
+	height=&#34;108&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/grep_hu_e443c33405bd15b5.png 480w, https://aurora156.github.io/p/linux/assets/grep_hu_c8d6fb126ef4493d.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;760&#34;
+		data-flex-basis=&#34;1824px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;软件安装&#34;&gt;软件安装
+&lt;/h2&gt;&lt;h3 id=&#34;软件安装方式&#34;&gt;软件安装方式
+&lt;/h3&gt;&lt;p&gt;在Linux系统中，安装软件的方式主要有四种，这四种安装方式的特点如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85.png&#34;
+	width=&#34;821&#34;
+	height=&#34;152&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85_hu_902583fecff177fe.png 480w, https://aurora156.github.io/p/linux/assets/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85_hu_2a1c134a637e047e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;540&#34;
+		data-flex-basis=&#34;1296px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;安装jdk&#34;&gt;安装JDK
+&lt;/h3&gt;&lt;p&gt;上述我们介绍了Linux系统软件安装的四种形式，接下来我们就通过第一种(二进制发布包)形式来安装JDK。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/jdk.png&#34;
+	width=&#34;308&#34;
+	height=&#34;42&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/jdk_hu_fefe74596fd857c2.png 480w, https://aurora156.github.io/p/linux/assets/jdk_hu_17247e40080401b7.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;733&#34;
+		data-flex-basis=&#34;1760px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;JDK具体安装步骤如下：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1). 上传安装包&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;使用FinalShell自带的上传工具将jdk的二进制发布包上传到Linux&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E4%B8%8A%E4%BC%A0%E5%AE%89%E8%A3%85%E5%8C%85.png&#34;
+	width=&#34;2114&#34;
+	height=&#34;887&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E4%B8%8A%E4%BC%A0%E5%AE%89%E8%A3%85%E5%8C%85_hu_1cbc6108282d6e2e.png 480w, https://aurora156.github.io/p/linux/assets/%E4%B8%8A%E4%BC%A0%E5%AE%89%E8%A3%85%E5%8C%85_hu_89ebbfc10d82b515.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;238&#34;
+		data-flex-basis=&#34;571px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2). 解压安装包&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;执行如下指令，将上传上来的压缩包进行解压，并通过-C参数指定解压文件存放目录为 /usr/local。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;tar -zxvf jdk-21_linux-x64_bin.tar.gz -C /usr/local/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E8%A7%A3%E5%8E%8B%E5%AE%89%E8%A3%85%E5%8C%85.png&#34;
+	width=&#34;991&#34;
+	height=&#34;395&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E8%A7%A3%E5%8E%8B%E5%AE%89%E8%A3%85%E5%8C%85_hu_4e3c7bed4d9fbc40.png 480w, https://aurora156.github.io/p/linux/assets/%E8%A7%A3%E5%8E%8B%E5%AE%89%E8%A3%85%E5%8C%85_hu_59efe52fc737b1f7.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;250&#34;
+		data-flex-basis=&#34;602px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3). 配置环境变量&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;使用vim命令修改&lt;code&gt;/etc/profile&lt;/code&gt;文件，在文件末尾加入如下配置&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;JAVA_HOME&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/usr/local/jdk-17.0.10
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;PATH&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$JAVA_HOME&lt;/span&gt;/bin:&lt;span class=&#34;nv&#34;&gt;$PATH&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;具体操作指令如下:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;1&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;. 编辑/etc/profile文件，进入命令模式
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    vim /etc/profile
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;2&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;. 在命令模式中，输入指令 G ， 切换到文件最后
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    G
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;3&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;. 在命令模式中输入 i/a/o 进入插入模式，然后切换到文件最后一行
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    i
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;4&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;. 将上述的配置拷贝到文件中
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nb&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;JAVA_HOME&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/usr/local/jdk-17.0.10
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nb&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;PATH&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$JAVA_HOME&lt;/span&gt;/bin:&lt;span class=&#34;nv&#34;&gt;$PATH&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;5&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;. 从插入模式，切换到指令模式
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    ESC
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;6&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;. 按:进入底行模式，然后输入wq，回车保存
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    :wq
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;4). 重新加载profile文件&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;为了使更改的配置立即生效，需要重新加载profile文件，执行命令:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;source&lt;/span&gt; /etc/profile
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;5). 检查安装是否成功&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;java -version
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E6%A3%80%E6%9F%A5%E5%AE%89%E8%A3%85.png&#34;
+	width=&#34;775&#34;
+	height=&#34;177&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E6%A3%80%E6%9F%A5%E5%AE%89%E8%A3%85_hu_899209bbc9d1b623.png 480w, https://aurora156.github.io/p/linux/assets/%E6%A3%80%E6%9F%A5%E5%AE%89%E8%A3%85_hu_6434e35fe71c120c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;437&#34;
+		data-flex-basis=&#34;1050px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;安装mysql&#34;&gt;安装MySQL
+&lt;/h3&gt;&lt;h4 id=&#34;mysql安装&#34;&gt;MySQL安装
+&lt;/h4&gt;&lt;p&gt;对于MySQL数据库的安装，我们将要使用前面讲解的第一种安装方式进行安装。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1). 准备工作&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在安装MySQL数据库之前，我们需要先检查一下当前Linux系统中，是否安装的有MySQL的相关服务（很多linux安装完毕之后，自带了低版本的mysql的依赖包），如果有，先需要卸载掉，然后再进行安装。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;A. 通过rpm相关指令，来查询当前系统中是否存在已安装的mysql软件包，执行指令如下：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;rpm -qa&lt;/code&gt;                                  查询当前系统中安装的所有软件&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;rpm -qa | grep mysql&lt;/code&gt;            查询当前系统中安装的名称带mysql的软件&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;rpm -qa | grep mariadb&lt;/code&gt;        查询当前系统中安装的名称带mariadb的软件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;通过rpm -qa 查询到系统通过rpm安装的所有软件，太多了，不方便查看，所以我们可以通过管道符 | 配合着grep进行过滤查询。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E6%9F%A5%E8%AF%A2.png&#34;
+	width=&#34;452&#34;
+	height=&#34;86&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E6%9F%A5%E8%AF%A2_hu_3fe324569bb7721f.png 480w, https://aurora156.github.io/p/linux/assets/%E6%9F%A5%E8%AF%A2_hu_bc3d5fd008e3f18.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;525&#34;
+		data-flex-basis=&#34;1261px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;通过查询，我们发现在当前系统不存在mysqlh和mariadb数据库。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;**RPM：**全称为 Red-Hat Package Manager，RPM软件包管理器，是红帽Linux用于管理和安装软件的工具。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;如果发现在当前系统中有这两个任意一个或都有，可以换通过以下方法卸载&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;B. 通过 rpm 相关指令，来卸载对应的组件，执行指令如下：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在rpm中，卸载软件的语法为：&lt;code&gt;rpm -e --nodeps  软件名称&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;那么，我们就可以通过指令，卸载 mariadb，具体指令为： &lt;code&gt;rpm -e --nodeps mariadb-libs-5.5.60-1.el7_5.x86_64&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E5%8D%B8%E8%BD%BD.png&#34;
+	width=&#34;821&#34;
+	height=&#34;94&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E5%8D%B8%E8%BD%BD_hu_3638e7d11023ddc1.png 480w, https://aurora156.github.io/p/linux/assets/%E5%8D%B8%E8%BD%BD_hu_2288122cd027128c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;873&#34;
+		data-flex-basis=&#34;2096px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2). 将资料中提供的MySQL安装包上传到Linux并解压&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;A. 上传MySQL安装包&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;我们需要将该MySQL安装包上传到Linux系统的根目录 /root 下面。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/mysql.png&#34;
+	width=&#34;339&#34;
+	height=&#34;33&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/mysql_hu_6acf398a1b3de685.png 480w, https://aurora156.github.io/p/linux/assets/mysql_hu_c2831cd77225e4ae.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;1027&#34;
+		data-flex-basis=&#34;2465px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/mysql1.png&#34;
+	width=&#34;960&#34;
+	height=&#34;245&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/mysql1_hu_5c55802bdecf2900.png 480w, https://aurora156.github.io/p/linux/assets/mysql1_hu_244b652e25a09c7a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;391&#34;
+		data-flex-basis=&#34;940px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;B. 解压到 当前目录&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;执行如下指令:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;tar -xvf mysql-8.0.30-linux-glibc2.12-x86_64.tar.xz
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E8%A7%A3%E5%8E%8Bmysql.png&#34;
+	width=&#34;859&#34;
+	height=&#34;223&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E8%A7%A3%E5%8E%8Bmysql_hu_8ea48f19e20da004.png 480w, https://aurora156.github.io/p/linux/assets/%E8%A7%A3%E5%8E%8Bmysql_hu_cb483b0cc9ce25a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;385&#34;
+		data-flex-basis=&#34;924px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;C. 将解压后的文件夹移动到 /usr/local 目录下， 并改名为 mysql&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mv mysql-8.0.30-linux-glibc2.12-x86_64 /usr/local/mysql
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; /usr/local/mysql
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E7%A7%BB%E5%8A%A8mysql.png&#34;
+	width=&#34;800&#34;
+	height=&#34;81&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E7%A7%BB%E5%8A%A8mysql_hu_9b10675536cb422d.png 480w, https://aurora156.github.io/p/linux/assets/%E7%A7%BB%E5%8A%A8mysql_hu_fac64d349547b455.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;987&#34;
+		data-flex-basis=&#34;2370px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;并执行如下指令, 注册MySQL为系统服务:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cp /usr/local/mysql/support-files/mysql.server /etc/init.d/mysql
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;chkconfig --add mysql
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E6%B3%A8%E5%86%8C.png&#34;
+	width=&#34;824&#34;
+	height=&#34;122&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E6%B3%A8%E5%86%8C_hu_75b0ecb2af253133.png 480w, https://aurora156.github.io/p/linux/assets/%E6%B3%A8%E5%86%8C_hu_652408c5fd63966a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;675&#34;
+		data-flex-basis=&#34;1620px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;5). 初始化数据库&lt;/strong&gt;(因为我的用户组和用户都不为空，所以我就新建了一个叫mysql1)&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#创建一个用户组, 组名就叫mysql&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;groupadd mysql1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#创建一个系统用户 mysql, 并归属于用户组 mysql &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;useradd -r -g mysql1 -s /bin/false mysql
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#初始化mysql&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mysqld --initialize --user&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;mysql1 --basedir&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/usr/local/mysql --datadir&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/usr/local/mysql/data
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E5%88%9D%E5%A7%8B%E5%8C%96.png&#34;
+	width=&#34;1380&#34;
+	height=&#34;154&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E5%88%9D%E5%A7%8B%E5%8C%96_hu_52a58ff7d543005.png 480w, https://aurora156.github.io/p/linux/assets/%E5%88%9D%E5%A7%8B%E5%8C%96_hu_16a8e44c61ebd418.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;896&#34;
+		data-flex-basis=&#34;2150px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;如果mysql中数据目录不为空，可能就会报出下面的错误&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E6%8A%A5%E9%94%99.png&#34;
+	width=&#34;1604&#34;
+	height=&#34;152&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E6%8A%A5%E9%94%99_hu_3417631e02a0b804.png 480w, https://aurora156.github.io/p/linux/assets/%E6%8A%A5%E9%94%99_hu_548013498addd24b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;1055&#34;
+		data-flex-basis=&#34;2532px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;我去问ai，ai给出的解释是：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;你正在尝试初始化一个新的数据库实例，但是指定的 &lt;code&gt;--datadir=/usr/local/mysql/data&lt;/code&gt; 目录里已经存在文件了。MySQL 的初始化机制要求数据目录必须是&lt;strong&gt;空的&lt;/strong&gt;或者&lt;strong&gt;不存在&lt;/strong&gt;，以防止意外覆盖已有的重要数据。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;给出的解决方案如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95.png&#34;
+	width=&#34;1116&#34;
+	height=&#34;1046&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95_hu_8824080ea954bb1b.png 480w, https://aurora156.github.io/p/linux/assets/%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95_hu_3db68bf7871755f2.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;106&#34;
+		data-flex-basis=&#34;256px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;删除前最好将原文件备份一份&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;创建备份目录&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mkdir -p /backup
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;使用 tar 命令打包（推荐）&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;tar -czvf /backup/mysql_data_backup.tar.gz -C /usr/local/mysql data
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;如果你不想压缩，只想单纯复制一份副本，可以使用 &lt;code&gt;cp&lt;/code&gt; 命令。但必须加上 &lt;code&gt;-a&lt;/code&gt; 参数以保留权限。&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cp -a /usr/local/mysql/data /backup/data_backup_copy
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;验证备份是否成功&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ls -lh /backup
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;如果你看到了 &lt;code&gt;mysql_data_backup.tar.gz&lt;/code&gt;（或 &lt;code&gt;data_backup_copy&lt;/code&gt; 目录），且文件大小不是 0，说明备份成功。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;恢复方法（万一出错了怎么办？）&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;如果你清空了原目录后发现出错了，可以用以下命令恢复：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;如果是用 tar 备份的：&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 进入 mysql 目录&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; /usr/local/mysql
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 解压覆盖&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;tar -xzvf /backup/mysql_data_backup.tar.gz
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;如果是用 cp 备份的：&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;rm -rf /usr/local/mysql/data
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cp -a /backup/data_backup_copy /usr/local/mysql/data
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h4 id=&#34;启动mysql&#34;&gt;启动MySQL
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;A. 启动MySQL服务&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;systemctl start mysql
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;B. 通过命令, 登录MySQL&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#xxxxx 代表上述生成的root的临时密码&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mysql -uroot -pxxxxx
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E5%90%AF%E5%8A%A8MySQL.png&#34;
+	width=&#34;1201&#34;
+	height=&#34;359&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E5%90%AF%E5%8A%A8MySQL_hu_635f37e3b67b354d.png 480w, https://aurora156.github.io/p/linux/assets/%E5%90%AF%E5%8A%A8MySQL_hu_1f0e3649dfa21785.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;334&#34;
+		data-flex-basis=&#34;802px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;配置mysql&#34;&gt;配置MySQL
+&lt;/h4&gt;&lt;p&gt;A. 修改root用户的密码&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ALTER USER &lt;span class=&#34;s1&#34;&gt;&amp;#39;root&amp;#39;&lt;/span&gt;@&lt;span class=&#34;s1&#34;&gt;&amp;#39;localhost&amp;#39;&lt;/span&gt; IDENTIFIED WITH mysql_native_password BY &lt;span class=&#34;s1&#34;&gt;&amp;#39;1234&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81.png&#34;
+	width=&#34;833&#34;
+	height=&#34;73&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81_hu_b070732b30b294.png 480w, https://aurora156.github.io/p/linux/assets/%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81_hu_65d7b778bda5a497.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;1141&#34;
+		data-flex-basis=&#34;2738px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;注意: 这个root账号仅仅能够在本机localhost上访问，我们在windows上是无法访问的。如果需要在window上或其他服务器上也能远程访问，需要创建一个账号，用于远程访问的。&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;B. 创建账号, 并授权远程访问&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;CREATE USER &lt;span class=&#34;s1&#34;&gt;&amp;#39;root&amp;#39;&lt;/span&gt;@&lt;span class=&#34;s1&#34;&gt;&amp;#39;%&amp;#39;&lt;/span&gt; IDENTIFIED BY &lt;span class=&#34;s1&#34;&gt;&amp;#39;1234&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;GRANT ALL PRIVILEGES ON *.* TO &lt;span class=&#34;s1&#34;&gt;&amp;#39;root&amp;#39;&lt;/span&gt;@&lt;span class=&#34;s1&#34;&gt;&amp;#39;%&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;FLUSH PRIVILEGES&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E6%8E%88%E6%9D%83.png&#34;
+	width=&#34;600&#34;
+	height=&#34;220&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E6%8E%88%E6%9D%83_hu_b56dcdfefac2ea85.png 480w, https://aurora156.github.io/p/linux/assets/%E6%8E%88%E6%9D%83_hu_a0529bff18b958eb.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;272&#34;
+		data-flex-basis=&#34;654px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;我们已经开启了MySQL的远程访问的权限，为什么还是连接不上MySQL服务器呢？？ 这是因为Linux系统的防火墙，将我们的访问拦截了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E8%AE%BF%E9%97%AE%E6%8B%A6%E6%88%AA.png&#34;
+	width=&#34;821&#34;
+	height=&#34;222&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E8%AE%BF%E9%97%AE%E6%8B%A6%E6%88%AA_hu_b7c77a08c69efa55.png 480w, https://aurora156.github.io/p/linux/assets/%E8%AE%BF%E9%97%AE%E6%8B%A6%E6%88%AA_hu_fb97cb5d3b738db7.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;369&#34;
+		data-flex-basis=&#34;887px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;防火墙操作&#34;&gt;防火墙操作
+&lt;/h4&gt;&lt;p&gt;Linux系统安装完毕后，系统启动时，防火墙自动启动，防火墙拦截了所有端口的访问。接下来我们就需要学习一下，如何操作防火墙，具体指令如下：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;操作&lt;/th&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;指令&lt;/th&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;备注&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;查看防火墙状态&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;systemctl status firewalld / firewall-cmd &amp;ndash;state&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;暂时关闭防火墙&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;systemctl stop firewalld&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;永久关闭防火墙(禁用开机自启)&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;systemctl disable firewalld&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;下次启动,才生效&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;暂时开启防火墙&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;systemctl start firewalld&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;永久开启防火墙(启用开机自启)&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;systemctl enable firewalld&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;下次启动,才生效&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;开放指定端口&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;firewall-cmd &amp;ndash;zone=public &amp;ndash;add-port=8080/tcp &amp;ndash;permanent&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;需要重新加载生效&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;关闭指定端口&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;firewall-cmd &amp;ndash;zone=public &amp;ndash;remove-port=8080/tcp &amp;ndash;permanent&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;需要重新加载生效&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;立即生效(重新加载)&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;firewall-cmd &amp;ndash;reload&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;查看开放端口&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;firewall-cmd &amp;ndash;zone=public &amp;ndash;list-ports&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;注意： 要想在windows上能够访问MySQL，需要开放防火墙的3306端口  或者 直接关闭防火墙 ，执行如下指令:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#开放防火墙的3306端口号&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;firewall-cmd --zone&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;public --add-port&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;3306/tcp --permanent
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#重新加载&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;firewall-cmd --reload
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#查看开放的端口号&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;firewall-cmd --zone&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;public --list-ports
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E5%BC%80%E6%94%BE%E9%98%B2%E7%81%AB%E5%A2%99.png&#34;
+	width=&#34;821&#34;
+	height=&#34;115&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E5%BC%80%E6%94%BE%E9%98%B2%E7%81%AB%E5%A2%99_hu_7545c2b72ca36f06.png 480w, https://aurora156.github.io/p/linux/assets/%E5%BC%80%E6%94%BE%E9%98%B2%E7%81%AB%E5%A2%99_hu_81761877d242f8aa.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;713&#34;
+		data-flex-basis=&#34;1713px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;或者直接关闭防火墙:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;systemctl stop firewalld
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E5%85%B3%E9%97%AD%E9%98%B2%E7%81%AB%E5%A2%99.png&#34;
+	width=&#34;821&#34;
+	height=&#34;215&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E5%85%B3%E9%97%AD%E9%98%B2%E7%81%AB%E5%A2%99_hu_5b6fc9f6dfac099b.png 480w, https://aurora156.github.io/p/linux/assets/%E5%85%B3%E9%97%AD%E9%98%B2%E7%81%AB%E5%A2%99_hu_829949b2ed77ee52.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;381&#34;
+		data-flex-basis=&#34;916px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;连接测试&#34;&gt;连接测试
+&lt;/h4&gt;&lt;p&gt;关闭掉linux系统的防火墙之后，我们就可以打开windows上的命令行，通过mysql的客户端(命令行/图形化界面)来连接远程linux上安装的MySQL数据库了。&lt;/p&gt;
+&lt;p&gt;1). 客户端连接&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%BF%9E%E6%8E%A5.png&#34;
+	width=&#34;1132&#34;
+	height=&#34;424&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%BF%9E%E6%8E%A5_hu_8cb8c7110a852532.png 480w, https://aurora156.github.io/p/linux/assets/%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%BF%9E%E6%8E%A5_hu_794f8154dfbbfb15.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;266&#34;
+		data-flex-basis=&#34;640px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;2). 打开DataGrip图形化工具连接&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/dg%E8%BF%9E%E6%8E%A5.png&#34;
+	width=&#34;1224&#34;
+	height=&#34;936&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/dg%E8%BF%9E%E6%8E%A5_hu_a896125de800b1e0.png 480w, https://aurora156.github.io/p/linux/assets/dg%E8%BF%9E%E6%8E%A5_hu_a07669ef84a95a8f.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;130&#34;
+		data-flex-basis=&#34;313px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;执行资料中提供的SQL脚本 &lt;code&gt;tlias.sql&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC1.png&#34;
+	width=&#34;1048&#34;
+	height=&#34;923&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC1_hu_f9a7ec7f63725b0d.png 480w, https://aurora156.github.io/p/linux/assets/%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC1_hu_4e74d68ac7881b90.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;113&#34;
+		data-flex-basis=&#34;272px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC2.png&#34;
+	width=&#34;1245&#34;
+	height=&#34;659&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC2_hu_f8840cc635c47923.png 480w, https://aurora156.github.io/p/linux/assets/%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC2_hu_766de4f519d333ab.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;188&#34;
+		data-flex-basis=&#34;453px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC3.png&#34;
+	width=&#34;335&#34;
+	height=&#34;525&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC3_hu_fccfb2b2577d17d0.png 480w, https://aurora156.github.io/p/linux/assets/%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC3_hu_aa58bdb78a0cddcd.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;63&#34;
+		data-flex-basis=&#34;153px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;安装nginx&#34;&gt;安装Nginx
+&lt;/h3&gt;&lt;h4 id=&#34;安装&#34;&gt;安装
+&lt;/h4&gt;&lt;p&gt;Nginx的安装包，从官方下载下来的是c语言的源码包，我们需要自己编译安装。具体操作步骤如下：&lt;/p&gt;
+&lt;p&gt;1). 安装Nginx运行时需要的依赖&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;yum install -y pcre pcre-devel zlib zlib-devel openssl openssl-devel
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;安装C语言的编译环境.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;yum install gcc-c++
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;安装完后可以检查是否安装成功，安装前也可以使用以下命令查看是否已经安装过了&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E6%A3%80%E6%9F%A5%E5%AE%89%E8%A3%851.png&#34;
+	width=&#34;2368&#34;
+	height=&#34;631&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E6%A3%80%E6%9F%A5%E5%AE%89%E8%A3%851_hu_dfc95eab9bd4cc15.png 480w, https://aurora156.github.io/p/linux/assets/%E6%A3%80%E6%9F%A5%E5%AE%89%E8%A3%851_hu_518be81ae3375ed9.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;375&#34;
+		data-flex-basis=&#34;900px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;yum list installed &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; grep pcre
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;yum list installed &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; grep zlib
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;yum list installed &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; grep openssl
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;gcc -v
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;2). 上传Nginx的源码包&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/%E4%B8%8A%E4%BC%A0%E8%B5%84%E6%BA%90%E5%8C%85.png&#34;
+	width=&#34;325&#34;
+	height=&#34;37&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/%E4%B8%8A%E4%BC%A0%E8%B5%84%E6%BA%90%E5%8C%85_hu_330ae2fb6a43f2f9.png 480w, https://aurora156.github.io/p/linux/assets/%E4%B8%8A%E4%BC%A0%E8%B5%84%E6%BA%90%E5%8C%85_hu_840877fd1d04f1ae.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;878&#34;
+		data-flex-basis=&#34;2108px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;3). 解压源码包到当前目录&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;tar -zxvf nginx-1.20.2.tar.gz
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;4). 进入到解压目录后，执行指令&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#进入解压目录&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; nginx-1.20.2
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#执行命令配置, 生成Makefile文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;./configure --prefix&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/usr/local/nginx
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;5). 执行命令进行编译和安装&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#编译&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;make
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#编译安装&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;make install
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;安装完成效果如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/nginx%E5%AE%89%E8%A3%85.png&#34;
+	width=&#34;536&#34;
+	height=&#34;291&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/nginx%E5%AE%89%E8%A3%85_hu_bbec1af0e28e4d0c.png 480w, https://aurora156.github.io/p/linux/assets/nginx%E5%AE%89%E8%A3%85_hu_537c625a26aafe5c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;184&#34;
+		data-flex-basis=&#34;442px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;h4 id=&#34;启动nginx&#34;&gt;启动Nginx
+&lt;/h4&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;进入到nginx安装目录&lt;code&gt;/usr/local/nginx&lt;/code&gt;，启动nginx服务&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; /usr/local/nginx/
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sbin/nginx
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;启动完毕之后，我们可以通过 &lt;code&gt;ps&lt;/code&gt; 指令查询当前系统中的nginx进程，从而确认nginx是否启动 。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/nginx%E5%90%AF%E5%8A%A8.png&#34;
+	width=&#34;738&#34;
+	height=&#34;148&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/nginx%E5%90%AF%E5%8A%A8_hu_41476db57fcc662a.png 480w, https://aurora156.github.io/p/linux/assets/nginx%E5%90%AF%E5%8A%A8_hu_5fa9f1de833da50c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;498&#34;
+		data-flex-basis=&#34;1196px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;然后，我们就可以打开浏览器，访问服务器上的nginx 。&lt;img src=&#34;https://aurora156.github.io/p/linux/assets/nginx%E5%90%AF%E5%8A%A81.png&#34;
+	width=&#34;1890&#34;
+	height=&#34;380&#34;
+	srcset=&#34;https://aurora156.github.io/p/linux/assets/nginx%E5%90%AF%E5%8A%A81_hu_91d060523d1aa64a.png 480w, https://aurora156.github.io/p/linux/assets/nginx%E5%90%AF%E5%8A%A81_hu_e03ecb4771f3f0aa.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;497&#34;
+		data-flex-basis=&#34;1193px&#34;
+	
+&gt;&lt;/p&gt;
+</description>
         </item>
         <item>
         <title>元注解</title>
@@ -383,34 +2541,34 @@
 &lt;/ol&gt;
 &lt;p&gt;接下来我们先来学习第一方面，Bean的作用域。&lt;/p&gt;
 &lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th style=&#34;text-align: center&#34;&gt;作用域&lt;/th&gt;
-          &lt;th style=&#34;text-align: center&#34;&gt;说明&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;singleton&lt;/strong&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;容器内同名称的bean只有一个实例（单例）（默认）&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;prototype&lt;/strong&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;每次使用bean时会创建新的实例（非单例）&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;request&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;每个请求范围内会创建新的实例（web环境中，了解）&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;session&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;每个会话范围内会创建新的实例（web环境中，了解）&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;application&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;每个应用范围内会创建新的实例（web环境中，了解）&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;作用域&lt;/th&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;说明&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;singleton&lt;/strong&gt;&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;容器内同名称的bean只有一个实例（单例）（默认）&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;prototype&lt;/strong&gt;&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;每次使用bean时会创建新的实例（非单例）&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;request&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;每个请求范围内会创建新的实例（web环境中，了解）&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;session&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;每个会话范围内会创建新的实例（web环境中，了解）&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;application&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;每个应用范围内会创建新的实例（web环境中，了解）&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;知道了bean的5种作用域了，我们要怎么去设置一个bean的作用域呢？&lt;/p&gt;
 &lt;ul&gt;
@@ -5189,34 +7347,34 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;只要我们在通知方法上加上了&lt;code&gt;@Around&lt;/code&gt;注解，就代表当前通知是一个环绕通知。&lt;/p&gt;
 &lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th style=&#34;text-align: center&#34;&gt;&lt;strong&gt;Spring AOP 通知类型&lt;/strong&gt;&lt;/th&gt;
-          &lt;th&gt;说明&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;@Around&lt;/td&gt;
-          &lt;td&gt;环绕通知，此注解标注的通知方法在目标方法前、后都被执行&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;@Before&lt;/td&gt;
-          &lt;td&gt;前置通知，此注解标注的通知方法在目标方法前被执行&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;@After&lt;/td&gt;
-          &lt;td&gt;后置通知，此注解标注的通知方法在目标方法后被执行，无论是否有异常都会执行&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;@AfterReturning&lt;/td&gt;
-          &lt;td&gt;返回后通知，此注解标注的通知方法在目标方法后被执行，有异常不会执行&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;@AfterThrowing&lt;/td&gt;
-          &lt;td&gt;异常后通知，此注解标注的通知方法发生异常后执行&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;&lt;strong&gt;Spring AOP 通知类型&lt;/strong&gt;&lt;/th&gt;
+					&lt;th&gt;说明&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;@Around&lt;/td&gt;
+					&lt;td&gt;环绕通知，此注解标注的通知方法在目标方法前、后都被执行&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;@Before&lt;/td&gt;
+					&lt;td&gt;前置通知，此注解标注的通知方法在目标方法前被执行&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;@After&lt;/td&gt;
+					&lt;td&gt;后置通知，此注解标注的通知方法在目标方法后被执行，无论是否有异常都会执行&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;@AfterReturning&lt;/td&gt;
+					&lt;td&gt;返回后通知，此注解标注的通知方法在目标方法后被执行，有异常不会执行&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;@AfterThrowing&lt;/td&gt;
+					&lt;td&gt;异常后通知，此注解标注的通知方法发生异常后执行&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;五种类型标志：前置、环绕、后置、返回后、异常后&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/springaop/assets/%E5%89%8D%E7%BD%AE.png&#34;
@@ -9574,30 +11732,30 @@
 &lt;h5 id=&#34;拦截路径&#34;&gt;拦截路径
 &lt;/h5&gt;&lt;p&gt;执行流程我们搞清楚之后，接下来再来介绍一下过滤器的拦截路径，Filter可以根据需求，配置不同的拦截资源路径：&lt;/p&gt;
 &lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th style=&#34;text-align: center&#34;&gt;拦截路径&lt;/th&gt;
-          &lt;th style=&#34;text-align: center&#34;&gt;urlPatterns值&lt;/th&gt;
-          &lt;th style=&#34;text-align: center&#34;&gt;含义&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;拦截具体路径&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;/login&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;只有访问 /login 路径时，才会被拦截&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;目录拦截&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;/emps/*&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;访问/emps下的所有资源，都会被拦截&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;拦截所有&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;/*&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;访问所有资源，都会被拦截&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;拦截路径&lt;/th&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;urlPatterns值&lt;/th&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;含义&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;拦截具体路径&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;/login&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;只有访问 /login 路径时，才会被拦截&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;目录拦截&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;/emps/*&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;访问/emps下的所有资源，都会被拦截&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;拦截所有&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;/*&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;访问所有资源，都会被拦截&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;下面我们来测试&amp;quot;拦截具体路径&amp;quot;：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
@@ -10091,35 +12249,35 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;在拦截器中除了可以设置&lt;code&gt;/**&lt;/code&gt;拦截所有资源外，还有一些常见拦截路径设置：&lt;/p&gt;
 &lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th style=&#34;text-align: center&#34;&gt;拦截路径&lt;/th&gt;
-          &lt;th style=&#34;text-align: center&#34;&gt;含义&lt;/th&gt;
-          &lt;th style=&#34;text-align: center&#34;&gt;举例&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;/*&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;一级路径&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;能匹配/depts，/emps，/login，不能匹配 /depts/1&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;/**&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;任意级路径&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;能匹配/depts，/depts/1，/depts/1/2&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;/depts/*&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;/depts下的一级路径&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;能匹配/depts/1，不能匹配/depts/1/2，/depts&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;/depts/**&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;/depts下的任意级路径&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;能匹配/depts，/depts/1，/depts/1/2，不能匹配/emps/1&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;拦截路径&lt;/th&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;含义&lt;/th&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;举例&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;/*&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;一级路径&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;能匹配/depts，/emps，/login，不能匹配 /depts/1&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;/**&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;任意级路径&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;能匹配/depts，/depts/1，/depts/1/2&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;/depts/*&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;/depts下的一级路径&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;能匹配/depts/1，不能匹配/depts/1/2，/depts&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;/depts/**&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;/depts下的任意级路径&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;能匹配/depts，/depts/1，/depts/1/2，不能匹配/emps/1&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
 &lt;/table&gt;
 &lt;h4 id=&#34;执行流程-1&#34;&gt;执行流程
 &lt;/h4&gt;&lt;p&gt;介绍完拦截路径的配置之后，接下来我们再来介绍拦截器的执行流程。通过执行流程，大家就能够清晰的知道过滤器与拦截器的执行时机。&lt;/p&gt;
@@ -15625,38 +17783,38 @@
 &lt;p&gt;所谓事务的传播行为，指的就是在A方法运行的时候，首先会开启一个事务，在A方法当中又调用了B方法， B方法自身也具有事务，&lt;u&gt;那么B方法在运行的时候，到底是加入到A方法的事务当中来，还是B方法在运行的时候新建一个事务？&lt;/u&gt;这个就涉及到了事务的传播行为。&lt;/p&gt;
 &lt;p&gt;我们要想控制事务的传播行为，在@Transactional注解的后面指定一个属性propagation，通过 propagation 属性来指定传播行为。接下来我们就来介绍一下常见的事务传播行为。&lt;/p&gt;
 &lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th style=&#34;text-align: center&#34;&gt;属性值&lt;/th&gt;
-          &lt;th style=&#34;text-align: center&#34;&gt;含义&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;REQUIRED&lt;/strong&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;【默认值】需要事务，有则加入，无则创建新事务&lt;/strong&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;REQUIRES_NEW&lt;/strong&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;需要新事务，无论有无，总是创建新事务&lt;/strong&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;SUPPORTS&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;支持事务，有则加入，无则在无事务状态中运行&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;NOT_SUPPORTED&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;不支持事务，在无事务状态下运行,如果当前存在已有事务,则挂起当前事务&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;MANDATORY&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;必须有事务，否则抛异常&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;NEVER&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;必须没事务，否则抛异常&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;属性值&lt;/th&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;含义&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;REQUIRED&lt;/strong&gt;&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;【默认值】需要事务，有则加入，无则创建新事务&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;REQUIRES_NEW&lt;/strong&gt;&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;需要新事务，无论有无，总是创建新事务&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;SUPPORTS&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;支持事务，有则加入，无则在无事务状态中运行&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;NOT_SUPPORTED&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;不支持事务，在无事务状态下运行,如果当前存在已有事务,则挂起当前事务&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;MANDATORY&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;必须有事务，否则抛异常&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;NEVER&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;必须没事务，否则抛异常&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
 &lt;/table&gt;
 &lt;blockquote&gt;
 &lt;p&gt;对于这些事务传播行为，我们只需要关注以下两个就可以了：&lt;/p&gt;
@@ -17163,20 +19321,20 @@
 &lt;li&gt;
 &lt;p&gt;参数说明：&lt;/p&gt;
 &lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th style=&#34;text-align: center&#34;&gt;参数名称&lt;/th&gt;
-          &lt;th style=&#34;text-align: center&#34;&gt;参数类型&lt;/th&gt;
-          &lt;th style=&#34;text-align: center&#34;&gt;是否必须&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;image&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;file&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;是&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;参数名称&lt;/th&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;参数类型&lt;/th&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;是否必须&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;image&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;file&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;是&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
 &lt;/table&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -17186,34 +19344,34 @@
 &lt;li&gt;参数说明：&lt;/li&gt;
 &lt;/ul&gt;
 &lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th style=&#34;text-align: center&#34;&gt;参数名&lt;/th&gt;
-          &lt;th style=&#34;text-align: center&#34;&gt;类型&lt;/th&gt;
-          &lt;th style=&#34;text-align: center&#34;&gt;是否必须&lt;/th&gt;
-          &lt;th style=&#34;text-align: center&#34;&gt;备注&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;code&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;number&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;必须&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;响应码，1代表成功，0代表失败&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;msg&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;string&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;非必须&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;提示信息&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;data&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;object&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;非必须&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;返回的数据，上传图片的访问路径&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;参数名&lt;/th&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;类型&lt;/th&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;是否必须&lt;/th&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;备注&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;code&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;number&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;必须&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;响应码，1代表成功，0代表失败&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;msg&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;string&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;非必须&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;提示信息&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;data&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;object&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;非必须&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;返回的数据，上传图片的访问路径&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
 &lt;/table&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -19145,22 +21303,22 @@
 &lt;p&gt;子查询返回的结果是一列(可以是多行)，这种子查询称为列子查询。&lt;/p&gt;
 &lt;p&gt;常用的操作符：&lt;/p&gt;
 &lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th style=&#34;text-align: center&#34;&gt;操作符&lt;/th&gt;
-          &lt;th style=&#34;text-align: center&#34;&gt;描述&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;in&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;在指定的范围之内，多选一&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;not in&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;不在指定的集合范围之内&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;操作符&lt;/th&gt;
+					&lt;th style=&#34;text-align: center&#34;&gt;描述&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;in&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;在指定的范围之内，多选一&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;not in&lt;/td&gt;
+					&lt;td style=&#34;text-align: center&#34;&gt;不在指定的集合范围之内&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;案例：查询&amp;quot;教研部&amp;quot;和&amp;quot;咨询部&amp;quot;的所有员工信息&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
