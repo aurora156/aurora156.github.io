@@ -308,6 +308,19 @@
         </li>
       </ol>
     </li>
+    <li><a href="#项目部署">项目部署</a>
+      <ol>
+        <li><a href="#前端项目部署">前端项目部署</a></li>
+        <li><a href="#后端项目部署">后端项目部署</a>
+          <ol>
+            <li><a href="#环境准备">环境准备</a></li>
+            <li><a href="#打包部署">打包部署</a></li>
+            <li><a href="#阿里云oss秘钥配置">阿里云OSS秘钥配置</a></li>
+            <li><a href="#后台运行">后台运行</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -2523,6 +2536,424 @@
 		data-flex-basis="1193px"
 	
 ></p>
+<h2 id="项目部署">项目部署
+</h2><h3 id="前端项目部署">前端项目部署
+</h3><p><strong>1). 将nginx的安装目录的html中的静态资源文件先删除掉。</strong></p>
+<p><img src="/p/linux/assets/%E5%89%8D%E7%AB%AF%E9%83%A8%E7%BD%B2.png"
+	width="2054"
+	height="575"
+	srcset="/p/linux/assets/%E5%89%8D%E7%AB%AF%E9%83%A8%E7%BD%B2_hu_7316d57c196f8407.png 480w, /p/linux/assets/%E5%89%8D%E7%AB%AF%E9%83%A8%E7%BD%B2_hu_aa360f7033ae75cd.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="357"
+		data-flex-basis="857px"
+	
+></p>
+<p><strong>2). 将资料中提供的</strong> <strong>&ldquo;资料/06. 项目部署/前端/页面资源&rdquo;</strong> <strong>目录下的静态资源文件，全部上传到nginx安装目录下的 html 目录中.</strong></p>
+<p><img src="/p/linux/assets/%E5%89%8D%E7%AB%AF%E9%83%A8%E7%BD%B21.png"
+	width="2055"
+	height="528"
+	srcset="/p/linux/assets/%E5%89%8D%E7%AB%AF%E9%83%A8%E7%BD%B21_hu_7f7a8e6128089f02.png 480w, /p/linux/assets/%E5%89%8D%E7%AB%AF%E9%83%A8%E7%BD%B21_hu_cbaf0ccff5cb0d68.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="389"
+		data-flex-basis="934px"
+	
+></p>
+<p><strong>3).</strong> <strong>修改资料中提供的nginx.conf配置文件，将其上传到nginx安装目录下的 conf 目录中.</strong></p>
+<p><img src="/p/linux/assets/%E5%89%8D%E7%AB%AF%E9%83%A8%E7%BD%B23.png"
+	width="1947"
+	height="543"
+	srcset="/p/linux/assets/%E5%89%8D%E7%AB%AF%E9%83%A8%E7%BD%B23_hu_4ad29e26cebb76fd.png 480w, /p/linux/assets/%E5%89%8D%E7%AB%AF%E9%83%A8%E7%BD%B23_hu_b9fc17f0561ad14b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="358"
+		data-flex-basis="860px"
+	
+></p>
+<p><strong>4).</strong> <strong>重新加载nginx服务的配置文件</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">#重新加载配置文件（nginx安装目录下操作）</span>
+</span></span><span class="line"><span class="cl">sbin/nginx -s reload
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>5). 再次访问nginx (可能会存在浏览器缓存, 可以按Ctrl+F5, 强制刷新清理缓存)</strong></p>
+<p><img src="/p/linux/assets/%E5%89%8D%E7%AB%AF.png"
+	width="1865"
+	height="824"
+	srcset="/p/linux/assets/%E5%89%8D%E7%AB%AF_hu_81660b339dec959c.png 480w, /p/linux/assets/%E5%89%8D%E7%AB%AF_hu_d09c3a05f072120f.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="226"
+		data-flex-basis="543px"
+	
+></p>
+<p>如果前端无响应，可能有以下几个原因：</p>
+<p><img src="/p/linux/assets/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88.png"
+	width="943"
+	height="1418"
+	srcset="/p/linux/assets/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88_hu_92223e4fdc97ebc2.png 480w, /p/linux/assets/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88_hu_1e6c8a7312ea34fa.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="66"
+		data-flex-basis="159px"
+	
+></p>
+<p>关闭nginx的命令</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sbin/nginx -s quit
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="后端项目部署">后端项目部署
+</h3><p>之前我们讲解Linux操作系统时，就提到，我们服务端开发工程师学习Linux系统的目的就是将来我们开发的项目绝大部分情况下都需要部署在Linux系统中。</p>
+<p><strong>操作步骤：</strong></p>
+<p><img src="/p/linux/assets/%E5%90%8E%E7%AB%AF%E6%AD%A5%E9%AA%A4.png"
+	width="1543"
+	height="229"
+	srcset="/p/linux/assets/%E5%90%8E%E7%AB%AF%E6%AD%A5%E9%AA%A4_hu_fc6010b8a129c1bc.png 480w, /p/linux/assets/%E5%90%8E%E7%AB%AF%E6%AD%A5%E9%AA%A4_hu_b7e380c54959d8dc.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="673"
+		data-flex-basis="1617px"
+	
+></p>
+<h4 id="环境准备">环境准备
+</h4><p>那现在，项目要上线了，要部署到linux服务器上了，我们也需要使用linux服务器上所安装的mysql数据库。</p>
+<p>那此时，我们就可以再准备一份文件 <code>application.yml</code> 将里面的配置的mysql的ip地址及相关配置信息修改一下（配置Linux上安装的MySQL的信息）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c">#配置数据库连接信息</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">spring</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">datasource</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">driver-class-name</span><span class="p">:</span><span class="w"> </span><span class="l">com.mysql.cj.jdbc.Driver</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l">jdbc:mysql://192.168.100.128:3306/tlias</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l">root</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="m">1234</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">servlet</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">multipart</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">max-file-size</span><span class="p">:</span><span class="w"> </span><span class="l">10MB</span><span class="w"> </span><span class="c">#单个文件最大大小限制10MB</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">max-request-size</span><span class="p">:</span><span class="w"> </span><span class="l">100MB</span><span class="w"> </span><span class="c">#单个请求最大大小限制100MB</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c">#配置mybatis的日志输出到控制台</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">mybatis</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">configuration</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">log-impl</span><span class="p">:</span><span class="w"> </span><span class="l">org.apache.ibatis.logging.stdout.StdOutImpl</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c">#配置mybatis的驼峰命名的映射开关</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">map-underscore-to-camel-case</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c">#查看事务管理的日志</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">logging</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">level</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">org.springframework.jdbc.support.JdbcTransactionManager</span><span class="p">:</span><span class="w"> </span><span class="l">debug</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c">#阿里云oss配置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">aliyun</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">oss</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l">https://oss-cn-beijing.aliyuncs.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">bucketName</span><span class="p">:</span><span class="w"> </span><span class="l">java422-web-ai</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>由于我们的Linux并没有在D盘上，所以我们的日志文件地址也需要进行修改：</p>
+<p><img src="/p/linux/assets/%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%E5%9C%B0%E5%9D%80.png"
+	width="1478"
+	height="545"
+	srcset="/p/linux/assets/%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%E5%9C%B0%E5%9D%80_hu_9d6e0541a4106b85.png 480w, /p/linux/assets/%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%E5%9C%B0%E5%9D%80_hu_7d0f2e3d48d4904f.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="271"
+		data-flex-basis="650px"
+	
+></p>
+<p>改造完毕之后，可以在本地的idea中先启动当前项目，然后访问一下，看看工程是否正常访问。</p>
+<p><img src="/p/linux/assets/%E5%89%8D%E7%AB%AF1.png"
+	width="1911"
+	height="961"
+	srcset="/p/linux/assets/%E5%89%8D%E7%AB%AF1_hu_4ecff7a7da0cf3db.png 480w, /p/linux/assets/%E5%89%8D%E7%AB%AF1_hu_111db194afb1f963.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="198"
+		data-flex-basis="477px"
+	
+></p>
+<h4 id="打包部署">打包部署
+</h4><p>1). 执行 <code>package</code> 指令，进行打包操作，将当前的springboot项目，打成一个jar包。 (<strong>跳过测试</strong>)</p>
+<p><img src="/p/linux/assets/%E6%89%93%E5%8C%851.png"
+	width="2560"
+	height="1380"
+	srcset="/p/linux/assets/%E6%89%93%E5%8C%851_hu_8a6bb19366bfa2d9.png 480w, /p/linux/assets/%E6%89%93%E5%8C%851_hu_3329cbab2f9618fe.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="185"
+		data-flex-basis="445px"
+	
+></p>
+<p>jar包地址：</p>
+<p><img src="/p/linux/assets/jar%E5%8C%85%E5%9C%B0%E5%9D%80.png"
+	width="1138"
+	height="891"
+	srcset="/p/linux/assets/jar%E5%8C%85%E5%9C%B0%E5%9D%80_hu_7b597d780448e5e2.png 480w, /p/linux/assets/jar%E5%8C%85%E5%9C%B0%E5%9D%80_hu_7408664b05a91f4b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="127"
+		data-flex-basis="306px"
+	
+></p>
+<p>2). 在Linux服务器上创建一个目录，将jar包上传到服务器 。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="l">mkdir -p /usr/local/tlias-app</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/linux/assets/%E4%B8%8A%E4%BC%A0jar%E5%8C%85i.png"
+	width="1499"
+	height="692"
+	srcset="/p/linux/assets/%E4%B8%8A%E4%BC%A0jar%E5%8C%85i_hu_cf61ca38e0f274b5.png 480w, /p/linux/assets/%E4%B8%8A%E4%BC%A0jar%E5%8C%85i_hu_8515877cfaff88d2.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="216"
+		data-flex-basis="519px"
+	
+></p>
+<p>3). 通过java命令，启动项目</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">#进入目录/usr/local/app </span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> /usr/local/tlias-app
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#运行jar包</span>
+</span></span><span class="line"><span class="cl">java -jar tilas-web-management-0.0.1-SNAPSHOT.jar
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/linux/assets/%E5%90%AF%E5%8A%A8Spring.png"
+	width="2005"
+	height="488"
+	srcset="/p/linux/assets/%E5%90%AF%E5%8A%A8Spring_hu_36d5278a05b5a7e7.png 480w, /p/linux/assets/%E5%90%AF%E5%8A%A8Spring_hu_9816797779635148.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="410"
+		data-flex-basis="986px"
+	
+></p>
+<p>项目启动起来之后，就可以打开浏览器测试啦。</p>
+<p><img src="/p/linux/assets/Linux%E5%89%8D%E7%AB%AF%E6%B5%8B%E8%AF%95.png"
+	width="1859"
+	height="870"
+	srcset="/p/linux/assets/Linux%E5%89%8D%E7%AB%AF%E6%B5%8B%E8%AF%95_hu_a7903bf6ef247a4.png 480w, /p/linux/assets/Linux%E5%89%8D%E7%AB%AF%E6%B5%8B%E8%AF%95_hu_35cc598393b66833.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="213"
+		data-flex-basis="512px"
+	
+></p>
+<h4 id="阿里云oss秘钥配置">阿里云OSS秘钥配置
+</h4><p>由于在开发的时候，我们将访问阿里云OSS的AccessKeyId，AccessKeySecret都配置在了系统的环境变量中了。那现在项目部署到了Linux服务器中，调用阿里云OSS进行文件上传时，程序就会获取Linux系统中的环境变量。所以此时，我们需要将AccessKeyId，AccessKeySecret配置为Linux系统的环境变量。</p>
+<p>1). 查看Windows系统之前配置的环境变量</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="l">echo %OSS_ACCESS_KEY_ID%</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">echo %OSS_ACCESS_KEY_SECRET%</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/linux/assets/%E9%98%BF%E9%87%8C%E4%BA%91%E5%AF%86%E9%92%A5.png"
+	width="813"
+	height="440"
+	srcset="/p/linux/assets/%E9%98%BF%E9%87%8C%E4%BA%91%E5%AF%86%E9%92%A5_hu_63311275adfbd67e.png 480w, /p/linux/assets/%E9%98%BF%E9%87%8C%E4%BA%91%E5%AF%86%E9%92%A5_hu_438dd6c4c87cae3c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="184"
+		data-flex-basis="443px"
+	
+></p>
+<p>我们将上述自己的 AccessKeyId 与  AccessKeySecret 复制出来，然后在linux系统中配置环境变量。</p>
+<p>2). 执行如下指令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="l">echo &#34;export OSS_ACCESS_KEY_ID=***&#34; &gt;&gt; /etc/profile</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">echo &#34;export OSS_ACCESS_KEY_SECRET=***&#34; &gt;&gt; /etc/profile</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">source /etc/profile</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/linux/assets/Linux%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0.png"
+	width="1910"
+	height="915"
+	srcset="/p/linux/assets/Linux%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0_hu_d5818c1e9633929b.png 480w, /p/linux/assets/Linux%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0_hu_5223a90462b75162.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="208"
+		data-flex-basis="500px"
+	
+></p>
+<p>当前程序中存在的问题:</p>
+<ul>
+<li>线上程序不会采用控制台霸屏的形式运行程序，而是将程序在后台运行</li>
+<li>线上程序不会将日志输出到控制台，而是输出到日志文件，方便运维查阅信息</li>
+</ul>
+<p>要解决上述这两个问题，我们就可以通过 nohup 指令让程序在后台运行。</p>
+<h4 id="后台运行">后台运行
+</h4><p>1). 后台运行程序</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">nohup java -jar tilas-web-management-0.0.1-SNAPSHOT.jar <span class="p">&amp;</span>&gt; tlias.log <span class="p">&amp;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>通过上述指令就可以后台运行服务，服务运行之后， 所有的日志信息都会输出到 tlias.log 文件中。</p>
+<p><img src="/p/linux/assets/%E5%90%8E%E5%8F%B0%E8%BF%90%E8%A1%8C.png"
+	width="1293"
+	height="187"
+	srcset="/p/linux/assets/%E5%90%8E%E5%8F%B0%E8%BF%90%E8%A1%8C_hu_e3fe01cf68e8c7df.png 480w, /p/linux/assets/%E5%90%8E%E5%8F%B0%E8%BF%90%E8%A1%8C_hu_b216c9a4f3b52721.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="691"
+		data-flex-basis="1659px"
+	
+></p>
+<p>2). 停止服务</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c">#查看服务的进程信息</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">ps -ef|grep tlias</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c">#杀掉进程</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">kill -9 xxxxx</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/linux/assets/%E6%9D%80%E6%8E%89%E8%BF%9B%E7%A8%8B.png"
+	width="821"
+	height="177"
+	srcset="/p/linux/assets/%E6%9D%80%E6%8E%89%E8%BF%9B%E7%A8%8B_hu_16157b93a333c60f.png 480w, /p/linux/assets/%E6%9D%80%E6%8E%89%E8%BF%9B%E7%A8%8B_hu_7530bafd4dd2ad00.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="463"
+		data-flex-basis="1113px"
+	
+></p>
+<blockquote>
+<p><strong>nohup命令说明:</strong></p>
+<ul>
+<li><strong>nohup命令</strong>：英文全称 no hang up（不挂起），用于不挂断地运行指定命令，退出终端不会影响程序的运行</li>
+<li><strong>语法格式：</strong> <code>nohup command [ args … ] [&amp;]</code></li>
+<li><strong>参数说明：</strong>
+<ul>
+<li>command：要执行的命令</li>
+<li>args：一些参数，可以指定输出文件</li>
+<li>&amp;：让命令在后台运行</li>
+</ul>
+</li>
+<li><strong>举例：</strong>
+<ul>
+<li><code>nohup java -jar boot工程.jar &amp;&gt; hello.log &amp;</code></li>
+</ul>
+</li>
+</ul>
+<p>​        上述指令的含义为： 后台运行 java -jar 命令，并将日志输出到hello.log文件</p>
+</blockquote>
 
 </section>
 
