@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content=" 本篇博客为学习RAG的前置准备\nRAG前置准备 大模型接入 大模型接入有两种方法：\n此处学习所用，就使用第二种方法了\n1.输入百炼网址\n大模型服务平台百炼控制台\n">
+<title>RAG（前置准备）</title>
+
+<link rel='canonical' href='https://aurora156.github.io/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/'>
+
+<link rel="stylesheet" href="/scss/style.min.6a692fd055deae459f2a9767f57f3855ba80cafd5041317f24f7360f6ca47cdf.css"><meta property='og:title' content="RAG（前置准备）">
+<meta property='og:description' content=" 本篇博客为学习RAG的前置准备\nRAG前置准备 大模型接入 大模型接入有两种方法：\n此处学习所用，就使用第二种方法了\n1.输入百炼网址\n大模型服务平台百炼控制台\n">
+<meta property='og:url' content='https://aurora156.github.io/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/'>
+<meta property='og:site_name' content='凉介的笔记'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-07-01T13:41:02&#43;08:00'/><meta property='article:modified_time' content='2026-07-01T13:41:02&#43;08:00'/>
+<meta name="twitter:title" content="RAG（前置准备）">
+<meta name="twitter:description" content=" 本篇博客为学习RAG的前置准备\nRAG前置准备 大模型接入 大模型接入有两种方法：\n此处学习所用，就使用第二种方法了\n1.输入百炼网址\n大模型服务平台百炼控制台\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_39194fe8d5906e9f.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🌆</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">凉介的笔记</a></h1>
+            <h2 class="site-description">凉介的博客</h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>档案</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#大模型接入">大模型接入</a></li>
+    <li><a href="#代码调用云端大模型">代码调用云端大模型</a></li>
+    <li><a href="#ollama简介">Ollama简介</a></li>
+    <li><a href="#ollama的部署">Ollama的部署</a></li>
+    <li><a href="#使用代码调用ollama">使用代码调用ollama</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#openai的基础使用">OpenAI的基础使用</a>
+      <ol>
+        <li><a href="#获取客户端对象">获取客户端对象</a></li>
+        <li><a href="#调用模型">调用模型</a></li>
+        <li><a href="#处理结果">处理结果</a></li>
+      </ol>
+    </li>
+    <li><a href="#openai库的流式输出">OpenAI库的流式输出</a></li>
+    <li><a href="#openai库附带历史消息调用模型">OpenAI库附带历史消息调用模型</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#大模型prompt工程指南">大模型prompt工程指南</a>
+      <ol>
+        <li><a href="#提示词工程概念">提示词工程概念</a></li>
+        <li><a href="#提示词技巧">提示词技巧</a></li>
+      </ol>
+    </li>
+    <li><a href="#实战案例">实战案例</a>
+      <ol>
+        <li><a href="#背景">背景</a></li>
+        <li><a href="#zero-shot思想">Zero-shot思想</a></li>
+        <li><a href="#few-shot思想">Few-shot思想</a></li>
+        <li><a href="#llm文本分类">LLM文本分类</a>
+          <ol>
+            <li><a href="#任务介绍">任务介绍</a></li>
+            <li><a href="#prompt设计">Prompt设计</a></li>
+          </ol>
+        </li>
+        <li><a href="#json数据格式">Json数据格式</a></li>
+        <li><a href="#llm信息抽取">LLM信息抽取</a>
+          <ol>
+            <li><a href="#任务介绍-1">任务介绍</a></li>
+            <li><a href="#prompt设计-1">Prompt设计</a></li>
+          </ol>
+        </li>
+        <li><a href="#llm信息文本匹配">LLM信息文本匹配</a>
+          <ol>
+            <li><a href="#任务介绍-2">任务介绍</a></li>
+            <li><a href="#prompt设计-2">Prompt设计</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/">RAG（前置准备）</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2026-07-01</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <blockquote>
+<p>本篇博客为学习RAG的前置准备</p>
+</blockquote>
+<h1 id="rag前置准备">RAG前置准备
+</h1><h2 id="大模型接入">大模型接入
+</h2><p>大模型接入有两种方法：</p>
+<p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%8E%A5%E5%85%A5.png"
+	width="1431"
+	height="568"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%8E%A5%E5%85%A5_hu_f76eaa92c4efec85.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%8E%A5%E5%85%A5_hu_179b32de829e7cbe.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="251"
+		data-flex-basis="604px"
+	
+></p>
+<p>此处学习所用，就使用第二种方法了</p>
+<p>1.输入百炼网址</p>
+<p><a class="link" href="https://bailian.console.aliyun.com/cn-beijing#/home"  target="_blank" rel="noopener"
+    >大模型服务平台百炼控制台</a></p>
+<p>2.注册/登录</p>
+<p>3.创建自己的API Key</p>
+<h2 id="代码调用云端大模型">代码调用云端大模型
+</h2><ul>
+<li>
+<p>创建API Key</p>
+</li>
+<li>
+<p>通过pip为Python程序提供OpenAI库：pip install openai（如果pip用不了，就用python -m pip install openai）</p>
+</li>
+<li>
+<p>编写代码测试（可从百炼平台官网复制代码，直接执行）</p>
+<p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E8%8E%B7%E5%8F%96.png"
+	width="1877"
+	height="899"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E8%8E%B7%E5%8F%96_hu_1bd73157646f79c.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E8%8E%B7%E5%8F%96_hu_bd175b2a530395fc.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="208"
+		data-flex-basis="501px"
+	
+></p>
+<p><code>注意：要将代码中的APIKEY替换为自己的</code></p>
+</li>
+</ul>
+<p>点击运行：</p>
+<p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E8%BF%90%E8%A1%8C.png"
+	width="1356"
+	height="590"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E8%BF%90%E8%A1%8C_hu_914d412ff81f12e7.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E8%BF%90%E8%A1%8C_hu_9ee10ad9c6908022.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="229"
+		data-flex-basis="551px"
+	
+></p>
+<p>如果想要更换模型，只需要将代码中的model替换为自己需要的模型即可</p>
+<hr>
+<p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/API_KEY.png"
+	width="1164"
+	height="464"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/API_KEY_hu_a1c1af2073fe9c92.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/API_KEY_hu_4e7830f508c4d861.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="250"
+		data-flex-basis="602px"
+	
+></p>
+<p>那么如何进行配置呢？（win）</p>
+<ul>
+<li>打开电脑的高级系统设置，在环境变量中的用户变量中新建两个变量：OPENAI_API_KEY和DASHSCOPE_API_KEY，将自己的api_key输入进去并保存。</li>
+<li>保存完以后就可以将项目中的APIKEY那行代码删除了，然后重启电脑进行测试</li>
+</ul>
+<p>以后写代码就不用明文的将APIKEY写出来了，这样既安全又方便</p>
+<h2 id="ollama简介">Ollama简介
+</h2><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/ollama.png"
+	width="888"
+	height="422"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/ollama_hu_4f3993f4a2c5da27.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/ollama_hu_10658bc85a4d83e1.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="210"
+		data-flex-basis="505px"
+	
+></p>
+<p>官网：<a class="link" href="https://ollama.com/"  target="_blank" rel="noopener"
+    >Ollama</a></p>
+<p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/ollama%E4%BB%8B%E7%BB%8D.png"
+	width="1397"
+	height="511"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/ollama%E4%BB%8B%E7%BB%8D_hu_970a710a6fe082e5.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/ollama%E4%BB%8B%E7%BB%8D_hu_7fcb62511ef713bf.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="273"
+		data-flex-basis="656px"
+	
+></p>
+<p>如何查看ollama支持的模型？</p>
+<p>通过ollama官方模型库：https://ollama.com/library</p>
+<h2 id="ollama的部署">Ollama的部署
+</h2><p>Ollama的部署还是很简单的，只需要进入官方网站点击Download按钮下载安装。</p>
+<p>安装完成后，通过命令：</p>
+<ul>
+<li>ollama run 模型名称</li>
+</ul>
+<p>即可运行对应的模型，并在命令行内做交互</p>
+<p>也可以在安装完成后直接打开ollama，然后在控制台直接进行交互。不过需要注意的是最好将下载地址更改一下，一般原始的下载地址在C盘，对于C盘空间不太友好的人不太方便。（因为里面的模型需要下载才能使用）</p>
+<p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/ollama1.png"
+	width="989"
+	height="612"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/ollama1_hu_26544fa41e8d0d4.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/ollama1_hu_f1e8340594917c96.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="161"
+		data-flex-basis="387px"
+	
+></p>
+<h2 id="使用代码调用ollama">使用代码调用ollama
+</h2><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E4%BB%A3%E7%A0%81%E8%B0%83%E7%94%A8.png"
+	width="1339"
+	height="778"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E4%BB%A3%E7%A0%81%E8%B0%83%E7%94%A8_hu_d9aee757fcbe2d09.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E4%BB%A3%E7%A0%81%E8%B0%83%E7%94%A8_hu_4439476172e24370.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="172"
+		data-flex-basis="413px"
+	
+></p>
+<p><code>注意：需要将本地的ollama启动起来才可以在编译器中调用</code></p>
+<p><code>使用ollama仅为备用方案，是为了如果阿里云免费额度用完了，又或者阿里云不再提供免费的活动了时进行使用</code></p>
+<h1 id="openai库基础使用">OpenAI库基础使用
+</h1><h2 id="openai的基础使用">OpenAI的基础使用
+</h2><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8.png"
+	width="940"
+	height="288"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8_hu_e1ab889812dac2e8.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8_hu_d883a09cbd29753c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="326"
+		data-flex-basis="783px"
+	
+></p>
+<h3 id="获取客户端对象">获取客户端对象
+</h3><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E8%8E%B7%E5%8F%96%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%AF%B9%E8%B1%A1.png"
+	width="705"
+	height="374"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E8%8E%B7%E5%8F%96%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%AF%B9%E8%B1%A1_hu_d72c1bb95d98b0be.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E8%8E%B7%E5%8F%96%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%AF%B9%E8%B1%A1_hu_880c2e0386352e2d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="188"
+		data-flex-basis="452px"
+	
+></p>
+<h3 id="调用模型">调用模型
+</h3><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E8%B0%83%E7%94%A8%E6%A8%A1%E5%9E%8B.png"
+	width="917"
+	height="383"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E8%B0%83%E7%94%A8%E6%A8%A1%E5%9E%8B_hu_87445e07f9202629.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E8%B0%83%E7%94%A8%E6%A8%A1%E5%9E%8B_hu_af3ed31f621b32a9.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="239"
+		data-flex-basis="574px"
+	
+></p>
+<h3 id="处理结果">处理结果
+</h3><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E5%A4%84%E7%90%86%E7%BB%93%E6%9E%9C.png"
+	width="1344"
+	height="666"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E5%A4%84%E7%90%86%E7%BB%93%E6%9E%9C_hu_357c679e90b9673e.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E5%A4%84%E7%90%86%E7%BB%93%E6%9E%9C_hu_b8da662bdd629643.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="201"
+		data-flex-basis="484px"
+	
+></p>
+<p><strong>代码示例</strong></p>
+<p><code>注意：一般把AI的性格（system）设定为话不多，否则消耗的Token会很多</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">response</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">httpx</span> <span class="kn">import</span> <span class="n">Client</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 1.获取Client对象</span>
+</span></span><span class="line"><span class="cl"><span class="n">Client</span>  <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">base_url</span><span class="o">=</span><span class="s2">&#34;https://ws-bt194c2c9a0aiu59.cn-beijing.maas.aliyuncs.com/compatible-mode/v1&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 2.调用模型</span>
+</span></span><span class="line"><span class="cl"><span class="n">response</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">model</span><span class="o">=</span><span class="s2">&#34;qwen3-max&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;system&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;你是一个Python编程专家，并且不说废话简单回答&#34;</span><span class="p">},</span><span class="c1"># 设置AI性格</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;assistant&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;好的，我是编程专家，并且话不多，你要问什么？&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;输出1-10的数字，使用pyhton代码&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 3.处理结果</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="openai库的流式输出">OpenAI库的流式输出
+</h2><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%B5%81%E5%BC%8F%E8%BE%93%E5%87%BA.png"
+	width="689"
+	height="417"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%B5%81%E5%BC%8F%E8%BE%93%E5%87%BA_hu_8bf92017944715a0.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%B5%81%E5%BC%8F%E8%BE%93%E5%87%BA_hu_38023de00c422c6d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="165"
+		data-flex-basis="396px"
+	
+></p>
+<p><strong>代码示例</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">response</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">httpx</span> <span class="kn">import</span> <span class="n">Client</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 1.获取Client对象</span>
+</span></span><span class="line"><span class="cl"><span class="n">Client</span>  <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">base_url</span><span class="o">=</span><span class="s2">&#34;https://ws-bt194c2c9a0aiu59.cn-beijing.maas.aliyuncs.com/compatible-mode/v1&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 2.调用模型</span>
+</span></span><span class="line"><span class="cl"><span class="n">response</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">model</span><span class="o">=</span><span class="s2">&#34;qwen3-max&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;system&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;你是一个Python编程专家，并且话非常多&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;assistant&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;好的，我是编程专家，并且话不多，你要问什么？&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;输出1-10的数字，使用pyhton代码&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="n">stream</span><span class="o">=</span><span class="kc">True</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 3.处理结果</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># print(response.choices[0].message.content)</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">chunk</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">delta</span><span class="o">.</span><span class="n">content</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="n">end</span><span class="o">=</span><span class="s2">&#34; &#34;</span><span class="p">,</span> <span class="c1"># 每一段之间以空格分隔</span>
+</span></span><span class="line"><span class="cl">          <span class="n">flush</span><span class="o">=</span><span class="kc">True</span> <span class="c1"># 立刻刷新缓冲区</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="openai库附带历史消息调用模型">OpenAI库附带历史消息调用模型
+</h2><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E9%99%84%E5%B8%A6%E5%8E%86%E5%8F%B2.png"
+	width="656"
+	height="435"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E9%99%84%E5%B8%A6%E5%8E%86%E5%8F%B2_hu_3c0f4236729b0f30.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E9%99%84%E5%B8%A6%E5%8E%86%E5%8F%B2_hu_92a8e1063045ac3b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="150"
+		data-flex-basis="361px"
+	
+></p>
+<p><strong>代码示例</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">response</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">httpx</span> <span class="kn">import</span> <span class="n">Client</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 1.获取Client对象</span>
+</span></span><span class="line"><span class="cl"><span class="n">Client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">base_url</span><span class="o">=</span><span class="s2">&#34;https://ws-bt194c2c9a0aiu59.cn-beijing.maas.aliyuncs.com/compatible-mode/v1&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 2.调用模型</span>
+</span></span><span class="line"><span class="cl"><span class="n">response</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">model</span><span class="o">=</span><span class="s2">&#34;qwen3-max&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;system&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;你是一个AI助理，回答很简洁，不要使用Markdown格式&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;小明有两条宠物狗&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;assistant&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;好的&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;小红有三只宠物猫&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;assistant&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;好的&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;总共有多少只宠物&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="n">stream</span><span class="o">=</span><span class="kc">True</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 3.处理结果</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="ow">not</span> <span class="n">chunk</span><span class="o">.</span><span class="n">choices</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">continue</span>
+</span></span><span class="line"><span class="cl">    <span class="n">delta</span> <span class="o">=</span> <span class="n">chunk</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">delta</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 打印思考过程（如果有）</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="s2">&#34;reasoning_content&#34;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">delta</span><span class="o">.</span><span class="n">reasoning_content</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="n">delta</span><span class="o">.</span><span class="n">reasoning_content</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 打印正式回答（过滤掉 None）</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">delta</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="n">delta</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E7%BB%93%E6%9E%9C%E6%BC%94%E7%A4%BA.png"
+	width="529"
+	height="95"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E7%BB%93%E6%9E%9C%E6%BC%94%E7%A4%BA_hu_c8db59e69e24cd25.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E7%BB%93%E6%9E%9C%E6%BC%94%E7%A4%BA_hu_17db722bf4c79982.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="556"
+		data-flex-basis="1336px"
+	
+></p>
+<h1 id="提示词工程">提示词工程
+</h1><h2 id="大模型prompt工程指南">大模型prompt工程指南
+</h2><h3 id="提示词工程概念">提示词工程概念
+</h3><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%A6%82%E5%BF%B5.png"
+	width="888"
+	height="310"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%A6%82%E5%BF%B5_hu_a03d217e0da73161.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%A6%82%E5%BF%B5_hu_e3c892b32072ee84.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="286"
+		data-flex-basis="687px"
+	
+></p>
+<h3 id="提示词技巧">提示词技巧
+</h3><p>任何Prompt技巧，都不如清晰的表达你的需求。这就类似人与人沟通，如果话都说不明白，不可能让别人理解你的思想。因此，写出清晰的指令，是核心。</p>
+<ul>
+<li>技巧1：详细的描述</li>
+</ul>
+<p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%8A%80%E5%B7%A71.png"
+	width="830"
+	height="202"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%8A%80%E5%B7%A71_hu_6430d6c7f125f47f.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%8A%80%E5%B7%A71_hu_b110da50c1fd67ff.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="410"
+		data-flex-basis="986px"
+	
+></p>
+<ul>
+<li>技巧2：让模型充当某个角色</li>
+</ul>
+<p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%8A%80%E5%B7%A72.png"
+	width="762"
+	height="215"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%8A%80%E5%B7%A72_hu_e984ba76a0897cbf.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%8A%80%E5%B7%A72_hu_76324ee522e92360.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="354"
+		data-flex-basis="850px"
+	
+></p>
+<ul>
+<li>
+<p>技巧3：使用分隔符标明输入的不同部分</p>
+<p>中括号、XML标签、三引号等分隔符可以帮助划分要区别对待的文本，也可以帮助模型更好的理解文本内容。常用&rsquo;&lsquo;&lsquo;&lsquo;&lsquo;&lsquo;把内容框起来</p>
+</li>
+</ul>
+<p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%8A%80%E5%B7%A7%E4%B8%89.png"
+	width="776"
+	height="238"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%8A%80%E5%B7%A7%E4%B8%89_hu_d2fd0844226c2833.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%8A%80%E5%B7%A7%E4%B8%89_hu_59d1967c5965f934.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="326"
+		data-flex-basis="782px"
+	
+></p>
+<ul>
+<li>
+<p>技巧4：对任务指定步骤</p>
+<p>对于可以拆分的任务可以尽量拆开，最好能为其指定一系列步骤，明确步骤可以让模型更容易实现它们。</p>
+</li>
+</ul>
+<p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%8A%80%E5%B7%A74.png"
+	width="732"
+	height="278"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%8A%80%E5%B7%A74_hu_4e0623dbe3eddf3f.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%8A%80%E5%B7%A74_hu_b31b3609f530a191.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="263"
+		data-flex-basis="631px"
+	
+></p>
+<ul>
+<li>
+<p>技巧5：提供例子</p>
+<p>本质类似于few-shot learning。先扔给大模型举例，然后让模型按照例子来输出</p>
+</li>
+</ul>
+<p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%8A%80%E5%B7%A75.png"
+	width="666"
+	height="210"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%8A%80%E5%B7%A75_hu_70438abaac21aec5.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%8A%80%E5%B7%A75_hu_c471a927e9f8867b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="317"
+		data-flex-basis="761px"
+	
+></p>
+<hr>
+<p>基于文本文档，辅助大模型回答，<strong>降低模型“幻觉”</strong>（一本正经的胡说八道）问题。</p>
+<p><strong>即使用参考文本作答</strong> <em>经典的知识库用法，让大模型使用我们提供的信息来组成答案。</em></p>
+<p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E5%8F%82%E8%80%83%E6%96%87%E6%9C%AC.png"
+	width="763"
+	height="216"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E5%8F%82%E8%80%83%E6%96%87%E6%9C%AC_hu_eabbfbc53d5e33e4.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E5%8F%82%E8%80%83%E6%96%87%E6%9C%AC_hu_c01dd62c2d551dca.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="353"
+		data-flex-basis="847px"
+	
+></p>
+<h2 id="实战案例">实战案例
+</h2><h3 id="背景">背景
+</h3><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E8%83%8C%E6%99%AF.png"
+	width="880"
+	height="301"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E8%83%8C%E6%99%AF_hu_9216a156a409405f.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E8%83%8C%E6%99%AF_hu_1760839e2946ed82.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="292"
+		data-flex-basis="701px"
+	
+></p>
+<h3 id="zero-shot思想">Zero-shot思想
+</h3><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/zs.png"
+	width="911"
+	height="406"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/zs_hu_7c8b1162b22912fe.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/zs_hu_a0cee4ff00f74836.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="224"
+		data-flex-basis="538px"
+	
+></p>
+<h3 id="few-shot思想">Few-shot思想
+</h3><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/fs.png"
+	width="902"
+	height="412"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/fs_hu_ae1c6c28b65098eb.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/fs_hu_b9e2f93f8acd29da.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="218"
+		data-flex-basis="525px"
+	
+></p>
+<h3 id="llm文本分类">LLM文本分类
+</h3><h4 id="任务介绍">任务介绍
+</h4><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E4%BB%BB%E5%8A%A1%E4%BB%8B%E7%BB%8D.png"
+	width="892"
+	height="300"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E4%BB%BB%E5%8A%A1%E4%BB%8B%E7%BB%8D_hu_e36d737d9e7cfe3b.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E4%BB%BB%E5%8A%A1%E4%BB%8B%E7%BB%8D_hu_48d211a46a82a117.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="297"
+		data-flex-basis="713px"
+	
+></p>
+<h4 id="prompt设计">Prompt设计
+</h4><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/p%E8%AE%BE%E8%AE%A1.png"
+	width="911"
+	height="398"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/p%E8%AE%BE%E8%AE%A1_hu_df3fd8fffaef3935.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/p%E8%AE%BE%E8%AE%A1_hu_e5c8ce254591c38.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="228"
+		data-flex-basis="549px"
+	
+></p>
+<p><strong>代码示例</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 1. 获取client对象，OpenAI类对象</span>
+</span></span><span class="line"><span class="cl"><span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">     <span class="n">base_url</span><span class="o">=</span><span class="s2">&#34;https://dashscope.aliyuncs.com/compatible-mode/v1&#34;</span>
+</span></span><span class="line"><span class="cl">     <span class="c1"># 基于本地ollama运行</span>
+</span></span><span class="line"><span class="cl">     <span class="c1"># base_url=&#34;http://localhost:11434/v1&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">examples_data</span> <span class="o">=</span> <span class="p">{</span>  <span class="c1"># 示例数据</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;新闻报道&#39;</span><span class="p">:</span> <span class="s1">&#39;今日，股市经历了一轮震荡，受到宏观经济数据和全球贸易紧张局势的影响。投资者密切关注美联储可能的政策调整，以适应市场的不确定性。&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;财务报告&#39;</span><span class="p">:</span> <span class="s1">&#39;本公司年度财务报告显示，去年公司实现了稳步增长的盈利，同时资产负债表呈现强劲的状况。经济环境的稳定和管理层的有效战略执行为公司的健康发展奠定了基础。&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;公司公告&#39;</span><span class="p">:</span> <span class="s1">&#39;本公司高兴地宣布成功完成最新一轮并购交易，收购了一家在人工智能领域领先的公司。这一战略举措将有助于扩大我们的业务领域，提高市场竞争力&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;分析师报告&#39;</span><span class="p">:</span> <span class="s1">&#39;最新的行业分析报告指出，科技公司的创新将成为未来增长的主要推动力。云计算、人工智能和数字化转型被认为是引领行业发展的关键因素，投资者应关注这些趋势&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 分类列表</span>
+</span></span><span class="line"><span class="cl"><span class="n">examples_types</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;新闻报道&#39;</span><span class="p">,</span> <span class="s1">&#39;财务报道&#39;</span><span class="p">,</span> <span class="s1">&#39;公司公告&#39;</span><span class="p">,</span> <span class="s1">&#39;分析师报告&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 提问数据</span>
+</span></span><span class="line"><span class="cl"><span class="n">questions</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;今日，央行发布公告宣布降低利率，以刺激经济增长。这一降息举措将影响贷款利率，并在未来几个季度内对金融市场产生影响。&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;ABC公司今日发布公告称，已成功完成对XYZ公司股权的收购交易。本次交易是ABC公司在扩大业务范围、加强市场竞争力方面的重要举措。据悉，此次收购将进一步巩固ABC公司在行业中的地位，并为未来业务发展提供更广阔的发展空间。详情请见公司官方网站公告栏&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;公司资产负债表显示，公司偿债能力强劲，现金流充足，为未来投资和扩张提供了坚实的财务基础。&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;最新的分析报告指出，可再生能源行业预计将在未来几年经历持续增长，投资者应该关注这一领域的投资机会&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;小明喜欢小新哟&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">[
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;system&#34;,      &#34;content&#34;: &#34;你是金融专家，将文本分类为[&#39;新闻报道&#39;, &#39;财务报道&#39;, &#39;公司公告&#39;, &#39;分析师报告&#39;]，不清楚的分类为&#39;不清楚类别&#39; 下面有示例：&#34;},
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;user&#34;,        &#34;content&#34;: &#34;今日，央行发布公告宣布降.............&#34;},
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;assistant&#34;,   &#34;content&#34;: &#34;新闻报道&#34;},
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;user&#34;,        &#34;content&#34;: &#34;ABC公司今日发布公告称，已成功完成对XYZ公司股.................&#34;},
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;assistant&#34;,   &#34;content&#34;: &#34;财务报告},
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;user&#34;,        &#34;content&#34;: &#34;公司资产负债表显示，公司偿债能力强劲，现金流充足...................&#34;},
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;assistant&#34;,   &#34;content&#34;: &#34;公司公告&#34;},
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;user&#34;,        &#34;content&#34;: &#34;最新的分析报告指出，可再生能源.............&#34;},
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;assistant&#34;,   &#34;content&#34;: &#34;分析师报告&#34;},
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;user&#34;,        &#34;content&#34;: &#34;要提问的问题&#34;}
+</span></span></span><span class="line"><span class="cl"><span class="s2">]
+</span></span></span><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;system&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">     <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;你是金融专家，将文本分类为[&#39;新闻报道&#39;, &#39;财务报道&#39;, &#39;公司公告&#39;, &#39;分析师报告&#39;]，不清楚的分类为&#39;不清楚类别&#39; 下面有示例：&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">examples_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl">    <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;assistant&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="n">key</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 向模型提问</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">questions</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">         <span class="n">model</span><span class="o">=</span><span class="s2">&#34;qwen3-max&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">         <span class="c1"># model=&#34;qwen3&#34;,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">messages</span><span class="o">=</span><span class="n">messages</span> <span class="o">+</span> <span class="p">[{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&#34;按照示例，回答这段文本的分类类别：</span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">}]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%A1%88%E4%BE%8B1.png"
+	width="1082"
+	height="229"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%A1%88%E4%BE%8B1_hu_7c7f13e48ec21f0a.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%A1%88%E4%BE%8B1_hu_dd051d32d3fbb4c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="472"
+		data-flex-basis="1133px"
+	
+></p>
+<h3 id="json数据格式">Json数据格式
+</h3><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/Json.png"
+	width="847"
+	height="399"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/Json_hu_7447c923ea270f99.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/Json_hu_e322378e96956241.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="212"
+		data-flex-basis="509px"
+	
+></p>
+<p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/Json1.png"
+	width="889"
+	height="420"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/Json1_hu_7f7d446b853d4018.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/Json1_hu_fcda3337dad6f554.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="211"
+		data-flex-basis="508px"
+	
+></p>
+<p><strong>Python中使用Json</strong></p>
+<p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/py%E4%BD%BF%E7%94%A8js.png"
+	width="596"
+	height="317"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/py%E4%BD%BF%E7%94%A8js_hu_fd8d0c44dbf4df84.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/py%E4%BD%BF%E7%94%A8js_hu_61d4cac3f27b09a2.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="188"
+		data-flex-basis="451px"
+	
+></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">json</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">d</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;周杰轮&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;age&#34;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;gender&#34;</span><span class="p">:</span> <span class="s2">&#34;男&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># print(str(d)) 输出格式为单引号，json标准格式为双引号</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1">#防止中文乱码</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">l</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;周杰轮&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;age&#34;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;gender&#34;</span><span class="p">:</span> <span class="s2">&#34;男&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;蔡依临&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;age&#34;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;gender&#34;</span><span class="p">:</span> <span class="s2">&#34;女&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;小明&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;age&#34;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;gender&#34;</span><span class="p">:</span> <span class="s2">&#34;男&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">json_str</span> <span class="o">=</span> <span class="s1">&#39;{&#34;name&#34;: &#34;周杰轮&#34;, &#34;age&#34;: 11, &#34;gender&#34;: &#34;男&#34;}&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">json_array_str</span> <span class="o">=</span> <span class="s1">&#39;[{&#34;name&#34;: &#34;周杰轮&#34;, &#34;age&#34;: 11, &#34;gender&#34;: &#34;男&#34;}, {&#34;name&#34;: &#34;蔡依临&#34;, &#34;age&#34;: 12, &#34;gender&#34;: &#34;女&#34;}, {&#34;name&#34;: &#34;小明&#34;, &#34;age&#34;: 16, &#34;gender&#34;: &#34;男&#34;}]&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">res_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">res_dict</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">res_dict</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">res_list</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json_array_str</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">res_list</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">res_list</span><span class="p">))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%A1%88%E4%BE%8B2.png"
+	width="1540"
+	height="221"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%A1%88%E4%BE%8B2_hu_d8ad95e0e6d5e9d7.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%A1%88%E4%BE%8B2_hu_ef67d304619312de.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="696"
+		data-flex-basis="1672px"
+	
+></p>
+<h3 id="llm信息抽取">LLM信息抽取
+</h3><h4 id="任务介绍-1">任务介绍
+</h4><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/LLM.png"
+	width="901"
+	height="356"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/LLM_hu_167400dccf0658d3.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/LLM_hu_e2c7025578abb780.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="253"
+		data-flex-basis="607px"
+	
+></p>
+<h4 id="prompt设计-1">Prompt设计
+</h4><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/pt%E8%AE%BE%E8%AE%A1.png"
+	width="908"
+	height="345"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/pt%E8%AE%BE%E8%AE%A1_hu_d4cd381679bddac4.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/pt%E8%AE%BE%E8%AE%A1_hu_5162b5138b1dbb37.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="263"
+		data-flex-basis="631px"
+	
+></p>
+<p><strong>代码示例</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">json</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">base_url</span><span class="o">=</span><span class="s2">&#34;https://dashscope.aliyuncs.com/compatible-mode/v1&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># base_url=&#34;http://localhost:11434/v1&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">schema</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;日期&#39;</span><span class="p">,</span> <span class="s1">&#39;股票名称&#39;</span><span class="p">,</span> <span class="s1">&#39;开盘价&#39;</span><span class="p">,</span> <span class="s1">&#39;收盘价&#39;</span><span class="p">,</span> <span class="s1">&#39;成交量&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">examples_data</span> <span class="o">=</span> <span class="p">[</span>  <span class="c1"># 示例数据</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;2023-01-10，股市震荡。股票强大科技A股今日开盘价100人民币，一度飙升至105人民币，随后回落至98人民币，最终以102人民币收盘，成交量达到520000。&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;answers&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;日期&#34;</span><span class="p">:</span> <span class="s2">&#34;2023-01-10&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;股票名称&#34;</span><span class="p">:</span> <span class="s2">&#34;强大科技A股&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;开盘价&#34;</span><span class="p">:</span> <span class="s2">&#34;100人民币&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;收盘价&#34;</span><span class="p">:</span> <span class="s2">&#34;102人民币&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;成交量&#34;</span><span class="p">:</span> <span class="s2">&#34;520000&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;2024-05-16，股市利好。股票英伟达美股今日开盘价105美元，一度飙升至109美元，随后回落至100美元，最终以116美元收盘，成交量达到3560000。&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;answers&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;日期&#34;</span><span class="p">:</span> <span class="s2">&#34;2024-05-16&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;股票名称&#34;</span><span class="p">:</span> <span class="s2">&#34;英伟达美股&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;开盘价&#34;</span><span class="p">:</span> <span class="s2">&#34;105美元&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;收盘价&#34;</span><span class="p">:</span> <span class="s2">&#34;116美元&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;成交量&#34;</span><span class="p">:</span> <span class="s2">&#34;3560000&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">questions</span> <span class="o">=</span> <span class="p">[</span>  <span class="c1"># 提问问题</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;2025-06-16，股市利好。股票传智教育A股今日开盘价66人民币，一度飙升至70人民币，随后回落至65人民币，最终以68人民币收盘，成交量达到123000。&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;2025-06-06，股市利好。股票黑马程序员A股今日开盘价200人民币，一度飙升至211人民币，随后回落至201人民币，最终以206人民币收盘。&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">[
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;system&#34;,      &#34;content&#34;: f&#34;你帮我完成信息抽取，我给你句子，你抽取</span><span class="si">{schema}</span><span class="s2">信息，按JSON字符串输出，如果某些信息不存在，用&#39;原文未提及&#39;表示，请参考如下示例：&#34;},
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;user&#34;,        &#34;content&#34;: &#34;2023-01-10，股市震荡。股票强大科技A股今日开盘价100人民币，一度飙升至105人民币，随后回落至98人民币，最终以102人民币收盘，成交量达到520000。&#34;},
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;assistant&#34;,   &#34;content&#34;: &#39;{&#34;日期&#34;:&#34;2023-01-10&#34;,&#34;股票名称&#34;:&#34;强大科技A股&#34;,&#34;开盘价&#34;:&#34;100人民币&#34;,&#34;收盘价&#34;:&#34;102人民币&#34;,&#34;成交量&#34;:&#34;520000&#34;}&#39;},
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;user&#34;,        &#34;content&#34;: &#34;2024-05-16，股市利好。股票英伟达美股今日开盘价105美元，一度飙升至109美元，随后回落至100美元，最终以116美元收盘，成交量达到3560000。&#34;},
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;assistant&#34;,   &#34;content&#34;: &#39;{&#34;日期&#34;:&#34;2024-05-16&#34;,&#34;股票名称&#34;:&#34;英伟达美股&#34;,&#34;开盘价&#34;:&#34;105美元&#34;,&#34;收盘价&#34;:&#34;116美元&#34;,&#34;成交量&#34;:&#34;3560000&#34;}&#39;},
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;user&#34;,        &#34;content&#34;: f&#34;按照上述示例，现在抽取这个句子的信息：</span><span class="si">{要抽取的句子文本}</span><span class="s2">&#34;}]}
+</span></span></span><span class="line"><span class="cl"><span class="s2">]
+</span></span></span><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;system&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">     <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&#34;你帮我完成信息抽取，我给你句子，你抽取</span><span class="si">{</span><span class="n">schema</span><span class="si">}</span><span class="s2">信息，按JSON字符串输出，如果某些信息不存在，用&#39;原文未提及&#39;表示，请参考如下示例：&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">examples_data</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="n">example</span><span class="p">[</span><span class="s2">&#34;content&#34;</span><span class="p">]}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;assistant&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">example</span><span class="p">[</span><span class="s2">&#34;answers&#34;</span><span class="p">],</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">questions</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="o">=</span><span class="s2">&#34;qwen3-max&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">messages</span><span class="o">=</span><span class="n">messages</span> <span class="o">+</span> <span class="p">[{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&#34;按照上述的示例，现在抽取这个句子的信息：</span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">}]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%A1%88%E4%BE%8B3.png"
+	width="1130"
+	height="145"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%A1%88%E4%BE%8B3_hu_3d0b272756695cfc.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%A1%88%E4%BE%8B3_hu_296bbfd46ed0cdf5.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="779"
+		data-flex-basis="1870px"
+	
+></p>
+<h3 id="llm信息文本匹配">LLM信息文本匹配
+</h3><h4 id="任务介绍-2">任务介绍
+</h4><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/LLM1.png"
+	width="624"
+	height="251"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/LLM1_hu_44778db177e511a2.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/LLM1_hu_3459cc6788a627e6.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="248"
+		data-flex-basis="596px"
+	
+></p>
+<h4 id="prompt设计-2">Prompt设计
+</h4><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/pt%E8%AE%BE%E8%AE%A11.png"
+	width="924"
+	height="445"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/pt%E8%AE%BE%E8%AE%A11_hu_914a3ace8401e075.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/pt%E8%AE%BE%E8%AE%A11_hu_167b5b9c917293dc.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="207"
+		data-flex-basis="498px"
+	
+></p>
+<p><strong>代码示例</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">     <span class="n">base_url</span><span class="o">=</span><span class="s2">&#34;https://dashscope.aliyuncs.com/compatible-mode/v1&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># base_url=&#34;http://localhost:11434/v1&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">examples_data</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;是&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="s2">&#34;公司ABC发布了季度财报，显示盈利增长。&#34;</span><span class="p">,</span> <span class="s2">&#34;财报披露，公司ABC利润上升。&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="s2">&#34;公司ITCAST发布了年度财报，显示盈利大幅度增长。&#34;</span><span class="p">,</span> <span class="s2">&#34;财报披露，公司ITCAST更赚钱了。&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;不是&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="s2">&#34;黄金价格下跌，投资者抛售。&#34;</span><span class="p">,</span> <span class="s2">&#34;外汇市场交易额创下新高。&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="s2">&#34;央行降息，刺激经济增长。&#34;</span><span class="p">,</span> <span class="s2">&#34;新能源技术的创新。&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">questions</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="s2">&#34;利率上升，影响房地产市场。&#34;</span><span class="p">,</span> <span class="s2">&#34;高利率对房地产有一定的冲击。&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="s2">&#34;油价大幅度下跌，能源公司面临挑战。&#34;</span><span class="p">,</span> <span class="s2">&#34;未来智能城市的建设趋势越加明显。&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="s2">&#34;股票市场今日大涨，投资者乐观。&#34;</span><span class="p">,</span> <span class="s2">&#34;持续上涨的市场让投资者感到满意。&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;system&#34;,      &#34;content&#34;: f&#34;你帮我完成文本匹配，我给你2个句子，被[]包围，你判断它们是否匹配，回答是或不是，请参考如下示例：&#34;},
+</span></span></span><span class="line"><span class="cl"><span class="s2">     
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;user&#34;,        &#34;content&#34;: &#34;句子1：[公司ABC发布了季度财报，显示盈利增长。]句子2：[财报披露，公司ABC利润上升。]&#34;},
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;assistant&#34;,   &#34;content&#34;: &#34;是&#34;},
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;user&#34;,        &#34;content&#34;: &#34;句子1：[公司ITCAST发布了年度财报，显示盈利大幅度增长。]句子2：[财报披露，公司ITCAST更赚钱了。]&#34;},
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;assistant&#34;,   &#34;content&#34;: &#34;是&#34;},
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;user&#34;,        &#34;content&#34;: &#34;句子1：[黄金价格下跌，投资者抛售。]句子2：[外汇市场交易额创下新高。]&#34;},
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;assistant&#34;,   &#34;content&#34;: &#34;不是&#34;},
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;user&#34;,        &#34;content&#34;: &#34;句子1：[央行降息，刺激经济增长。]句子2：[新能源技术的创新。]&#34;},
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;assistant&#34;,   &#34;content&#34;: &#34;不是&#34;}, 
+</span></span></span><span class="line"><span class="cl"><span class="s2">    
+</span></span></span><span class="line"><span class="cl"><span class="s2">    {&#34;role&#34;: &#34;user&#34;,        &#34;content&#34;: f&#34;按照上述示例，回答这2个句子的情况。句子1: [...]，句子2: [...]&#34;}
+</span></span></span><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;system&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&#34;你帮我完成文本匹配，我给你2个句子，被[]包围，你判断它们是否匹配，回答是或不是，请参考如下示例：&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">examples_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&#34;句子1：[</span><span class="si">{</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">]，句子2：[</span><span class="si">{</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">]&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;assistant&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="n">key</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">questions</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="o">=</span><span class="s2">&#34;qwen3-max&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">messages</span><span class="o">=</span><span class="n">messages</span> <span class="o">+</span> <span class="p">[{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&#34;句子1：[</span><span class="si">{</span><span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">]，句子2：[</span><span class="si">{</span><span class="n">q</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">]&#34;</span><span class="p">}]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%A1%88%E4%BE%8B4.png"
+	width="1165"
+	height="165"
+	srcset="/p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%A1%88%E4%BE%8B4_hu_7f6364e1e0206699.png 480w, /p/rag%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87/assets/%E6%A1%88%E4%BE%8B4_hu_72e9773166027c8b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="706"
+		data-flex-basis="1694px"
+	
+></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <script src="https://utteranc.es/client.js" 
+        repo="IAmYuanyu/IAmYuanyu.github.io"
+        issue-term="pathname"
+        
+        crossorigin="anonymous"
+        async
+        >
+</script>
+
+<style>
+    .utterances {
+        max-width: unset;
+    }
+</style>
+
+<script>
+    let utterancesLoaded = false;
+
+    function setUtterancesTheme(theme) {
+        let utterances = document.querySelector('.utterances iframe');
+        if (utterances) {
+            utterances.contentWindow.postMessage(
+                {
+                    type: 'set-theme',
+                    theme: `github-${theme}`
+                },
+                'https://utteranc.es'
+            );
+        }
+    }
+
+    addEventListener('message', event => {
+        if (event.origin !== 'https://utteranc.es') return;
+
+        
+        utterancesLoaded = true;
+        setUtterancesTheme(document.documentElement.dataset.scheme)
+    });
+
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (!utterancesLoaded) return;
+        setUtterancesTheme(e.detail)
+    })
+</script>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2025 - 
+        
+        2026 凉介
+    </section>
+    
+    <section class="powerby">
+        
+            本站于2026年3月31日建立 <br/>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
