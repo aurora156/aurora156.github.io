@@ -1,0 +1,2176 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="RAG开发 LangChain简介 主要功能 提供：\n提示词优化的相关功能API 调用各类模型的功能API 会话记忆的相关功能API 各类文档管理分析的功能API 构建Agent智能体的相关功能API 各类功能链式执行的能力 LangChain是后续学习RAG开发的主力框架\n">
+<title>RAG开发-LangChain</title>
+
+<link rel='canonical' href='https://aurora156.github.io/p/rag%E5%BC%80%E5%8F%91-langchain/'>
+
+<link rel="stylesheet" href="/scss/style.min.6a692fd055deae459f2a9767f57f3855ba80cafd5041317f24f7360f6ca47cdf.css"><meta property='og:title' content="RAG开发-LangChain">
+<meta property='og:description' content="RAG开发 LangChain简介 主要功能 提供：\n提示词优化的相关功能API 调用各类模型的功能API 会话记忆的相关功能API 各类文档管理分析的功能API 构建Agent智能体的相关功能API 各类功能链式执行的能力 LangChain是后续学习RAG开发的主力框架\n">
+<meta property='og:url' content='https://aurora156.github.io/p/rag%E5%BC%80%E5%8F%91-langchain/'>
+<meta property='og:site_name' content='凉介的笔记'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-07-13T16:48:40&#43;08:00'/><meta property='article:modified_time' content='2026-07-13T16:48:40&#43;08:00'/>
+<meta name="twitter:title" content="RAG开发-LangChain">
+<meta name="twitter:description" content="RAG开发 LangChain简介 主要功能 提供：\n提示词优化的相关功能API 调用各类模型的功能API 会话记忆的相关功能API 各类文档管理分析的功能API 构建Agent智能体的相关功能API 各类功能链式执行的能力 LangChain是后续学习RAG开发的主力框架\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_39194fe8d5906e9f.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🌆</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">凉介的笔记</a></h1>
+            <h2 class="site-description">凉介的博客</h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>档案</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#langchain简介">LangChain简介</a></li>
+    <li><a href="#主要功能">主要功能</a></li>
+    <li><a href="#langchain环境部署">LangChain环境部署</a>
+      <ol>
+        <li><a href="#langchain安装">LangChain安装</a></li>
+      </ol>
+    </li>
+    <li><a href="#rag">RAG</a>
+      <ol>
+        <li><a href="#介绍">介绍</a></li>
+        <li><a href="#工作原理">工作原理</a></li>
+        <li><a href="#标准流程">标准流程</a></li>
+      </ol>
+    </li>
+    <li><a href="#向量">向量</a>
+      <ol>
+        <li><a href="#基础概念">基础概念</a></li>
+        <li><a href="#扩展余弦相似度">【扩展】余弦相似度</a></li>
+      </ol>
+    </li>
+    <li><a href="#langchain组件">Langchain组件</a>
+      <ol>
+        <li><a href="#models大语言模型的使用">Models：大语言模型的使用</a>
+          <ol>
+            <li><a href="#llms阿里云大语言模型的访问">LLMs（阿里云大语言模型的访问）</a></li>
+            <li><a href="#models的流失输出">Models的流失输出</a></li>
+            <li><a href="#models聊天模型的使用">Models：聊天模型的使用</a></li>
+            <li><a href="#models消息的简写形式">Models：消息的简写形式</a></li>
+            <li><a href="#models嵌入模型的使用">Models：嵌入模型的使用</a></li>
+          </ol>
+        </li>
+        <li><a href="#通用promptszero-shot">通用prompts【zero-shot】</a></li>
+        <li><a href="#fewshotprompttemplate的使用">FewShotPromptTemplate的使用</a></li>
+        <li><a href="#模板类的format和invoke方法">模板类的format和invoke方法</a></li>
+        <li><a href="#chatprompttemplate的使用">ChatPromptTemplate的使用</a></li>
+        <li><a href="#chain链的基础使用">chain链的基础使用</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/rag%E5%BC%80%E5%8F%91-langchain/">RAG开发-LangChain</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2026-07-13</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="rag开发">RAG开发
+</h1><h2 id="langchain简介">LangChain简介
+</h2><p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E7%AE%80%E4%BB%8B.png"
+	width="826"
+	height="320"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E7%AE%80%E4%BB%8B_hu_fcd32af6f0235385.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E7%AE%80%E4%BB%8B_hu_8ff1146d7513b93e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="258"
+		data-flex-basis="619px"
+	
+></p>
+<h2 id="主要功能">主要功能
+</h2><p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%8A%9F%E8%83%BD.png"
+	width="860"
+	height="424"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%8A%9F%E8%83%BD_hu_926acf395fc8aab1.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%8A%9F%E8%83%BD_hu_f67faa60f79f5c3.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="202"
+		data-flex-basis="486px"
+	
+></p>
+<p>提供：</p>
+<ul>
+<li>提示词优化的相关功能API</li>
+<li>调用各类模型的功能API</li>
+<li>会话记忆的相关功能API</li>
+<li>各类文档管理分析的功能API</li>
+<li>构建Agent智能体的相关功能API</li>
+<li>各类功能链式执行的能力</li>
+</ul>
+<p><em>LangChain是后续学习RAG开发的主力框架</em></p>
+<h2 id="langchain环境部署">LangChain环境部署
+</h2><h3 id="langchain安装">LangChain安装
+</h3><p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%AE%89%E8%A3%85.png"
+	width="844"
+	height="170"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%AE%89%E8%A3%85_hu_17b0a1a478460aee.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%AE%89%E8%A3%85_hu_6a23d293ad5de2ad.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="496"
+		data-flex-basis="1191px"
+	
+></p>
+<p>如果清华镜像源不行，可以使用以下命令：</p>
+<blockquote>
+<p>（社区版）</p>
+<p>官方PyPI源：python -m pip install langchain-community langchain-ollama dashscope chromadb -i <a class="link" href="https://pypi.org/simple/"  target="_blank" rel="noopener"
+    >https://pypi.org/simple/</a></p>
+<p>阿里云镜像：python -m pip install langchain-community langchain-ollama dashscope chromadb -i
+<a class="link" href="https://mirrors.aliyun.com/pypi/simple/"  target="_blank" rel="noopener"
+    >https://mirrors.aliyun.com/pypi/simple/</a></p>
+<p>基础langchain包：</p>
+<p>官方PyPI源：python -m pip install langchain -i <a class="link" href="https://pypi.org/simple/"  target="_blank" rel="noopener"
+    >https://pypi.org/simple/</a></p>
+<p>阿里云镜像：python -m pip install langchain -i <a class="link" href="https://mirrors.aliyun.com/pypi/simple/"  target="_blank" rel="noopener"
+    >https://mirrors.aliyun.com/pypi/simple/</a></p>
+</blockquote>
+<p>安装完可以输入python进入python环境进行验证</p>
+<p>进入到python环境中输入</p>
+<blockquote>
+<p>import langchain</p>
+<p>print(langchain.<strong>version</strong>)</p>
+</blockquote>
+<p>进行验证</p>
+<h2 id="rag">RAG
+</h2><h3 id="介绍">介绍
+</h3><p>通⽤的基础⼤模型存在一些问题：</p>
+<ul>
+<li>LLM的知识不是实时的，模型训练好后不具备自动更新知识的能力，会导致部分信息滞后</li>
+<li>LLM领域知识是缺乏的，大模型的知识来源于训练数据，这些数据主要来自公开的互联网和开源数据集，无法覆盖特定领域或高度专业化的内部知识</li>
+<li>幻觉问题，LLM有时会在回答中⽣成看似合理但实际上是错误的信息</li>
+<li>数据安全性</li>
+</ul>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E9%97%AE%E9%A2%98.png"
+	width="604"
+	height="242"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E9%97%AE%E9%A2%98_hu_3781eb80baf4dfb4.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E9%97%AE%E9%A2%98_hu_e27a7bda6d5460ad.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="249"
+		data-flex-basis="599px"
+	
+></p>
+<p>RAG（Retrieval-Augmented Generation）即检索增强生成，为大模型提供了<strong>从特定数据源检索到的信息，以此来修正和补充生成的答案</strong>。可以总结为一个公式：RAG = 检索技术 + LLM 提示</p>
+<h3 id="工作原理">工作原理
+</h3><p>工作流程图解：</p>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.png"
+	width="813"
+	height="491"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B_hu_b6f7de46c6aa6eb5.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B_hu_8c322aefd95bd52c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="165"
+		data-flex-basis="397px"
+	
+></p>
+<p><strong>RAG</strong>标准流程：</p>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E6%A0%87%E5%87%86%E6%B5%81%E7%A8%8B.png"
+	width="960"
+	height="490"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E6%A0%87%E5%87%86%E6%B5%81%E7%A8%8B_hu_a6347a872920b17f.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E6%A0%87%E5%87%86%E6%B5%81%E7%A8%8B_hu_99ba3bfbfe153cea.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="195"
+		data-flex-basis="470px"
+	
+></p>
+<p>简单来说，RAG工作分为两条线：离线准备线 / 在线服务线</p>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E4%B8%A4%E6%9D%A1%E7%BA%BF.png"
+	width="722"
+	height="145"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E4%B8%A4%E6%9D%A1%E7%BA%BF_hu_581f7b233b763bc3.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E4%B8%A4%E6%9D%A1%E7%BA%BF_hu_5e6f2da0df9a8911.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="497"
+		data-flex-basis="1195px"
+	
+></p>
+<h3 id="标准流程">标准流程
+</h3><p>RAG 标准流程由索引（Indexing）、检索（Retriever）和生成（Generation）三个核心阶段组成。</p>
+<ul>
+<li><strong>索引阶段</strong>：<strong>通过处理多种来源多种格式的文档提取其中文本，将其切分为标准长度的文本块（chunk），并进行嵌入向量化（embedding），向量存储在向量数据库（vector database）中。</strong>
+<ul>
+<li>加载文件</li>
+<li>内容提取</li>
+<li>文本分割 ，形成chunk</li>
+<li>文本向量化</li>
+<li>存向量数据库</li>
+</ul>
+</li>
+<li><strong>检索阶段</strong>，<strong>用户输入的查询（query）被转化为向量表示，通过相似度匹配从向量数据库中检索出最相关的文本块。</strong>
+<ul>
+<li>query向量化</li>
+<li>在文本向量中匹配出与问句向量相似的top_k个</li>
+</ul>
+</li>
+<li><strong>生成阶段</strong>，<strong>检索到的相关文本与原始查询共同构成提示词（Prompt），输入大语言模型（LLM），生成精确且具备上下文关联的回答。</strong>
+<ul>
+<li>匹配出的文本作为上下文和问题一起添加到prompt中</li>
+<li>提交给LLM生成答案</li>
+</ul>
+</li>
+</ul>
+<p>主流向量数据库：</p>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/1.png"
+	width="958"
+	height="670"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/1_hu_20208319defefe98.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/1_hu_56e0970fb706ef8e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="142"
+		data-flex-basis="343px"
+	
+></p>
+<blockquote>
+<p><strong>RAG的核心价值：</strong></p>
+<ul>
+<li><strong>解决知识实效性问题：大模型的训练数据有截止时间，RAG 可以接入最新文档（如公司财报、政策文件），让模型输出 “与时俱进”。</strong></li>
+<li><strong>降低模型幻觉：模型的回答基于检索到的事实性资料，而非纯靠自身记忆，大幅减少编造信息的概率。</strong></li>
+<li><strong>无需重新训练模型：相比微调（Fine-tuning），RAG 只需更新知识库，成本更低、效率更高。</strong></li>
+</ul>
+</blockquote>
+<h2 id="向量">向量
+</h2><h3 id="基础概念">基础概念
+</h3><p>RAG流程中，向量库是一个重要的节点。</p>
+<ul>
+<li>离线流程：知识和信息 → 向量嵌入（向量化） → 存入向量库</li>
+<li>在线流程：用户的提问 → 向量嵌入（向量化） → 在向量库中匹配</li>
+</ul>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%90%91%E9%87%8F.png"
+	width="950"
+	height="339"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%90%91%E9%87%8F_hu_a65ca4ecb4129dfa.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%90%91%E9%87%8F_hu_fceed205c4a25a3e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="280"
+		data-flex-basis="672px"
+	
+></p>
+<p>向量（Vector）就是文本的 “数学身份证”：它把一段文字的<strong>语义信息</strong>，转换成一串固定长度的<strong>数字列表</strong>，让计算机能 “看懂” <strong>文字的含义并做相似度计算</strong>。</p>
+<p>简单来说，就是让计算机更方便的理解不同的文本内容，是否表述的是一个意思。</p>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%90%91%E9%87%8F1.png"
+	width="743"
+	height="305"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%90%91%E9%87%8F1_hu_d195c9be6ccea6d8.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%90%91%E9%87%8F1_hu_b2b677f700757b45.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="243"
+		data-flex-basis="584px"
+	
+></p>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%90%91%E9%87%8F2.png"
+	width="228"
+	height="117"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%90%91%E9%87%8F2_hu_f34574a7b8abf048.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%90%91%E9%87%8F2_hu_2b5d595911856fd8.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="194"
+		data-flex-basis="467px"
+	
+></p>
+<p>文本嵌入模型（如text-embedding-v1）通过深度学习等技术，从文本提取语义特征并映射为固定长度的数字序列。</p>
+<p>向量嵌入的过程，我们一般选用合适的文本嵌入模型来完成。</p>
+<p>在向量匹配的过程中，如何识别2段文本是否表述相似的含义，主要可以通过如余弦相似度等算法来完成。比如（下列案例中向量为示例，仅描述概念，非真实向量）：</p>
+<ul>
+<li>A： “如何快速学打篮球” →  [0.2, 0.5, 0.8]</li>
+<li>B： “打篮球怎么学得快” →  [0.18, 0.52, 0.79]</li>
+<li>C： “运动后吃什么好呢” →  [0.9, 0.1, 0.2]</li>
+</ul>
+<p>通过余弦相似度算法可以计算得到：A和B相似度0.999789，A和C相似度0.361446</p>
+<p>由此可通过精确的数学计算，去匹配2段文本是否描述同一个意思，提高语义匹配的效率和精度。</p>
+<hr>
+<p>如何更为精准的完成语义匹配，生成向量的维度是一个很重要的指标。</p>
+<p>如text-embedding-v1模型，可以生成1536维的向量（一段文本<strong>固定</strong>得到1536个数字序列），比较实用。</p>
+<ul>
+<li>1536个数字表示，这段文本在1536个主题（抽象的语义特征）方向上的得分（强度）</li>
+</ul>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%90%91%E9%87%8F3.png"
+	width="948"
+	height="131"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%90%91%E9%87%8F3_hu_eeb009d4a93ac448.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%90%91%E9%87%8F3_hu_375017c4fe72d78a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="723"
+		data-flex-basis="1736px"
+	
+></p>
+<ul>
+<li>生成向量的维度越多，就更好的记录文本的语义特征，做语义匹配会更加精准。</li>
+<li>更多的向量会在计算、存储和匹配过程中，带来更大的压力。</li>
+</ul>
+<p>选择合适的向量维度需要在精确和性能之间做平衡。一般1536维算是比较好的选择。</p>
+<h3 id="扩展余弦相似度">【扩展】余弦相似度
+</h3><p>向量的数字序列，共同决定了向量在高维空间中的<strong>方向</strong>和<strong>长度</strong>.而余弦相似度主要就是撇除长度的影响，得到方向的夹角。夹角越小越相似，即方向相同。</p>
+<p>如何体现向量的方向和长度呢？以一维向量为例：</p>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%90%91%E9%87%8F4.png"
+	width="399"
+	height="68"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%90%91%E9%87%8F4_hu_d88f0953812cc409.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%90%91%E9%87%8F4_hu_2bbca70aaf0ed22e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="586"
+		data-flex-basis="1408px"
+	
+></p>
+<p>向量：[-0.5]、[0.5]、[1]的方向和长度。</p>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%90%91%E9%87%8F5.png"
+	width="293"
+	height="188"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%90%91%E9%87%8F5_hu_53405785946966a9.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%90%91%E9%87%8F5_hu_49c5de4cf11c9bfd.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="155"
+		data-flex-basis="374px"
+	
+></p>
+<p>向量：[0.5, 0.5]</p>
+<p>[0.7, 0.7]</p>
+<p>[0.7, 0.5]</p>
+<p>[0.5, -0.5]</p>
+<p>[-0.5, -0.5]</p>
+<p>[-0.6, 0.5]</p>
+<p>的方向和长度</p>
+<blockquote>
+<p>PS：3维乃至更高纬度难以描述，但概念一致</p>
+</blockquote>
+<blockquote>
+<p>余弦相似度主要匹配的就是：<strong>同向（无所谓长度）</strong></p>
+<p>我们能直接发现</p>
+<ul>
+<li>[0.5, 0.5]和[0.7, 0.7]是同向不同长那计算机如何判定就依赖余弦相似度算法了。</li>
+</ul>
+</blockquote>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E4%BD%99%E5%BC%A6%E7%9B%B8%E4%BC%BC%E5%BA%A6.png"
+	width="862"
+	height="411"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E4%BD%99%E5%BC%A6%E7%9B%B8%E4%BC%BC%E5%BA%A6_hu_2185f31e413446cf.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E4%BD%99%E5%BC%A6%E7%9B%B8%E4%BC%BC%E5%BA%A6_hu_5670ec8f68474f4c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="209"
+		data-flex-basis="503px"
+	
+></p>
+<p><strong>代码示例</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">计算两个向量的余弦相似度（衡量方向相似性，剔除长度影响）
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">参数：
+</span></span></span><span class="line"><span class="cl"><span class="s2">    vec_a (np.array): 向量A
+</span></span></span><span class="line"><span class="cl"><span class="s2">    vec_b (np.array): 向量B
+</span></span></span><span class="line"><span class="cl"><span class="s2">返回：
+</span></span></span><span class="line"><span class="cl"><span class="s2">    float: 余弦相似度结果（范围[-1,1]，越接近1方向越一致）
+</span></span></span><span class="line"><span class="cl"><span class="s2">公式：
+</span></span></span><span class="line"><span class="cl"><span class="s2">    cos_sim = (vec_a · vec_b) / (||vec_a|| × ||vec_b||)
+</span></span></span><span class="line"><span class="cl"><span class="s2">    拆解：
+</span></span></span><span class="line"><span class="cl"><span class="s2">    1. 点积：vec_a · vec_b = vec_a[0]×vec_b[0] + vec_a[1]×vec_b[1] + ... + vec_a[n]×vec_b[n]
+</span></span></span><span class="line"><span class="cl"><span class="s2">    2. 模长：||vec_a|| = √(vec_a[0]² + vec_a[1]² + ... + vec_a[n]²)
+</span></span></span><span class="line"><span class="cl"><span class="s2">    3. 模长：||vec_b|| = √(vec_b[0]² + vec_b[1]² + ... + vec_b[n]²)
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">A: [0.5, 0.5]
+</span></span></span><span class="line"><span class="cl"><span class="s2">B: [0.7, 0.7]
+</span></span></span><span class="line"><span class="cl"><span class="s2">C: [0.7, 0.5]
+</span></span></span><span class="line"><span class="cl"><span class="s2">D: [-0.6, -0.5]
+</span></span></span><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">get_dot</span><span class="p">(</span><span class="n">vec_a</span><span class="p">,</span> <span class="n">vec_b</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;计算2个向量的点积，2个向量同维度数字乘积之和&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vec_a</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">vec_b</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&#34;2个向量必须维度数量相同&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">dot_sum</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">vec_a</span><span class="p">,</span> <span class="n">vec_b</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dot_sum</span> <span class="o">+=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">dot_sum</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">get_norm</span><span class="p">(</span><span class="n">vec</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;计算单个向量的模长：对向量的每个数字求平方再求和再开根号&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sum_square</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vec</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sum_square</span> <span class="o">+=</span> <span class="n">v</span> <span class="o">*</span> <span class="n">v</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># numpy sqrt函数完成开根号</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sum_square</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">cosine_similarity</span><span class="p">(</span><span class="n">vec_a</span><span class="p">,</span> <span class="n">vec_b</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;余弦相似度：2个向量的点积 除以 2个向量模长的乘积&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">result</span> <span class="o">=</span> <span class="n">get_dot</span><span class="p">(</span><span class="n">vec_a</span><span class="p">,</span> <span class="n">vec_b</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">get_norm</span><span class="p">(</span><span class="n">vec_a</span><span class="p">)</span> <span class="o">*</span> <span class="n">get_norm</span><span class="p">(</span><span class="n">vec_b</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">result</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vec_a</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vec_b</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vec_c</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vec_d</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.6</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;ab:&#34;</span><span class="p">,</span> <span class="n">cosine_similarity</span><span class="p">(</span><span class="n">vec_a</span><span class="p">,</span> <span class="n">vec_b</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;ac:&#34;</span><span class="p">,</span> <span class="n">cosine_similarity</span><span class="p">(</span><span class="n">vec_a</span><span class="p">,</span> <span class="n">vec_c</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;ad:&#34;</span><span class="p">,</span> <span class="n">cosine_similarity</span><span class="p">(</span><span class="n">vec_a</span><span class="p">,</span> <span class="n">vec_d</span><span class="p">))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E4%BD%99%E5%BC%A6.png"
+	width="317"
+	height="88"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E4%BD%99%E5%BC%A6_hu_9e986c541ab103c.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E4%BD%99%E5%BC%A6_hu_5b0902be55d481c3.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="360"
+		data-flex-basis="864px"
+	
+></p>
+<h2 id="langchain组件">Langchain组件
+</h2><h3 id="models大语言模型的使用">Models：大语言模型的使用
+</h3><p>现在市面上的模型多如牛毛，各种各样的模型不断出现，LangChain模型组件提供了与各种模型的集成，并为所有模型提供一个精简的统一接口。</p>
+<p>LangChain目前支持三种类型的模型：LLMs（大语言模型）、Chat Models(聊天模型)、Embeddings Models(嵌入模型）.</p>
+<ul>
+<li>LLMs:是技术范畴的统称，指基于大参数量、海量文本训练的 Transformer 架构模型，核心能力是理解和生成自然语言，主要服务于文本生成场景</li>
+<li>聊天模型:是应用范畴的细分，是专为对话场景优化的 LLMs，核心能力是模拟人类对话的轮次交互，主要服务于聊天场景</li>
+<li>文本嵌入模型: 文本嵌入模型接收文本作为输入, 得到文本的向量.LangChain支持的三类模型，它们的使用场景不同，输入和输出不同，开发者需要根据项目需要选择相应。</li>
+</ul>
+<p>我们所用的阿里云通义千问系列主要来自于：langchain_community包</p>
+<h4 id="llms阿里云大语言模型的访问">LLMs（阿里云大语言模型的访问）
+</h4><p>LLMs使用场景最多，常用大模型的下载库：</p>
+<ul>
+<li><a class="link" href="https://huggingface.co/models"  target="_blank" rel="noopener"
+    >https://huggingface.co/models</a></li>
+<li><a class="link" href="https://modelscope.cn/models"  target="_blank" rel="noopener"
+    >https://modelscope.cn/models</a></li>
+</ul>
+<p>同时LangChain支持对许多模型的调用，以通义千问为例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_community.llms.tongyi</span> <span class="kn">import</span> <span class="n">Tongyi</span>
+</span></span><span class="line"><span class="cl"><span class="c1">### 实例化模型</span>
+</span></span><span class="line"><span class="cl"><span class="n">llm</span> <span class="o">=</span> <span class="n">Tongyi</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;qwen-max&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">### 模型推理</span>
+</span></span><span class="line"><span class="cl"><span class="n">res</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&#34;帮我讲个笑话吧&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/llms.png"
+	width="727"
+	height="125"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/llms_hu_3d944de6e4ecf26c.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/llms_hu_e529787405d95d64.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="581"
+		data-flex-basis="1395px"
+	
+></p>
+<p>如果用的python太新了(比如我的是python3.14) - langchain-tongyi 尚未发布 3.14 的 wheel 包，所以无法安装。</p>
+<blockquote>
+<p>会出现以下错误:</p>
+<p>DeprecationWarning: <code>langchain-community</code> is being sunset and is no longer actively maintained. See <a class="link" href="https://github.com/langchain-ai/langchain-community/issues/674"  target="_blank" rel="noopener"
+    >https://github.com/langchain-ai/langchain-community/issues/674</a> for details and migration guidance toward standalone integration packages.</p>
+</blockquote>
+<p>有两个解决方案：</p>
+<blockquote>
+<p>方案一（推荐）：用 Python 3.10~3.12 运行项目</p>
+<p>通义千问相关的 LangChain 包对 3.14 支持不完善，建议用 conda 或 pyenv 创建一个 3.11 环境：</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">rag</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.11</span> <span class="o">-</span><span class="n">y</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">conda</span> <span class="n">activate</span> <span class="n">rag</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">pip</span> <span class="n">install</span> <span class="n">langchain</span> <span class="n">langchain</span><span class="o">-</span><span class="n">tongyi</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>方案二：忽略警告继续用旧包</p>
+<p>当前代码功能上是正常的，DeprecationWarning 只是提醒 langchain-community 未来不再维护，现在还能用。如果只是学习用途，可以先忽略：</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">warnings</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&#34;ignore&#34;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">DeprecationWarning</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_community.llms.tongyi</span> <span class="kn">import</span> <span class="n">Tongyi</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果要访问本地Ollama的模型，简单更改一下代码。</p>
+<p>通过langchain_ollama包导入OllamaLLM类即可（请确保Ollama已经启动并提前下载好要使用的模型）。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_ollama</span> <span class="kn">import</span> <span class="n">OllamaLLM</span>
+</span></span><span class="line"><span class="cl"><span class="n">model</span> <span class="o">=</span> <span class="n">OllamaLLM</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&#34;qwen3&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 通过invoke方法去调用模型</span>
+</span></span><span class="line"><span class="cl"><span class="n">res</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="s2">&#34;你是谁呀能做什么？&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="models的流失输出">Models的流失输出
+</h4><p>如果需要流式输出结果，需要将模型的invoke方法改为stream方法即可。</p>
+<ul>
+<li>invoke方法：一次型返回完整结果</li>
+<li>stream方法：逐段返回结果流式输出</li>
+</ul>
+<p><strong>阿里云：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># langchain_community</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_community.llms.tongyi</span> <span class="kn">import</span> <span class="n">Tongyi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 不用qwen3-max，因为qwen3-max是聊天模型，qwen-max是大语言模型</span>
+</span></span><span class="line"><span class="cl"><span class="n">model</span> <span class="o">=</span> <span class="n">Tongyi</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&#34;qwen-max&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 调用invoke向模型提问</span>
+</span></span><span class="line"><span class="cl"><span class="n">res</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="s2">&#34;你是谁呀能做什么？&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">	<span class="nb">print</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>ollama：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_ollama</span> <span class="kn">import</span> <span class="n">OllamaLLM</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">model</span> <span class="o">=</span> <span class="n">OllamaLLM</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&#34;qwen3&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">res</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="s2">&#34;你是谁呀能做什么？&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="models聊天模型的使用">Models：聊天模型的使用
+</h4><p><strong>Chat Models</strong></p>
+<p>聊天消息包含下面几种类型，使用时需要按照约定传入合适的值：</p>
+<ul>
+<li>AIMessage: 就是 AI 输出的消息，可以是针对问题的回答. (OpenAI库中的assistant角色）</li>
+<li>HumanMessage: 人类消息就是用户信息，由人给出的信息发送给LLMs的提示信息，比如“实现一个快速排序方法”. (OpenAI库中的user角色）</li>
+<li>SystemMessage: 可以用于指定模型具体所处的环境和背景，如角色扮演等。你可以在这里给出具体的指示，比如“作为一个代码专家”，或者“返回json格式”. (OpenAI库中的system角色）</li>
+</ul>
+<p><strong>单独使用HumanMessage</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_community.chat_models.tongyi</span> <span class="kn">import</span> <span class="n">ChatTongyi</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_core.messages</span> <span class="kn">import</span> <span class="n">HumanMessage</span><span class="p">,</span> <span class="n">AIMessage</span><span class="p">,</span> <span class="n">SystemMessage</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 得到模型对象, qwen3-max就是聊天模型</span>
+</span></span><span class="line"><span class="cl"><span class="n">model</span> <span class="o">=</span> <span class="n">ChatTongyi</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&#34;qwen3-max&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 准备消息列表</span>
+</span></span><span class="line"><span class="cl"><span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&#34;写一首唐诗&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 调用stream流式执行</span>
+</span></span><span class="line"><span class="cl"><span class="n">res</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">messages</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># for循环迭代打印输出，通过.content来获取到内容</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">chunk</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/HM.png"
+	width="534"
+	height="222"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/HM_hu_8222c490921cc45d.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/HM_hu_34bfa9be8f3765d1.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="240"
+		data-flex-basis="577px"
+	
+></p>
+<p><strong>SystemMessage + HumanMessage</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_community.chat_models.tongyi</span> <span class="kn">import</span> <span class="n">ChatTongyi</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_core.messages</span> <span class="kn">import</span> <span class="n">HumanMessage</span><span class="p">,</span> <span class="n">AIMessage</span><span class="p">,</span> <span class="n">SystemMessage</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 得到模型对象, qwen3-max就是聊天模型</span>
+</span></span><span class="line"><span class="cl"><span class="n">model</span> <span class="o">=</span> <span class="n">ChatTongyi</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&#34;qwen3-max&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 准备消息列表</span>
+</span></span><span class="line"><span class="cl"><span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="n">SystemMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&#34;你是一个边塞诗人。&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&#34;写一首唐诗&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 调用stream流式执行</span>
+</span></span><span class="line"><span class="cl"><span class="n">res</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">messages</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># for循环迭代打印输出，通过.content来获取到内容</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">chunk</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/SM&#43;HM.png"
+	width="1455"
+	height="382"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/SM&#43;HM_hu_a364c747ea0a7cfa.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/SM&#43;HM_hu_264932e0ec9d6c21.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="380"
+		data-flex-basis="914px"
+	
+></p>
+<p><strong>SystemMessage + HumanMessage + AIMessage</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_community.chat_models.tongyi</span> <span class="kn">import</span> <span class="n">ChatTongyi</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_core.messages</span> <span class="kn">import</span> <span class="n">HumanMessage</span><span class="p">,</span> <span class="n">AIMessage</span><span class="p">,</span> <span class="n">SystemMessage</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 得到模型对象, qwen3-max就是聊天模型</span>
+</span></span><span class="line"><span class="cl"><span class="n">model</span> <span class="o">=</span> <span class="n">ChatTongyi</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&#34;qwen3-max&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 准备消息列表</span>
+</span></span><span class="line"><span class="cl"><span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="n">SystemMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&#34;你是一个边塞诗人。&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&#34;写一首唐诗&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">AIMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&#34;锄禾日当午，汗滴禾下土，谁知盘中餐，粒粒皆辛苦。&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&#34;按照你上一个回复的格式，在写一首唐诗。&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 调用stream流式执行</span>
+</span></span><span class="line"><span class="cl"><span class="n">res</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">messages</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># for循环迭代打印输出，通过.content来获取到内容</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">chunk</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/HM&#43;AIM&#43;SM.png"
+	width="282"
+	height="165"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/HM&#43;AIM&#43;SM_hu_bc956f12b782ec3e.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/HM&#43;AIM&#43;SM_hu_c4ceeddbdd15cfee.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="170"
+		data-flex-basis="410px"
+	
+></p>
+<h4 id="models消息的简写形式">Models：消息的简写形式
+</h4><p><strong>SystemMessage、HumanMessage、AIMessage可以有如下的简写形式</strong></p>
+<p>原：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_community.chat_models.tongyi</span> <span class="kn">import</span> <span class="n">ChatTongyi</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_core.messages</span> <span class="kn">import</span> <span class="n">HumanMessage</span><span class="p">,</span> <span class="n">AIMessage</span><span class="p">,</span> <span class="n">SystemMessage</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 得到模型对象, qwen3-max就是聊天模型</span>
+</span></span><span class="line"><span class="cl"><span class="n">model</span> <span class="o">=</span> <span class="n">ChatTongyi</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&#34;qwen3-max&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 准备消息列表</span>
+</span></span><span class="line"><span class="cl"><span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="n">SystemMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&#34;你是一个边塞诗人。&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&#34;写一首唐诗&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">AIMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&#34;锄禾日当午，汗滴禾下土，谁知盘中餐，粒粒皆辛苦。&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&#34;按照你上一个回复的格式，在写一首唐诗。&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 调用stream流式执行</span>
+</span></span><span class="line"><span class="cl"><span class="n">res</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">messages</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># for循环迭代打印输出，通过.content来获取到内容</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">chunk</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>简：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># 得到模型对象, qwen3-max就是聊天模型</span>
+</span></span><span class="line"><span class="cl"><span class="n">model</span> <span class="o">=</span> <span class="n">ChatTongyi</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&#34;qwen3-max&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 准备消息列表</span>
+</span></span><span class="line"><span class="cl"><span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">#(角色，内容) 角色：system/human/ai</span>
+</span></span><span class="line"><span class="cl">	<span class="p">(</span><span class="s2">&#34;system&#34;</span><span class="p">,</span> <span class="s2">&#34;你是一个边塞诗人。&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="s2">&#34;human&#34;</span><span class="p">,</span> <span class="s2">&#34;写一首唐诗&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="s2">&#34;ai&#34;</span><span class="p">,</span> <span class="s2">&#34;锄禾日当午，汗滴禾下土，谁知盘中餐，粒粒皆辛苦。&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="s2">&#34;human&#34;</span><span class="p">,</span> <span class="s2">&#34;按照你上一个回复的格式，再写一首唐诗。&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"> <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># for循环迭代打印输出，通过.content来获取到内容</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">messages</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">	<span class="nb">print</span><span class="p">(</span><span class="n">chunk</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>通过2元元组封装信息；第一个元素为角色字符串：system/human/ai第二个元素为内容</p>
+</blockquote>
+<p><strong>区别和优势在于，使用类对象的方式，如下：</strong></p>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E7%B1%BB%E5%AF%B9%E8%B1%A1.png"
+	width="348"
+	height="93"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E7%B1%BB%E5%AF%B9%E8%B1%A1_hu_1959e710c51b4b15.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E7%B1%BB%E5%AF%B9%E8%B1%A1_hu_333e47d9a959518d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="374"
+		data-flex-basis="898px"
+	
+></p>
+<blockquote>
+<p>是<strong>静态</strong>的，一步到位</p>
+<p>直接就得到了Message类的类对象</p>
+</blockquote>
+<p><strong>简写形式如下：</strong></p>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E7%AE%80%E5%86%99.png"
+	width="351"
+	height="92"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E7%AE%80%E5%86%99_hu_44e94ed8c4dfdd10.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E7%AE%80%E5%86%99_hu_4f2e4b4068d4c334.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="381"
+		data-flex-basis="915px"
+	
+></p>
+<blockquote>
+<p>是<strong>动态</strong>的，需要在<strong>运行时</strong></p>
+<p>由LangChain内部机制<strong>转换</strong>为Message类对象</p>
+</blockquote>
+<p><strong>好处就在于，简写形式避免导包、写起来更简单，更重要的是支持：</strong></p>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%A5%BD%E5%A4%84.png"
+	width="348"
+	height="91"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%A5%BD%E5%A4%84_hu_eba96fe89e25115f.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E5%A5%BD%E5%A4%84_hu_1e4d02c50d46b22a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="382"
+		data-flex-basis="917px"
+	
+></p>
+<blockquote>
+<p>由于是<strong>动态</strong>，需要转换步骤</p>
+<p>所以简写形式支持内部填充{变量}占位</p>
+<p>可在运行时填充具体值(后续学习提示词模板时用到）</p>
+</blockquote>
+<h4 id="models嵌入模型的使用">Models：嵌入模型的使用
+</h4><p><strong>Embeddings Models(文本嵌入模型）</strong></p>
+<p>Embeddings Models嵌入模型的特点：将字符串作为输入，返回一个浮点数的列表（向量）。</p>
+<p>在NLP中，Embedding的作用就是将数据进行文本向量化。</p>
+<p>阿里云千问模型访问方式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_community.embeddings</span> <span class="kn">import</span> <span class="n">DashScopeEmbeddings</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 初始化嵌入模型对象，其默认使用模型是：text-embedding-v1</span>
+</span></span><span class="line"><span class="cl"><span class="n">embed</span> <span class="o">=</span> <span class="n">DashScopeEmbeddings</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 测试</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 单次转换</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">embed</span><span class="o">.</span><span class="n">embed_query</span><span class="p">(</span><span class="s2">&#34;我喜欢你&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 批量转换</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">embed</span><span class="o">.</span><span class="n">embed_documents</span><span class="p">([</span><span class="s1">&#39;我喜欢你&#39;</span><span class="p">,</span> <span class="s1">&#39;我稀饭你&#39;</span><span class="p">,</span> <span class="s1">&#39;晚上吃啥&#39;</span><span class="p">]))</span> 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E6%96%87%E6%9C%AC%E5%B5%8C%E5%85%A5.png"
+	width="957"
+	height="72"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E6%96%87%E6%9C%AC%E5%B5%8C%E5%85%A5_hu_9e229ff18caea547.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E6%96%87%E6%9C%AC%E5%B5%8C%E5%85%A5_hu_ec1322f1278a5f35.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1329"
+		data-flex-basis="3190px"
+	
+></p>
+<p>本地Ollama模型访问方式：</p>
+<p>通过langchain_ollama导入OllamaEmbeddings使用，其余不变。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_ollama</span> <span class="kn">import</span> <span class="n">OllamaEmbeddings</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">model</span> <span class="o">=</span> <span class="n">OllamaEmbeddings</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&#34;qwen3-embedding&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 不用invoke stream</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># embed_query、embed_documents</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">embed_query</span><span class="p">(</span><span class="s2">&#34;我喜欢你&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">embed_documents</span><span class="p">([</span><span class="s2">&#34;我喜欢你&#34;</span><span class="p">,</span> <span class="s2">&#34;我稀饭你&#34;</span><span class="p">,</span> <span class="s2">&#34;晚上吃啥&#34;</span><span class="p">]))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>在本地下载模型：</p>
+<p>打开命令行，输入ollama pull 模型</p>
+</blockquote>
+<p>目前所掌握的LangChain API如下：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>方式</th>
+					<th>LLMs大语言模型</th>
+					<th>聊天模型</th>
+					<th>文本嵌入模型</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>阿里云千问</td>
+					<td>from langchain_community.llms.tongyi import Tongyi</td>
+					<td>from langchain_community.chat_models.tongyi import ChatTongyi</td>
+					<td>from langchain_community.embeddings import DashScopeEmbeddings</td>
+			</tr>
+			<tr>
+					<td>ollama本地模型</td>
+					<td>from langchain_ollama import OllamaLLM</td>
+					<td>from langchain_ollama import ChatOllama</td>
+					<td>from langchain_ollama import OllamaEmbeddings</td>
+			</tr>
+			<tr>
+					<td>反复噶</td>
+					<td><code>invoke</code>批量 / <code>stream</code>流式</td>
+					<td><code>invoke</code>批量 / <code>stream</code>流式</td>
+					<td><code>embed_query</code>单次转换 / <code>embed_documents</code>批量转换</td>
+			</tr>
+	</tbody>
+</table></div>
+<h3 id="通用promptszero-shot">通用prompts【zero-shot】
+</h3><p>提示词优化在模型应用中非常重要，LangChain提供了<strong>PromptTemplate</strong>类，用来协助优化提示词。</p>
+<p><strong>PromptTemplate</strong>表示提示词模板，可以构建一个自定义的基础提示词模板，支持变量的注入，最终生成所需的提示词。</p>
+<p><strong>标准写法：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_core.prompts</span> <span class="kn">import</span> <span class="n">PromptTemplate</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_community.llms.tongyi</span> <span class="kn">import</span> <span class="n">Tongyi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">prompt_template</span> <span class="o">=</span> <span class="n">PromptTemplate</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">	<span class="err">“</span><span class="n">我的邻居姓</span><span class="p">{</span><span class="n">lastname</span><span class="p">},</span> <span class="n">刚生了</span><span class="p">{</span><span class="n">gender</span><span class="p">},</span> <span class="n">帮忙起名字</span><span class="err">，</span><span class="n">请简略回答</span><span class="err">。”</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 变量注入，生成提示词文本</span>
+</span></span><span class="line"><span class="cl"><span class="n">prompt_text</span> <span class="o">=</span> <span class="n">prompt_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lastname</span><span class="o">=</span><span class="s2">&#34;张&#34;</span><span class="p">,</span> <span class="n">gender</span><span class="o">=</span><span class="s2">&#34;女儿&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">model</span> <span class="o">=</span> <span class="n">Tongyi</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&#34;qwen-max&#34;</span><span class="p">)</span>        <span class="c1"># 创建模型对象</span>
+</span></span><span class="line"><span class="cl"><span class="n">res</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">prompt_text</span><span class="p">)</span>   <span class="c1"># 调用模型获取结果</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E6%A8%A1%E6%9D%BF1.png"
+	width="231"
+	height="96"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E6%A8%A1%E6%9D%BF1_hu_a513fed8ec306a4b.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E6%A8%A1%E6%9D%BF1_hu_800e892cd807b620.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="240"
+		data-flex-basis="577px"
+	
+></p>
+<p>基于chain链的写法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_core.prompts</span> <span class="kn">import</span> <span class="n">PromptTemplate</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_community.llms.tongyi</span> <span class="kn">import</span> <span class="n">Tongyi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#zero-shot</span>
+</span></span><span class="line"><span class="cl"><span class="n">prompt_template</span> <span class="o">=</span> <span class="n">PromptTemplate</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">	<span class="err">“</span><span class="n">我的邻居姓</span><span class="p">{</span><span class="n">lastname</span><span class="p">},</span> <span class="n">刚生了</span><span class="p">{</span><span class="n">gender</span><span class="p">},</span> <span class="n">帮忙起名字</span><span class="err">，</span><span class="n">请简略回答</span><span class="err">。”</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">model</span> <span class="o">=</span> <span class="n">Tongyi</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="err">“</span><span class="n">qwen</span><span class="o">-</span><span class="nb">max</span><span class="err">”</span><span class="p">)</span>        <span class="c1"># 创建模型对象</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 生成链</span>
+</span></span><span class="line"><span class="cl"><span class="n">chain</span> <span class="o">=</span> <span class="n">prompt_template</span> <span class="o">|</span> <span class="n">model</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 基于链，调用模型获取结果</span>
+</span></span><span class="line"><span class="cl"><span class="n">res</span> <span class="o">=</span> <span class="n">chain</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;lastname&#34;</span><span class="p">:</span> <span class="s2">&#34;张&#34;</span><span class="p">,</span> <span class="s2">&#34;gender&#34;</span><span class="p">:</span> <span class="s2">&#34;女儿&#34;</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E6%A8%A1%E5%9E%8B2.png"
+	width="245"
+	height="100"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E6%A8%A1%E5%9E%8B2_hu_e6db1792a061afd1.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E6%A8%A1%E5%9E%8B2_hu_165d4b2e8d5bf5b8.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="245"
+		data-flex-basis="588px"
+	
+></p>
+<ul>
+<li>zero-sho思想下，可以基于PromptTemplate直接完成</li>
+<li>few-shot思想下，需要更换为FewShotPromptTemplate</li>
+</ul>
+<blockquote>
+<p>PS：使用PromptTemplate还不如自己手动拼接字符串？</p>
+<ul>
+<li>使用Template模板构建提示词，在大型工程中更容易做标准化模板</li>
+<li>Template模板类，支持LangChian框架的链式调用（Runnable接口）
+<ul>
+<li>PromptTemplate</li>
+<li>FewShotPromptTemplate</li>
+<li>ChatPromptTemplate</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h3 id="fewshotprompttemplate的使用">FewShotPromptTemplate的使用
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_core.prompts</span> <span class="kn">import</span> <span class="n">FewShotPromptTemplate</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">FewShotPromptTemplate</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">	<span class="n">examples</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">example_prompt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">suffix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">input_variables</span><span class="o">=</span><span class="kc">None</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>参数：</p>
+<p>examples：示例数据，list，内套字典</p>
+<p>example_prompt：示例数据的提示词模板</p>
+<p>prefix：组装提示词，示例数据前内容</p>
+<p>suffix：组装提示词，示例数据后内容</p>
+<p>input_variables：列表，注入的变量列表</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_core.prompts</span> <span class="kn">import</span> <span class="n">PromptTemplate</span><span class="p">,</span> <span class="n">FewShotPromptTemplate</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_community.llms.tongyi</span> <span class="kn">import</span> <span class="n">Tongyi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 示例的模板</span>
+</span></span><span class="line"><span class="cl"><span class="n">example_template</span> <span class="o">=</span> <span class="n">PromptTemplate</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span><span class="s2">&#34;单词：</span><span class="si">{word}</span><span class="s2">, 反义词：</span><span class="si">{antonym}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 示例的动态数据注入 要求是list内部套字典</span>
+</span></span><span class="line"><span class="cl"><span class="n">examples_data</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="s2">&#34;word&#34;</span><span class="p">:</span> <span class="s2">&#34;大&#34;</span><span class="p">,</span> <span class="s2">&#34;antonym&#34;</span><span class="p">:</span> <span class="s2">&#34;小&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="s2">&#34;word&#34;</span><span class="p">:</span> <span class="s2">&#34;上&#34;</span><span class="p">,</span> <span class="s2">&#34;antonym&#34;</span><span class="p">:</span> <span class="s2">&#34;下&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">few_shot_template</span> <span class="o">=</span> <span class="n">FewShotPromptTemplate</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">example_prompt</span><span class="o">=</span><span class="n">example_template</span><span class="p">,</span>    <span class="c1"># 示例数据的模板</span>
+</span></span><span class="line"><span class="cl">    <span class="n">examples</span><span class="o">=</span><span class="n">examples_data</span><span class="p">,</span>             <span class="c1"># 示例的数据（用来注入动态数据的），list内套字典</span>
+</span></span><span class="line"><span class="cl">    <span class="n">prefix</span><span class="o">=</span><span class="s2">&#34;告知我单词的反义词，我提供如下的示例：&#34;</span><span class="p">,</span>                   <span class="c1"># 示例之前的提示词</span>
+</span></span><span class="line"><span class="cl">    <span class="n">suffix</span><span class="o">=</span><span class="s2">&#34;基于前面的示例告知我，</span><span class="si">{input_word}</span><span class="s2">的反义词是？&#34;</span><span class="p">,</span>          <span class="c1"># 示例之后的提示词</span>
+</span></span><span class="line"><span class="cl">    <span class="n">input_variables</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;input_word&#39;</span><span class="p">]</span>      <span class="c1"># 声明在前缀或后缀中所需要注入的变量名（可以多个）</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">prompt_text</span> <span class="o">=</span> <span class="n">few_shot_template</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;input_word&#34;</span><span class="p">:</span> <span class="s2">&#34;左&#34;</span><span class="p">})</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span> <span class="c1"># to_string()转为字符串输出</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">prompt_text</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 创建模型对象</span>
+</span></span><span class="line"><span class="cl"><span class="n">model</span> <span class="o">=</span> <span class="n">Tongyi</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&#34;qwen-max&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">prompt_text</span><span class="p">))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/FSPt.png"
+	width="468"
+	height="228"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/FSPt_hu_fe7e6394c1277fdd.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/FSPt_hu_e4c27ba257124639.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="205"
+		data-flex-basis="492px"
+	
+></p>
+<h3 id="模板类的format和invoke方法">模板类的format和invoke方法
+</h3><p>在PromptTemplate（通用提示词模板）和FewShotPromptTemplate（FewShot提示词模板）的使用中，我们使用了如下：</p>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E6%A8%A1%E6%9D%BF%E7%B1%BB.png"
+	width="1720"
+	height="311"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E6%A8%A1%E6%9D%BF%E7%B1%BB_hu_88ced9995710b27c.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E6%A8%A1%E6%9D%BF%E7%B1%BB_hu_a4b3affb534e61c5.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="553"
+		data-flex-basis="1327px"
+	
+></p>
+<p>PromptTemplate、FewShotPromptTemplate、ChatPromptTemplate都拥有format和invoke这2类方法。</p>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E6%A8%A1%E6%9D%BF%E7%B1%BB1.png"
+	width="696"
+	height="236"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E6%A8%A1%E6%9D%BF%E7%B1%BB1_hu_3bfcc1c07e7c5f21.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/%E6%A8%A1%E6%9D%BF%E7%B1%BB1_hu_ef4651d384fd2857.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="294"
+		data-flex-basis="707px"
+	
+></p>
+<p>format和invoke的区别在于：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>区别</th>
+					<th>format</th>
+					<th>invoke</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>功能</td>
+					<td>纯字符串替换</td>
+					<td>Runnable接口标准方法，解析占位符生辰提示词</td>
+			</tr>
+			<tr>
+					<td>返回值</td>
+					<td>字符串</td>
+					<td>PromptValue类对象</td>
+			</tr>
+			<tr>
+					<td>传参</td>
+					<td>.format(k=v，k=v，&hellip;)</td>
+					<td>.invoke({&ldquo;k&rdquo;:v，&ldquo;k&rdquo;:v，&hellip;})</td>
+			</tr>
+			<tr>
+					<td>解析</td>
+					<td>支持解析{}占位符</td>
+					<td>支持解析{}占位符和MessagePlaceholder结构化占位符</td>
+			</tr>
+	</tbody>
+</table></div>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_core.prompts</span> <span class="kn">import</span> <span class="n">PromptTemplate</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_core.prompts</span> <span class="kn">import</span> <span class="n">FewShotPromptTemplate</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_core.prompts</span> <span class="kn">import</span> <span class="n">ChatPromptTemplate</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_community.llms.tongyi</span> <span class="kn">import</span> <span class="n">Tongyi</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_community.chat_models.tongyi</span> <span class="kn">import</span> <span class="n">ChatTongyi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 模板继承关系</span>
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">PromptTemplate -&gt; StringPromptTemplate -&gt; BasePromptTemplate -&gt; RunnableSerializable -&gt; Runnable
+</span></span></span><span class="line"><span class="cl"><span class="s2">FewShotPromptTemplate -&gt; StringPromptTemplate -&gt; BasePromptTemplate  -&gt; RunnableSerializable -&gt; Runnable
+</span></span></span><span class="line"><span class="cl"><span class="s2">ChatPromptTemplate -&gt; BaseChatPromptTemplate -&gt; BasePromptTemplate  -&gt; RunnableSerializable -&gt; Runnable
+</span></span></span><span class="line"><span class="cl"><span class="s2">Tongyi -&gt; BaseLLM -&gt; BaseLanguageModel -&gt; RunnableSerializable -&gt; Runnable
+</span></span></span><span class="line"><span class="cl"><span class="s2">ChatTongyi -&gt; BaseChatModel -&gt; BaseLanguageModel -&gt; RunnableSerializable -&gt; Runnable
+</span></span></span><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">template</span> <span class="o">=</span> <span class="n">PromptTemplate</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span><span class="s2">&#34;我的邻居是：</span><span class="si">{lastname}</span><span class="s2">，最喜欢：</span><span class="si">{hobby}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">res</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lastname</span><span class="o">=</span><span class="s2">&#34;张大明&#34;</span><span class="p">,</span> <span class="n">hobby</span><span class="o">=</span><span class="s2">&#34;钓鱼&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">res2</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">invoke</span><span class="p">({</span><span class="s2">&#34;lastname&#34;</span><span class="p">:</span> <span class="s2">&#34;周杰伦&#34;</span><span class="p">,</span> <span class="s2">&#34;hobby&#34;</span><span class="p">:</span> <span class="s2">&#34;唱歌&#34;</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">res2</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">res2</span><span class="p">))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/fi%E6%96%B9%E6%B3%95.png"
+	width="979"
+	height="73"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/fi%E6%96%B9%E6%B3%95_hu_ff27040feb69b776.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/fi%E6%96%B9%E6%B3%95_hu_2b4ef4d2d9bdd99f.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1341"
+		data-flex-basis="3218px"
+	
+></p>
+<h3 id="chatprompttemplate的使用">ChatPromptTemplate的使用
+</h3><p>**PromptTemplate：**通用提示词模板，支持动态注入信息。</p>
+<p>**FewShotPromptTemplate：**支持基于模板注入任意数量的示例信息。</p>
+<p><strong>ChatPromptTemplate：<strong>支持注入任意数量的</strong>历史会话</strong>信息。</p>
+<ul>
+<li>通过from_messages方法，从列表中获取多轮次会话作为聊天的基础模板
+<ul>
+<li>PS: 前面PromptTemplate类用的from_template仅能接入一条消息，而from_messages可以接入一个list的消息</li>
+</ul>
+</li>
+</ul>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/CPT.png"
+	width="1034"
+	height="220"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/CPT_hu_ac3d85a361a6474e.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/CPT_hu_7e7ad2bded40e855.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="470"
+		data-flex-basis="1128px"
+	
+></p>
+<hr>
+<p>历史会话信息并不是静态的（固定的），而是随着对话的进行不停地积攒，即动态的。所以，历史会话信息需要支持动态注入。</p>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/CPT1.png"
+	width="614"
+	height="363"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/CPT1_hu_3116126fd4dda7d3.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/CPT1_hu_ca1b601c91da2485.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="169"
+		data-flex-basis="405px"
+	
+></p>
+<ul>
+<li>MessagePlaceholder作为占位
+<ul>
+<li>提供history作为占位的key</li>
+</ul>
+</li>
+<li>基于invoke动态注入历史会话记录</li>
+</ul>
+<p><strong>必须是invoke，format无法注入</strong></p>
+<p><strong>代码示例</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_core.prompts</span> <span class="kn">import</span> <span class="n">ChatPromptTemplate</span><span class="p">,</span> <span class="n">MessagesPlaceholder</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_community.chat_models.tongyi</span> <span class="kn">import</span> <span class="n">ChatTongyi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">chat_prompt_template</span> <span class="o">=</span> <span class="n">ChatPromptTemplate</span><span class="o">.</span><span class="n">from_messages</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="s2">&#34;system&#34;</span><span class="p">,</span> <span class="s2">&#34;你是一个边塞诗人，可以作诗。&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="n">MessagesPlaceholder</span><span class="p">(</span><span class="s2">&#34;history&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="s2">&#34;human&#34;</span><span class="p">,</span> <span class="s2">&#34;请再来一首唐诗&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">history_data</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="s2">&#34;human&#34;</span><span class="p">,</span> <span class="s2">&#34;你来写一首唐诗&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="s2">&#34;ai&#34;</span><span class="p">,</span> <span class="s2">&#34;床前明月光，疑是地上霜，举头望明月，低头思故乡&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="s2">&#34;human&#34;</span><span class="p">,</span> <span class="s2">&#34;好诗再来一首&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="s2">&#34;ai&#34;</span><span class="p">,</span> <span class="s2">&#34;锄禾日当午，汗滴禾下锄，谁知盘中餐，粒粒皆辛苦&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># invoke的返回类型是StringPromptValue → to_string() 变为字符串</span>
+</span></span><span class="line"><span class="cl"><span class="n">prompt_text</span> <span class="o">=</span> <span class="n">chat_prompt_template</span><span class="o">.</span><span class="n">invoke</span><span class="p">({</span><span class="s2">&#34;history&#34;</span><span class="p">:</span> <span class="n">history_data</span><span class="p">})</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#聊天模型</span>
+</span></span><span class="line"><span class="cl"><span class="n">model</span> <span class="o">=</span> <span class="n">ChatTongyi</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&#34;qwen3-max&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">res</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">prompt_text</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">res</span><span class="p">))</span><span class="c1"># .content的作用是只取模型返回的内容</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/CPT2.png"
+	width="618"
+	height="182"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/CPT2_hu_5dc25e6f3d90b54a.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/CPT2_hu_d74bacf08698fa15.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="339"
+		data-flex-basis="814px"
+	
+></p>
+<hr>
+<p>也可以基于聊天模型，并组装聊天历史的模式，做提示词工程。</p>
+<p>few-shot提示方式：求反义词 examples = [ {&ldquo;word&rdquo;: &ldquo;开心&rdquo;, &ldquo;antonym&rdquo;: &ldquo;难过&rdquo;}, {&ldquo;word&rdquo;: &ldquo;高&rdquo;, &ldquo;antonym&rdquo;: &ldquo;矮&rdquo;}, ]</p>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/cpts.png"
+	width="801"
+	height="732"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/cpts_hu_e708b927d6e47c47.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/cpts_hu_52de0e1c02404f5d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="109"
+		data-flex-basis="262px"
+	
+></p>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/cpts1.png"
+	width="300"
+	height="365"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/cpts1_hu_bebf8d56581c43a1.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/cpts1_hu_83a3069de8451c5d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="82"
+		data-flex-basis="197px"
+	
+></p>
+<h3 id="chain链的基础使用">chain链的基础使用
+</h3><p>「<strong>将组件串联，上一个组件的输出作为下一个组件的输入</strong>」是 LangChain 链（尤其是 | 管道链）的核心工作原理，这也是链式调用的核心价值：实现数据的自动化流转与组件的协同工作，如下。</p>
+<p>chain = prompt_template <strong>|</strong> model</p>
+<p>核心前提：即Runnable子类对象才能入链（以及Callable、Mapping接口子类对象也可加入（后续了解用的不多））。</p>
+<p>我们目前所学习到的组件，均是Runnable接口的子类，如下类的继承关系：</p>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/chain.png"
+	width="785"
+	height="302"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/chain_hu_7603bf65f4df940f.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/chain_hu_7dfa8da8acd3c095.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="259"
+		data-flex-basis="623px"
+	
+></p>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/chain1.png"
+	width="941"
+	height="880"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/chain1_hu_eaf42926516cbe42.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/chain1_hu_348f86a4c8d85310.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="106"
+		data-flex-basis="256px"
+	
+></p>
+<ul>
+<li>通过|链接提示词模板对象和模型对象</li>
+<li>返回值chain对象是RunnableSerializable对象
+<ul>
+<li>是Runnable接口的直接子类</li>
+<li>也是绝大多数组件的父类</li>
+</ul>
+</li>
+<li>通过invoke或stream进行阻塞执行或流式执行</li>
+</ul>
+<p>组成的链在执行上有：上一个组件的输出作为下一个组件的输入的特性。</p>
+<p>所以有如下执行流程：</p>
+<p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/chain2.png"
+	width="1470"
+	height="217"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/chain2_hu_de486d22725ace93.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/chain2_hu_6c760d3a9544f91a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="677"
+		data-flex-basis="1625px"
+	
+></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_core.prompts</span> <span class="kn">import</span> <span class="n">ChatPromptTemplate</span><span class="p">,</span> <span class="n">MessagesPlaceholder</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_community.chat_models.tongyi</span> <span class="kn">import</span> <span class="n">ChatTongyi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">chat_prompt_template</span> <span class="o">=</span> <span class="n">ChatPromptTemplate</span><span class="o">.</span><span class="n">from_messages</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="s2">&#34;system&#34;</span><span class="p">,</span> <span class="s2">&#34;你是一个边塞诗人，可以作诗。&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="n">MessagesPlaceholder</span><span class="p">(</span><span class="s2">&#34;history&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="s2">&#34;human&#34;</span><span class="p">,</span> <span class="s2">&#34;请再来一首唐诗&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">history_data</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="s2">&#34;human&#34;</span><span class="p">,</span> <span class="s2">&#34;你来写一个唐诗&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="s2">&#34;ai&#34;</span><span class="p">,</span> <span class="s2">&#34;床前明月光，疑是地上霜，举头望明月，低头思故乡&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="s2">&#34;human&#34;</span><span class="p">,</span> <span class="s2">&#34;好诗再来一个&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="s2">&#34;ai&#34;</span><span class="p">,</span> <span class="s2">&#34;锄禾日当午，汗滴禾下锄，谁知盘中餐，粒粒皆辛苦&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">model</span> <span class="o">=</span> <span class="n">ChatTongyi</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&#34;qwen3-max&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 组成链，要求每一个组件都是Runnable接口的子类</span>
+</span></span><span class="line"><span class="cl"><span class="n">chain</span> <span class="o">=</span> <span class="n">chat_prompt_template</span> <span class="o">|</span> <span class="n">model</span> <span class="c1">#| xxx | xxx | model2 | model3 | ...</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 通过链去调用invoke或stream</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 通过invoke去触发链条，原始输入是&#34;history&#34;: history_data（提供给chat_prompt_template）</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 然后再给到model</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># res = chain.invoke({&#34;history&#34;: history_data})</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># print(res.content)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 通过stream流式输出</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chain</span><span class="o">.</span><span class="n">stream</span><span class="p">({</span><span class="s2">&#34;history&#34;</span><span class="p">:</span> <span class="n">history_data</span><span class="p">}):</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">chunk</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/chain3.png"
+	width="688"
+	height="435"
+	srcset="/p/rag%E5%BC%80%E5%8F%91-langchain/assets/chain3_hu_21bcc5e28745186.png 480w, /p/rag%E5%BC%80%E5%8F%91-langchain/assets/chain3_hu_32fd08e9cefc48a4.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="158"
+		data-flex-basis="379px"
+	
+></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <script src="https://utteranc.es/client.js" 
+        repo="IAmYuanyu/IAmYuanyu.github.io"
+        issue-term="pathname"
+        
+        crossorigin="anonymous"
+        async
+        >
+</script>
+
+<style>
+    .utterances {
+        max-width: unset;
+    }
+</style>
+
+<script>
+    let utterancesLoaded = false;
+
+    function setUtterancesTheme(theme) {
+        let utterances = document.querySelector('.utterances iframe');
+        if (utterances) {
+            utterances.contentWindow.postMessage(
+                {
+                    type: 'set-theme',
+                    theme: `github-${theme}`
+                },
+                'https://utteranc.es'
+            );
+        }
+    }
+
+    addEventListener('message', event => {
+        if (event.origin !== 'https://utteranc.es') return;
+
+        
+        utterancesLoaded = true;
+        setUtterancesTheme(document.documentElement.dataset.scheme)
+    });
+
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (!utterancesLoaded) return;
+        setUtterancesTheme(e.detail)
+    })
+</script>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2025 - 
+        
+        2026 凉介
+    </section>
+    
+    <section class="powerby">
+        
+            本站于2026年3月31日建立 <br/>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
