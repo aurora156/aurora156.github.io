@@ -1,0 +1,2025 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="RAG项目案例 RAG回顾 RAG即检索、增强和生成，其主要分为2条线：\n离线处理：向私有知识库（向量存储）源源不断添加私有知识文档。 向知识库添加来自未来的知识文档（基于模型训练完成时间） 向模型添加私有知识文档 给出模型参考资料，规避模型幻觉（一本正经的胡说八道） 在线处理：用户提问会先基于私有知识库做检索，获取参考资料，同步组装新提示词询问大模型获取结果。 ">
+<title>RAG项目案例</title>
+
+<link rel='canonical' href='https://aurora156.github.io/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/'>
+
+<link rel="stylesheet" href="/scss/style.min.6a692fd055deae459f2a9767f57f3855ba80cafd5041317f24f7360f6ca47cdf.css"><meta property='og:title' content="RAG项目案例">
+<meta property='og:description' content="RAG项目案例 RAG回顾 RAG即检索、增强和生成，其主要分为2条线：\n离线处理：向私有知识库（向量存储）源源不断添加私有知识文档。 向知识库添加来自未来的知识文档（基于模型训练完成时间） 向模型添加私有知识文档 给出模型参考资料，规避模型幻觉（一本正经的胡说八道） 在线处理：用户提问会先基于私有知识库做检索，获取参考资料，同步组装新提示词询问大模型获取结果。 ">
+<meta property='og:url' content='https://aurora156.github.io/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/'>
+<meta property='og:site_name' content='凉介的笔记'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-07-29T14:40:49&#43;08:00'/><meta property='article:modified_time' content='2026-07-29T14:40:49&#43;08:00'/>
+<meta name="twitter:title" content="RAG项目案例">
+<meta name="twitter:description" content="RAG项目案例 RAG回顾 RAG即检索、增强和生成，其主要分为2条线：\n离线处理：向私有知识库（向量存储）源源不断添加私有知识文档。 向知识库添加来自未来的知识文档（基于模型训练完成时间） 向模型添加私有知识文档 给出模型参考资料，规避模型幻觉（一本正经的胡说八道） 在线处理：用户提问会先基于私有知识库做检索，获取参考资料，同步组装新提示词询问大模型获取结果。 ">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_39194fe8d5906e9f.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🌆</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">凉介的笔记</a></h1>
+            <h2 class="site-description">凉介的博客</h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>档案</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#rag回顾">RAG回顾</a></li>
+    <li><a href="#项目需求和思路">项目需求和思路</a></li>
+    <li><a href="#离线流程">离线流程</a>
+      <ol>
+        <li><a href="#知识库服务">知识库服务</a></li>
+      </ol>
+    </li>
+    <li><a href="#在线流程">在线流程</a></li>
+    <li><a href="#历史会话记录功能">历史会话记录功能</a></li>
+    <li><a href="#聊天页面开发">聊天页面开发</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/">RAG项目案例</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2026-07-29</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="rag项目案例">RAG项目案例
+</h1><h2 id="rag回顾">RAG回顾
+</h2><p>RAG即检索、增强和生成，其主要分为2条线：</p>
+<ul>
+<li>离线处理：向私有知识库（向量存储）源源不断添加私有知识文档。
+<ul>
+<li>向知识库添加来自未来的知识文档（基于模型训练完成时间）</li>
+<li>向模型添加私有知识文档</li>
+<li>给出模型参考资料，规避模型幻觉（一本正经的胡说八道）</li>
+</ul>
+</li>
+<li>在线处理：用户提问会先基于私有知识库做检索，获取参考资料，同步组装新提示词询问大模型获取结果。</li>
+</ul>
+<p><img src="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%9B%9E%E9%A1%BE.png"
+	width="856"
+	height="423"
+	srcset="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%9B%9E%E9%A1%BE_hu_280dd8b50eeabe8b.png 480w, /p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%9B%9E%E9%A1%BE_hu_aba9b36bbc0ec4c6.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="202"
+		data-flex-basis="485px"
+	
+></p>
+<h2 id="项目需求和思路">项目需求和思路
+</h2><p>本次项目以&quot;某东商品衣服&quot;为例，以衣服属性构建本地知识。使用者可以<strong>自由更新</strong>本地知识，用户问题的答案也是<strong>基于本地知识</strong>生成的。</p>
+<p><img src="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E6%80%9D%E8%B7%AF.png"
+	width="1800"
+	height="570"
+	srcset="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E6%80%9D%E8%B7%AF_hu_5bc6f0d81797df75.png 480w, /p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E6%80%9D%E8%B7%AF_hu_d21adde92b4c88b4.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="315"
+		data-flex-basis="757px"
+	
+></p>
+<p>项目主要会实现如下代码：</p>
+<p><img src="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E6%80%9D%E8%B7%AF1.png"
+	width="1141"
+	height="496"
+	srcset="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E6%80%9D%E8%B7%AF1_hu_51084b2b7d46dbea.png 480w, /p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E6%80%9D%E8%B7%AF1_hu_def9e6f1c1faf5c9.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="230"
+		data-flex-basis="552px"
+	
+></p>
+<p><img src="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E6%80%9D%E8%B7%AF2.png"
+	width="696"
+	height="449"
+	srcset="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E6%80%9D%E8%B7%AF2_hu_69fb590b45ff71b5.png 480w, /p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E6%80%9D%E8%B7%AF2_hu_c64fe1c5bb413611.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="155"
+		data-flex-basis="372px"
+	
+></p>
+<h2 id="离线流程">离线流程
+</h2><p><img src="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E7%A6%BB%E7%BA%BF.png"
+	width="1757"
+	height="830"
+	srcset="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E7%A6%BB%E7%BA%BF_hu_31e15f941c8c3abd.png 480w, /p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E7%A6%BB%E7%BA%BF_hu_f4bb112b33a03431.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="211"
+		data-flex-basis="508px"
+	
+></p>
+<ol>
+<li>
+<p>项目基础数据 - /data/xxx.txt</p>
+</li>
+<li>
+<p>app_file_uploader.py</p>
+</li>
+</ol>
+<p>可以先按照以下步骤运行网页：</p>
+<p>1.编写测试代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">streamlit</span> <span class="k">as</span> <span class="nn">st</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 添加网页标题</span>
+</span></span><span class="line"><span class="cl"><span class="n">st</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&#34;知识库更新服务&#34;</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2.复制文件地址到命令提示符（cmd）中，进入到当前项目目录（c盘切到d盘：<strong>d:</strong>）</p>
+<p>D:\RAG\AI大模型RAG与智能体开发\P4_RAG项目案例&gt;</p>
+<p>3.在cmd中输入<code>streamlit run app_file_uploader.py</code>则会自动跳转到网页中</p>
+<p><img src="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E7%A6%BB%E7%BA%BF2.png"
+	width="1890"
+	height="408"
+	srcset="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E7%A6%BB%E7%BA%BF2_hu_264dfb0686b2796.png 480w, /p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E7%A6%BB%E7%BA%BF2_hu_9c5120283138a221.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="463"
+		data-flex-basis="1111px"
+	
+></p>
+<p>4.使用 st.file_uploader 创建文件上传组件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># file_uploader</span>
+</span></span><span class="line"><span class="cl"><span class="n">uploader_file</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">file_uploader</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;请上传TXT文件&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">type</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;txt&#39;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="n">accept_multiple_files</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>    <span class="c1"># False表示仅接受一个文件的上传[不接受多文件]</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>5.提取文件信息</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">if</span> <span class="n">uploader_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 提取文件的信息</span>
+</span></span><span class="line"><span class="cl">    <span class="n">file_name</span> <span class="o">=</span> <span class="n">uploader_file</span><span class="o">.</span><span class="n">name</span>
+</span></span><span class="line"><span class="cl">    <span class="n">file_type</span> <span class="o">=</span> <span class="n">uploader_file</span><span class="o">.</span><span class="n">type</span>
+</span></span><span class="line"><span class="cl">    <span class="n">file_size</span> <span class="o">=</span> <span class="n">uploader_file</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="mi">1024</span>    <span class="c1"># KB</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">st</span><span class="o">.</span><span class="n">subheader</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;文件名：</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;格式：</span><span class="si">{</span><span class="n">file_type</span><span class="si">}</span><span class="s2"> | 大小：</span><span class="si">{</span><span class="n">file_size</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> KB&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># get_value -&gt; bytes -&gt; decode(&#39;utf-8&#39;)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">text</span> <span class="o">=</span> <span class="n">uploader_file</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E7%A6%BB%E7%BA%BF1.png"
+	width="1136"
+	height="648"
+	srcset="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E7%A6%BB%E7%BA%BF1_hu_d9551c56671c5a17.png 480w, /p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E7%A6%BB%E7%BA%BF1_hu_4c23aeaba28308f5.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="175"
+		data-flex-basis="420px"
+	
+></p>
+<p>完整代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">基于Streamlit完成WEB网页上传服务
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">pip install streamlit
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">Streamlit：当WEB页面元素发生变化，则代码重新执行一遍
+</span></span></span><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">streamlit</span> <span class="k">as</span> <span class="nn">st</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 添加网页标题</span>
+</span></span><span class="line"><span class="cl"><span class="n">st</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&#34;知识库更新服务&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># file_uploader</span>
+</span></span><span class="line"><span class="cl"><span class="n">uploader_file</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">file_uploader</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;请上传TXT文件&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">type</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;txt&#39;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="n">accept_multiple_files</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>    <span class="c1"># False表示仅接受一个文件的上传[不接受多文件]</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">uploader_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 提取文件的信息</span>
+</span></span><span class="line"><span class="cl">    <span class="n">file_name</span> <span class="o">=</span> <span class="n">uploader_file</span><span class="o">.</span><span class="n">name</span>
+</span></span><span class="line"><span class="cl">    <span class="n">file_type</span> <span class="o">=</span> <span class="n">uploader_file</span><span class="o">.</span><span class="n">type</span>
+</span></span><span class="line"><span class="cl">    <span class="n">file_size</span> <span class="o">=</span> <span class="n">uploader_file</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="mi">1024</span>    <span class="c1"># KB</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">st</span><span class="o">.</span><span class="n">subheader</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;文件名：</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;格式：</span><span class="si">{</span><span class="n">file_type</span><span class="si">}</span><span class="s2"> | 大小：</span><span class="si">{</span><span class="n">file_size</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> KB&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># get_value -&gt; bytes -&gt; decode(&#39;utf-8&#39;)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">text</span> <span class="o">=</span> <span class="n">uploader_file</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="知识库服务">知识库服务
+</h3><p><img src="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E7%9F%A5%E8%AF%86%E5%BA%93.png"
+	width="611"
+	height="494"
+	srcset="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E7%9F%A5%E8%AF%86%E5%BA%93_hu_abbc5b872fd454c9.png 480w, /p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E7%9F%A5%E8%AF%86%E5%BA%93_hu_7d8fcc5ffe263781.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="123"
+		data-flex-basis="296px"
+	
+></p>
+<p><strong>knowledge_base.py</strong></p>
+<p>工具类的实现：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">知识库
+</span></span></span><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">os</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">config_data</span> <span class="k">as</span> <span class="nn">config</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">hashlib</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">check_md5</span><span class="p">(</span><span class="n">md5_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    检查传入的md5字符串是否已经被处理过了
+</span></span></span><span class="line"><span class="cl"><span class="s2">        return False(md5未处理过) True(已经处理过，已有记录)
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">md5_path</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># if进入表示文件不存在，那肯定没有处理过这个md5</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">open</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">md5_path</span><span class="p">,</span> <span class="s2">&#34;w&#34;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="kc">False</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">md5_path</span><span class="p">,</span> <span class="s2">&#34;r&#34;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>     <span class="c1"># 处理字符串前后的空格和回车</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="n">md5_str</span><span class="p">:</span>     <span class="c1"># 已处理过</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="kc">True</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span>  <span class="kc">False</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">save_md5</span><span class="p">(</span><span class="n">md5_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;将传入的md5字符串，记录到文件内保存&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">md5_path</span><span class="p">,</span> <span class="s2">&#34;a&#34;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">md5_str</span> <span class="o">+</span> <span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">get_string_md5</span><span class="p">(</span><span class="n">input_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;将传入的字符串转换为md5字符串&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 将字符串转化为bytes字节数组</span>
+</span></span><span class="line"><span class="cl">    <span class="n">str_bytes</span> <span class="o">=</span> <span class="n">input_str</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 创建md5对象</span>
+</span></span><span class="line"><span class="cl">    <span class="n">md5_obj</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">()</span>     <span class="c1"># 得到md5对象</span>
+</span></span><span class="line"><span class="cl">    <span class="n">md5_obj</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">str_bytes</span><span class="p">)</span>   <span class="c1"># 更新内容（传入即将要转换的字节数组）</span>
+</span></span><span class="line"><span class="cl">    <span class="n">md5_hex</span> <span class="o">=</span> <span class="n">md5_obj</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>   <span class="c1"># 得到md5的十六进制字符串</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">md5_hex</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">KnowledgeBaseService</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;知识库服务&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">chroma</span> <span class="o">=</span> <span class="kc">None</span>      <span class="c1"># 向量存储的实例 Chroma向量库对象</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">spliter</span> <span class="o">=</span> <span class="kc">None</span>     <span class="c1"># 文本分割器的对象</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">upload_by_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">filename</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;&#34;&#34;将传入的字符串，进行向量化，存入向量数据&#34;&#34;&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>同样的内容计算的md5值是一样的（16进制字符串，长度32位），不管体积多大计算出来的结果都是32位，假设文本非常非常长，只要内容相同，计算的结果都是一样的（32位），方便做记录【节省空间，效率高】</p>
+<p>以下为测试代码（粘贴至上述代码下方）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 无论r1和r2里面内容多大，只要内容相同，输出结果就是一样的32位的16进制字符串</span>
+</span></span><span class="line"><span class="cl">    <span class="n">r1</span> <span class="o">=</span> <span class="n">get_string_md5</span><span class="p">(</span><span class="s2">&#34;周杰伦&#34;</span><span class="p">)</span>	
+</span></span><span class="line"><span class="cl">    <span class="n">r2</span> <span class="o">=</span> <span class="n">get_string_md5</span><span class="p">(</span><span class="s2">&#34;周杰伦&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">r3</span> <span class="o">=</span> <span class="n">get_string_md5</span><span class="p">(</span><span class="s2">&#34;周杰伦2&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">r1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">r2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">r3</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/md5.png"
+	width="437"
+	height="141"
+	srcset="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/md5_hu_ef2dd950b11aabe.png 480w, /p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/md5_hu_b50448af4707636d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="309"
+		data-flex-basis="743px"
+	
+></p>
+<p>测试<strong>check_md5</strong>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">check_md5</span><span class="p">(</span><span class="s2">&#34;7a8941058aaf4df5147042ce104568da&#34;</span><span class="p">))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>无论运行几次都是False，怎样才能得到True呢</p>
+<p>只需要调用save方法将内容保存至md5.text中即可</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">save_md5</span><span class="p">(</span><span class="s2">&#34;7a8941058aaf4df5147042ce104568da&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">check_md5</span><span class="p">(</span><span class="s2">&#34;7a8941058aaf4df5147042ce104568da&#34;</span><span class="p">))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/md5-1.png"
+	width="780"
+	height="110"
+	srcset="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/md5-1_hu_aa904a94f920325.png 480w, /p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/md5-1_hu_57cda8b06d089516.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="709"
+		data-flex-basis="1701px"
+	
+></p>
+<p><strong>配置文件：config_data.py</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">md5_path</span> <span class="o">=</span> <span class="s2">&#34;./md5.txt&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<p>接下来继续完成知识库服务部分**(KnowledgeBaseService)**的代码编写</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_chroma</span> <span class="kn">import</span> <span class="n">Chroma</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_community.embeddings</span> <span class="kn">import</span> <span class="n">DashScopeEmbeddings</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_text_splitters</span> <span class="kn">import</span> <span class="n">RecursiveCharacterTextSplitter</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">​```</span>
+</span></span><span class="line"><span class="cl"><span class="n">此处省略mt5部分的代码</span>
+</span></span><span class="line"><span class="cl"><span class="err">​```</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">KnowledgeBaseService</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;知识库服务&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 如果文件夹不存在则创建，如果存在则跳过</span>
+</span></span><span class="line"><span class="cl">        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">persist_directory</span><span class="p">,</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">chroma</span> <span class="o">=</span> <span class="n">Chroma</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="n">collection_name</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">collection_name</span><span class="p">,</span>     <span class="c1"># 数据库的表名</span>
+</span></span><span class="line"><span class="cl">            <span class="n">embedding_function</span><span class="o">=</span><span class="n">DashScopeEmbeddings</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&#34;text-embedding-v4&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">            <span class="n">persist_directory</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">persist_directory</span><span class="p">,</span>     <span class="c1"># 数据库本地存储文件夹</span>
+</span></span><span class="line"><span class="cl">        <span class="p">)</span>      <span class="c1"># 向量存储的实例 Chroma向量库对象</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">spliter</span> <span class="o">=</span> <span class="n">RecursiveCharacterTextSplitter</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="n">chunk_size</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">chunk_size</span><span class="p">,</span>       <span class="c1"># 分割后的文本段最大长度</span>
+</span></span><span class="line"><span class="cl">            <span class="n">chunk_overlap</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">chunk_overlap</span><span class="p">,</span>      <span class="c1"># 连续文本段之间的字符重叠数量</span>
+</span></span><span class="line"><span class="cl">            <span class="n">separators</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">separators</span><span class="p">,</span>       <span class="c1"># 自然段落划分的符号</span>
+</span></span><span class="line"><span class="cl">            <span class="n">length_function</span><span class="o">=</span><span class="nb">len</span><span class="p">,</span>                <span class="c1"># 使用python自带的len函数做长度统计的依据</span>
+</span></span><span class="line"><span class="cl">        <span class="p">)</span>     <span class="c1"># 文本分割器的对象</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">upload_by_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">filename</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;&#34;&#34;将传入的字符串，进行向量化，存入向量数据&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 先得到传入字符串的md5值</span>
+</span></span><span class="line"><span class="cl">        <span class="n">md5_hex</span> <span class="o">=</span> <span class="n">get_string_md5</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">check_md5</span><span class="p">(</span><span class="n">md5_hex</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="s2">&#34;[跳过]内容已经存在知识库中&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">config</span><span class="o">.</span><span class="n">max_split_char_number</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># 如果传入的字符串长度大于阈值，则进行文本分割</span>
+</span></span><span class="line"><span class="cl">            <span class="n">knowledge_chunk</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spliter</span><span class="o">.</span><span class="n">split_text</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">knowledge_chunk</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;source&#34;</span><span class="p">:</span> <span class="n">filename</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="c1"># 2026-01-01 10:00:00</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;create_time&#34;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&#34;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;operator&#34;</span><span class="p">:</span> <span class="s2">&#34;小曹&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">chroma</span><span class="o">.</span><span class="n">add_texts</span><span class="p">(</span>  <span class="c1"># 内容就加载到向量库中了</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># iterable -&gt; list \ tuple</span>
+</span></span><span class="line"><span class="cl">            <span class="n">knowledge_chunk</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># 列表推导式 ：通过这个列表推导式，为每个文本块生成一份相同的元数据字典</span>
+</span></span><span class="line"><span class="cl">            <span class="n">metadatas</span><span class="o">=</span><span class="p">[</span><span class="n">metadata</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">knowledge_chunk</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">        <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">#  保存md5</span>
+</span></span><span class="line"><span class="cl">        <span class="n">save_md5</span><span class="p">(</span><span class="n">md5_hex</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s2">&#34;[成功]内容已经成功载入到向量库中&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>补充<strong>config_data.py</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># Chroma</span>
+</span></span><span class="line"><span class="cl"><span class="n">collection_name</span> <span class="o">=</span> <span class="s2">&#34;rag&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">persist_directory</span> <span class="o">=</span> <span class="s2">&#34;./chroma_db&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># spliter</span>
+</span></span><span class="line"><span class="cl"><span class="n">chunk_size</span> <span class="o">=</span> <span class="mi">1000</span>
+</span></span><span class="line"><span class="cl"><span class="n">chunk_overlap</span> <span class="o">=</span> <span class="mi">100</span>
+</span></span><span class="line"><span class="cl"><span class="n">separators</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;</span><span class="se">\n\n</span><span class="s2">&#34;</span><span class="p">,</span> <span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span> <span class="s2">&#34;.&#34;</span><span class="p">,</span> <span class="s2">&#34;!&#34;</span><span class="p">,</span> <span class="s2">&#34;?&#34;</span><span class="p">,</span> <span class="s2">&#34;。&#34;</span><span class="p">,</span> <span class="s2">&#34;！&#34;</span><span class="p">,</span> <span class="s2">&#34;？&#34;</span><span class="p">,</span> <span class="s2">&#34; &#34;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">max_split_char_number</span> <span class="o">=</span> <span class="mi">1000</span>        <span class="c1"># 文本分割的阈值</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>测试代码（删除先前创建的text文件）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">service</span> <span class="o">=</span> <span class="n">KnowledgeBaseService</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="n">r</span> <span class="o">=</span> <span class="n">service</span><span class="o">.</span><span class="n">upload_by_str</span><span class="p">(</span><span class="s2">&#34;周杰伦&#34;</span><span class="p">,</span><span class="s2">&#34;testfile&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%90%91%E9%87%8F%E5%BA%93.png"
+	width="351"
+	height="122"
+	srcset="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%90%91%E9%87%8F%E5%BA%93_hu_9513c514f1fa2b9a.png 480w, /p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%90%91%E9%87%8F%E5%BA%93_hu_6cc7106b8fe4dcd9.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="287"
+		data-flex-basis="690px"
+	
+></p>
+<p><img src="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%90%91%E9%87%8F%E5%BA%931.png"
+	width="357"
+	height="118"
+	srcset="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%90%91%E9%87%8F%E5%BA%931_hu_7d49dfea7d781755.png 480w, /p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%90%91%E9%87%8F%E5%BA%931_hu_45b47aa748975bd3.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="302"
+		data-flex-basis="726px"
+	
+></p>
+<p>再次运行</p>
+<p><img src="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%90%91%E9%87%8F%E5%BA%932.png"
+	width="263"
+	height="115"
+	srcset="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%90%91%E9%87%8F%E5%BA%932_hu_242e31c2d63b9026.png 480w, /p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%90%91%E9%87%8F%E5%BA%932_hu_b439b603d0627277.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="228"
+		data-flex-basis="548px"
+	
+></p>
+<hr>
+<p>接下来将前面两个文件合并（app_file+knowledge）</p>
+<p>我们可以在app_file文件中最下方写一行print语句</p>
+<p>然后打开网页进行测试，可以发现不管是刷新还是添加文件，控制台都会输出一遍print里的内容，说明<code>Streamlit：当WEB页面元素发生变化，则代码重新执行一遍</code></p>
+<p>那么这个有什么问题呢？</p>
+<p>其实问题还是挺大的，因为有了这个问题，就相当于我们整个代码都重跑了一遍，这会造成状态的丢失</p>
+<p>我们可以来进行测试一下：</p>
+<p>将前面的app文件代码修改为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">streamlit</span> <span class="k">as</span> <span class="nn">st</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 添加网页标题</span>
+</span></span><span class="line"><span class="cl"><span class="n">st</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&#34;知识库更新服务&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># file_uploader</span>
+</span></span><span class="line"><span class="cl"><span class="n">uploader_file</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">file_uploader</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;请上传TXT文件&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">type</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;txt&#39;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="n">accept_multiple_files</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>    <span class="c1"># False表示仅接受一个文件的上传[不接受多文件]</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">uploader_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 提取文件的信息</span>
+</span></span><span class="line"><span class="cl">    <span class="n">file_name</span> <span class="o">=</span> <span class="n">uploader_file</span><span class="o">.</span><span class="n">name</span>
+</span></span><span class="line"><span class="cl">    <span class="n">file_type</span> <span class="o">=</span> <span class="n">uploader_file</span><span class="o">.</span><span class="n">type</span>
+</span></span><span class="line"><span class="cl">    <span class="n">file_size</span> <span class="o">=</span> <span class="n">uploader_file</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="mi">1024</span>    <span class="c1"># KB</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">st</span><span class="o">.</span><span class="n">subheader</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;文件名：</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;格式：</span><span class="si">{</span><span class="n">file_type</span><span class="si">}</span><span class="s2"> | 大小：</span><span class="si">{</span><span class="n">file_size</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> KB&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># get_value -&gt; bytes -&gt; decode(&#39;utf-8&#39;)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">text</span> <span class="o">=</span> <span class="n">uploader_file</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;上传了</span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">个文件&#34;</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E7%A6%BB%E7%BA%BF3.png"
+	width="619"
+	height="164"
+	srcset="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E7%A6%BB%E7%BA%BF3_hu_fd853f433e1b10fd.png 480w, /p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E7%A6%BB%E7%BA%BF3_hu_853007ecdcce1739.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="377"
+		data-flex-basis="905px"
+	
+></p>
+<p>第一次上传文件是正常的，但是后续再上传都是相当于每次将代码从头跑了一遍，count都是从0开始，可以发现，只要每次页面发生变化，代码都是从头开始执行一遍</p>
+<p>将content相关的代码替换为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># session_state就是一个字典</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="s2">&#34;count&#34;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&#34;count&#34;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&#34;count&#34;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;上传了</span><span class="si">{</span><span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&#34;count&#34;</span><span class="p">]</span><span class="si">}</span><span class="s1">个文件&#39;</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>打开网页进行测试</p>
+<p><img src="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E7%A6%BB%E7%BA%BF4.png"
+	width="270"
+	height="204"
+	srcset="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E7%A6%BB%E7%BA%BF4_hu_adcf164efe25b356.png 480w, /p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E7%A6%BB%E7%BA%BF4_hu_624ef63d7d9359dc.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="132"
+		data-flex-basis="317px"
+	
+></p>
+<p>这样就解决了状态维护的问题</p>
+<p>但是这样还是有缺陷，因为只要页面一刷新，KnowledgeBaseService对象还是留不下来（接下来完整代码中出现），需要重新创建，性能消耗大</p>
+<p>接下来就需要达成一个这样的效果：程序不停，只需要创建一个对象即可</p>
+<p>完整代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">基于Streamlit完成WEB网页上传服务
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">pip install streamlit
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">Streamlit：当WEB页面元素发生变化，则代码重新执行一遍
+</span></span></span><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">time</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">streamlit</span> <span class="k">as</span> <span class="nn">st</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">knowledge_base</span> <span class="kn">import</span> <span class="n">KnowledgeBaseService</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 添加网页标题</span>
+</span></span><span class="line"><span class="cl"><span class="n">st</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&#34;知识库更新服务&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># file_uploader</span>
+</span></span><span class="line"><span class="cl"><span class="n">uploader_file</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">file_uploader</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;请上传TXT文件&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">type</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;txt&#39;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="n">accept_multiple_files</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>    <span class="c1"># False表示仅接受一个文件的上传[不接受多文件]</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># # session_state就是一个字典</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="s2">&#34;service&#34;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&#34;service&#34;</span><span class="p">]</span> <span class="o">=</span> <span class="n">KnowledgeBaseService</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">uploader_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 提取文件的信息</span>
+</span></span><span class="line"><span class="cl">    <span class="n">file_name</span> <span class="o">=</span> <span class="n">uploader_file</span><span class="o">.</span><span class="n">name</span>
+</span></span><span class="line"><span class="cl">    <span class="n">file_type</span> <span class="o">=</span> <span class="n">uploader_file</span><span class="o">.</span><span class="n">type</span>
+</span></span><span class="line"><span class="cl">    <span class="n">file_size</span> <span class="o">=</span> <span class="n">uploader_file</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="mi">1024</span>    <span class="c1"># KB</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">st</span><span class="o">.</span><span class="n">subheader</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;文件名：</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;格式：</span><span class="si">{</span><span class="n">file_type</span><span class="si">}</span><span class="s2"> | 大小：</span><span class="si">{</span><span class="n">file_size</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> KB&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># get_value -&gt; bytes -&gt; decode(&#39;utf-8&#39;)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">text</span> <span class="o">=</span> <span class="n">uploader_file</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 增加一点用户体验的等待动画</span>
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="n">st</span><span class="o">.</span><span class="n">spinner</span><span class="p">(</span><span class="s2">&#34;载入知识库中。。。&#34;</span><span class="p">):</span>       <span class="c1"># 在spinner内的代码执行过程中，会有一个转圈动画</span>
+</span></span><span class="line"><span class="cl">        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">result</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&#34;service&#34;</span><span class="p">]</span><span class="o">.</span><span class="n">upload_by_str</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>        <span class="c1"># 可以直接在页面中显示结果</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/post/RAG%e9%a1%b9%e7%9b%ae/assets/%e5%ae%8c%e6%95%b4.gif"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h2 id="在线流程">在线流程
+</h2><p><img src="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%9C%A8%E7%BA%BF.png"
+	width="1163"
+	height="544"
+	srcset="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%9C%A8%E7%BA%BF_hu_727d3bc417d6124f.png 480w, /p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%9C%A8%E7%BA%BF_hu_6d7ea2b8da16d3d5.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="213"
+		data-flex-basis="513px"
+	
+></p>
+<p>首先先创创建一个向量存储文件</p>
+<p><strong>vector_stores.py</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_chroma</span> <span class="kn">import</span> <span class="n">Chroma</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">config_data</span> <span class="k">as</span> <span class="nn">config</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">VectorStoreService</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">embedding</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">        :param embedding: 嵌入模型的传入
+</span></span></span><span class="line"><span class="cl"><span class="s2">        &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span> <span class="o">=</span> <span class="n">embedding</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">vector_store</span> <span class="o">=</span> <span class="n">Chroma</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="n">collection_name</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">collection_name</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">embedding_function</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">persist_directory</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">persist_directory</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">get_retriever</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;&#34;&#34;返回向量检索器，方便加入chain&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">vector_store</span><span class="o">.</span><span class="n">as_retriever</span><span class="p">(</span><span class="n">search_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;k&#34;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">similarity_threshold</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kn">from</span> <span class="nn">langchain_community.embeddings</span> <span class="kn">import</span> <span class="n">DashScopeEmbeddings</span>
+</span></span><span class="line"><span class="cl">    <span class="n">retriever</span> <span class="o">=</span> <span class="n">VectorStoreService</span><span class="p">(</span><span class="n">DashScopeEmbeddings</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&#34;text-embedding-v4&#34;</span><span class="p">))</span><span class="o">.</span><span class="n">get_retriever</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">res</span> <span class="o">=</span> <span class="n">retriever</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&#34;我的体重120斤，尺码推荐&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>config_data</strong>中添加下面这一行代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">similarity_threshold</span> <span class="o">=</span> <span class="mi">1</span>            <span class="c1"># 检索返回匹配的文档数量</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%9C%A8%E7%BA%BF1.png"
+	width="1761"
+	height="90"
+	srcset="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%9C%A8%E7%BA%BF1_hu_16807c367b43c421.png 480w, /p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%9C%A8%E7%BA%BF1_hu_f8c1375b5bcc1c86.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1956"
+		data-flex-basis="4696px"
+	
+></p>
+<hr>
+<p>接下来实现<strong>rag.py</strong></p>
+<p>基础实现：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_core.documents</span> <span class="kn">import</span> <span class="n">Document</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_core.output_parsers</span> <span class="kn">import</span> <span class="n">StrOutputParser</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_core.runnables</span> <span class="kn">import</span> <span class="n">RunnablePassthrough</span><span class="p">,</span> <span class="n">RunnableWithMessageHistory</span><span class="p">,</span> <span class="n">RunnableLambda</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">vector_stores</span> <span class="kn">import</span> <span class="n">VectorStoreService</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_community.embeddings</span> <span class="kn">import</span> <span class="n">DashScopeEmbeddings</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">config_data</span> <span class="k">as</span> <span class="nn">config</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_core.prompts</span> <span class="kn">import</span> <span class="n">ChatPromptTemplate</span><span class="p">,</span> <span class="n">MessagesPlaceholder</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_community.chat_models.tongyi</span> <span class="kn">import</span> <span class="n">ChatTongyi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">print_prompt</span><span class="p">(</span><span class="n">prompt</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;=&#34;</span><span class="o">*</span><span class="mi">20</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">prompt</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;=&#34;</span><span class="o">*</span><span class="mi">20</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">prompt</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">RagService</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># 向量数据库服务 - 用于检索</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">vector_service</span> <span class="o">=</span> <span class="n">VectorStoreService</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="n">embedding</span><span class="o">=</span><span class="n">DashScopeEmbeddings</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">embedding_model_name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">prompt_template</span> <span class="o">=</span> <span class="n">ChatPromptTemplate</span><span class="o">.</span><span class="n">from_messages</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="p">[</span>
+</span></span><span class="line"><span class="cl">                <span class="p">(</span><span class="s2">&#34;system&#34;</span><span class="p">,</span> <span class="s2">&#34;以我提供的已知参考资料为主，&#34;</span>
+</span></span><span class="line"><span class="cl">                 <span class="s2">&#34;简洁和专业的回答用户问题。参考资料:</span><span class="si">{context}</span><span class="s2">。&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                <span class="p">(</span><span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="s2">&#34;请回答用户提问：</span><span class="si">{input}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">chat_model</span> <span class="o">=</span> <span class="n">ChatTongyi</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">chat_model_name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">chain</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_chain</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">__get_chain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;&#34;&#34;获取最终的执行链&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 获取检索器</span>
+</span></span><span class="line"><span class="cl">        <span class="n">retriever</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vector_service</span><span class="o">.</span><span class="n">get_retriever</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">def</span> <span class="nf">format_document</span><span class="p">(</span><span class="n">docs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Document</span><span class="p">]):</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="ow">not</span> <span class="n">docs</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="s2">&#34;无相关参考资料&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">formatted_str</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">docs</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">formatted_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&#34;文档片段：</span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">page_content</span><span class="si">}</span><span class="se">\n</span><span class="s2">文档元数据：</span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">metadata</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">formatted_str</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">chain</span> <span class="o">=</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="s2">&#34;input&#34;</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">(),</span>
+</span></span><span class="line"><span class="cl">                    <span class="s2">&#34;context&#34;</span><span class="p">:</span>  <span class="n">retriever</span> <span class="o">|</span> <span class="n">format_document</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span> <span class="o">|</span>  <span class="bp">self</span><span class="o">.</span><span class="n">prompt_template</span> <span class="o">|</span> <span class="n">print_prompt</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">chat_model</span> <span class="o">|</span> <span class="n">StrOutputParser</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">chain</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">res</span> <span class="o">=</span> <span class="n">RagService</span><span class="p">()</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">invoke</span><span class="p">({</span><span class="s2">&#34;我身高170厘米，尺码推荐&#34;</span><span class="p">},</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%9C%A8%E7%BA%BF2.png"
+	width="1101"
+	height="595"
+	srcset="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%9C%A8%E7%BA%BF2_hu_a50dead9a57faa5a.png 480w, /p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%9C%A8%E7%BA%BF2_hu_6846f4d46785fe91.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="185"
+		data-flex-basis="444px"
+	
+></p>
+<h2 id="历史会话记录功能">历史会话记录功能
+</h2><p>完整代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span><span class="lnt">86
+</span><span class="lnt">87
+</span><span class="lnt">88
+</span><span class="lnt">89
+</span><span class="lnt">90
+</span><span class="lnt">91
+</span><span class="lnt">92
+</span><span class="lnt">93
+</span><span class="lnt">94
+</span><span class="lnt">95
+</span><span class="lnt">96
+</span><span class="lnt">97
+</span><span class="lnt">98
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_core.documents</span> <span class="kn">import</span> <span class="n">Document</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_core.output_parsers</span> <span class="kn">import</span> <span class="n">StrOutputParser</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_core.runnables</span> <span class="kn">import</span> <span class="n">RunnablePassthrough</span><span class="p">,</span> <span class="n">RunnableWithMessageHistory</span><span class="p">,</span> <span class="n">RunnableLambda</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">file_history_store</span> <span class="kn">import</span> <span class="n">get_history</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">vector_stores</span> <span class="kn">import</span> <span class="n">VectorStoreService</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_community.embeddings</span> <span class="kn">import</span> <span class="n">DashScopeEmbeddings</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">config_data</span> <span class="k">as</span> <span class="nn">config</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_core.prompts</span> <span class="kn">import</span> <span class="n">ChatPromptTemplate</span><span class="p">,</span> <span class="n">MessagesPlaceholder</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">langchain_community.chat_models.tongyi</span> <span class="kn">import</span> <span class="n">ChatTongyi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">print_prompt</span><span class="p">(</span><span class="n">prompt</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;=&#34;</span><span class="o">*</span><span class="mi">20</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">prompt</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;=&#34;</span><span class="o">*</span><span class="mi">20</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">prompt</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">RagService</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># 向量数据库服务 - 用于检索</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">vector_service</span> <span class="o">=</span> <span class="n">VectorStoreService</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="n">embedding</span><span class="o">=</span><span class="n">DashScopeEmbeddings</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">embedding_model_name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">prompt_template</span> <span class="o">=</span> <span class="n">ChatPromptTemplate</span><span class="o">.</span><span class="n">from_messages</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="p">[</span>
+</span></span><span class="line"><span class="cl">                <span class="p">(</span><span class="s2">&#34;system&#34;</span><span class="p">,</span> <span class="s2">&#34;以我提供的已知参考资料为主，&#34;</span>
+</span></span><span class="line"><span class="cl">                 <span class="s2">&#34;简洁和专业的回答用户问题。参考资料:</span><span class="si">{context}</span><span class="s2">。&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                <span class="p">(</span><span class="s2">&#34;system&#34;</span><span class="p">,</span> <span class="s2">&#34;并且我提供用户的对话历史记录，如下：&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                <span class="n">MessagesPlaceholder</span><span class="p">(</span><span class="s2">&#34;history&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                <span class="p">(</span><span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="s2">&#34;请回答用户提问：</span><span class="si">{input}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">chat_model</span> <span class="o">=</span> <span class="n">ChatTongyi</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">chat_model_name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">chain</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_chain</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">__get_chain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;&#34;&#34;获取最终的执行链&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 获取检索器</span>
+</span></span><span class="line"><span class="cl">        <span class="n">retriever</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vector_service</span><span class="o">.</span><span class="n">get_retriever</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># 将检索到的文档列表格式化为字符串</span>
+</span></span><span class="line"><span class="cl">        <span class="k">def</span> <span class="nf">format_document</span><span class="p">(</span><span class="n">docs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Document</span><span class="p">]):</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="ow">not</span> <span class="n">docs</span><span class="p">:</span>  <span class="c1"># 如果没有检索到文档</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="s2">&#34;无相关参考资料&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">formatted_str</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">docs</span><span class="p">:</span>  <span class="c1"># 遍历每个文档片段</span>
+</span></span><span class="line"><span class="cl">                <span class="n">formatted_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&#34;文档片段：</span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">page_content</span><span class="si">}</span><span class="se">\n</span><span class="s2">文档元数据：</span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">metadata</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">formatted_str</span>  <span class="c1"># 返回拼接后的字符串</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># 从检索器的输入中提取用户问题（为检索器做格式化）</span>
+</span></span><span class="line"><span class="cl">        <span class="k">def</span> <span class="nf">format_for_retriever</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">value</span><span class="p">[</span><span class="s2">&#34;input&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># 格式化Prompt模板所需的输入变量</span>
+</span></span><span class="line"><span class="cl">        <span class="k">def</span> <span class="nf">format_for_prompt_template</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># 将嵌套字典展平为 {input, context, history} 格式</span>
+</span></span><span class="line"><span class="cl">            <span class="n">new_value</span> <span class="o">=</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">new_value</span><span class="p">[</span><span class="s2">&#34;input&#34;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="s2">&#34;input&#34;</span><span class="p">][</span><span class="s2">&#34;input&#34;</span><span class="p">]</span>      <span class="c1"># 提取用户输入的问题</span>
+</span></span><span class="line"><span class="cl">            <span class="n">new_value</span><span class="p">[</span><span class="s2">&#34;context&#34;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="s2">&#34;context&#34;</span><span class="p">]</span>           <span class="c1"># 提取检索到的上下文</span>
+</span></span><span class="line"><span class="cl">            <span class="n">new_value</span><span class="p">[</span><span class="s2">&#34;history&#34;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="s2">&#34;input&#34;</span><span class="p">][</span><span class="s2">&#34;history&#34;</span><span class="p">]</span>  <span class="c1"># 提取对话历史</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">new_value</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">chain</span> <span class="o">=</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;input&#34;</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">(),</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;context&#34;</span><span class="p">:</span> <span class="n">RunnableLambda</span><span class="p">(</span><span class="n">format_for_retriever</span><span class="p">)</span> <span class="o">|</span> <span class="n">retriever</span> <span class="o">|</span> <span class="n">format_document</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="o">|</span> <span class="n">RunnableLambda</span><span class="p">(</span><span class="n">format_for_prompt_template</span><span class="p">)</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">prompt_template</span> <span class="o">|</span> <span class="n">print_prompt</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">chat_model</span> <span class="o">|</span> <span class="n">StrOutputParser</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">conversation_chain</span> <span class="o">=</span> <span class="n">RunnableWithMessageHistory</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="n">chain</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">get_history</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">input_messages_key</span><span class="o">=</span><span class="s2">&#34;input&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">history_messages_key</span><span class="o">=</span><span class="s2">&#34;history&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">conversation_chain</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># session id 配置</span>
+</span></span><span class="line"><span class="cl">    <span class="n">session_config</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;configurable&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;session_id&#34;</span><span class="p">:</span> <span class="s2">&#34;user_001&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 此时（增强链）传入的是一个字典</span>
+</span></span><span class="line"><span class="cl">    <span class="n">res</span> <span class="o">=</span> <span class="n">RagService</span><span class="p">()</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">invoke</span><span class="p">({</span><span class="s2">&#34;input&#34;</span><span class="p">:</span> <span class="s2">&#34;春天穿什么颜色的衣服？&#34;</span><span class="p">},</span> <span class="n">session_config</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%8E%86%E5%8F%B2.png"
+	width="1249"
+	height="1058"
+	srcset="/p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%8E%86%E5%8F%B2_hu_4e710c361b6edd96.png 480w, /p/rag%E9%A1%B9%E7%9B%AE%E6%A1%88%E4%BE%8B/assets/%E5%8E%86%E5%8F%B2_hu_9ada60f3830596c7.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="118"
+		data-flex-basis="283px"
+	
+></p>
+<h2 id="聊天页面开发">聊天页面开发
+</h2><p>进入到“智能客服”网页：</p>
+<p>1.编写测试代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">streamlit</span> <span class="k">as</span> <span class="nn">st</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 标题</span>
+</span></span><span class="line"><span class="cl"><span class="n">st</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&#34;智能客服&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">st</span><span class="o">.</span><span class="n">divider</span><span class="p">()</span>    
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2.复制文件地址到命令提示符（cmd）中，进入到当前项目目录：</p>
+<p>D:\RAG\AI大模型RAG与智能体开发\P4_RAG项目案例\app_qa.py&gt;</p>
+<p>3.启动项目</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">streamlit</span> <span class="n">run</span> <span class="n">app_qa</span><span class="o">.</span><span class="n">py</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>完整代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">time</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">rag</span> <span class="kn">import</span> <span class="n">RagService</span>          <span class="c1"># 导入RAG服务类</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">streamlit</span> <span class="k">as</span> <span class="nn">st</span>               <span class="c1"># 导入Streamlit用于构建Web界面</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">config_data</span> <span class="k">as</span> <span class="nn">config</span>         <span class="c1"># 导入配置文件</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># ========== 页面标题 ==========</span>
+</span></span><span class="line"><span class="cl"><span class="n">st</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&#34;智能客服&#34;</span><span class="p">)</span>                 <span class="c1"># 设置页面标题</span>
+</span></span><span class="line"><span class="cl"><span class="n">st</span><span class="o">.</span><span class="n">divider</span><span class="p">()</span>                         <span class="c1"># 添加分隔符</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># ========== 初始化会话状态 ==========</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 存储聊天记录，初始时添加一条欢迎消息</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="s2">&#34;message&#34;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&#34;message&#34;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;assistant&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;你好，有什么可以帮助你？&#34;</span><span class="p">}]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 初始化RAG服务实例（只创建一次，避免重复初始化）</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="s2">&#34;rag&#34;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&#34;rag&#34;</span><span class="p">]</span> <span class="o">=</span> <span class="n">RagService</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># ========== 显示历史聊天记录 ==========</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 遍历所有聊天记录并渲染到页面</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&#34;message&#34;</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">st</span><span class="o">.</span><span class="n">chat_message</span><span class="p">(</span><span class="n">message</span><span class="p">[</span><span class="s2">&#34;role&#34;</span><span class="p">])</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">message</span><span class="p">[</span><span class="s2">&#34;content&#34;</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># ========== 用户输入 ==========</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 在页面最下方提供用户输入栏</span>
+</span></span><span class="line"><span class="cl"><span class="n">prompt</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">chat_input</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">prompt</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 显示用户提问</span>
+</span></span><span class="line"><span class="cl">    <span class="n">st</span><span class="o">.</span><span class="n">chat_message</span><span class="p">(</span><span class="s2">&#34;user&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 将用户消息添加到聊天记录</span>
+</span></span><span class="line"><span class="cl">    <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&#34;message&#34;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># ========== AI响应 ==========</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ai_res_list</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># 用于缓存AI的流式响应</span>
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="n">st</span><span class="o">.</span><span class="n">spinner</span><span class="p">(</span><span class="s2">&#34;AI思考中...&#34;</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 调用RAG链进行流式响应（res_stream：迭代器）</span>
+</span></span><span class="line"><span class="cl">        <span class="n">res_stream</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&#34;rag&#34;</span><span class="p">]</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">stream</span><span class="p">({</span><span class="s2">&#34;input&#34;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">},</span> <span class="n">config</span><span class="o">.</span><span class="n">session_config</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#yield</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># 定义捕获生成器：将流式数据同时返回并缓存</span>
+</span></span><span class="line"><span class="cl">        <span class="k">def</span> <span class="nf">capture</span><span class="p">(</span><span class="n">generator</span><span class="p">,</span> <span class="n">cache_list</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">generator</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">cache_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>  <span class="c1"># 缓存每个chunk</span>
+</span></span><span class="line"><span class="cl">                <span class="k">yield</span> <span class="n">chunk</span>               <span class="c1"># 返回给Streamlit显示</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># 流式输出AI响应</span>
+</span></span><span class="line"><span class="cl">        <span class="n">st</span><span class="o">.</span><span class="n">chat_message</span><span class="p">(</span><span class="s2">&#34;assistant&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">write_stream</span><span class="p">(</span><span class="n">capture</span><span class="p">(</span><span class="n">res_stream</span><span class="p">,</span> <span class="n">ai_res_list</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 将AI完整响应添加到聊天记录</span>
+</span></span><span class="line"><span class="cl">        <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&#34;message&#34;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;assistant&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ai_res_list</span><span class="p">)})</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># [&#34;a&#34;, &#34;b&#34;, &#34;c&#34;]   &#34;&#34;.join(list)    -&gt; abc</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># [&#34;a&#34;, &#34;b&#34;, &#34;c&#34;]   &#34;,&#34;.join(list)    -&gt; a,b,c</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>配置文件config_data.py：</p>
+<p>在原本的文件上添加以下代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">session_config</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;configurable&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;session_id&#34;</span><span class="p">:</span> <span class="s2">&#34;user_001&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/post/RAG%e9%a1%b9%e7%9b%ae/assets/%e8%81%8a%e5%a4%a9.gif"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <script src="https://utteranc.es/client.js" 
+        repo="IAmYuanyu/IAmYuanyu.github.io"
+        issue-term="pathname"
+        
+        crossorigin="anonymous"
+        async
+        >
+</script>
+
+<style>
+    .utterances {
+        max-width: unset;
+    }
+</style>
+
+<script>
+    let utterancesLoaded = false;
+
+    function setUtterancesTheme(theme) {
+        let utterances = document.querySelector('.utterances iframe');
+        if (utterances) {
+            utterances.contentWindow.postMessage(
+                {
+                    type: 'set-theme',
+                    theme: `github-${theme}`
+                },
+                'https://utteranc.es'
+            );
+        }
+    }
+
+    addEventListener('message', event => {
+        if (event.origin !== 'https://utteranc.es') return;
+
+        
+        utterancesLoaded = true;
+        setUtterancesTheme(document.documentElement.dataset.scheme)
+    });
+
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (!utterancesLoaded) return;
+        setUtterancesTheme(e.detail)
+    })
+</script>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2025 - 
+        
+        2026 凉介
+    </section>
+    
+    <section class="powerby">
+        
+            本站于2026年3月31日建立 <br/>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
