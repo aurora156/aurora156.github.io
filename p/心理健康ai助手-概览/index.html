@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='https://aurora156.github.io/p/%E5%BF%83%E7%90%86%E5%81%A5%E5%BA%B7ai%E5%8A%A9%E6%89%8B-%E6%A6%82%E8%A7%88/'>
 
-<link rel="stylesheet" href="/scss/style.min.6a692fd055deae459f2a9767f57f3855ba80cafd5041317f24f7360f6ca47cdf.css"><meta property='og:title' content="心理健康AI助手 - 概览">
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="心理健康AI助手 - 概览">
 <meta property='og:description' content="心理健康AI助手 项目导图 环境配置 node.js版本 v24.12.0\nhttps://nodejs.org/zh-cn/download\n推荐使用nvm https://nvm.uihtm.com\nnvm常用命令：\nnvm list：打印使用nvm下载的所有的node版本\nnvm install xx：下载xx版本\n">
 <meta property='og:url' content='https://aurora156.github.io/p/%E5%BF%83%E7%90%86%E5%81%A5%E5%BA%B7ai%E5%8A%A9%E6%89%8B-%E6%A6%82%E8%A7%88/'>
 <meta property='og:site_name' content='凉介的笔记'>
@@ -227,21 +227,51 @@
   <ol>
     <li><a href="#项目导图">项目导图</a></li>
     <li><a href="#环境配置">环境配置</a></li>
-    <li><a href="#常用标签">常用标签</a></li>
-    <li><a href="#情绪状态">情绪状态</a></li>
-    <li><a href="#常用图标">常用图标</a></li>
-    <li><a href="#常用映射方法">常用映射方法</a></li>
-    <li><a href="#数据分析">数据分析</a>
+    <li><a href="#技术栈">技术栈</a></li>
+    <li><a href="#前端">前端</a>
       <ol>
-        <li><a href="#情绪趋势分析">情绪趋势分析</a></li>
-        <li><a href="#咨询活动统计">咨询活动统计</a></li>
-        <li><a href="#用户活跃度趋势">用户活跃度趋势</a></li>
+        <li><a href="#常用标签">常用标签</a></li>
+        <li><a href="#情绪状态">情绪状态</a></li>
+        <li><a href="#常用图标">常用图标</a></li>
+        <li><a href="#常用映射方法">常用映射方法</a></li>
+        <li><a href="#数据分析">数据分析</a>
+          <ol>
+            <li><a href="#情绪趋势分析">情绪趋势分析</a></li>
+            <li><a href="#咨询活动统计">咨询活动统计</a></li>
+            <li><a href="#用户活跃度趋势">用户活跃度趋势</a></li>
+          </ol>
+        </li>
+        <li><a href="#基本的html清理和格式化方法">基本的HTML清理和格式化方法</a></li>
+        <li><a href="#情绪日记样式">情绪日记样式</a></li>
+        <li><a href="#知识库样式">知识库样式</a></li>
+        <li><a href="#知识库详情样式">知识库详情样式</a></li>
       </ol>
     </li>
-    <li><a href="#基本的html清理和格式化方法">基本的HTML清理和格式化方法</a></li>
-    <li><a href="#情绪日记样式">情绪日记样式</a></li>
-    <li><a href="#知识库样式">知识库样式</a></li>
-    <li><a href="#知识库详情样式">知识库详情样式</a></li>
+    <li><a href="#后端">后端</a>
+      <ol>
+        <li><a href="#项目结构">项目结构</a></li>
+      </ol>
+    </li>
+    <li><a href="#核心功能模块">核心功能模块</a>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#情绪日记模块">情绪日记模块</a></li>
+            <li><a href="#心理咨询模块">心理咨询模块</a></li>
+            <li><a href="#知识库模块">知识库模块</a></li>
+            <li><a href="#用户管理模块">用户管理模块</a></li>
+            <li><a href="#数据分析模块">数据分析模块</a></li>
+          </ol>
+        </li>
+        <li><a href="#jwt">JWT</a>
+          <ol>
+            <li><a href="#token生成规则">token生成规则</a></li>
+            <li><a href="#jwt配置">JWT配置</a></li>
+          </ol>
+        </li>
+        <li><a href="#idea查看mybatis-plus生成sql">IDEA查看MyBatis-Plus生成SQL</a></li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -346,18 +376,91 @@
     >https://file.itndedu.com/psychology_ai.png</a></p>
 <p>pinia官网：<a class="link" href="https://pinia.vuejs.org/zh/introduction.html"  target="_blank" rel="noopener"
     >简介 | Pinia</a></p>
-<h2 id="常用标签">常用标签
-</h2><p>const commonTags = [
+<h2 id="技术栈">技术栈
+</h2><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>技术</th>
+					<th>版本</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Java</td>
+					<td>17</td>
+					<td>编程语言</td>
+			</tr>
+			<tr>
+					<td>Spring Boot</td>
+					<td>3.4.1</td>
+					<td>后端框架</td>
+			</tr>
+			<tr>
+					<td>Spring AI（spring-ai-starter-model-openai）</td>
+					<td>1.0.0-SNAPSHOT</td>
+					<td>AI集成框架（OpenAI）</td>
+			</tr>
+			<tr>
+					<td>MyBatis Plus</td>
+					<td>3.5.7</td>
+					<td>ORM框架</td>
+			</tr>
+			<tr>
+					<td>spring-boot-starter-security</td>
+					<td>-</td>
+					<td>安全框架</td>
+			</tr>
+			<tr>
+					<td>Spring Data Redis</td>
+					<td>-</td>
+					<td>Redis缓存</td>
+			</tr>
+			<tr>
+					<td>MySQL</td>
+					<td>-</td>
+					<td>关系型数据库</td>
+			</tr>
+			<tr>
+					<td>Spring Validation</td>
+					<td>-</td>
+					<td>参数校验</td>
+			</tr>
+			<tr>
+					<td>Java-JWT</td>
+					<td>4.4.0</td>
+					<td>JWT认证</td>
+			</tr>
+			<tr>
+					<td>Spring AOP</td>
+					<td>-</td>
+					<td>切面编程</td>
+			</tr>
+			<tr>
+					<td>Spring Mail</td>
+					<td>-</td>
+					<td>邮件发送</td>
+			</tr>
+			<tr>
+					<td>hutool-all</td>
+					<td></td>
+					<td>Java工具类库</td>
+			</tr>
+	</tbody>
+</table></div>
+<h2 id="前端">前端
+</h2><h3 id="常用标签">常用标签
+</h3><p>const commonTags = [
 &lsquo;情绪管理&rsquo;, &lsquo;焦虑&rsquo;, &lsquo;抑郁&rsquo;, &lsquo;压力&rsquo;, &lsquo;睡眠&rsquo;,
 &lsquo;冥想&rsquo;, &lsquo;正念&rsquo;, &lsquo;放松&rsquo;, &lsquo;心理健康&rsquo;, &lsquo;自我成长&rsquo;,
 &lsquo;人际关系&rsquo;, &lsquo;工作压力&rsquo;, &lsquo;学习方法&rsquo;, &lsquo;生活技巧&rsquo;
 ]</p>
-<h2 id="情绪状态">情绪状态
-</h2><p>const emotionStatus = [&lsquo;绝望崩溃&rsquo;, &lsquo;消沉抑郁&rsquo;, &lsquo;焦虑烦躁&rsquo;, &lsquo;低落不悦&rsquo;, &lsquo;平静淡然&rsquo;, &lsquo;轻松惬意&rsquo;, &lsquo;愉悦舒心&rsquo;, &lsquo;欢欣满足&rsquo;, &lsquo;兴奋欣喜&rsquo;, &lsquo;极致幸福&rsquo;]</p>
-<h2 id="常用图标">常用图标
-</h2><p>💝 ✨ 🤗</p>
-<h2 id="常用映射方法">常用映射方法
-</h2><div class="highlight"><div class="chroma">
+<h3 id="情绪状态">情绪状态
+</h3><p>const emotionStatus = [&lsquo;绝望崩溃&rsquo;, &lsquo;消沉抑郁&rsquo;, &lsquo;焦虑烦躁&rsquo;, &lsquo;低落不悦&rsquo;, &lsquo;平静淡然&rsquo;, &lsquo;轻松惬意&rsquo;, &lsquo;愉悦舒心&rsquo;, &lsquo;欢欣满足&rsquo;, &lsquo;兴奋欣喜&rsquo;, &lsquo;极致幸福&rsquo;]</p>
+<h3 id="常用图标">常用图标
+</h3><p>💝 ✨ 🤗</p>
+<h3 id="常用映射方法">常用映射方法
+</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -471,9 +574,9 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="数据分析">数据分析
-</h2><h3 id="情绪趋势分析">情绪趋势分析
-</h3><div class="highlight"><div class="chroma">
+</div><h3 id="数据分析">数据分析
+</h3><h4 id="情绪趋势分析">情绪趋势分析
+</h4><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">  1
 </span><span class="lnt">  2
@@ -685,8 +788,8 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="咨询活动统计">咨询活动统计
-</h3><div class="highlight"><div class="chroma">
+</div><h4 id="咨询活动统计">咨询活动统计
+</h4><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">  1
 </span><span class="lnt">  2
@@ -898,8 +1001,8 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="用户活跃度趋势">用户活跃度趋势
-</h3><div class="highlight"><div class="chroma">
+</div><h4 id="用户活跃度趋势">用户活跃度趋势
+</h4><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">  1
 </span><span class="lnt">  2
@@ -1165,8 +1268,8 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="基本的html清理和格式化方法">基本的HTML清理和格式化方法
-</h2><div class="highlight"><div class="chroma">
+</div><h3 id="基本的html清理和格式化方法">基本的HTML清理和格式化方法
+</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1194,8 +1297,8 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="情绪日记样式">情绪日记样式
-</h2><div class="highlight"><div class="chroma">
+</div><h3 id="情绪日记样式">情绪日记样式
+</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1357,8 +1460,8 @@
 </span></span><span class="line"><span class="cl"><span class="err">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="知识库样式">知识库样式
-</h2><div class="highlight"><div class="chroma">
+</div><h3 id="知识库样式">知识库样式
+</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1536,8 +1639,8 @@
 </span></span><span class="line"><span class="cl"><span class="err">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="知识库详情样式">知识库详情样式
-</h2><div class="highlight"><div class="chroma">
+</div><h3 id="知识库详情样式">知识库详情样式
+</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">  1
 </span><span class="lnt">  2
@@ -1767,7 +1870,222 @@
 </span></span><span class="line"><span class="cl"><span class="err">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
+</div><h2 id="后端">后端
+</h2><h3 id="项目结构">项目结构
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">springboot</span><span class="o">/</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">src</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">java</span><span class="o">/</span><span class="n">org</span><span class="o">/</span><span class="n">example</span><span class="o">/</span><span class="n">springboot</span><span class="o">/</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">├──</span> <span class="n">AiService</span><span class="o">/</span>           <span class="c1"># AI服务层</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">PromptManage</span><span class="o">.</span><span class="n">java</span>              <span class="c1"># 提示词管理</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">PsychologicalSupportService</span><span class="o">.</span><span class="n">java</span> <span class="c1"># 心理支持服务</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">StructOutPut</span><span class="o">.</span><span class="n">java</span>              <span class="c1"># 结构化输出</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">Tools</span><span class="o">.</span><span class="n">java</span>                     <span class="c1"># AI工具</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">├──</span> <span class="n">DTO</span><span class="o">/</span>                 <span class="c1"># 数据传输对象</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">command</span><span class="o">/</span>         <span class="c1"># 命令类（创建/更新）</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">ArticleCreateDTO</span><span class="o">.</span><span class="n">java</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">ArticleStatusUpdateDTO</span><span class="o">.</span><span class="n">java</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">ConsultationSessionCreateDTO</span><span class="o">.</span><span class="n">java</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">EmotionDiaryCreateDTO</span><span class="o">.</span><span class="n">java</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">UserLoginCommandDTO</span><span class="o">.</span><span class="n">java</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">UserRegisterCommandDTO</span><span class="o">.</span><span class="n">java</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">query</span><span class="o">/</span>           <span class="c1"># 查询类</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">ArticleListQueryDTO</span><span class="o">.</span><span class="n">java</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">ConsultationSessionQueryDTO</span><span class="o">.</span><span class="n">java</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">EmotionDiaryQueryDTO</span><span class="o">.</span><span class="n">java</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">response</span><span class="o">/</span>        <span class="c1"># 响应类</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">ArticleResponseDTO</span><span class="o">.</span><span class="n">java</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">ArticleSimpleResponseDTO</span><span class="o">.</span><span class="n">java</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">CategoryResponseDTO</span><span class="o">.</span><span class="n">java</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">ConsultationMessageResponseDTO</span><span class="o">.</span><span class="n">java</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">ConsultationSessionResponseDTO</span><span class="o">.</span><span class="n">java</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">DataAnalyticsResponseDTO</span><span class="o">.</span><span class="n">java</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">EmotionDiaryResponseDTO</span><span class="o">.</span><span class="n">java</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">UserLoginResponseDTO</span><span class="o">.</span><span class="n">java</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">FileInfoDTO</span><span class="o">.</span><span class="n">java</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">FileUploadDTO</span><span class="o">.</span><span class="n">java</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">SimpleFileInfoDTO</span><span class="o">.</span><span class="n">java</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">├──</span> <span class="n">common</span><span class="o">/</span>              <span class="c1"># 通用类</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">Result</span><span class="o">.</span><span class="n">java</span>      <span class="c1"># 统一响应封装</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">ResultCode</span><span class="o">.</span><span class="n">java</span>  <span class="c1"># 响应码枚举</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">├──</span> <span class="n">config</span><span class="o">/</span>              <span class="c1"># 配置类</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">ChatClientConfig</span><span class="o">.</span><span class="n">java</span>         <span class="c1"># 聊天客户端配置</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">JwtAuthenticationFilter</span><span class="o">.</span><span class="n">java</span>  <span class="c1"># JWT认证过滤器</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">JwtConfig</span><span class="o">.</span><span class="n">java</span>                <span class="c1"># JWT配置</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">Knife4jConfig</span><span class="o">.</span><span class="n">java</span>            <span class="c1"># API文档配置</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">MybatisPlusConfig</span><span class="o">.</span><span class="n">java</span>        <span class="c1"># MyBatis Plus配置</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">RedisConfig</span><span class="o">.</span><span class="n">java</span>              <span class="c1"># Redis配置</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">SecurityConfig</span><span class="o">.</span><span class="n">java</span>           <span class="c1"># 安全配置</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">WebConfig</span><span class="o">.</span><span class="n">java</span>                <span class="c1"># Web配置</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">├──</span> <span class="n">consts</span><span class="o">/</span>              <span class="c1"># 常量定义</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">RedisKeyConsts</span><span class="o">.</span><span class="n">java</span>           <span class="c1"># Redis键常量</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">├──</span> <span class="n">controller</span><span class="o">/</span>          <span class="c1"># 控制器层（已使用）</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">DataAnalyticsController</span><span class="o">.</span><span class="n">java</span>     <span class="c1"># 数据分析</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">EmotionDiaryController</span><span class="o">.</span><span class="n">java</span>      <span class="c1"># 情绪日记</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">FileController</span><span class="o">.</span><span class="n">java</span>              <span class="c1"># 文件管理</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">KnowledgeArticleController</span><span class="o">.</span><span class="n">java</span>  <span class="c1"># 知识库文章</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">KnowledgeCategoryController</span><span class="o">.</span><span class="n">java</span> <span class="c1"># 知识库分类</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">PsychologicalChatController</span><span class="o">.</span><span class="n">java</span> <span class="c1"># 心理咨询</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">UserController</span><span class="o">.</span><span class="n">java</span>              <span class="c1"># 用户管理</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">├──</span> <span class="n">entity</span><span class="o">/</span>              <span class="c1"># 实体类（已使用）</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">ConsultationMessage</span><span class="o">.</span><span class="n">java</span>  <span class="c1"># 咨询消息</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">ConsultationSession</span><span class="o">.</span><span class="n">java</span>  <span class="c1"># 咨询会话</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">EmotionDiary</span><span class="o">.</span><span class="n">java</span>         <span class="c1"># 情绪日记</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">KnowledgeArticle</span><span class="o">.</span><span class="n">java</span>     <span class="c1"># 知识库文章</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">KnowledgeCategory</span><span class="o">.</span><span class="n">java</span>    <span class="c1"># 知识库分类</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">SysFileInfo</span><span class="o">.</span><span class="n">java</span>          <span class="c1"># 文件信息</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">User</span><span class="o">.</span><span class="n">java</span>                 <span class="c1"># 用户</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">└──</span> <span class="n">SpringbootApplication</span><span class="o">.</span><span class="n">java</span>    <span class="c1"># 启动类</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">files</span><span class="o">/</span>                   <span class="c1"># 文件存储目录</span>
+</span></span><span class="line"><span class="cl"><span class="err">└──</span> <span class="n">pom</span><span class="o">.</span><span class="n">xml</span>                  <span class="c1"># Maven配置</span>
+</span></span></code></pre></td></tr></table>
 </div>
+</div><h2 id="核心功能模块">核心功能模块
+</h2><h4 id="情绪日记模块">情绪日记模块
+</h4><ul>
+<li>记录每日情绪状态</li>
+<li>情绪评分与分析</li>
+<li>情绪趋势统计</li>
+</ul>
+<h4 id="心理咨询模块">心理咨询模块
+</h4><ul>
+<li>AI心理支持对话</li>
+<li>咨询会话管理</li>
+<li>消息记录存储</li>
+</ul>
+<h4 id="知识库模块">知识库模块
+</h4><ul>
+<li>文章分类管理</li>
+<li>文章发布与审核</li>
+<li>文章搜索与展示</li>
+</ul>
+<h4 id="用户管理模块">用户管理模块
+</h4><ul>
+<li>用户注册与登录</li>
+<li>用户信息管理</li>
+</ul>
+<h4 id="数据分析模块">数据分析模块
+</h4><ul>
+<li>情绪趋势分析</li>
+<li>用户活跃度统计</li>
+<li>咨询活动统计</li>
+</ul>
+<h3 id="jwt">JWT
+</h3><h4 id="token生成规则">token生成规则
+</h4><p><img src="/p/%E5%BF%83%E7%90%86%E5%81%A5%E5%BA%B7ai%E5%8A%A9%E6%89%8B-%E6%A6%82%E8%A7%88/assets/JWT.png"
+	width="2040"
+	height="891"
+	srcset="/p/%E5%BF%83%E7%90%86%E5%81%A5%E5%BA%B7ai%E5%8A%A9%E6%89%8B-%E6%A6%82%E8%A7%88/assets/JWT_hu_b02d04e46544de59.png 480w, /p/%E5%BF%83%E7%90%86%E5%81%A5%E5%BA%B7ai%E5%8A%A9%E6%89%8B-%E6%A6%82%E8%A7%88/assets/JWT_hu_23b1012cc6e7c675.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="228"
+		data-flex-basis="549px"
+	
+></p>
+<h4 id="jwt配置">JWT配置
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># JWT配置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">jwt</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">secret</span><span class="p">:</span><span class="w"> </span><span class="l">MySecretKeyForJWT2025!@#$%^&amp;*()_+SecureKeyHere</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">expiration</span><span class="p">:</span><span class="w"> </span><span class="m">86400000</span><span class="w">  </span><span class="c"># 24小时（毫秒）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">refresh-expiration</span><span class="p">:</span><span class="w"> </span><span class="m">604800000</span><span class="w">  </span><span class="c"># 7天（毫秒）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">header</span><span class="p">:</span><span class="w"> </span><span class="l">Authorization </span><span class="w"> </span><span class="c"># token头部名称</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">token-prefix</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;Bearer &#34;</span><span class="w">  </span><span class="c"># token前缀</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="idea查看mybatis-plus生成sql">IDEA查看MyBatis-Plus生成SQL
+</h3><p>Ctrl+N 搜索 <strong>SqlSessionTemplate</strong>，然后再按照下图操作</p>
+<p><img src="/p/%E5%BF%83%E7%90%86%E5%81%A5%E5%BA%B7ai%E5%8A%A9%E6%89%8B-%E6%A6%82%E8%A7%88/assets/SQL.png"
+	width="2472"
+	height="1461"
+	srcset="/p/%E5%BF%83%E7%90%86%E5%81%A5%E5%BA%B7ai%E5%8A%A9%E6%89%8B-%E6%A6%82%E8%A7%88/assets/SQL_hu_e26127dfc7c367ce.png 480w, /p/%E5%BF%83%E7%90%86%E5%81%A5%E5%BA%B7ai%E5%8A%A9%E6%89%8B-%E6%A6%82%E8%A7%88/assets/SQL_hu_465c324c3b8b4706.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="169"
+		data-flex-basis="406px"
+	
+></p>
+
 </section>
 
 
