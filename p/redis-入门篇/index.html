@@ -1,0 +1,2088 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content=" 本篇博客基于黑马程序员2022年的课程进行编写，课程内容地址：黑马程序员Redis入门到实战教程，深度透析redis底层原理+redis分布式锁+企业解决方案+黑马点评实战项目-bili_62700648706-redis-哔哩哔哩视频\n">
+<title>Redis 入门篇</title>
+
+<link rel='canonical' href='https://aurora156.github.io/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/'>
+
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="Redis 入门篇">
+<meta property='og:description' content=" 本篇博客基于黑马程序员2022年的课程进行编写，课程内容地址：黑马程序员Redis入门到实战教程，深度透析redis底层原理+redis分布式锁+企业解决方案+黑马点评实战项目-bili_62700648706-redis-哔哩哔哩视频\n">
+<meta property='og:url' content='https://aurora156.github.io/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/'>
+<meta property='og:site_name' content='凉介的笔记'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-08-24T14:52:31&#43;08:00'/><meta property='article:modified_time' content='2026-08-24T14:52:31&#43;08:00'/>
+<meta name="twitter:title" content="Redis 入门篇">
+<meta name="twitter:description" content=" 本篇博客基于黑马程序员2022年的课程进行编写，课程内容地址：黑马程序员Redis入门到实战教程，深度透析redis底层原理+redis分布式锁+企业解决方案+黑马点评实战项目-bili_62700648706-redis-哔哩哔哩视频\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_39194fe8d5906e9f.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🌆</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">凉介的笔记</a></h1>
+            <h2 class="site-description">凉介的博客</h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>档案</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#redis的常见命令和客户端使用">Redis的常见命令和客户端使用</a>
+      <ol>
+        <li><a href="#初识redis">初识Redis</a>
+          <ol>
+            <li><a href="#认识nosql">认识NoSql</a></li>
+            <li><a href="#认识redis">认识Redis</a></li>
+            <li><a href="#安装redis">安装Redis</a></li>
+          </ol>
+        </li>
+        <li><a href="#数据类型">数据类型</a>
+          <ol>
+            <li><a href="#常用数据类型">常用数据类型</a></li>
+            <li><a href="#常用数据类型简介">常用数据类型简介</a></li>
+          </ol>
+        </li>
+        <li><a href="#redis通用命令">Redis通用命令</a></li>
+        <li><a href="#常用命令">常用命令</a>
+          <ol>
+            <li><a href="#字符串操作命令">字符串操作命令</a></li>
+            <li><a href="#哈希操作命令">哈希操作命令</a></li>
+            <li><a href="#列表操作命令">列表操作命令</a></li>
+            <li><a href="#集合操作命令">集合操作命令</a></li>
+            <li><a href="#有序集合操作命令">有序集合操作命令</a></li>
+            <li><a href="#通用命令">通用命令</a></li>
+            <li><a href="#思考">思考</a></li>
+          </ol>
+        </li>
+        <li><a href="#在java中操作redis">在Java中操作Redis</a>
+          <ol>
+            <li><a href="#redis的java客户端">Redis的Java客户端</a></li>
+          </ol>
+        </li>
+        <li><a href="#spring-data-redis使用方式">Spring Data Redis使用方式</a>
+          <ol>
+            <li><a href="#环境搭建">环境搭建</a></li>
+            <li><a href="#springdataredis的序列化方式">SpringDataRedis的序列化方式</a></li>
+            <li><a href="#stringredistemplate">StringRedisTemplate</a></li>
+          </ol>
+        </li>
+        <li><a href="#操作常见类型数据">操作常见类型数据</a>
+          <ol>
+            <li><a href="#操作字符串类型数据">操作字符串类型数据</a></li>
+            <li><a href="#操作哈希类型数据">操作哈希类型数据</a></li>
+            <li><a href="#操作列表类型数据">操作列表类型数据</a></li>
+            <li><a href="#操作集合类型数据">操作集合类型数据</a></li>
+            <li><a href="#通用命令操作">通用命令操作</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/">Redis 入门篇</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2026-08-24</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <blockquote>
+<p>本篇博客基于黑马程序员2022年的课程进行编写，课程内容地址：<a class="link" href="https://www.bilibili.com/list/ml4120066138?spm_id_from=333.1387.0.0&amp;oid=766995956&amp;bvid=BV1cr4y1671t&amp;p=2"  target="_blank" rel="noopener"
+    >黑马程序员Redis入门到实战教程，深度透析redis底层原理+redis分布式锁+企业解决方案+黑马点评实战项目-bili_62700648706-redis-哔哩哔哩视频</a></p>
+</blockquote>
+<h1 id="redis快速入门">Redis快速入门
+</h1><h2 id="redis的常见命令和客户端使用">Redis的常见命令和客户端使用
+</h2><p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E4%BB%8B%E7%BB%8D.png"
+	width="1763"
+	height="802"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E4%BB%8B%E7%BB%8D_hu_c9c8550e4b7e93c8.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E4%BB%8B%E7%BB%8D_hu_ced94a10eba04b16.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="219"
+		data-flex-basis="527px"
+	
+></p>
+<p>这里的值除了可以是字符串以外，还可以是其他的复杂的结构，比如说list等</p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/nosql.png"
+	width="1504"
+	height="542"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/nosql_hu_5369480f8a26e5a0.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/nosql_hu_4f9631b08fa46ee4.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="277"
+		data-flex-basis="665px"
+	
+></p>
+<p>我们将这样的数据库称为NoSql数据库</p>
+<h3 id="初识redis">初识Redis
+</h3><h4 id="认识nosql">认识NoSql
+</h4><p><strong>结构型数据库</strong>：在创建数据库时，会为这些表定义相关的约定，当这些约定定义好了，我们的表的结构就固定了，将来插入表中的所有数据，都要严格的遵循这些约定。而且数据库也会对你插入的数据做校验，如果不符合则会报错不允许插入，这就是所谓的结构化。而且表的结构一般是不建议随便去修改的，你最好在项目之初就把它定义好。</p>
+<p><strong>NoSQL</strong>：是一种在创建数据库时，不需要预先定义表结构（无固定列、无Schema）的数据库。 它允许你在同一个“集合”（类比“表”）里，插入完全不同字段的数据，数据库<strong>不会</strong>对数据的格式做强制校验，一切以你写入的JSON/键值对为准。而且，它的结构是<strong>随时可以动态变化的</strong>，你可以在项目运行中途随意增加或删除字段。</p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%86.png"
+	width="2350"
+	height="1143"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%86_hu_97b9d71aedbe380c.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%86_hu_3195a8ce893d92bb.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="205"
+		data-flex-basis="493px"
+	
+></p>
+<hr>
+<p><strong>SQL：关联的（Relational）</strong></p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%861.png"
+	width="1098"
+	height="621"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%861_hu_d76ec64fdd305764.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%861_hu_6a254b9236ae730d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="176"
+		data-flex-basis="424px"
+	
+></p>
+<p><strong>NoSql：非关联的</strong></p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%862.png"
+	width="1282"
+	height="833"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%862_hu_7830fb1b426fbefb.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%862_hu_50a231c8cfb9683d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="153"
+		data-flex-basis="369px"
+	
+></p>
+<p>但这种存储有一个缺点，就是重复存储</p>
+<hr>
+<p><strong>SQL：SQL查询</strong></p>
+<p>由于语法是固定的，所以只要是关系型数据库，就都能够使用相同的语句进行查询</p>
+<p><strong>NoSql：非SQL</strong></p>
+<p>优点：简单，没有复杂的语法需要去学习</p>
+<p>缺点：不同意，每一个不同的库要学不同的语法</p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%863.png"
+	width="1242"
+	height="523"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%863_hu_812d1bc2fb26afa1.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%863_hu_32a3db42e2724171.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="237"
+		data-flex-basis="569px"
+	
+></p>
+<hr>
+<p><strong>SQL：都满足ACID的事务特性（ACID）</strong></p>
+<p><strong>NoSql：无法满足或者说无法全部满足ACID（BASE）（基本满足）</strong></p>
+<p>总结：</p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%864.png"
+	width="2263"
+	height="1084"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%864_hu_9136a51d951c1a4b.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%864_hu_626234fb0dd3a121.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="208"
+		data-flex-basis="501px"
+	
+></p>
+<h4 id="认识redis">认识Redis
+</h4><p>Redis诞生于2009年全称是<strong>Re</strong>mote <strong>D</strong>ictionary <strong>S</strong>erver，远程词典服务器，是一个基于内存的键值型NoSQL数据库。</p>
+<p>特征：</p>
+<ul>
+<li>键值（key-value）型，value支持多种不同数据结构，功能丰富</li>
+<li>单线程，每个命令具备原子性</li>
+<li>低延迟，速度快（基于内存、IO多路复用、良好的编码）。</li>
+<li>支持数据持久化</li>
+<li>支持主从集群、分片集群</li>
+<li>支持多语言客户端</li>
+</ul>
+<h4 id="安装redis">安装Redis
+</h4><p>Windows版下载地址:https://github.com/tporadowski/redis/releases【本文直接下载的msi文件】</p>
+<p>Linux版下载地址:https://download.redis.io/releases/</p>
+<p>Redis的官方网站地址：https://redis.io/</p>
+<blockquote>
+<p>本文仅介绍Windows版本的安装，以下部分内容借鉴<a class="link" href="https://xn--9krq6q3ox70h4k2b.me/p/redis%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E4%B8%8E%E4%BD%BF%E7%94%A8/"  target="_blank" rel="noopener"
+    >Redis快速入门与使用</a></p>
+</blockquote>
+<p>如何验证Windows版是否安装好：</p>
+<p><strong>方法一：图形界面验证（最直观）</strong></p>
+<p>安装程序走到最后一步，点击 <code>Finish</code>（完成）后，在 Windows 的<strong>任务管理器</strong>里看一眼：</p>
+<ol>
+<li>按 <code>Ctrl + Shift + Esc</code> 打开任务管理器。</li>
+<li>切换到 <strong>&ldquo;服务&rdquo;</strong> 选项卡（或&quot;详细信息&quot;）。</li>
+<li>按字母顺序找一下有没有 <strong>Redis</strong> 或 <strong>redis-server</strong> 在列表中，状态显示为 <strong>&ldquo;正在运行&rdquo;</strong>。</li>
+</ol>
+<p>如果看到了，说明 Redis 已经作为 Windows 后台服务在跑了。</p>
+<p><strong>方法二：命令行验证（最准确，推荐）</strong></p>
+<p>这是最标准的方式，无论你装没装好，一试便知：</p>
+<ol>
+<li>
+<p>按 <code>Win + R</code>，输入 <code>cmd</code>，回车打开命令提示符（黑窗口）。</p>
+</li>
+<li>
+<p>在cmd里输入以下命令并回车：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">redis-cli ping
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>看返回结果</strong>：</p>
+<ul>
+<li>✅ 如果返回 <strong>PONG</strong>：恭喜，安装成功！Redis 活得好好的。</li>
+<li>❌ 如果返回 <code>'redis-cli' 不是内部或外部命令...</code>：说明 PATH 环境变量没配上（就是我之前提醒你勾的那个复选框）。</li>
+<li>❌ 如果返回 <code>Could not connect to Redis at 127.0.0.1:6379: Connection refused</code>：说明 Redis 服务没有启动。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p>如果没装好怎么办？</p>
+<p><strong>情况一：<code>redis-cli</code> 命令找不到</strong></p>
+<ul>
+<li><strong>解决办法</strong>：手动进入 Redis 安装目录（比如 <code>C:\Program Files\Redis\</code>），在该目录下再运行 <code>redis-cli ping</code>。如果能用，说明只是 PATH 没配好，可以手动添加环境变量，或者重装时记得勾选那个选项。</li>
+</ul>
+<p><strong>情况二：能连上，但显示 <code>NOAUTH</code> 或需要密码</strong></p>
+<ul>
+<li>这是因为 Redis 设置了密码。你可以在 Redis 安装目录下找到 <code>redis.windows.conf</code> 或 <code>redis.conf</code> 配置文件，搜索 <code>requirepass</code>，看看后面跟着什么密码。</li>
+</ul>
+<h5 id="连接本地redis">连接本地Redis
+</h5><blockquote>
+<p>演示基础连接方式，一般会使用图形化工具连接</p>
+</blockquote>
+<p>由于我们在安装时，Redis 已经<strong>作为 Windows 后台服务（Service）自动启动</strong>了。它就像电脑里的打印服务一样，开机就在后台默默运行。</p>
+<p>要想连接上Redis，打开一个命令行窗口，输入下方命令即可连接</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">redis-cli.exe
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>需要取消连接的话，输入<code>exit</code>即可</p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%BF%9E%E6%8E%A5.png"
+	width="459"
+	height="137"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%BF%9E%E6%8E%A5_hu_3b1867a3612fb031.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%BF%9E%E6%8E%A5_hu_9a16512963be0930.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="335"
+		data-flex-basis="804px"
+	
+></p>
+<h5 id="连接指定redis">连接指定Redis
+</h5><p>如果需要连接指定ip地址的Redis可以使用下方命令</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">redis-cli.exe -h ip地址 -p 端口号
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%BF%9E%E6%8E%A51.png"
+	width="679"
+	height="112"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%BF%9E%E6%8E%A51_hu_58d9604084cf6c73.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%BF%9E%E6%8E%A51_hu_7e70428c17925b15.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="606"
+		data-flex-basis="1455px"
+	
+></p>
+<h5 id="配置密码">配置密码
+</h5><p>Redis默认是没有密码的，可以在<code>redis.windows.conf</code>中配置密码，输入<code>requirepass 密码</code>来设置密码</p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%AF%86%E7%A0%81.png"
+	width="807"
+	height="540"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%AF%86%E7%A0%81_hu_bed001b82589acfc.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%AF%86%E7%A0%81_hu_d2314db4549cae95.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="149"
+		data-flex-basis="358px"
+	
+></p>
+<p>可以通过命令<code>CONFIG GET requirepass</code>来查看是否设置成功</p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%AF%86%E7%A0%811.png"
+	width="571"
+	height="192"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%AF%86%E7%A0%811_hu_98441fb117010df2.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%AF%86%E7%A0%811_hu_9fcdb1e74a212eba.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="297"
+		data-flex-basis="713px"
+	
+></p>
+<p>连接Redis没有用户的概念，只需要提供密码即可</p>
+<h5 id="设置后台自动启动">设置后台自动启动
+</h5><p>将Redis安装为Windows服务后可通过服务管理器启动，实现后台运行</p>
+<p>在刚刚启动Redis的窗口输入下方命令</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">redis-server --service-install redis.windows.conf --loglevel verbose
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>此后Redis就会如同MySQL一样，开机后自动在后台运行，不会占用窗口，也无需手动启动</p>
+<p>如果不希望自动启动，想要改为手动启动或者禁用可以通过下方步骤操作：</p>
+<ol>
+<li>按下 <code>Win + R</code> 输入 <code>services.msc</code> 打开服务管理器</li>
+<li>在列表中找到 Redis 相关服务（通常名为 <code>Redis</code> 或 <code>Redis Server</code>）</li>
+<li>右键点击服务 → 选择 “属性”</li>
+<li>在 “启动类型” 下拉菜单中可选择：
+<ul>
+<li><strong>自动</strong>：系统启动时自动运行（默认）</li>
+<li><strong>自动（延迟启动）</strong>：系统启动后延迟一段时间运行</li>
+<li><strong>手动</strong>：需要手动启动服务</li>
+<li><strong>禁用</strong>：禁止启动服务</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p>不过需要注意的是，如果之前安装服务时，是通过 <code>cd /d C:\Program Files\Redis</code> 进入 Redis 安装目录后再执行的安装命令，所以当时能成功。但你现在直接在用户目录下执行，系统则会找不到配置文件。</p>
+<p><strong>解决方法（二选一）</strong></p>
+<p><strong>方法一：先切换到 Redis 安装目录，再执行（推荐）</strong></p>
+<p>cmd</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cd /d C:\Program Files\Redis
+</span></span><span class="line"><span class="cl">redis-server --service-install redis.windows.conf --loglevel verbose
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p><strong>说明</strong>：<code>/d</code> 参数可以跨盘符切换目录。如果你已经在 C 盘，直接 <code>cd C:\Program Files\Redis</code> 也可以。</p>
+</blockquote>
+<hr>
+<p><strong>方法二：使用配置文件的完整绝对路径</strong></p>
+<p>无论你在哪个目录，都可以直接用完整路径来安装：</p>
+<p>cmd</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">redis-server --service-install &#34;C:\Program Files\Redis\redis.windows.conf&#34; --loglevel verbose
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<p>额外提醒</p>
+<p>如果你的 Redis 服务目前已经在运行中（比如之前我们已经启动过），再次执行 <code>--service-install</code> 可能会报错说服务已存在。如果需要重新安装，可以先卸载再安装：</p>
+<p>cmd</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cd /d C:\Program Files\Redis
+</span></span><span class="line"><span class="cl">redis-server --service-uninstall
+</span></span><span class="line"><span class="cl">redis-server --service-install redis.windows.conf --loglevel verbose
+</span></span><span class="line"><span class="cl">redis-server --service-start
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="命令行客户端">命令行客户端
+</h5><p>Redis安装完成后就自带了命令行客户端：redis-cli，使用方式如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">redis-cli <span class="o">[</span>options<span class="o">]</span> <span class="o">[</span>commonds<span class="o">]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中常见的options有：</p>
+<ul>
+<li><code>-h 127.0.0.1</code>：指定要连接的redis节点的IP地址，默认是127.0.0.1</li>
+<li><code>-p 6379</code>：指定要连接的redis节点的端口，默认是6379</li>
+<li><code>-a 123321</code>：指定redis的访问密码</li>
+</ul>
+<p>其中的commonds就是Redis的操作命令，例如：</p>
+<ul>
+<li><code>ping</code>：与redis服务端做心跳测试，服务端正常会返回<code>pong</code></li>
+</ul>
+<p>不指定commond时，会进入<code>redis-cli</code>的交互控制台</p>
+<blockquote>
+<p>注意：设置的时候如果是使用cmd进行编写，可能会出现中文乱码的情况，这虽然不影响正常存储对象，但是比较影响美观无法输出正常的字符，我们可以在在启动 <code>redis-cli</code> 前，先把 CMD 的编码强制切换为 UTF-8：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">chcp 65001
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这样图形化窗口就能够正常显示了，但是cmd窗口仍然是乱码的情况，我这里选择比较麻烦的一种方式：每次启动时在后面加上 &ndash;raw，这样在命令行中查看就能够显示中文了，不过输入的时候好像还是乱码的格式</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">redis-cli -a 123456 --raw
+</span></span></code></pre></td></tr></table>
+</div>
+</div></blockquote>
+<h3 id="数据类型">数据类型
+</h3><h4 id="常用数据类型">常用数据类型
+</h4><p>Redis是一个key-value的数据库，key一般是String类型，value的常用数据类型（也称为基本类型）一般为以下五种：</p>
+<ul>
+<li>字符串 string</li>
+<li>哈希 hash</li>
+<li>列表 list</li>
+<li>集合 set</li>
+<li>有序集合 sorted set / zset</li>
+</ul>
+<p>特殊类型：</p>
+<ul>
+<li>GEO</li>
+<li>BitMap</li>
+<li>HyperLog</li>
+</ul>
+<h4 id="常用数据类型简介">常用数据类型简介
+</h4><p>哈希：也叫散列，类似于Java中的HashMap结构</p>
+<p>列表：按照插入顺序排序，可以有重复元素，类似于Java中的LinkedList</p>
+<p>集合：又称无序集合，没有重复元素，类似于Java中的HashSet</p>
+<p>有序集合：集合中每个元素关联一个分数（score），根据分数升序排序，没有重复元素</p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%B8%B8%E7%94%A8%E7%AE%80%E4%BB%8B.png"
+	width="798"
+	height="812"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%B8%B8%E7%94%A8%E7%AE%80%E4%BB%8B_hu_1c8578716185ec51.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%B8%B8%E7%94%A8%E7%AE%80%E4%BB%8B_hu_9ae233ec9936700.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="98"
+		data-flex-basis="235px"
+	
+></p>
+<p>Redis为了方便我们学习，将操作不同数据类型的命令也做了分组，在官网（ <a class="link" href="https://redis.io/commands"  target="_blank" rel="noopener"
+    >https://redis.io/commands</a> ）可以查看到不同的命令</p>
+<h3 id="redis通用命令">Redis通用命令
+</h3><p>通用指令是部分数据类型的，都可以使用的指令，常见的有：<strong>（可以先通过help [command]来查看命令的使用）</strong></p>
+<ul>
+<li>**KEYS：**查看符合模板的所有key，<strong>不建议在生产环境设备上使用</strong></li>
+<li>**DEL：**删除一个指定的key</li>
+<li>**MSET k1 v1 k2 v2 &hellip;：**设置key</li>
+<li>**EXISTS：**判断key是否存在</li>
+<li><strong>EXPIRE</strong>：给一个key设置有效期，有效期到期时该key会被自动删除</li>
+<li>**TTL：**查看一个KEY的剩余有效期[-1代表永久有效，-2代表已经被删除了]</li>
+</ul>
+<p>通过help [command] 可以查看一个命令的具体用法，例如：<img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%80%9A%E7%94%A8.png"
+	width="723"
+	height="175"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%80%9A%E7%94%A8_hu_f0564ba4c7f49ed7.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%80%9A%E7%94%A8_hu_62a65e75b87cd775.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="413"
+		data-flex-basis="991px"
+	
+></p>
+<h3 id="常用命令">常用命令
+</h3><h4 id="字符串操作命令">字符串操作命令
+</h4><p>String类型，也就是字符串类型，是Redis中最简单的存储类型。</p>
+<p>其value是字符串，不过根据字符串的格式不同，又可以分为3类：</p>
+<ul>
+<li>string：普通字符串</li>
+<li>int：整数类型，可以做自增、自减操作</li>
+<li>float：浮点类型，可以做自增、自减操作</li>
+</ul>
+<p>不管是哪种格式，底层都是字节数组形式存储，只不过是编码方式不同。字符串类型的最大空间不能超过512m</p>
+<p><strong>常见命令：</strong></p>
+<ul>
+<li>**SET：**添加或者修改已经存在的一个String类型的键值对【SET key value】</li>
+<li>**GET：**根据key获取String类型的value【GET key】</li>
+<li>**MSET：**批量添加多个String类型的键值对</li>
+<li>**MGET：**根据多个key获取多个String类型的value</li>
+</ul>
+<hr>
+<ul>
+<li>
+<p>**INCR：**让一个整型的key自增1</p>
+</li>
+<li>
+<p>**INCRBY：**让一个整型的key自增并指定步长，例如：incrby num 2 让num值自增2【将值设为负数可以实现自减】</p>
+</li>
+<li>
+<p>**INCRBYFLOAT：**让一个浮点类型的数字自增并指定步长</p>
+</li>
+</ul>
+<hr>
+<ul>
+<li>
+<p>**SETNX：**添加一个String类型的键值对，前提是这个key不存在，否则不执行</p>
+</li>
+<li>
+<p>**SETEX：**添加一个String类型的键值对，并且指定有效期</p>
+</li>
+</ul>
+<h4 id="哈希操作命令">哈希操作命令
+</h4><p>Hash类型，也叫散列，其value是一个无序字典，类似于Java中的HashMap结构。</p>
+<p>String结构是将对象序列化为JSON字符串后存储，当需要修改对象某个字段时很不方便：</p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C.png"
+	width="1151"
+	height="174"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C_hu_54e8ab241b4af684.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C_hu_e0ba98d3002a6ff2.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="661"
+		data-flex-basis="1587px"
+	
+></p>
+<p>Hash结构可以将对象中的每个字段独立存储，可以针对单个字段做CRUD：</p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C1.png"
+	width="1147"
+	height="487"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C1_hu_53f1f4eaffc3ee5a.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C1_hu_6f4a341266f04fa4.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="235"
+		data-flex-basis="565px"
+	
+></p>
+<p><strong>常见命令：</strong></p>
+<ul>
+<li>**HSET key field value：**添加或者修改hash类型key的field的值</li>
+<li>**HGET key field：**获取一个hash类型key的field的值</li>
+<li>**HMSET：**批量添加多个hash类型key的field的值</li>
+<li>**HMGET：**批量获取多个hash类型key的field的值</li>
+<li>**HGETALL：**获取一个hash类型的key中的所有的field和value</li>
+<li>**HKEYS：**获取一个hash类型的key中的所有的field</li>
+<li>**HVALS：**获取一个hash类型的key中的所有的value</li>
+<li>**HINCRBY：**让一个hash类型key的字段值自增并指定步长</li>
+<li>**HSETNX：**添加一个hash类型的key的field值，前提是这个field不存在，否则不执行</li>
+</ul>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C2.png"
+	width="645"
+	height="171"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C2_hu_4da36e380b6d5a5f.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C2_hu_c7a1565f39c8382f.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="377"
+		data-flex-basis="905px"
+	
+></p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C3.png"
+	width="1506"
+	height="305"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C3_hu_fadc8eb4b773645c.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C3_hu_de40c2186e38b590.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="493"
+		data-flex-basis="1185px"
+	
+></p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C4.png"
+	width="788"
+	height="205"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C4_hu_8e6c968a77ad80be.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C4_hu_28d4483f5ac2caf9.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="384"
+		data-flex-basis="922px"
+	
+></p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C4-1.png"
+	width="1518"
+	height="390"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C4-1_hu_307f679a0cd11ae2.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C4-1_hu_407c7e58fad45be.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="389"
+		data-flex-basis="934px"
+	
+></p>
+<p>剩下的命令自行验证，本篇不过多展示</p>
+<h4 id="列表操作命令">列表操作命令
+</h4><p>Redis中的List类型与Java中的LinkedList类似，可以看做是一个双向链表结构。既可以支持正向检索和也可以支持反向检索。</p>
+<p>特征也与LinkedList类似：</p>
+<ul>
+<li>有序</li>
+<li>元素可以重复</li>
+<li>插入和删除快</li>
+<li>查询速度一般</li>
+</ul>
+<p>常用来存储一个有序数据，例如：朋友圈点赞列表，评论列表等。</p>
+<p><strong>常见命令：</strong></p>
+<ul>
+<li>**LPUSH key  element &hellip; ：**向列表左侧插入一个或多个元素</li>
+<li>**LPOP key：**移除并返回列表左侧的第一个元素，没有则返回nil</li>
+<li>**RPUSH key  element &hellip; ：**向列表右侧插入一个或多个元素</li>
+<li>**RPOP key：**移除并返回列表右侧的第一个元素</li>
+<li>**LRANGE key star end：**返回一段角标范围内的所有元素</li>
+<li>**BLPOP和BRPOP：**与LPOP和RPOP类似，只不过在没有元素时等待指定时间，而不是直接返回nil</li>
+</ul>
+<p>列表增：</p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8%E5%A2%9E.png"
+	width="2026"
+	height="244"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8%E5%A2%9E_hu_3ce7d3721e0f6d38.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8%E5%A2%9E_hu_ea09f5a7e2a792bf.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="830"
+		data-flex-basis="1992px"
+	
+></p>
+<p>列表取：</p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8%E5%8F%96.png"
+	width="2016"
+	height="281"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8%E5%8F%96_hu_7055a678f600db5e.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8%E5%8F%96_hu_684362d707eea2bf.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="717"
+		data-flex-basis="1721px"
+	
+></p>
+<p>LRANGE：</p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8.png"
+	width="954"
+	height="354"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8_hu_8106561f50a697a4.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8_hu_2722b6a920f4ae2b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="269"
+		data-flex-basis="646px"
+	
+></p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A81.png"
+	width="934"
+	height="739"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A81_hu_38bfb5e2e0fba303.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A81_hu_5f8b5c167f40f62d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="126"
+		data-flex-basis="303px"
+	
+></p>
+<p>由于我的Redis版本较低（5.0.14）所以使用LPOP user 1会出现报错，使用较高版本输出（&gt;6.2）的同时会将列表中的数据同步删除</p>
+<p>新开一个cmd，在等待时间内插入元素</p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A82.png"
+	width="502"
+	height="73"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A82_hu_9a7083399199a4a1.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A82_hu_b70794a99d309a37.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="687"
+		data-flex-basis="1650px"
+	
+></p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A83.png"
+	width="944"
+	height="413"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A83_hu_356da23888edc8b6.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A83_hu_81ea0ef80f8f73cd.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="228"
+		data-flex-basis="548px"
+	
+></p>
+<h4 id="集合操作命令">集合操作命令
+</h4><p>Redis的Set结构与Java中的HashSet类似，可以看做是一个value为null的HashMap。因为也是一个hash表，因此具备与HashSet类似的特征：</p>
+<ul>
+<li>无序</li>
+<li>元素不可重复</li>
+<li>查找快</li>
+<li>支持交集、并集、差集等功能</li>
+</ul>
+<p><strong>常见命令：</strong></p>
+<ul>
+<li>**SADD key member &hellip; ：**向set中添加一个或多个元素</li>
+<li><strong>SREM key member &hellip; :</strong> 移除set中的指定元素</li>
+<li><strong>SCARD key：</strong> 返回set中元素的个数</li>
+<li>**SISMEMBER key member：**判断一个元素是否存在于set中</li>
+<li>**SMEMBERS：**获取set中的所有元素</li>
+<li>**SINTER key1 key2 &hellip; ：**求key1与key2的交集</li>
+<li>**SDIFF key1 key2&hellip;：**求key1与key2的差集</li>
+<li>**SUNION key1 key2&hellip;：**求key1与key2的并集</li>
+</ul>
+<p>交集：</p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%9B%86%E5%90%88.gif"
+	width="1084"
+	height="1008"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%9B%86%E5%90%88_hu_5bfa76aee24a979c.gif 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%9B%86%E5%90%88_hu_f729336a5345fca6.gif 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="107"
+		data-flex-basis="258px"
+	
+></p>
+<p>差集：<img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%9B%86%E5%90%88.png"
+	width="1199"
+	height="879"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%9B%86%E5%90%88_hu_46908a12502e1a72.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%9B%86%E5%90%88_hu_f57aae34ae136d87.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="136"
+		data-flex-basis="327px"
+	
+></p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%9B%86%E5%90%881.png"
+	width="587"
+	height="314"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%9B%86%E5%90%881_hu_54c15f55360994e8.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%9B%86%E5%90%881_hu_2b964e649d977a8d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="186"
+		data-flex-basis="448px"
+	
+></p>
+<h4 id="有序集合操作命令">有序集合操作命令
+</h4><p>Redis的SortedSet是一个可排序的set集合，与Java中的TreeSet有些类似，但底层数据结构却差别很大。SortedSet中的每一个元素都带有一个score属性，可以基于score属性对元素排序，底层的实现是一个跳表（SkipList）加 hash表。SortedSet具备下列特性：</p>
+<ul>
+<li>可排序</li>
+<li>元素不重复</li>
+<li>查询速度快</li>
+</ul>
+<p>因为SortedSet的可排序特性，经常被用来实现排行榜这样的功能。</p>
+<p><strong>常见命令：</strong></p>
+<p>SortedSet的常见命令有：</p>
+<ul>
+<li>**ZADD key score member：**添加一个或多个元素到sorted set ，如果已经存在则更新其score值</li>
+<li>**ZREM key member：**删除sorted set中的一个指定元素</li>
+<li><strong>ZSCORE key member :</strong> 获取sorted set中的指定元素的score值</li>
+<li>**ZRANK key member：**获取sorted set 中的指定元素的排名</li>
+<li>**ZCARD key：**获取sorted set中的元素个数</li>
+<li>**ZCOUNT key min max：**统计score值在给定范围内的所有元素的个数</li>
+<li>**ZINCRBY key increment member：**让sorted set中的指定元素自增，步长为指定的increment值</li>
+<li>**ZRANGE key min max：**按照score排序后，获取指定排名范围内的元素</li>
+<li>**ZRANGEBYSCORE key min max：**按照score排序后，获取指定score范围内的元素</li>
+<li>**ZDIFF、ZINTER、ZUNION：**求差集、交集、并集</li>
+</ul>
+<blockquote>
+<p>注意：所有的排名默认都是升序，如果要降序则在命令的Z后面添加REV即可</p>
+</blockquote>
+<h4 id="通用命令">通用命令
+</h4><p>Redis的通用命令是不分数据类型的，都可以使用的命令：</p>
+<ul>
+<li><code>KEYS pattern</code>：查找所有符合给定模式（pattern）的 key</li>
+<li><code>EXISTS key</code>：检查给定 key 是否存在</li>
+<li><code>TYPE key</code>：返回 key 所储存的值的类型</li>
+<li><code>DEL key</code>：该命令用于在 key 存在是删除 key</li>
+</ul>
+<h4 id="思考">思考
+</h4><p>Redis没有类似MySQL中的Table的概念，我们该如何区分不同类型的key呢？</p>
+<p>例如，需要存储用户、商品信息到redis，有一个用户id是1，有一个商品id恰好也是1</p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/key.png"
+	width="1920"
+	height="1066"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/key_hu_e7567b62a9e7001b.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/key_hu_e58ef40337e3a9cc.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="180"
+		data-flex-basis="432px"
+	
+></p>
+<h3 id="在java中操作redis">在Java中操作Redis
+</h3><h4 id="redis的java客户端">Redis的Java客户端
+</h4><p>在Redis官网中提供了各种语言的客户端，地址：https://redis.io/clients</p>
+<p>在Java程序中操作Redis需要使用Redis的Java客户端，就如同使用JDBC操作MySQL数据库一样</p>
+<p>Redis 的 Java 客户端很多，常用的几种：</p>
+<ul>
+<li>Jedis：以Redis命令作为方法名称，学习成本低，简单实用。但是Jedis实例是线程不安全的，多线程环境下需要基于连接池来使用</li>
+<li>Lettuce：Lettuce是基于Netty实现的，支持同步、异步和响应式编程方式，并且是线程安全的。支持Redis的哨兵模式、集群模式和管道模式</li>
+<li>Redission：Redission是一个基于Redis实现的分布式、可伸缩的Java数据结构集合。包含了诸如Map、Query、Lock、Semaphore、AtomicLong等强大功能</li>
+<li>Spring Data Redis</li>
+</ul>
+<p>Spring Data Redis对Jedis和Lettuce进行了封装，在Spring Boot项目中还提供了对应的Starter，即 spring-boot-starter-data-redis</p>
+<h3 id="spring-data-redis使用方式">Spring Data Redis使用方式
+</h3><p>SpringData是Spring中数据操作的模块，包含对各种数据库的集成，其中对Redis的集成模块就叫做SpringDataRedis，官网地址：https://spring.io/projects/spring-data-redis</p>
+<ul>
+<li>提供了对不同Redis客户端的整合（Lettuce和Jedis）</li>
+<li>提供了RedisTemplate统一API来操作Redis</li>
+<li>支持Redis的发布订阅模型</li>
+<li>支持Redis哨兵和Redis集群</li>
+<li>支持基于Lettuce的响应式编程</li>
+<li>支持基于JDK、JSON、字符串、Spring对象的数据序列化及反序列化</li>
+<li>支持基于Redis的JDKCollection实现</li>
+</ul>
+<p>SpringDataRedis中提供了RedisTemplate工具类，其中封装了各种对Redis的操作。并且将不同数据类型的操作API封装到了不同的类型中：</p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/SDR.png"
+	width="857"
+	height="284"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/SDR_hu_63e382de3517d026.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/SDR_hu_6a3a3d775110c04e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="301"
+		data-flex-basis="724px"
+	
+></p>
+<h4 id="环境搭建">环境搭建
+</h4><p>1.在<code>pom.xml</code>文件中导入依赖</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">     <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">     <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-data-redis<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c">&lt;!--配置连接池--&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;groupId&gt;</span>org.apache.commons<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;artifactId&gt;</span>commons-pool2<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2.在<code>application.yml</code>中配置数据源</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">spring</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">data</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">redis</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">6379</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="m">127.0.0.1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="m">123456</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">database</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">	</span><span class="c"># 选择数据库</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">lettuce</span><span class="p">:</span><span class="w">  </span><span class="c"># 设置Redis连接池，lettuce无需重新配置，Jedis需要重新在pom文件中进行配置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">pool</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">max-active</span><span class="p">:</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="c"># 设置最大连接数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">max-idle</span><span class="p">:</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="c"># 设置最大空闲数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">min-idle</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="c"># 设置最小空闲数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">max-wait</span><span class="p">:</span><span class="w"> </span><span class="l">100ms</span><span class="w"> </span><span class="c"># 设置最大等待时间</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>注：如果用的是SpringBoot2，则不加data，如下</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">spring</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">redis</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">6379</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="m">127.0.0.1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="m">123456</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">database</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>3.注入RedisTemplate</p>
+<p>RedisDemoApplicationTests</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@SpringBootTest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">RedisDemoApplicationTests</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">RedisTemplate</span><span class="w"> </span><span class="n">redisTemplate</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>4.编写测试</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="w"> </span><span class="nf">testString</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 写入一条String数据</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">opsForValue</span><span class="p">().</span><span class="na">set</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span><span class="s">&#34;虎哥&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 获取String数据</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Object</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">opsForValue</span><span class="p">().</span><span class="na">get</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;name = &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">name</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E6%B5%8B%E8%AF%95.png"
+	width="1720"
+	height="309"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E6%B5%8B%E8%AF%95_hu_22dee36aaea90a8d.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E6%B5%8B%E8%AF%95_hu_d1c0b97ef4119ed7.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="556"
+		data-flex-basis="1335px"
+	
+></p>
+<p>但是这种写法Redis中输出的结果的格式并不是我们想要的那种，为了解决这种问题，我们需要编写一个配置类，创建<code>RedisTemplate</code>对象</p>
+<p>RedisConfig</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.redisdemo.redis.config</span><span class="p">;</span><span class="w">  </span><span class="c1">// 根据你的包路径调整</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Bean</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Configuration</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.data.redis.connection.RedisConnectionFactory</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.data.redis.core.RedisTemplate</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.data.redis.serializer.RedisSerializer</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.extern.slf4j.Slf4j</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Configuration</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Slf4j</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">RedisConfig</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Bean</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">RedisTemplate</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">redisTemplate</span><span class="p">(</span><span class="n">RedisConnectionFactory</span><span class="w"> </span><span class="n">redisConnectionFactory</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;开始创建Redis模板对象...&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">RedisTemplate</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">redisTemplate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">RedisTemplate</span><span class="o">&lt;&gt;</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 设置Redis的连接工厂对象</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">setConnectionFactory</span><span class="p">(</span><span class="n">redisConnectionFactory</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// ✅ 使用 JSON 序列化器（Spring Data Redis 4.0+ 推荐写法）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">RedisSerializer</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">jsonSerializer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RedisSerializer</span><span class="p">.</span><span class="na">json</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 设置Key的序列化器（用 String）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">setKeySerializer</span><span class="p">(</span><span class="n">RedisSerializer</span><span class="p">.</span><span class="na">string</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">setHashKeySerializer</span><span class="p">(</span><span class="n">RedisSerializer</span><span class="p">.</span><span class="na">string</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// ✅ 设置Value的序列化器（用 JSON，可以存任意对象）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">setValueSerializer</span><span class="p">(</span><span class="n">jsonSerializer</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">setHashValueSerializer</span><span class="p">(</span><span class="n">jsonSerializer</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">redisTemplate</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>当前配置类不是必须的，因为Spring Boot框架会自动装配 RedisTemplate 对象，但是默认的key和value序列化器为JdkSerializationRedisSerializer，导致我们存到Redis中后的数据和原始数据有差别（会变成一串编码），故设置为StringRedisSerializer序列化器</p>
+<p><strong>不过不建议将value也序列化为String类型，否则后续可能会出现一些问题</strong></p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@SpringBootTest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">RedisDemoApplicationTests</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">RedisTemplate</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">redisTemplate</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">testRedisTemplate</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;redisTemplate:&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">redisTemplate</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// redisTemplate:org.springframework.data.redis.core.RedisTemplate@34fcd292</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>测试能成功运行说明环境搭建完成</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="c1">//string数据操作</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">ValueOperations</span><span class="w"> </span><span class="n">valueOperations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">opsForValue</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">//hash类型的数据操作</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">HashOperations</span><span class="w"> </span><span class="n">hashOperations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">opsForHash</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">//list类型的数据操作</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">ListOperations</span><span class="w"> </span><span class="n">listOperations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">opsForList</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">//set类型数据操作</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">SetOperations</span><span class="w"> </span><span class="n">setOperations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">opsForSet</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">//zset类型数据操作</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">ZSetOperations</span><span class="w"> </span><span class="n">zSetOperations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">opsForZSet</span><span class="p">();</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>在Java中通过上面五种类型的对象来操作Redis</p>
+</blockquote>
+<h4 id="springdataredis的序列化方式">SpringDataRedis的序列化方式
+</h4><p>RedisTemplate可以接收任意Object作为值写入Redis，只不过写入前会把Object序列化为字节形式，默认是采用JDK序列化，得到的结果是这样的：<img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%96.png"
+	width="1073"
+	height="209"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%96_hu_54d1ddca8f20838f.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%96_hu_8e6012146c5e4636.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="513"
+		data-flex-basis="1232px"
+	
+></p>
+<p>缺点：</p>
+<ul>
+<li>可读性差</li>
+<li>内存占用较大</li>
+</ul>
+<p>我们可以自定义RedisTemplate的序列化方式，代码如下：</p>
+<p>RedisDemoApplicationTests:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="w"> </span><span class="nf">testSaveUser</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 写入数据</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">opsForValue</span><span class="p">().</span><span class="na">set</span><span class="p">(</span><span class="s">&#34;user:100&#34;</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">User</span><span class="p">(</span><span class="s">&#34;虎哥&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">21</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 获取数据</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">User</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">User</span><span class="p">)</span><span class="w"> </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">opsForValue</span><span class="p">().</span><span class="na">get</span><span class="p">(</span><span class="s">&#34;user:100&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;user = &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">user</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>User</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@NoArgsConstructor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@AllArgsConstructor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">User</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">age</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%961.png"
+	width="1276"
+	height="241"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%961_hu_8bc6e1885ea39d17.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%961_hu_802ddde8be05759.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="529"
+		data-flex-basis="1270px"
+	
+></p>
+<h4 id="stringredistemplate">StringRedisTemplate
+</h4><p>尽管JSON的序列化方式可以满足我们的需求，但依然存在一些问题，如图：<img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%962.png"
+	width="534"
+	height="168"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%962_hu_4729cfe61c0fc625.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%962_hu_2f46e408c78c7a9d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="317"
+		data-flex-basis="762px"
+	
+></p>
+<p>为了在反序列化时知道对象的类型，JSON序列化器会将类的class类型写入json结果中，存入Redis，会带来额外的内存开销。</p>
+<p>为了节省内存空间，我们并不会使用JSON序列化器来处理value，而是统一使用String序列化器，要求只能存储String类型的key和value。当需要存储Java对象时，手动完成对象的序列化和反序列化。</p>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%963.png"
+	width="898"
+	height="302"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%963_hu_b0ad4920660243d4.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%963_hu_9cd2b36b6e78e229.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="297"
+		data-flex-basis="713px"
+	
+></p>
+<p>Spring默认提供了一个StringRedisTemplate类，它的key和value的序列化方式默认就是String方式。省去了我们自定义RedisTemplate的过程：</p>
+<p>RedisStringTests：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.itheima.redisdemo</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.itheima.redisdemo.redis.pojo.User</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.junit.jupiter.api.Test</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.test.context.SpringBootTest</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.data.redis.core.RedisTemplate</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.data.redis.core.StringRedisTemplate</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">tools.jackson.databind.ObjectMapper</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@SpringBootTest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">RedisStringTests</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">StringRedisTemplate</span><span class="w"> </span><span class="n">stringRedisTemplate</span><span class="p">;</span><span class="w">  </span><span class="c1">// ✅ 加上泛型</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">testString</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 写入一条String数据</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">opsForValue</span><span class="p">().</span><span class="na">set</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;虎哥&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 获取string数据</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Object</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">opsForValue</span><span class="p">().</span><span class="na">get</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;name = &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">name</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">ObjectMapper</span><span class="w"> </span><span class="n">mapper</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ObjectMapper</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">testSaveUser</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 创建对象</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">User</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">User</span><span class="p">(</span><span class="s">&#34;虎哥&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">21</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 手动序列化</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">json</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapper</span><span class="p">.</span><span class="na">writeValueAsString</span><span class="p">(</span><span class="n">user</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 写入数据</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">opsForValue</span><span class="p">().</span><span class="na">set</span><span class="p">(</span><span class="s">&#34;user:200&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">json</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 获取数据</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">jsonUser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">opsForValue</span><span class="p">().</span><span class="na">get</span><span class="p">(</span><span class="s">&#34;user:200&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 手动反序列化</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">User</span><span class="w"> </span><span class="n">user1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapper</span><span class="p">.</span><span class="na">readValue</span><span class="p">(</span><span class="n">jsonUser</span><span class="p">,</span><span class="w"> </span><span class="n">User</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;user1 = &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">user1</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%964.png"
+	width="1165"
+	height="171"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%964_hu_c19cf06ed59be487.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%964_hu_2f1a6bf576b07fca.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="681"
+		data-flex-basis="1635px"
+	
+></p>
+<hr>
+<p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%965.png"
+	width="878"
+	height="358"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%965_hu_70e936f0587a003d.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%965_hu_f8754648c13476fa.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="245"
+		data-flex-basis="588px"
+	
+></p>
+<h3 id="操作常见类型数据">操作常见类型数据
+</h3><h4 id="操作字符串类型数据">操作字符串类型数据
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 操作字符串类型的数据
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">testString</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// set</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">opsForValue</span><span class="p">().</span><span class="na">set</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span><span class="s">&#34;吴峰&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// get</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">city</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">String</span><span class="p">)</span><span class="w"> </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">opsForValue</span><span class="p">().</span><span class="na">get</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">city</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// setex</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">opsForValue</span><span class="p">().</span><span class="na">set</span><span class="p">(</span><span class="s">&#34;code&#34;</span><span class="p">,</span><span class="s">&#34;0721&#34;</span><span class="p">,</span><span class="n">3</span><span class="p">,</span><span class="w"> </span><span class="n">TimeUnit</span><span class="p">.</span><span class="na">MINUTES</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// setnx</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">opsForValue</span><span class="p">().</span><span class="na">setIfAbsent</span><span class="p">(</span><span class="s">&#34;lock&#34;</span><span class="p">,</span><span class="s">&#34;1&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">opsForValue</span><span class="p">().</span><span class="na">setIfAbsent</span><span class="p">(</span><span class="s">&#34;lock&#34;</span><span class="p">,</span><span class="s">&#34;2&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">opsForValue</span><span class="p">().</span><span class="na">get</span><span class="p">(</span><span class="s">&#34;lock&#34;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="操作哈希类型数据">操作哈希类型数据
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 操作哈希类型的数据
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">testHash</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">HashOperations</span><span class="w"> </span><span class="n">hashOperations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">opsForHash</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// hset</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">hashOperations</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&#34;100&#34;</span><span class="p">,</span><span class="s">&#34;name&#34;</span><span class="p">,</span><span class="s">&#34;Jerry&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">hashOperations</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&#34;100&#34;</span><span class="p">,</span><span class="s">&#34;age&#34;</span><span class="p">,</span><span class="s">&#34;22&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// hget</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">String</span><span class="p">)</span><span class="w"> </span><span class="n">hashOperations</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">&#34;100&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;name&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">name</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// hkeys</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Set</span><span class="w"> </span><span class="n">keys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hashOperations</span><span class="p">.</span><span class="na">keys</span><span class="p">(</span><span class="s">&#34;100&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">keys</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// hvals</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">List</span><span class="w"> </span><span class="n">values</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hashOperations</span><span class="p">.</span><span class="na">values</span><span class="p">(</span><span class="s">&#34;100&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">values</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// hdel</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">hashOperations</span><span class="p">.</span><span class="na">delete</span><span class="p">(</span><span class="s">&#34;100&#34;</span><span class="p">,</span><span class="s">&#34;age&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="操作列表类型数据">操作列表类型数据
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 操作列表类型的数据
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">testList</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">ListOperations</span><span class="w"> </span><span class="n">listOperations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">opsForList</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// lpush</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">listOperations</span><span class="p">.</span><span class="na">leftPushAll</span><span class="p">(</span><span class="s">&#34;mylist&#34;</span><span class="p">,</span><span class="s">&#34;a&#34;</span><span class="p">,</span><span class="s">&#34;b&#34;</span><span class="p">,</span><span class="s">&#34;c&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">listOperations</span><span class="p">.</span><span class="na">leftPush</span><span class="p">(</span><span class="s">&#34;mylist&#34;</span><span class="p">,</span><span class="s">&#34;d&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// lrange</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">List</span><span class="w"> </span><span class="n">mylist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOperations</span><span class="p">.</span><span class="na">range</span><span class="p">(</span><span class="s">&#34;mylist&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">0</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">1</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">mylist</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// rpop</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">listOperations</span><span class="p">.</span><span class="na">rightPop</span><span class="p">(</span><span class="s">&#34;mylist&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// llen</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Long</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOperations</span><span class="p">.</span><span class="na">size</span><span class="p">(</span><span class="s">&#34;mylist&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">size</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="操作集合类型数据">操作集合类型数据
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 操作集合类型的数据
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">testSet</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">SetOperations</span><span class="w"> </span><span class="n">setOperations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">opsForSet</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// sadd</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">setOperations</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="s">&#34;set1&#34;</span><span class="p">,</span><span class="s">&#34;a&#34;</span><span class="p">,</span><span class="s">&#34;b&#34;</span><span class="p">,</span><span class="s">&#34;c&#34;</span><span class="p">,</span><span class="s">&#34;d&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">setOperations</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="s">&#34;set2&#34;</span><span class="p">,</span><span class="s">&#34;a&#34;</span><span class="p">,</span><span class="s">&#34;b&#34;</span><span class="p">,</span><span class="s">&#34;x&#34;</span><span class="p">,</span><span class="s">&#34;y&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// smembers</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Set</span><span class="w"> </span><span class="n">members</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">setOperations</span><span class="p">.</span><span class="na">members</span><span class="p">(</span><span class="s">&#34;set1&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">members</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// scard</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Long</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">setOperations</span><span class="p">.</span><span class="na">size</span><span class="p">(</span><span class="s">&#34;set1&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">size</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// sinter</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Set</span><span class="w"> </span><span class="n">intersect</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">setOperations</span><span class="p">.</span><span class="na">intersect</span><span class="p">(</span><span class="s">&#34;set1&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;set2&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">intersect</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// sunion</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Set</span><span class="w"> </span><span class="n">union</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">setOperations</span><span class="p">.</span><span class="na">union</span><span class="p">(</span><span class="s">&#34;set1&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;set2&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">union</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// srem</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">setOperations</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="s">&#34;set1&#34;</span><span class="p">,</span><span class="s">&#34;a&#34;</span><span class="p">,</span><span class="s">&#34;b&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>操作有序集合类型数据</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">  * 操作有序集合类型的数据
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">testZset</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">ZSetOperations</span><span class="w"> </span><span class="n">zSetOperations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">opsForZSet</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// zadd</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">zSetOperations</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="s">&#34;zset1&#34;</span><span class="p">,</span><span class="s">&#34;a&#34;</span><span class="p">,</span><span class="n">90</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">zSetOperations</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="s">&#34;zset1&#34;</span><span class="p">,</span><span class="s">&#34;b&#34;</span><span class="p">,</span><span class="n">80</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">zSetOperations</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="s">&#34;zset1&#34;</span><span class="p">,</span><span class="s">&#34;c&#34;</span><span class="p">,</span><span class="n">70</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// zrange</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Set</span><span class="w"> </span><span class="n">zset1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zSetOperations</span><span class="p">.</span><span class="na">range</span><span class="p">(</span><span class="s">&#34;zset1&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">0</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">1</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">zset1</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// zincrby</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">zSetOperations</span><span class="p">.</span><span class="na">incrementScore</span><span class="p">(</span><span class="s">&#34;zset1&#34;</span><span class="p">,</span><span class="s">&#34;c&#34;</span><span class="p">,</span><span class="n">10</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// zrem</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">zSetOperations</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="s">&#34;zset1&#34;</span><span class="p">,</span><span class="s">&#34;a&#34;</span><span class="p">,</span><span class="s">&#34;b&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="通用命令操作">通用命令操作
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 通用命令操作
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">testCommon</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//keys</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Set</span><span class="w"> </span><span class="n">keys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">keys</span><span class="p">(</span><span class="s">&#34;*&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">keys</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// exists</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Boolean</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">hasKey</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Boolean</span><span class="w"> </span><span class="n">set1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">hasKey</span><span class="p">(</span><span class="s">&#34;set1&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// type</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Object</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">keys</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">DataType</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">type</span><span class="p">((</span><span class="n">String</span><span class="p">)</span><span class="w"> </span><span class="n">key</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">type</span><span class="p">.</span><span class="na">name</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// del</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">redisTemplate</span><span class="p">.</span><span class="na">delete</span><span class="p">(</span><span class="s">&#34;mylist&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <script src="https://utteranc.es/client.js" 
+        repo="IAmYuanyu/IAmYuanyu.github.io"
+        issue-term="pathname"
+        
+        crossorigin="anonymous"
+        async
+        >
+</script>
+
+<style>
+    .utterances {
+        max-width: unset;
+    }
+</style>
+
+<script>
+    let utterancesLoaded = false;
+
+    function setUtterancesTheme(theme) {
+        let utterances = document.querySelector('.utterances iframe');
+        if (utterances) {
+            utterances.contentWindow.postMessage(
+                {
+                    type: 'set-theme',
+                    theme: `github-${theme}`
+                },
+                'https://utteranc.es'
+            );
+        }
+    }
+
+    addEventListener('message', event => {
+        if (event.origin !== 'https://utteranc.es') return;
+
+        
+        utterancesLoaded = true;
+        setUtterancesTheme(document.documentElement.dataset.scheme)
+    });
+
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (!utterancesLoaded) return;
+        setUtterancesTheme(e.detail)
+    })
+</script>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2025 - 
+        
+        2026 凉介
+    </section>
+    
+    <section class="powerby">
+        
+            本站于2026年3月31日建立 <br/>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
