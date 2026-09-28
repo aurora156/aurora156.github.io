@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>注解 on 凉介的笔记</title>
+        <link>https://aurora156.github.io/tags/%E6%B3%A8%E8%A7%A3/</link>
+        <description>Recent content in 注解 on 凉介的笔记</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>凉介</copyright>
+        <lastBuildDate>Fri, 22 May 2026 21:39:37 +0800</lastBuildDate><atom:link href="https://aurora156.github.io/tags/%E6%B3%A8%E8%A7%A3/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>元注解</title>
+        <link>https://aurora156.github.io/p/%E5%85%83%E6%B3%A8%E8%A7%A3/</link>
+        <pubDate>Fri, 22 May 2026 21:39:37 +0800</pubDate>
+        
+        <guid>https://aurora156.github.io/p/%E5%85%83%E6%B3%A8%E8%A7%A3/</guid>
+        <description>&lt;h1 id=&#34;元注解&#34;&gt;元注解
+&lt;/h1&gt;&lt;p&gt;Java中的&lt;strong&gt;元注解（Meta-Annotation）&lt;/strong&gt;，简单来说就是**“用来修饰注解的注解”**。&lt;/p&gt;
+&lt;p&gt;在Java中，我们可以自己定义注解，但光定义一个空壳注解是没用的。我们需要通过元注解来告诉编译器或JVM：这个自定义的注解能写在哪里？它的生命周期有多长？会不会被继承？&lt;/p&gt;
+&lt;p&gt;JDK原生提供了几个核心的元注解，其中最常用、最核心的有以下4个：&lt;/p&gt;
+&lt;h3 id=&#34;1-target指定作用范围&#34;&gt;1. @Target（指定作用范围）
+&lt;/h3&gt;&lt;p&gt;它用来限制你的注解&lt;strong&gt;可以写在哪些位置&lt;/strong&gt;。比如，你希望某个注解只能写在方法上，或者只能写在类上，就需要用到它。它的取值是 &lt;code&gt;ElementType&lt;/code&gt; 枚举，常见的有：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ElementType.TYPE&lt;/code&gt;：可以作用在类、接口、枚举上。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ElementType.FIELD&lt;/code&gt;：可以作用在成员变量（字段）上。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ElementType.METHOD&lt;/code&gt;：可以作用在成员方法上。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ElementType.PARAMETER&lt;/code&gt;：可以作用在方法参数上。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-retention指定生命周期&#34;&gt;2. @Retention（指定生命周期）
+&lt;/h3&gt;&lt;p&gt;它用来决定你的注解&lt;strong&gt;能保留到什么时候&lt;/strong&gt;，这是元注解里&lt;strong&gt;最核心&lt;/strong&gt;的一个。它的取值是 &lt;code&gt;RetentionPolicy&lt;/code&gt; 枚举，分为三个阶段：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;RetentionPolicy.SOURCE&lt;/code&gt;：注解只保留在源码中，编译成 &lt;code&gt;.class&lt;/code&gt; 文件时就会被丢弃（比如我们常用的 &lt;code&gt;@Override&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;RetentionPolicy.CLASS&lt;/code&gt;：注解保留在 &lt;code&gt;.class&lt;/code&gt; 字节码文件中，但在JVM运行时不会被加载到内存（这是默认值）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;RetentionPolicy.RUNTIME&lt;/code&gt;：注解不仅保留在 &lt;code&gt;.class&lt;/code&gt; 中，还会被JVM加载到内存。&lt;strong&gt;只有设置为 RUNTIME，你的程序才能在运行时通过反射（Reflection）获取到注解信息&lt;/strong&gt;。我们平时用的 Spring 框架中的 &lt;code&gt;@Autowired&lt;/code&gt;、&lt;code&gt;@Controller&lt;/code&gt; 等，底层都是 RUNTIME。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;3-documented生成文档&#34;&gt;3. @Documented（生成文档）
+&lt;/h3&gt;&lt;p&gt;这是一个标记注解。默认情况下，使用 &lt;code&gt;javadoc&lt;/code&gt; 工具生成API文档时，是不会把注解信息包含进去的。如果你的自定义注解上加了 &lt;code&gt;@Documented&lt;/code&gt;，那么在生成文档时，这个注解也会作为说明的一部分出现在生成的 HTML 文档里。&lt;/p&gt;
+&lt;h3 id=&#34;4-inherited允许继承&#34;&gt;4. @Inherited（允许继承）
+&lt;/h3&gt;&lt;p&gt;它用来规定注解&lt;strong&gt;是否具有继承性&lt;/strong&gt;。如果一个父类上加了被 &lt;code&gt;@Inherited&lt;/code&gt; 修饰的注解，那么它的子类在没有加任何注解的情况下，会自动继承父类的这个注解。
+&lt;em&gt;注意：这个元注解只对类级别的注解（即 @Target 为 TYPE）有效，对方法和字段无效。&lt;/em&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;结合黑马课程实战举例&#34;&gt;结合黑马课程实战举例
+&lt;/h3&gt;&lt;p&gt;为了更好理解，我们正在学的 Spring 来举个例子。在 Spring Boot 中，我们经常用到 &lt;code&gt;@RestController&lt;/code&gt; 或 &lt;code&gt;@Service&lt;/code&gt;，这些其实就是 Spring 框架帮咱们定义好的&lt;strong&gt;自定义注解&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;如果我们自己来模拟定义一个类似 &lt;code&gt;@Service&lt;/code&gt; 的注解，代码大概长这样：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nn&#34;&gt;java.lang.annotation.*&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 1. @Target：规定这个 @MyService 注解只能写在类、接口或枚举上&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nd&#34;&gt;@Target&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ElementType&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;TYPE&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 2. @Retention：规定这个注解要保留到程序运行时，这样Spring框架才能在启动时通过反射扫描到它&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nd&#34;&gt;@Retention&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;RetentionPolicy&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;RUNTIME&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 3. @Documented：生成文档时带上这个注解信息&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nd&#34;&gt;@Documented&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nd&#34;&gt;@interface&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;MyService&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 可以定义属性，比如给Bean起个名字&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;default&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;因为 &lt;code&gt;@Retention&lt;/code&gt; 设置成了 &lt;code&gt;RUNTIME&lt;/code&gt;，Spring 容器在启动的时候，才能通过反射机制去扫描你项目里的所有类，看看哪些类头上顶着 &lt;code&gt;@MyService&lt;/code&gt;（或 &lt;code&gt;@Service&lt;/code&gt;），然后把这些类自动创建成对象（Bean）并管理起来。&lt;/p&gt;
+&lt;p&gt;简单总结一下：元注解就是给自定义注解立规矩的“幕后大佬”，尤其是 &lt;code&gt;@Target&lt;/code&gt; 和 &lt;code&gt;@Retention&lt;/code&gt;，在后续学习 Spring 等框架的底层原理时会非常关键！&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

@@ -10,7 +10,7 @@
 <meta property='og:description' content=" 本篇博客基于黑马程序员2022年的课程进行编写，课程内容地址：黑马程序员Redis入门到实战教程，深度透析redis底层原理+redis分布式锁+企业解决方案+黑马点评实战项目-bili_62700648706-redis-哔哩哔哩视频\n">
 <meta property='og:url' content='https://aurora156.github.io/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/'>
 <meta property='og:site_name' content='凉介的笔记'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-08-24T14:52:31&#43;08:00'/><meta property='article:modified_time' content='2026-08-24T14:52:31&#43;08:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Redis' /><meta property='article:tag' content='缓存' /><meta property='article:published_time' content='2026-08-24T14:52:31&#43;08:00'/><meta property='article:modified_time' content='2026-08-24T14:52:31&#43;08:00'/>
 <meta name="twitter:title" content="Redis 入门篇">
 <meta name="twitter:description" content=" 本篇博客基于黑马程序员2022年的课程进行编写，课程内容地址：黑马程序员Redis入门到实战教程，深度透析redis底层原理+redis分布式锁+企业解决方案+黑马点评实战项目-bili_62700648706-redis-哔哩哔哩视频\n">
     <link rel="shortcut icon" href="/favicon.ico" />
@@ -58,7 +58,7 @@
                     
                     
                         
-                        <img src="/img/avatar_hu_39194fe8d5906e9f.png" width="300"
+                        <img src="/img/avatar_hu_28f265b6f4c29d51.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -291,12 +291,30 @@
 
     <div class="article-details">
     
+    <header class="article-category">
+        
+            <a href="/categories/%E6%95%99%E7%A8%8B/" >
+                教程
+            </a>
+        
+    </header>
+    
+
+    
+    <section class="article-tags">
+        
+            <a href="/tags/redis/">Redis</a>
+        
+            <a href="/tags/%E7%BC%93%E5%AD%98/">缓存</a>
+        
+    </section>
+    
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
             <a href="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/">Redis 入门篇</a>
         </h2>
-    
+
         
     </div>
 
@@ -335,13 +353,15 @@
     <blockquote>
 <p>本篇博客基于黑马程序员2022年的课程进行编写，课程内容地址：<a class="link" href="https://www.bilibili.com/list/ml4120066138?spm_id_from=333.1387.0.0&amp;oid=766995956&amp;bvid=BV1cr4y1671t&amp;p=2"  target="_blank" rel="noopener"
     >黑马程序员Redis入门到实战教程，深度透析redis底层原理+redis分布式锁+企业解决方案+黑马点评实战项目-bili_62700648706-redis-哔哩哔哩视频</a></p>
+<p>本文部分内容借鉴自Redis快速入门与使用](<a class="link" href="https://xn--9krq6q3ox70h4k2b.me/p/redis%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E4%B8%8E%E4%BD%BF%E7%94%A8/"  target="_blank" rel="noopener"
+    >https://xn--9krq6q3ox70h4k2b.me/p/redis%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E4%B8%8E%E4%BD%BF%E7%94%A8/</a>)</p>
 </blockquote>
 <h1 id="redis快速入门">Redis快速入门
 </h1><h2 id="redis的常见命令和客户端使用">Redis的常见命令和客户端使用
 </h2><p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E4%BB%8B%E7%BB%8D.png"
 	width="1763"
 	height="802"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E4%BB%8B%E7%BB%8D_hu_c9c8550e4b7e93c8.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E4%BB%8B%E7%BB%8D_hu_ced94a10eba04b16.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E4%BB%8B%E7%BB%8D_hu_ec848a13e8229835.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E4%BB%8B%E7%BB%8D_hu_934224b21b3bca52.png 1024w"
 	loading="lazy"
 	
 	
@@ -354,7 +374,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/nosql.png"
 	width="1504"
 	height="542"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/nosql_hu_5369480f8a26e5a0.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/nosql_hu_4f9631b08fa46ee4.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/nosql_hu_fed677cff1e12130.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/nosql_hu_982ddfb66ac2d8e6.png 1024w"
 	loading="lazy"
 	
 	
@@ -371,7 +391,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%86.png"
 	width="2350"
 	height="1143"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%86_hu_97b9d71aedbe380c.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%86_hu_3195a8ce893d92bb.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%86_hu_aef6745055c303ab.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%86_hu_403386068ace420e.png 1024w"
 	loading="lazy"
 	
 	
@@ -385,7 +405,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%861.png"
 	width="1098"
 	height="621"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%861_hu_d76ec64fdd305764.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%861_hu_6a254b9236ae730d.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%861_hu_56351c8760beb1ff.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%861_hu_7710ec33327993fd.png 1024w"
 	loading="lazy"
 	
 	
@@ -398,7 +418,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%862.png"
 	width="1282"
 	height="833"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%862_hu_7830fb1b426fbefb.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%862_hu_50a231c8cfb9683d.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%862_hu_4c2cc484b9e87ce1.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%862_hu_5ad649f9d2c351ea.png 1024w"
 	loading="lazy"
 	
 	
@@ -417,7 +437,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%863.png"
 	width="1242"
 	height="523"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%863_hu_812d1bc2fb26afa1.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%863_hu_32a3db42e2724171.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%863_hu_3e4575b67ad11a49.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%863_hu_2f99c15da6e44cf2.png 1024w"
 	loading="lazy"
 	
 	
@@ -433,7 +453,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%864.png"
 	width="2263"
 	height="1084"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%864_hu_9136a51d951c1a4b.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%864_hu_626234fb0dd3a121.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%864_hu_dcb1e1ac7b73df41.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%AE%A4%E8%AF%864_hu_586e1918917b4a35.png 1024w"
 	loading="lazy"
 	
 	
@@ -458,8 +478,7 @@
 <p>Linux版下载地址:https://download.redis.io/releases/</p>
 <p>Redis的官方网站地址：https://redis.io/</p>
 <blockquote>
-<p>本文仅介绍Windows版本的安装，以下部分内容借鉴<a class="link" href="https://xn--9krq6q3ox70h4k2b.me/p/redis%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E4%B8%8E%E4%BD%BF%E7%94%A8/"  target="_blank" rel="noopener"
-    >Redis快速入门与使用</a></p>
+<p>本文仅介绍Windows版本的安装</p>
 </blockquote>
 <p>如何验证Windows版是否安装好：</p>
 <p><strong>方法一：图形界面验证（最直观）</strong></p>
@@ -524,7 +543,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%BF%9E%E6%8E%A5.png"
 	width="459"
 	height="137"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%BF%9E%E6%8E%A5_hu_3b1867a3612fb031.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%BF%9E%E6%8E%A5_hu_9a16512963be0930.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%BF%9E%E6%8E%A5_hu_62d51d562c69559c.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%BF%9E%E6%8E%A5_hu_eb656573c52600fe.png 1024w"
 	loading="lazy"
 	
 	
@@ -546,7 +565,7 @@
 </div><p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%BF%9E%E6%8E%A51.png"
 	width="679"
 	height="112"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%BF%9E%E6%8E%A51_hu_58d9604084cf6c73.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%BF%9E%E6%8E%A51_hu_7e70428c17925b15.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%BF%9E%E6%8E%A51_hu_e3172a5a86a64190.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E8%BF%9E%E6%8E%A51_hu_47d8eadfb7d72896.png 1024w"
 	loading="lazy"
 	
 	
@@ -560,7 +579,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%AF%86%E7%A0%81.png"
 	width="807"
 	height="540"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%AF%86%E7%A0%81_hu_bed001b82589acfc.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%AF%86%E7%A0%81_hu_d2314db4549cae95.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%AF%86%E7%A0%81_hu_e89c39193a6ca466.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%AF%86%E7%A0%81_hu_d36e09fb972d9b1f.png 1024w"
 	loading="lazy"
 	
 	
@@ -573,7 +592,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%AF%86%E7%A0%811.png"
 	width="571"
 	height="192"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%AF%86%E7%A0%811_hu_98441fb117010df2.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%AF%86%E7%A0%811_hu_9fcdb1e74a212eba.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%AF%86%E7%A0%811_hu_f129fc23a1732fca.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%AF%86%E7%A0%811_hu_a080e40baf04116e.png 1024w"
 	loading="lazy"
 	
 	
@@ -722,7 +741,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%B8%B8%E7%94%A8%E7%AE%80%E4%BB%8B.png"
 	width="798"
 	height="812"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%B8%B8%E7%94%A8%E7%AE%80%E4%BB%8B_hu_1c8578716185ec51.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%B8%B8%E7%94%A8%E7%AE%80%E4%BB%8B_hu_9ae233ec9936700.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%B8%B8%E7%94%A8%E7%AE%80%E4%BB%8B_hu_cf471d7064ed4b37.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%B8%B8%E7%94%A8%E7%AE%80%E4%BB%8B_hu_dd9bf820c71d5611.png 1024w"
 	loading="lazy"
 	
 	
@@ -746,7 +765,7 @@
 <p>通过help [command] 可以查看一个命令的具体用法，例如：<img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%80%9A%E7%94%A8.png"
 	width="723"
 	height="175"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%80%9A%E7%94%A8_hu_f0564ba4c7f49ed7.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%80%9A%E7%94%A8_hu_62a65e75b87cd775.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%80%9A%E7%94%A8_hu_515a3d552129a44a.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%80%9A%E7%94%A8_hu_83d37b077249eaee.png 1024w"
 	loading="lazy"
 	
 	
@@ -799,7 +818,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C.png"
 	width="1151"
 	height="174"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C_hu_54e8ab241b4af684.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C_hu_e0ba98d3002a6ff2.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C_hu_6efd171d391ca822.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C_hu_eef3c4bf03236b95.png 1024w"
 	loading="lazy"
 	
 	
@@ -812,7 +831,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C1.png"
 	width="1147"
 	height="487"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C1_hu_53f1f4eaffc3ee5a.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C1_hu_6f4a341266f04fa4.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C1_hu_a670570866563cba.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C1_hu_2a2405db1f4c8a87.png 1024w"
 	loading="lazy"
 	
 	
@@ -836,7 +855,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C2.png"
 	width="645"
 	height="171"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C2_hu_4da36e380b6d5a5f.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C2_hu_c7a1565f39c8382f.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C2_hu_a7b965b4e5cae79d.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C2_hu_31804178b37459af.png 1024w"
 	loading="lazy"
 	
 	
@@ -848,7 +867,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C3.png"
 	width="1506"
 	height="305"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C3_hu_fadc8eb4b773645c.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C3_hu_de40c2186e38b590.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C3_hu_a13ec43a28edca40.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C3_hu_e67a722351c5ff1a.png 1024w"
 	loading="lazy"
 	
 	
@@ -860,7 +879,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C4.png"
 	width="788"
 	height="205"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C4_hu_8e6c968a77ad80be.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C4_hu_28d4483f5ac2caf9.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C4_hu_306d0a12c0e089a7.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C4_hu_d4f7336bf62755fb.png 1024w"
 	loading="lazy"
 	
 	
@@ -872,7 +891,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C4-1.png"
 	width="1518"
 	height="390"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C4-1_hu_307f679a0cd11ae2.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C4-1_hu_407c7e58fad45be.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C4-1_hu_5988fcab2ba40ff7.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%93%88%E5%B8%8C4-1_hu_a5a5259505d5dadd.png 1024w"
 	loading="lazy"
 	
 	
@@ -905,7 +924,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8%E5%A2%9E.png"
 	width="2026"
 	height="244"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8%E5%A2%9E_hu_3ce7d3721e0f6d38.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8%E5%A2%9E_hu_ea09f5a7e2a792bf.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8%E5%A2%9E_hu_f4c8ab38a86e8653.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8%E5%A2%9E_hu_2dd8c37944751b22.png 1024w"
 	loading="lazy"
 	
 	
@@ -918,7 +937,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8%E5%8F%96.png"
 	width="2016"
 	height="281"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8%E5%8F%96_hu_7055a678f600db5e.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8%E5%8F%96_hu_684362d707eea2bf.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8%E5%8F%96_hu_b244ad42e95b97d3.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8%E5%8F%96_hu_8197a3a57ac24ab3.png 1024w"
 	loading="lazy"
 	
 	
@@ -931,7 +950,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8.png"
 	width="954"
 	height="354"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8_hu_8106561f50a697a4.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8_hu_2722b6a920f4ae2b.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8_hu_544cc9f31c2ea058.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A8_hu_ac9e30f6fd511cc0.png 1024w"
 	loading="lazy"
 	
 	
@@ -943,7 +962,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A81.png"
 	width="934"
 	height="739"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A81_hu_38bfb5e2e0fba303.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A81_hu_5f8b5c167f40f62d.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A81_hu_6d8c4879d2f54230.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A81_hu_360328ef98a037b0.png 1024w"
 	loading="lazy"
 	
 	
@@ -957,7 +976,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A82.png"
 	width="502"
 	height="73"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A82_hu_9a7083399199a4a1.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A82_hu_b70794a99d309a37.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A82_hu_32c92ef508546a18.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A82_hu_63d557f11c8bb890.png 1024w"
 	loading="lazy"
 	
 	
@@ -969,7 +988,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A83.png"
 	width="944"
 	height="413"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A83_hu_356da23888edc8b6.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A83_hu_81ea0ef80f8f73cd.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A83_hu_b97ee3833319620a.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%88%97%E8%A1%A83_hu_902a6914e480c132.png 1024w"
 	loading="lazy"
 	
 	
@@ -1013,7 +1032,7 @@
 <p>差集：<img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%9B%86%E5%90%88.png"
 	width="1199"
 	height="879"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%9B%86%E5%90%88_hu_46908a12502e1a72.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%9B%86%E5%90%88_hu_f57aae34ae136d87.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%9B%86%E5%90%88_hu_515330c50186fe31.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%9B%86%E5%90%88_hu_656215ab082ea497.png 1024w"
 	loading="lazy"
 	
 	
@@ -1025,7 +1044,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%9B%86%E5%90%881.png"
 	width="587"
 	height="314"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%9B%86%E5%90%881_hu_54c15f55360994e8.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%9B%86%E5%90%881_hu_2b964e649d977a8d.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%9B%86%E5%90%881_hu_f212b31db6d79c71.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E9%9B%86%E5%90%881_hu_596e3c5ea9cd8572.png 1024w"
 	loading="lazy"
 	
 	
@@ -1073,7 +1092,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/key.png"
 	width="1920"
 	height="1066"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/key_hu_e7567b62a9e7001b.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/key_hu_e58ef40337e3a9cc.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/key_hu_34e2fcbe9459b504.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/key_hu_5442867134730f43.png 1024w"
 	loading="lazy"
 	
 	
@@ -1109,7 +1128,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/SDR.png"
 	width="857"
 	height="284"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/SDR_hu_63e382de3517d026.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/SDR_hu_6a3a3d775110c04e.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/SDR_hu_5e32047150950c65.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/SDR_hu_273496b1fb64014d.png 1024w"
 	loading="lazy"
 	
 	
@@ -1252,7 +1271,7 @@
 </div><p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E6%B5%8B%E8%AF%95.png"
 	width="1720"
 	height="309"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E6%B5%8B%E8%AF%95_hu_22dee36aaea90a8d.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E6%B5%8B%E8%AF%95_hu_d1c0b97ef4119ed7.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E6%B5%8B%E8%AF%95_hu_556d1f80ddb6c4da.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E6%B5%8B%E8%AF%95_hu_6e707df6a05e699d.png 1024w"
 	loading="lazy"
 	
 	
@@ -1409,7 +1428,7 @@
 </h4><p>RedisTemplate可以接收任意Object作为值写入Redis，只不过写入前会把Object序列化为字节形式，默认是采用JDK序列化，得到的结果是这样的：<img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%96.png"
 	width="1073"
 	height="209"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%96_hu_54d1ddca8f20838f.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%96_hu_8e6012146c5e4636.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%96_hu_2d0b294e7eadf599.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%96_hu_9724ed27e3462efd.png 1024w"
 	loading="lazy"
 	
 	
@@ -1471,7 +1490,7 @@
 </div><p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%961.png"
 	width="1276"
 	height="241"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%961_hu_8bc6e1885ea39d17.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%961_hu_802ddde8be05759.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%961_hu_325a7b85eda40816.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%961_hu_e72227989fd31d28.png 1024w"
 	loading="lazy"
 	
 	
@@ -1484,7 +1503,7 @@
 </h4><p>尽管JSON的序列化方式可以满足我们的需求，但依然存在一些问题，如图：<img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%962.png"
 	width="534"
 	height="168"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%962_hu_4729cfe61c0fc625.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%962_hu_2f46e408c78c7a9d.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%962_hu_1a9d1cdb3daa5b77.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%962_hu_adc49bb4a4fda298.png 1024w"
 	loading="lazy"
 	
 	
@@ -1498,7 +1517,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%963.png"
 	width="898"
 	height="302"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%963_hu_b0ad4920660243d4.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%963_hu_9cd2b36b6e78e229.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%963_hu_9dd40ba223b54ed4.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%963_hu_8ebbcb71eeae3cea.png 1024w"
 	loading="lazy"
 	
 	
@@ -1602,7 +1621,7 @@
 </div><p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%964.png"
 	width="1165"
 	height="171"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%964_hu_c19cf06ed59be487.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%964_hu_2f1a6bf576b07fca.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%964_hu_1e51141f8fb43399.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%964_hu_10a9c1cf163af0e7.png 1024w"
 	loading="lazy"
 	
 	
@@ -1615,7 +1634,7 @@
 <p><img src="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%965.png"
 	width="878"
 	height="358"
-	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%965_hu_70e936f0587a003d.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%965_hu_f8754648c13476fa.png 1024w"
+	srcset="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%965_hu_a36e18c259f7a4cc.png 480w, /p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/assets/%E5%BA%8F%E5%88%97%E5%8C%965_hu_846a73915d9affb8.png 1024w"
 	loading="lazy"
 	
 	
@@ -1906,8 +1925,6 @@
 
 
     <footer class="article-footer">
-    
-
     </footer>
 
 
@@ -1917,6 +1934,80 @@
     
 
     
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/p/redis%E5%AE%9E%E6%88%98%E7%AF%87/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Redis实战篇</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/python%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Python基础语法</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/%E5%85%83%E6%B3%A8%E8%A7%A3/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">元注解</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">后端web进阶（SpringBoot原理）</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6maven%E9%AB%98%E7%BA%A7/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">后端web进阶（Maven高级）</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
 
      
     
