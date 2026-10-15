@@ -205,14 +205,18 @@
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;17.下载好主题后，把主题压缩包解压到hugo的&lt;code&gt;theme&lt;/code&gt;文件夹中&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;C:%5cUsers%5c%e5%90%b4%e6%8c%af%e8%b4%b5%5cAppData%5cLocal%5cTemp%5c1772867617631.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B67.png&#34;
+	width=&#34;1001&#34;
+	height=&#34;542&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B67_hu_a2bd3c5d616b97bd.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B67_hu_b502d53f3a69aef4.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;77286761763&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;184&#34;
+		data-flex-basis=&#34;443px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;18.打开下载的&lt;code&gt;hugo-theme-stack-3.30.0&lt;/code&gt;文件夹，再打开其中的&lt;code&gt;exampleSite&lt;/code&gt;文件夹&lt;/p&gt;
