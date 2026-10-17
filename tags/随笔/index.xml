@@ -21,187 +21,274 @@
 &lt;ol&gt;
 &lt;li&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c1.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/1.png&#34;
+	width=&#34;2550&#34;
+	height=&#34;1275&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/1_hu_3e28bbb0eb3f6306.png 480w, https://aurora156.github.io/p/myfirstblog/assets/1_hu_a1696732cbb988e7.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;1&#34;
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;200&#34;
+		data-flex-basis=&#34;480px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;ol start=&#34;2&#34;&gt;
 &lt;li&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c2.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/2.png&#34;
+	width=&#34;2531&#34;
+	height=&#34;1155&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/2_hu_27c8492af02aa4ad.png 480w, https://aurora156.github.io/p/myfirstblog/assets/2_hu_1c0d4f2575c74d02.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;2&#34;
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;219&#34;
+		data-flex-basis=&#34;525px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;ol start=&#34;3&#34;&gt;
 &lt;li&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c2.3%e4%b9%8b%e9%97%b4.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/2.3%E4%B9%8B%E9%97%B4.png&#34;
+	width=&#34;2531&#34;
+	height=&#34;1125&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/2.3%E4%B9%8B%E9%97%B4_hu_cd3b94e68d4fb5d7.png 480w, https://aurora156.github.io/p/myfirstblog/assets/2.3%E4%B9%8B%E9%97%B4_hu_dd509cce9143a8ac.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;.3之&#34;
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;224&#34;
+		data-flex-basis=&#34;539px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;4.找到自己电脑对应的版本&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c3.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/3.png&#34;
+	width=&#34;2531&#34;
+	height=&#34;1265&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/3_hu_1c339c194ef0adf8.png 480w, https://aurora156.github.io/p/myfirstblog/assets/3_hu_5297fd89c744c361.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;3&#34;
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;200&#34;
+		data-flex-basis=&#34;480px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;5.解压后在文件夹中打开cmd&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c4.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/4.png&#34;
+	width=&#34;1631&#34;
+	height=&#34;792&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/4_hu_31fef2ce1880f526.png 480w, https://aurora156.github.io/p/myfirstblog/assets/4_hu_f0b481f5b496e245.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;4&#34;
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;205&#34;
+		data-flex-basis=&#34;494px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;6.在cmd中输入&lt;code&gt;hugo new site 要创建文件夹的名字&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c5.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/5.png&#34;
+	width=&#34;1481&#34;
+	height=&#34;760&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/5_hu_788de59ba187cb7b.png 480w, https://aurora156.github.io/p/myfirstblog/assets/5_hu_f00d052a9f5fa60.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;5&#34;
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;194&#34;
+		data-flex-basis=&#34;467px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/6.png&#34;
+	width=&#34;1423&#34;
+	height=&#34;169&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/6_hu_74b6438c82b0c8ec.png 480w, https://aurora156.github.io/p/myfirstblog/assets/6_hu_eed67e4c283f8b43.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;842&#34;
+		data-flex-basis=&#34;2020px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;7.若配置了hugo的全局环境变量则无需执行copy命令，若不知道是否配置，则与图中操作一样&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c%e5%a4%8d%e5%88%b61.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B61.png&#34;
+	width=&#34;896&#34;
+	height=&#34;87&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B61_hu_1f15d1b87b341277.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B61_hu_b71a552e4ecedcb0.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;77286624813&#34;
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;1029&#34;
+		data-flex-basis=&#34;2471px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/7.png&#34;
+	width=&#34;1429&#34;
+	height=&#34;592&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/7_hu_ce2fc38249ec59d4.png 480w, https://aurora156.github.io/p/myfirstblog/assets/7_hu_3bc3745f8bc1d191.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;241&#34;
+		data-flex-basis=&#34;579px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/8.png&#34;
+	width=&#34;1071&#34;
+	height=&#34;160&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/8_hu_c87d84bebb394523.png 480w, https://aurora156.github.io/p/myfirstblog/assets/8_hu_f0115315336e7cec.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;669&#34;
+		data-flex-basis=&#34;1606px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;下载网页主题并启动&#34;&gt;下载网页主题并启动
 &lt;/h2&gt;&lt;p&gt;8.配置完成后先看看启动后的样子是怎样的&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c9.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/9.png&#34;
+	width=&#34;1514&#34;
+	height=&#34;397&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/9_hu_f71f28573ddfd0d9.png 480w, https://aurora156.github.io/p/myfirstblog/assets/9_hu_db485133230f3baa.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;9&#34;
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;381&#34;
+		data-flex-basis=&#34;915px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;ol start=&#34;9&#34;&gt;
 &lt;li&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5cPixPin_2026-03-07_14-57-51.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/PixPin_2026-03-07_14-57-51.png&#34;
+	width=&#34;1281&#34;
+	height=&#34;666&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/PixPin_2026-03-07_14-57-51_hu_b7cd2407b9717362.png 480w, https://aurora156.github.io/p/myfirstblog/assets/PixPin_2026-03-07_14-57-51_hu_504412edc41da403.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;ixPin_2026-03-07_14-57-5&#34;
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;192&#34;
+		data-flex-basis=&#34;461px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;10.这时打开的网址什么都没有，但服务其实已经搭好了&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c10.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/10.png&#34;
+	width=&#34;503&#34;
+	height=&#34;179&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/10_hu_b969b6e0fcab69a9.png 480w, https://aurora156.github.io/p/myfirstblog/assets/10_hu_6b37d6ee846de3c7.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;281&#34;
+		data-flex-basis=&#34;674px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;11.查看完后先把cmd窗口放到后台，别关掉，重新打开hugo官网&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c%e5%a4%8d%e5%88%b61.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/11.png&#34;
+	width=&#34;2550&#34;
+	height=&#34;1275&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/11_hu_1696d97facac6173.png 480w, https://aurora156.github.io/p/myfirstblog/assets/11_hu_90712297f17b31f5.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;77286685650&#34;
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;200&#34;
+		data-flex-basis=&#34;480px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;12.&lt;img src=&#34;https://aurora156.github.io/assets%5c%e5%a4%8d%e5%88%b62.png&#34;
-	
-	
-	
+&lt;ol start=&#34;12&#34;&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B62.png&#34;
+	width=&#34;1001&#34;
+	height=&#34;318&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B62_hu_acc0651847da109b.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B62_hu_97fd605396d6f54c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;77286693182&#34;
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;314&#34;
+		data-flex-basis=&#34;755px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;ol start=&#34;13&#34;&gt;
 &lt;li&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c%e5%a4%8d%e5%88%b63.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B63.png&#34;
+	width=&#34;1001&#34;
+	height=&#34;497&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B63_hu_6b1aaf3b3c0a42cc.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B63_hu_49ee9242d6ded9b2.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;77286703125&#34;
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;201&#34;
+		data-flex-basis=&#34;483px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;ol start=&#34;14&#34;&gt;
 &lt;li&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c%e5%a4%8d%e5%88%b64.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B64.png&#34;
+	width=&#34;841&#34;
+	height=&#34;943&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B64_hu_bb3dbb6292c589e7.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B64_hu_c9027227323bf57e.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;77286708779&#34;
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;89&#34;
+		data-flex-basis=&#34;214px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B65.png&#34;
+	width=&#34;1001&#34;
+	height=&#34;454&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B65_hu_3150c31e7d72a4.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B65_hu_7d5e000307cdbfda.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;220&#34;
+		data-flex-basis=&#34;529px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;15.选择版本随意，但此处建议使用3.30.0（因为视频教程中用的是这个，使用其他版本在后续的配置中可能会无法按照教程继续进行）&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c%e5%a4%8d%e5%88%b66.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B66.png&#34;
+	width=&#34;1001&#34;
+	height=&#34;274&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B66_hu_8bfcec54717c8888.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B66_hu_37a3b6d9b6c660a1.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;77286713150&#34;
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;365&#34;
+		data-flex-basis=&#34;876px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;ol start=&#34;16&#34;&gt;
 &lt;li&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c12.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/12.png&#34;
+	width=&#34;1757&#34;
+	height=&#34;1021&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/12_hu_4a8f158b61808c01.png 480w, https://aurora156.github.io/p/myfirstblog/assets/12_hu_673b05107b73d3ef.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;172&#34;
+		data-flex-basis=&#34;413px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;17.下载好主题后，把主题压缩包解压到hugo的&lt;code&gt;theme&lt;/code&gt;文件夹中&lt;/p&gt;
@@ -211,8 +298,6 @@
 	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B67_hu_a2bd3c5d616b97bd.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B67_hu_b502d53f3a69aef4.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;77286761763&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;184&#34;
@@ -220,65 +305,107 @@
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;18.打开下载的&lt;code&gt;hugo-theme-stack-3.30.0&lt;/code&gt;文件夹，再打开其中的&lt;code&gt;exampleSite&lt;/code&gt;文件夹&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c13.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/13.png&#34;
+	width=&#34;1429&#34;
+	height=&#34;592&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/13_hu_87d7df8d6c00b8fe.png 480w, https://aurora156.github.io/p/myfirstblog/assets/13_hu_be8258e24ee7a67b.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;241&#34;
+		data-flex-basis=&#34;579px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;ol start=&#34;19&#34;&gt;
 &lt;li&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c%e5%a4%8d%e5%88%b68.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B68.png&#34;
+	width=&#34;1001&#34;
+	height=&#34;207&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B68_hu_29a366fba64c5393.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B68_hu_b08928ac3c5b9f9d.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;77286773775&#34;
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;483&#34;
+		data-flex-basis=&#34;1160px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/14.png&#34;
+	width=&#34;1429&#34;
+	height=&#34;592&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/14_hu_32cc976579209c3b.png 480w, https://aurora156.github.io/p/myfirstblog/assets/14_hu_ece3ab0ff21a1e48.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;241&#34;
+		data-flex-basis=&#34;579px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;20.粘贴到hugo的dev文件夹下&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c%e5%a4%8d%e5%88%b69.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B69.png&#34;
+	width=&#34;617&#34;
+	height=&#34;499&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B69_hu_a51dc8e5a0eee382.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B69_hu_410628eed5e39e8a.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;77286777775&#34;
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;123&#34;
+		data-flex-basis=&#34;296px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;21.删掉&lt;code&gt;hugo.toml&lt;/code&gt;，因为刚刚复制的&lt;code&gt;hugo.yaml&lt;/code&gt;与其作用是一致的，相当于已经配置好了的&lt;code&gt;hugo.toml&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c15.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/15.png&#34;
+	width=&#34;1429&#34;
+	height=&#34;592&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/15_hu_315e5a4d477ddd4a.png 480w, https://aurora156.github.io/p/myfirstblog/assets/15_hu_ba5cb990b0d99088.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;241&#34;
+		data-flex-basis=&#34;579px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;22.然后打开刚刚复制过来的&lt;code&gt;content&lt;/code&gt;文件夹，再打开之中的&lt;code&gt;post&lt;/code&gt;文件夹&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c%e5%a4%8d%e5%88%b610.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B610.png&#34;
+	width=&#34;908&#34;
+	height=&#34;252&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B610_hu_e2c042e0e1e15f5e.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B610_hu_df31acae5c4e88c8.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;77286785742&#34;
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;360&#34;
+		data-flex-basis=&#34;864px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/16.png&#34;
+	width=&#34;1429&#34;
+	height=&#34;592&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/16_hu_a3ddf4b4b6839639.png 480w, https://aurora156.github.io/p/myfirstblog/assets/16_hu_2296f8bee38c9b0d.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;241&#34;
+		data-flex-basis=&#34;579px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;23.因为&lt;code&gt;rich-content&lt;/code&gt;中有引用国外网站，可能会导致之后无法启动网页&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c17.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/17.png&#34;
+	width=&#34;1429&#34;
+	height=&#34;592&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/17_hu_95073cd9b3f8ace6.png 480w, https://aurora156.github.io/p/myfirstblog/assets/17_hu_7484bd286c0d8cf.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;241&#34;
+		data-flex-basis=&#34;579px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;24.回到&lt;code&gt;dev&lt;/code&gt;文件夹&lt;/p&gt;
@@ -287,8 +414,6 @@
 	height=&#34;554&#34;
 	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B611_hu_e824a08e2e2f35cc.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B611_hu_1e68bd2e02ba3493.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;制1&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -305,8 +430,6 @@
 	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B612_hu_f7aac375bf824585.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B612_hu_7809730cacfd42b9.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;制1&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;518&#34;
@@ -320,8 +443,6 @@
 	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B613_hu_a4b867c0b63aa5dd.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B613_hu_ef111efed2025723.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;制1&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;198&#34;
@@ -334,8 +455,6 @@
 	height=&#34;456&#34;
 	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B614_hu_c9203eebd7fca2ad.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B614_hu_a09984c50793b061.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;制1&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -352,12 +471,22 @@
 	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B615_hu_da91e6995519ea82.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B615_hu_16eb552301956257.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;制1&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;2133&#34;
 		data-flex-basis=&#34;5120px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/18.png&#34;
+	width=&#34;1483&#34;
+	height=&#34;404&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/18_hu_f467f79ea10a2460.png 480w, https://aurora156.github.io/p/myfirstblog/assets/18_hu_4fb11cf4820f5d66.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;367&#34;
+		data-flex-basis=&#34;880px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;29.在cmd窗口输入&lt;code&gt;hugo server -D&lt;/code&gt;，重新启动网页&lt;/p&gt;
@@ -366,8 +495,6 @@
 	height=&#34;461&#34;
 	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B616_hu_ad2b14092612ebec.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B616_hu_e56fe8281268ab92.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;制1&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -384,12 +511,22 @@
 	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B617_hu_96f79c1509b82bc.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B617_hu_68e83a7280045bf4.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;制1&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;197&#34;
 		data-flex-basis=&#34;473px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/19.png&#34;
+	width=&#34;1238&#34;
+	height=&#34;1212&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/19_hu_571d591c1df9d295.png 480w, https://aurora156.github.io/p/myfirstblog/assets/19_hu_b4ca6c7eb8b21d1d.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;102&#34;
+		data-flex-basis=&#34;245px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;31.Hugo的默认根路径在在&lt;code&gt;static&lt;/code&gt;文件夹，所以要注意修改笔记中图片的路径(以下为我存放图片的位置)&lt;/p&gt;
@@ -398,8 +535,6 @@
 	height=&#34;302&#34;
 	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B618_hu_e98a4345608b886.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B618_hu_723777d4e3fa48e1.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;制1&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -420,8 +555,6 @@
 	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B619_hu_d6d4f72fd1d254da.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B619_hu_ee099bf302d841ab.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;制1&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;549&#34;
@@ -429,12 +562,16 @@
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;35.创建仓库&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c20.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/20.png&#34;
+	width=&#34;2550&#34;
+	height=&#34;1275&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/20_hu_cd5e0340ec71173c.png 480w, https://aurora156.github.io/p/myfirstblog/assets/20_hu_6faf2c1d11c88ec.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;200&#34;
+		data-flex-basis=&#34;480px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;ol start=&#34;36&#34;&gt;
@@ -445,8 +582,6 @@
 	height=&#34;963&#34;
 	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B620_hu_45c68f804123c17.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B620_hu_2571b493444a3d75.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;制2&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -460,34 +595,61 @@
 	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B621_hu_aa493be27653156e.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B621_hu_a27b5924fe4b782e.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;制2&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;216&#34;
 		data-flex-basis=&#34;520px&#34;
 	
-&gt;
-37.修改&lt;code&gt;hugo.yaml&lt;/code&gt;中&lt;code&gt;baseurl&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/assets%5c22.png&#34;
-	
-	
-	
+&gt;&lt;/p&gt;
+&lt;p&gt;37.修改&lt;code&gt;hugo.yaml&lt;/code&gt;中&lt;code&gt;baseurl&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/21.png&#34;
+	width=&#34;1429&#34;
+	height=&#34;592&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/21_hu_ba2c3f1ecad0f49c.png 480w, https://aurora156.github.io/p/myfirstblog/assets/21_hu_5a54409a7a8f195e.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
-&gt;38.&lt;/p&gt;
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;241&#34;
+		data-flex-basis=&#34;579px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/22.png&#34;
+	width=&#34;959&#34;
+	height=&#34;855&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/22_hu_ec371783fa8d6650.png 480w, https://aurora156.github.io/p/myfirstblog/assets/22_hu_161e706037b0a951.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;112&#34;
+		data-flex-basis=&#34;269px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ol start=&#34;38&#34;&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;
 &lt;p&gt;打开&lt;code&gt;dev&lt;/code&gt;中的&lt;code&gt;public&lt;/code&gt;文件夹，在路径处输入&lt;code&gt;cmd&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;补充（非必要，可不看）：可以先删掉&lt;code&gt;public&lt;/code&gt;文件夹，再在cmd窗口输入&lt;code&gt;hugo -D&lt;/code&gt;重新生成一个&lt;code&gt;public&lt;/code&gt;文件夹。因为在配置主题的时候可能会把很多没必要的地方删掉，而删掉的部分仍留在public中，这时就可以用&lt;code&gt;hugo -D&lt;/code&gt;重新生成一次静态页面&lt;/p&gt;
 &lt;p&gt;39.然后在cmd窗口依次输入&lt;code&gt;git init&lt;/code&gt;、&lt;code&gt;git add .&lt;/code&gt;、&lt;code&gt;git commit -m &amp;quot;first commit&amp;quot;&lt;/code&gt;、&lt;code&gt;git branch -M main&lt;/code&gt;、&lt;code&gt;git remote add origin https://github.com/xxx/xxx.github.io.git&lt;/code&gt;（这里填你自己的仓库地址）、&lt;code&gt;git push -u origin main&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/23.png&#34;
+	width=&#34;1481&#34;
+	height=&#34;760&#34;
+	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/23_hu_6f33b4beb660dd39.png 480w, https://aurora156.github.io/p/myfirstblog/assets/23_hu_1b077e4f58c3cb4b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;194&#34;
+		data-flex-basis=&#34;467px&#34;
+	
+&gt;&lt;/p&gt;
 &lt;p&gt;40.如果和图中一样说明部署完成了&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B622.png&#34;
 	width=&#34;1001&#34;
 	height=&#34;438&#34;
 	srcset=&#34;https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B622_hu_781400bfeaa3f8e3.png 480w, https://aurora156.github.io/p/myfirstblog/assets/%E5%A4%8D%E5%88%B622_hu_661f3670461962f1.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;制2&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
