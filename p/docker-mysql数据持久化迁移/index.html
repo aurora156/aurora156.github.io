@@ -1,0 +1,2461 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Docker-MySQL数据持久化迁移 迁移背景 原有环境 在学习 Docker 和 MySQL 时，我们使用 VMware Workstation 创建 Ubuntu 20.04 虚拟机，并在 Ubuntu 中通过 Docker 部署 MySQL 5.7.25。\n同时，在 Windows 宿主机上安装 Navicat，通过虚拟机 IP 和 Docker 映射端口连接 MySQL。\n">
+<title>Docker MySQL数据持久化迁移</title>
+
+<link rel='canonical' href='https://aurora156.github.io/p/docker-mysql%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E8%BF%81%E7%A7%BB/'>
+
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="Docker MySQL数据持久化迁移">
+<meta property='og:description' content="Docker-MySQL数据持久化迁移 迁移背景 原有环境 在学习 Docker 和 MySQL 时，我们使用 VMware Workstation 创建 Ubuntu 20.04 虚拟机，并在 Ubuntu 中通过 Docker 部署 MySQL 5.7.25。\n同时，在 Windows 宿主机上安装 Navicat，通过虚拟机 IP 和 Docker 映射端口连接 MySQL。\n">
+<meta property='og:url' content='https://aurora156.github.io/p/docker-mysql%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E8%BF%81%E7%A7%BB/'>
+<meta property='og:site_name' content='凉介的笔记'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Docker' /><meta property='article:tag' content='MySQL' /><meta property='article:tag' content='数据持久化' /><meta property='article:published_time' content='2026-10-17T14:47:59&#43;08:00'/><meta property='article:modified_time' content='2026-10-17T14:47:59&#43;08:00'/>
+<meta name="twitter:title" content="Docker MySQL数据持久化迁移">
+<meta name="twitter:description" content="Docker-MySQL数据持久化迁移 迁移背景 原有环境 在学习 Docker 和 MySQL 时，我们使用 VMware Workstation 创建 Ubuntu 20.04 虚拟机，并在 Ubuntu 中通过 Docker 部署 MySQL 5.7.25。\n同时，在 Windows 宿主机上安装 Navicat，通过虚拟机 IP 和 Docker 映射端口连接 MySQL。\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_28f265b6f4c29d51.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🌆</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">凉介的笔记</a></h1>
+            <h2 class="site-description">凉介的博客</h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>档案</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#迁移背景">迁移背景</a>
+      <ol>
+        <li><a href="#原有环境">原有环境</a></li>
+        <li><a href="#原来的-mysql-部署方式">原来的 MySQL 部署方式</a></li>
+        <li><a href="#遇到的问题">遇到的问题</a></li>
+        <li><a href="#迁移目标">迁移目标</a></li>
+      </ol>
+    </li>
+    <li><a href="#docker数据持久化原理">Docker数据持久化原理</a>
+      <ol>
+        <li><a href="#为什么需要数据持久化">为什么需要数据持久化</a></li>
+        <li><a href="#bind-mount的工作原理">Bind Mount的工作原理</a></li>
+        <li><a href="#为什么选择-optmysql">为什么选择 /opt/mysql</a></li>
+      </ol>
+    </li>
+    <li><a href="#迁移前检查">迁移前检查</a>
+      <ol>
+        <li><a href="#检查磁盘空间">检查磁盘空间</a></li>
+        <li><a href="#检查原容器挂载目录">检查原容器挂载目录</a></li>
+        <li><a href="#检查-mysql-镜像和容器配置">检查 MySQL 镜像和容器配置</a></li>
+        <li><a href="#检查端口映射">检查端口映射</a></li>
+      </ol>
+    </li>
+    <li><a href="#迁移前备份">迁移前备份</a>
+      <ol>
+        <li><a href="#为什么迁移前必须备份">为什么迁移前必须备份</a></li>
+        <li><a href="#创建备份目录">创建备份目录</a></li>
+        <li><a href="#备份-docker-容器配置">备份 Docker 容器配置</a></li>
+        <li><a href="#备份-mysql-数据库">备份 MySQL 数据库</a></li>
+        <li><a href="#检查-sql-备份文件">检查 SQL 备份文件</a></li>
+        <li><a href="#检查-mysqldump-退出码">检查 mysqldump 退出码</a></li>
+      </ol>
+    </li>
+    <li><a href="#停止mysql并复制数据">停止MySQL并复制数据</a>
+      <ol>
+        <li><a href="#为什么必须先停止-mysql">为什么必须先停止 MySQL</a></li>
+        <li><a href="#停止原-mysql-容器">停止原 MySQL 容器</a></li>
+        <li><a href="#创建新的数据目录">创建新的数据目录</a></li>
+        <li><a href="#复制原始数据">复制原始数据</a></li>
+        <li><a href="#检查复制结果">检查复制结果</a></li>
+        <li><a href="#检查数据文件是否一致">检查数据文件是否一致</a></li>
+        <li><a href="#检查数据目录权限">检查数据目录权限</a></li>
+      </ol>
+    </li>
+    <li><a href="#恢复mysql配置文件">恢复MySQL配置文件</a>
+      <ol>
+        <li><a href="#发现的问题">发现的问题</a></li>
+        <li><a href="#创建配置文件">创建配置文件</a></li>
+        <li><a href="#配置说明">配置说明</a></li>
+        <li><a href="#检查配置文件">检查配置文件</a></li>
+      </ol>
+    </li>
+    <li><a href="#保留旧容器并创建新容器">保留旧容器并创建新容器</a>
+      <ol>
+        <li><a href="#为什么不能直接修改旧容器挂载目录">为什么不能直接修改旧容器挂载目录</a></li>
+        <li><a href="#禁用旧容器自动重启">禁用旧容器自动重启</a></li>
+        <li><a href="#重命名旧容器">重命名旧容器</a></li>
+        <li><a href="#创建新的-mysql-容器">创建新的 MySQL 容器</a></li>
+      </ol>
+    </li>
+    <li><a href="#检查新mysql容器">检查新MySQL容器</a>
+      <ol>
+        <li><a href="#检查容器状态">检查容器状态</a></li>
+        <li><a href="#查看-mysql-启动日志">查看 MySQL 启动日志</a></li>
+        <li><a href="#检查实际挂载目录">检查实际挂载目录</a></li>
+        <li><a href="#检查-mysql-登录">检查 MySQL 登录</a></li>
+        <li><a href="#检查-mysql-数据目录">检查 MySQL 数据目录</a></li>
+        <li><a href="#检查自动重启策略">检查自动重启策略</a></li>
+      </ol>
+    </li>
+    <li><a href="#验证数据持久化">验证数据持久化</a>
+      <ol>
+        <li><a href="#创建测试数据库">创建测试数据库</a></li>
+        <li><a href="#创建测试表">创建测试表</a></li>
+        <li><a href="#插入测试数据">插入测试数据</a></li>
+        <li><a href="#重启-mysql-容器">重启 MySQL 容器</a></li>
+        <li><a href="#重启后查询测试数据">重启后查询测试数据</a></li>
+      </ol>
+    </li>
+    <li><a href="#windows-navicat连接验证">Windows Navicat连接验证</a>
+      <ol>
+        <li><a href="#连接配置">连接配置</a></li>
+        <li><a href="#为什么使用-3307-端口">为什么使用 3307 端口</a></li>
+        <li><a href="#验证结果">验证结果</a></li>
+      </ol>
+    </li>
+    <li><a href="#迁移过程中遇到的问题">迁移过程中遇到的问题</a>
+      <ol>
+        <li><a href="#mycnf配置文件不存在">my.cnf配置文件不存在</a></li>
+        <li><a href="#mysql启动日志出现skip-name-resolve警告">MySQL启动日志出现skip-name-resolve警告</a></li>
+        <li><a href="#mysql启动日志出现复制线程警告">MySQL启动日志出现复制线程警告</a></li>
+        <li><a href="#为什么不直接删除旧容器">为什么不直接删除旧容器</a></li>
+        <li><a href="#为什么不立即删除-tmpmysql">为什么不立即删除 /tmp/mysql</a></li>
+      </ol>
+    </li>
+    <li><a href="#常用mysql-docker管理命令">常用MySQL Docker管理命令</a>
+      <ol>
+        <li><a href="#查看运行中的容器">查看运行中的容器</a></li>
+        <li><a href="#查看全部容器">查看全部容器</a></li>
+        <li><a href="#启动-mysql">启动 MySQL</a></li>
+        <li><a href="#停止-mysql">停止 MySQL</a></li>
+        <li><a href="#重启-mysql">重启 MySQL</a></li>
+        <li><a href="#查看-mysql-日志">查看 MySQL 日志</a></li>
+        <li><a href="#进入-mysql">进入 MySQL</a></li>
+        <li><a href="#查看挂载目录">查看挂载目录</a></li>
+        <li><a href="#查看自动重启策略">查看自动重启策略</a></li>
+        <li><a href="#查看-mysql-数据目录大小">查看 MySQL 数据目录大小</a></li>
+      </ol>
+    </li>
+    <li><a href="#迁移前后对比">迁移前后对比</a></li>
+    <li><a href="#总结">总结</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/docker/" >
+                Docker
+            </a>
+        
+    </header>
+    
+
+    
+    <section class="article-tags">
+        
+            <a href="/tags/docker/">Docker</a>
+        
+            <a href="/tags/mysql/">MySQL</a>
+        
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96/">数据持久化</a>
+        
+    </section>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/docker-mysql%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E8%BF%81%E7%A7%BB/">Docker MySQL数据持久化迁移</a>
+        </h2>
+
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2026-10-17</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="docker-mysql数据持久化迁移">Docker-MySQL数据持久化迁移
+</h1><h2 id="迁移背景">迁移背景
+</h2><h3 id="原有环境">原有环境
+</h3><p>在学习 Docker 和 MySQL 时，我们使用 VMware Workstation 创建 Ubuntu 20.04 虚拟机，并在 Ubuntu 中通过 Docker 部署 MySQL 5.7.25。</p>
+<p>同时，在 Windows 宿主机上安装 Navicat，通过虚拟机 IP 和 Docker 映射端口连接 MySQL。</p>
+<p>环境信息如下：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>项目</th>
+					<th>配置</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>宿主机</td>
+					<td>Windows</td>
+			</tr>
+			<tr>
+					<td>虚拟化软件</td>
+					<td>VMware Workstation</td>
+			</tr>
+			<tr>
+					<td>虚拟机操作系统</td>
+					<td>Ubuntu 20.04</td>
+			</tr>
+			<tr>
+					<td>Docker 容器名称</td>
+					<td>mysql</td>
+			</tr>
+			<tr>
+					<td>MySQL 镜像</td>
+					<td>mysql:5.7.25</td>
+			</tr>
+			<tr>
+					<td>MySQL 容器端口</td>
+					<td>3306</td>
+			</tr>
+			<tr>
+					<td>Ubuntu 映射端口</td>
+					<td>3307</td>
+			</tr>
+			<tr>
+					<td>Ubuntu 固定 IP</td>
+					<td>192.168.240.100</td>
+			</tr>
+			<tr>
+					<td>VMware 网络模式</td>
+					<td>NAT</td>
+			</tr>
+			<tr>
+					<td>数据库客户端</td>
+					<td>Navicat</td>
+			</tr>
+			<tr>
+					<td>Docker 自动重启策略</td>
+					<td>unless-stopped</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>Windows Navicat 通过以下地址访问 MySQL：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">192.168.240.100:3307
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这里需要区分：</p>
+<ul>
+<li>Windows 是宿主机。</li>
+<li>Ubuntu 是运行在 VMware 中的虚拟机。</li>
+<li>Docker 运行在 Ubuntu 内部。</li>
+<li>MySQL 运行在 Docker 容器中。</li>
+</ul>
+<p>访问关系：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">Windows</span> <span class="err">宿主机</span>
+</span></span><span class="line"><span class="cl">    <span class="err">│</span>
+</span></span><span class="line"><span class="cl">    <span class="err">│</span> <span class="n">Navicat</span>
+</span></span><span class="line"><span class="cl">    <span class="err">│</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">240.100</span><span class="p">:</span><span class="mi">3307</span>
+</span></span><span class="line"><span class="cl">    <span class="err">▼</span>
+</span></span><span class="line"><span class="cl"><span class="n">Ubuntu</span> <span class="mf">20.04</span> <span class="err">虚拟机</span>
+</span></span><span class="line"><span class="cl">    <span class="err">│</span>
+</span></span><span class="line"><span class="cl">    <span class="err">│</span> <span class="n">Docker</span> <span class="err">端口映射</span> <span class="mi">3307</span><span class="p">:</span><span class="mi">3306</span>
+</span></span><span class="line"><span class="cl">    <span class="err">▼</span>
+</span></span><span class="line"><span class="cl"><span class="n">MySQL</span> <span class="n">Docker</span> <span class="err">容器</span>
+</span></span><span class="line"><span class="cl">    <span class="err">│</span>
+</span></span><span class="line"><span class="cl">    <span class="err">│</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">mysql</span>
+</span></span><span class="line"><span class="cl">    <span class="err">▼</span>
+</span></span><span class="line"><span class="cl"><span class="n">Ubuntu</span> <span class="err">宿主目录</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="原来的-mysql-部署方式">原来的 MySQL 部署方式
+</h3><p>最初按照教程，在 Ubuntu 的 <code>/tmp</code> 目录下创建 MySQL 数据目录：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cd /tmp
+</span></span><span class="line"><span class="cl">mkdir mysql
+</span></span><span class="line"><span class="cl">cd mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后启动 MySQL：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">p</span> <span class="mi">3307</span><span class="p">:</span><span class="mi">3306</span> <span class="o">--</span><span class="n">name</span> <span class="n">mysql</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">-</span><span class="n">v</span> <span class="o">$</span><span class="n">PWD</span><span class="o">/</span><span class="n">conf</span><span class="p">:</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">-</span><span class="n">v</span> <span class="o">$</span><span class="n">PWD</span><span class="o">/</span><span class="n">logs</span><span class="p">:</span><span class="o">/</span><span class="n">logs</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">-</span><span class="n">v</span> <span class="o">$</span><span class="n">PWD</span><span class="o">/</span><span class="n">data</span><span class="p">:</span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">mysql</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">-</span><span class="n">e</span> <span class="n">MYSQL_ROOT_PASSWORD</span><span class="o">=</span><span class="mi">123456</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">--</span><span class="n">privileged</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">-</span><span class="n">d</span> <span class="n">mysql</span><span class="p">:</span><span class="mf">5.7</span><span class="o">.</span><span class="mi">25</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中，<code>$PWD</code> 表示当前工作目录。</p>
+<p>由于启动命令是在 <code>/tmp/mysql</code> 中执行的，因此实际挂载关系为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">conf</span>  <span class="err">→</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">logs</span>  <span class="err">→</span> <span class="o">/</span><span class="n">logs</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">data</span>  <span class="err">→</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">mysql</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>原来的目录结构：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/tmp/mysql/
+</span></span><span class="line"><span class="cl">├── conf/
+</span></span><span class="line"><span class="cl">├── data/
+</span></span><span class="line"><span class="cl">└── logs/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中：</p>
+<ul>
+<li><code>conf</code>：用于存放 MySQL 配置文件。</li>
+<li><code>data</code>：用于保存 MySQL 数据库文件。</li>
+<li><code>logs</code>：预留的日志目录。</li>
+</ul>
+<p>需要注意，<code>/logs</code> 并不是 MySQL 默认的全部日志存放位置，是否真正向该目录写入日志取决于 MySQL 配置。</p>
+<h3 id="遇到的问题">遇到的问题
+</h3><p>在关闭并重新启动 Ubuntu 虚拟机后，发现原来位于 <code>/tmp/mysql</code> 下的文件出现丢失或被重新初始化的情况。</p>
+<p>虽然 Docker 中仍然能够看到 MySQL 容器，但是容器启动后，数据库中只剩下系统数据库：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SHOW DATABASES;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>返回：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">information_schema
+</span></span><span class="line"><span class="cl">mysql
+</span></span><span class="line"><span class="cl">performance_schema
+</span></span><span class="line"><span class="cl">sys
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这说明当前数据库实例中没有看到之前的业务数据库。</p>
+<p>造成该问题的重要风险因素是：<strong>MySQL 数据被保存在</strong> <code>**/tmp**</code> <strong>临时目录中。</strong></p>
+<p>Linux 的 <code>/tmp</code> 主要用于保存临时文件。不同系统可能通过启动清理机制或定期清理服务删除其中的文件。</p>
+<p>因此，不适合将需要长期保留的数据库文件依赖于 <code>/tmp</code> 目录。</p>
+<p>需要说明的是：这次未能通过日志完全证明旧数据丢失的唯一原因就是 <code>/tmp</code> 清理，但这种目录选择确实存在数据丢失风险。</p>
+<h3 id="迁移目标">迁移目标
+</h3><p>为了避免再次出现类似问题，决定将 MySQL 的数据目录从：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/tmp/mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>迁移到：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/opt/mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>迁移后目录结构：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/opt/mysql/
+</span></span><span class="line"><span class="cl">├── conf/
+</span></span><span class="line"><span class="cl">│   └── my.cnf
+</span></span><span class="line"><span class="cl">├── data/
+</span></span><span class="line"><span class="cl">└── logs/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>本次迁移需要满足以下要求：</p>
+<ol>
+<li>保留原来的 MySQL 5.7.25 版本。</li>
+<li>保留 <code>3307:3306</code> 端口映射。</li>
+<li>保留原有数据库数据。</li>
+<li>保留 Windows Navicat 连接方式。</li>
+<li>配置 Docker 自动重启策略。</li>
+<li>保留旧容器和原始数据，以便迁移失败时回退。</li>
+<li>验证容器重启后数据不会丢失。</li>
+</ol>
+<hr>
+<h2 id="docker数据持久化原理">Docker数据持久化原理
+</h2><h3 id="为什么需要数据持久化">为什么需要数据持久化
+</h3><p>Docker 容器具有相对独立的文件系统。</p>
+<p>如果数据库文件只保存在容器的可写层中，删除容器时，这些文件也可能随容器一起被删除。</p>
+<p>因此，部署数据库时通常需要使用数据持久化机制。</p>
+<p>Docker 常见的数据持久化方式包括：</p>
+<ul>
+<li>Bind Mount：将宿主机指定目录挂载到容器内部。</li>
+<li>Volume：使用 Docker 管理的数据卷。</li>
+</ul>
+<p>本次采用的是 <strong>Bind Mount（绑定挂载）</strong>。</p>
+<h3 id="bind-mount的工作原理">Bind Mount的工作原理
+</h3><p>Docker 启动参数：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">-</span><span class="n">v</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">data</span><span class="p">:</span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">mysql</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>表示将 Ubuntu 中的：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/opt/mysql/data
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>挂载到 MySQL 容器中的：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">mysql</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>因此：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">MySQL</span> <span class="err">容器</span>
+</span></span><span class="line"><span class="cl">    <span class="err">│</span>
+</span></span><span class="line"><span class="cl">    <span class="err">│</span> <span class="err">写入</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">mysql</span>
+</span></span><span class="line"><span class="cl">    <span class="err">▼</span>
+</span></span><span class="line"><span class="cl"><span class="n">Docker</span> <span class="n">Bind</span> <span class="n">Mount</span>
+</span></span><span class="line"><span class="cl">    <span class="err">│</span>
+</span></span><span class="line"><span class="cl">    <span class="err">▼</span>
+</span></span><span class="line"><span class="cl"><span class="n">Ubuntu</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">data</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>当 MySQL 在容器内部创建数据库或表时，相关数据库文件会写入 Ubuntu 的 <code>/opt/mysql/data</code>。</p>
+<p>这样即使容器停止、重启，或者在正确操作的前提下重新创建容器，数据文件仍然保存在 Ubuntu 中。</p>
+<p><strong>注意：持久化不等于备份。</strong></p>
+<p>如果 Ubuntu 虚拟磁盘损坏、数据文件被误删除或者数据库本身发生损坏，Bind Mount 不能保证恢复数据。</p>
+<h3 id="为什么选择-optmysql">为什么选择 /opt/mysql
+</h3><p>Linux 常见目录的用途：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>目录</th>
+					<th>常见用途</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>/tmp</code></td>
+					<td>临时文件</td>
+			</tr>
+			<tr>
+					<td><code>/opt</code></td>
+					<td>第三方应用及其相关文件</td>
+			</tr>
+			<tr>
+					<td><code>/var/lib</code></td>
+					<td>应用程序持久化状态数据</td>
+			</tr>
+			<tr>
+					<td><code>/home</code></td>
+					<td>普通用户个人文件</td>
+			</tr>
+			<tr>
+					<td><code>/etc</code></td>
+					<td>系统和服务配置文件</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>本次选择 <code>/opt/mysql</code>，主要是为了让 MySQL 的配置、数据和日志集中存放，便于学习和管理。</p>
+<p>在正式生产环境中，也可以根据系统规范选择 <code>/var/lib/mysql</code>、Docker Volume 或专用数据磁盘。</p>
+<hr>
+<h2 id="迁移前检查">迁移前检查
+</h2><h3 id="检查磁盘空间">检查磁盘空间
+</h3><p>迁移时需要同时保留旧数据和新数据，因此必须先确认 Ubuntu 有足够的磁盘空间。</p>
+<p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">df -h / /opt /tmp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>本次检查时，根文件系统容量约为 49 GB，剩余空间约为 25 GB。</p>
+<p>接着查看原始 MySQL 目录大小：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">du -sh /tmp/mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>检查时约为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">210M    /tmp/mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>说明剩余磁盘空间足够完成本次迁移和备份。</p>
+<h3 id="检查原容器挂载目录">检查原容器挂载目录
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker inspect mysql \
+</span></span><span class="line"><span class="cl">  --format &#39;{{range .Mounts}}{{println .Source &#34;-&gt;&#34; .Destination}}{{end}}&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>返回：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">conf</span> <span class="o">-&gt;</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">logs</span> <span class="o">-&gt;</span> <span class="o">/</span><span class="n">logs</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">data</span> <span class="o">-&gt;</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">mysql</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>说明原容器确实使用 <code>/tmp/mysql</code> 进行绑定挂载。</p>
+<h3 id="检查-mysql-镜像和容器配置">检查 MySQL 镜像和容器配置
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker inspect mysql \
+</span></span><span class="line"><span class="cl">  --format &#39;Image={{.Config.Image}} Restart={{.HostConfig.RestartPolicy.Name}} Network={{.HostConfig.NetworkMode}}&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>检查结果：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Image=mysql:5.7.25 Restart=unless-stopped Network=bridge
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中：</p>
+<ul>
+<li><code>Image=mysql:5.7.25</code>：使用 MySQL 5.7.25。</li>
+<li><code>Restart=unless-stopped</code>：容器异常退出或 Docker 服务重新启动时，按照该策略尝试恢复容器。</li>
+<li><code>Network=bridge</code>：使用 Docker 默认桥接网络。</li>
+</ul>
+<p>注意：Docker 的 <code>bridge</code> 网络与 VMware 的 <code>NAT</code> 网络不是同一个概念。</p>
+<p>本次需要保留 MySQL 镜像版本和自动重启策略。</p>
+<h3 id="检查端口映射">检查端口映射
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker inspect mysql \
+</span></span><span class="line"><span class="cl">  --format &#39;{{json .HostConfig.PortBindings}}&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>返回：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">{&#34;3306/tcp&#34;:[{&#34;HostIp&#34;:&#34;&#34;,&#34;HostPort&#34;:&#34;3307&#34;}]}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>说明：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Ubuntu 3307 → Docker MySQL 3306
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>因此 Windows Navicat 仍然通过 Ubuntu 的 <code>3307</code> 端口连接。</p>
+<hr>
+<h2 id="迁移前备份">迁移前备份
+</h2><h3 id="为什么迁移前必须备份">为什么迁移前必须备份
+</h3><p>本次迁移涉及 MySQL 数据文件的复制和 Docker 容器重建。</p>
+<p>如果复制过程中发生错误，或者新容器无法正常启动，就可能影响数据库使用。</p>
+<p>因此，正式迁移前至少保留两类信息：</p>
+<ol>
+<li>Docker 容器原始配置。</li>
+<li>MySQL 数据库逻辑备份。</li>
+</ol>
+<p>此外，本次还保留原容器及 <code>/tmp/mysql</code> 原始数据目录。</p>
+<h3 id="创建备份目录">创建备份目录
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mkdir -p /opt/mysql-backup
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>该目录用于保存本次迁移的备份文件。</p>
+<h3 id="备份-docker-容器配置">备份 Docker 容器配置
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker inspect mysql &gt; /opt/mysql-backup/mysql-inspect.json
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>该命令会将容器配置保存到 JSON 文件中。</p>
+<p>可以检查：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ls -lh /opt/mysql-backup/mysql-inspect.json
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>本次生成的文件大小约为 9.6 KB。</p>
+<p>注意：<code>docker inspect</code> 的输出可能包含数据库环境变量和密码等敏感信息，不要将完整文件上传到公开博客或代码仓库。</p>
+<h3 id="备份-mysql-数据库">备份 MySQL 数据库
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker exec mysql sh -c \
+</span></span><span class="line"><span class="cl">  &#39;exec mysqldump -uroot -p&#34;$MYSQL_ROOT_PASSWORD&#34; --all-databases --routines --events --triggers --single-transaction&#39; \
+</span></span><span class="line"><span class="cl">  &gt; /opt/mysql-backup/all-databases.sql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>参数说明：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>参数</th>
+					<th>含义</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>mysqldump</code></td>
+					<td>MySQL 逻辑备份工具</td>
+			</tr>
+			<tr>
+					<td><code>--all-databases</code></td>
+					<td>导出全部数据库</td>
+			</tr>
+			<tr>
+					<td><code>--routines</code></td>
+					<td>包含存储过程和函数</td>
+			</tr>
+			<tr>
+					<td><code>--events</code></td>
+					<td>包含事件</td>
+			</tr>
+			<tr>
+					<td><code>--triggers</code></td>
+					<td>包含触发器</td>
+			</tr>
+			<tr>
+					<td><code>--single-transaction</code></td>
+					<td>对支持事务一致性读取的表进行一致性备份</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>执行时出现：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mysqldump: [Warning] Using a password on the command line interface can be insecure.
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这是 MySQL 对命令行密码使用方式的安全提醒，不代表备份失败。</p>
+<p>在正式生产环境中，应采用更安全的凭据管理方式，并根据数据库规模、存储引擎和业务写入情况设计备份方案。</p>
+<h3 id="检查-sql-备份文件">检查 SQL 备份文件
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ls -lh /opt/mysql-backup/all-databases.sql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>本次生成的 SQL 文件约为 3.4 MB。</p>
+<p>查看文件结尾：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">tail -n 10 /opt/mysql-backup/all-databases.sql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中出现：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">-- Dump completed on 2026-10-17 ...
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>说明文件包含正常的导出结束标记。</p>
+<p>再执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">grep -E &#39;^-- Current Database:&#39; /opt/mysql-backup/all-databases.sql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>检查导出的数据库章节。</p>
+<p>本次能看到 <code>mysql</code> 系统数据库。</p>
+<h3 id="检查-mysqldump-退出码">检查 mysqldump 退出码
+</h3><p>为了确认备份命令执行成功，又重新执行了一次：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker exec mysql sh -c \
+</span></span><span class="line"><span class="cl">  &#39;exec mysqldump -uroot -p&#34;$MYSQL_ROOT_PASSWORD&#34; --all-databases --routines --events --triggers --single-transaction&#39; \
+</span></span><span class="line"><span class="cl">  &gt; /opt/mysql-backup/all-databases-check.sql
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">echo &#34;mysqldump退出码：$?&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>返回：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mysqldump退出码：0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>说明这次 <code>mysqldump</code> 命令正常退出。</p>
+<p>这里需要注意：</p>
+<p><code>echo $?</code> 只能检查<strong>紧挨着它的上一条命令</strong>的退出码。</p>
+<p>如果中间执行了其他命令，返回的就不再是 <code>mysqldump</code> 的退出状态。</p>
+<p>另外，退出码为 0 也不等于备份一定可以成功恢复。重要数据库还应定期进行恢复演练。</p>
+<hr>
+<h2 id="停止mysql并复制数据">停止MySQL并复制数据
+</h2><h3 id="为什么必须先停止-mysql">为什么必须先停止 MySQL
+</h3><p>MySQL 运行时会不断修改数据库文件。</p>
+<p>如果在 MySQL 正在写入数据时直接复制 <code>/var/lib/mysql</code>，可能得到不一致的数据文件。</p>
+<p>因此，本次采用离线复制方式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">备份数据库
+</span></span><span class="line"><span class="cl">    ↓
+</span></span><span class="line"><span class="cl">正常停止 MySQL
+</span></span><span class="line"><span class="cl">    ↓
+</span></span><span class="line"><span class="cl">复制数据目录
+</span></span><span class="line"><span class="cl">    ↓
+</span></span><span class="line"><span class="cl">创建新容器
+</span></span><span class="line"><span class="cl">    ↓
+</span></span><span class="line"><span class="cl">验证数据
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="停止原-mysql-容器">停止原 MySQL 容器
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker stop -t 60 mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这里的 <code>-t 60</code> 表示最多等待 60 秒，让容器内的 MySQL 正常关闭。</p>
+<p>检查容器状态：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker ps -a --filter name=^/mysql$
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>返回状态：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Exited (0)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>表示容器正常退出。</p>
+<h3 id="创建新的数据目录">创建新的数据目录
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mkdir -p /opt/mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="复制原始数据">复制原始数据
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cp -a /tmp/mysql/. /opt/mysql/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中：</p>
+<ul>
+<li><code>cp</code>：复制文件。</li>
+<li><code>-a</code>：归档复制，尽可能保留权限、所有者、时间戳和目录结构。</li>
+<li><code>/tmp/mysql/.</code>：表示复制原目录中的全部内容。</li>
+<li><code>/opt/mysql/</code>：目标目录。</li>
+</ul>
+<p>执行后立即检查退出码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">echo &#34;复制退出码：$?&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>本次返回：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">复制退出码：0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>说明复制命令执行成功。</p>
+<h3 id="检查复制结果">检查复制结果
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">du -sh /tmp/mysql /opt/mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>本次结果：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">198M    /tmp/mysql
+</span></span><span class="line"><span class="cl">198M    /opt/mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>说明新旧目录的数据量一致。</p>
+<p>查看新目录：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ls -la /opt/mysql/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以看到：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">conf
+</span></span><span class="line"><span class="cl">data
+</span></span><span class="line"><span class="cl">logs
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="检查数据文件是否一致">检查数据文件是否一致
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">diff -qr /tmp/mysql/data /opt/mysql/data
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>本次没有任何输出。</p>
+<p>说明 <code>diff</code> 没有发现两个数据目录中的文件差异。</p>
+<p>注意：目录大小相同并不能证明数据完全一致，因此还需要进行文件比较，并在新容器启动后执行数据库查询验证。</p>
+<h3 id="检查数据目录权限">检查数据目录权限
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ls -ld /opt/mysql/data
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>本次输出显示目录所有者和所属组均为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">systemd-coredump
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这是 Ubuntu 宿主机对容器内部 UID/GID 的名称解析结果，不代表 MySQL 数据目录必须属于一个叫 <code>systemd-coredump</code> 的用户。</p>
+<p>由于使用了 <code>cp -a</code>，原有文件的数字 UID/GID 已得到保留。</p>
+<p><strong>不要为了方便直接执行</strong> <code>**chmod -R 777 /opt/mysql/data**</code><strong>。</strong></p>
+<p>随意修改数据库文件权限可能导致 MySQL 无法启动，也会降低系统安全性。</p>
+<hr>
+<h2 id="恢复mysql配置文件">恢复MySQL配置文件
+</h2><h3 id="发现的问题">发现的问题
+</h3><p>复制完成后，执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ls -l /opt/mysql/conf/my.cnf
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>返回：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">没有那个文件或目录
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>说明新目录中没有找到原来使用的 <code>my.cnf</code> 文件。</p>
+<p>需要注意：<code>cp -a</code> 已经成功复制原目录内容，因此该问题不一定是复制失败，也可能是复制前原目录中就没有这个文件。</p>
+<h3 id="创建配置文件">创建配置文件
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">vi /opt/mysql/conf/my.cnf
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>写入：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="p">[</span><span class="n">mysqld</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">skip</span><span class="o">-</span><span class="n">name</span><span class="o">-</span><span class="n">resolve</span>
+</span></span><span class="line"><span class="cl"><span class="n">character_set_server</span><span class="o">=</span><span class="n">utf8</span>
+</span></span><span class="line"><span class="cl"><span class="n">datadir</span><span class="o">=/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">mysql</span>
+</span></span><span class="line"><span class="cl"><span class="n">server</span><span class="o">-</span><span class="n">id</span><span class="o">=</span><span class="mi">1000</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在 Vim 中：</p>
+<ol>
+<li>按 <code>i</code> 进入编辑模式。</li>
+<li>输入配置内容。</li>
+<li>按 <code>Esc</code>。</li>
+<li>输入 <code>:wq</code> 并回车保存。</li>
+</ol>
+<h3 id="配置说明">配置说明
+</h3><p><strong>1. skip-name-resolve</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">skip-name-resolve
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>禁止 MySQL 在连接认证时进行 DNS 主机名解析。</p>
+<p>这可以减少某些 DNS 解析带来的延迟，但需要注意账户授权中主机名与 IP 地址的匹配问题。</p>
+<p><strong>2. character_set_server=utf8</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">character_set_server=utf8
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>设置 MySQL 服务器默认字符集。</p>
+<p>在 MySQL 5.7 中，<code>utf8</code> 通常指 <code>utf8mb3</code>，并非完整的四字节 UTF-8。</p>
+<p>如果是新项目，通常更推荐使用 <code>utf8mb4</code>。但本次属于原版本数据迁移，因此先保留原有配置，避免同时引入额外变化。</p>
+<p><strong>3. datadir</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">datadir</span><span class="o">=/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">mysql</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>指定 MySQL 容器内部的数据目录。</p>
+<p>由于 Docker 已经进行绑定挂载：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">data</span> <span class="err">→</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">mysql</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>所以数据实际上保存在 Ubuntu 的 <code>/opt/mysql/data</code>。</p>
+<p><strong>4. server-id</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">server-id=1000
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>设置 MySQL 服务器 ID。</p>
+<p>它通常用于 MySQL 复制相关配置。当前仅作为原配置保留，并不表示已经启用了 MySQL 主从复制。</p>
+<h3 id="检查配置文件">检查配置文件
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cat /opt/mysql/conf/my.cnf
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>确认配置内容正确。</p>
+<hr>
+<h2 id="保留旧容器并创建新容器">保留旧容器并创建新容器
+</h2><h3 id="为什么不能直接修改旧容器挂载目录">为什么不能直接修改旧容器挂载目录
+</h3><p>Docker 容器创建时，Bind Mount 的挂载关系已经确定。</p>
+<p>不能通过普通的 <code>docker start</code> 或 <code>docker restart</code> 命令，将旧容器的挂载源路径直接改为 <code>/opt/mysql</code>。</p>
+<p>因此，本次采用以下方案：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">旧容器 mysql
+</span></span><span class="line"><span class="cl">    ↓
+</span></span><span class="line"><span class="cl">停止并重命名
+</span></span><span class="line"><span class="cl">    ↓
+</span></span><span class="line"><span class="cl">mysql-old
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">新建容器 mysql
+</span></span><span class="line"><span class="cl">    ↓
+</span></span><span class="line"><span class="cl">挂载 /opt/mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这样既能保留原容器，又可以创建使用新目录的 MySQL 容器。</p>
+<h3 id="禁用旧容器自动重启">禁用旧容器自动重启
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker update --restart=no mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这样可以防止旧容器在 Docker 服务重启时自动启动并占用 3307 端口。</p>
+<h3 id="重命名旧容器">重命名旧容器
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker rename mysql mysql-old
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>查看：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker ps -a --filter name=mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以看到旧容器名称变成：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mysql-old
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>此时旧容器没有被删除，原始数据仍然保留在 <code>/tmp/mysql</code>。</p>
+<h3 id="创建新的-mysql-容器">创建新的 MySQL 容器
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">docker</span> <span class="n">run</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">--</span><span class="n">name</span> <span class="n">mysql</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">-</span><span class="n">p</span> <span class="mi">3307</span><span class="p">:</span><span class="mi">3306</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">-</span><span class="n">v</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">conf</span><span class="p">:</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">-</span><span class="n">v</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">logs</span><span class="p">:</span><span class="o">/</span><span class="n">logs</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">-</span><span class="n">v</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">data</span><span class="p">:</span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">mysql</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">-</span><span class="n">e</span> <span class="n">MYSQL_ROOT_PASSWORD</span><span class="o">=</span><span class="mi">123456</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">--</span><span class="n">restart</span> <span class="n">unless</span><span class="o">-</span><span class="n">stopped</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">-</span><span class="n">d</span> \
+</span></span><span class="line"><span class="cl">  <span class="n">mysql</span><span class="p">:</span><span class="mf">5.7</span><span class="o">.</span><span class="mi">25</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>参数说明：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>参数</th>
+					<th>作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>--name mysql</code></td>
+					<td>设置容器名称</td>
+			</tr>
+			<tr>
+					<td><code>-p 3307:3306</code></td>
+					<td>映射 Ubuntu 端口到容器端口</td>
+			</tr>
+			<tr>
+					<td><code>-v /opt/mysql/conf:/etc/mysql/conf.d</code></td>
+					<td>挂载配置目录</td>
+			</tr>
+			<tr>
+					<td><code>-v /opt/mysql/logs:/logs</code></td>
+					<td>挂载日志目录</td>
+			</tr>
+			<tr>
+					<td><code>-v /opt/mysql/data:/var/lib/mysql</code></td>
+					<td>挂载数据库文件目录</td>
+			</tr>
+			<tr>
+					<td><code>-e MYSQL_ROOT_PASSWORD=123456</code></td>
+					<td>设置新初始化数据库时的 root 密码</td>
+			</tr>
+			<tr>
+					<td><code>--restart unless-stopped</code></td>
+					<td>设置容器自动重启策略</td>
+			</tr>
+			<tr>
+					<td><code>-d</code></td>
+					<td>后台运行</td>
+			</tr>
+			<tr>
+					<td><code>mysql:5.7.25</code></td>
+					<td>指定 MySQL 镜像版本</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>这里有两个注意事项。</p>
+<p><strong>第一：继续使用 MySQL 5.7.25。</strong></p>
+<p>本次复用的是 MySQL 5.7.25 的数据目录，不能直接将同一份数据目录挂载到 MySQL 8.0 容器中尝试升级。</p>
+<p>跨大版本升级需要按照 MySQL 官方支持的升级路径执行。</p>
+<p><strong>第二：MYSQL_ROOT_PASSWORD 不会修改已有数据库密码。</strong></p>
+<p>如果挂载的数据目录已经完成初始化，MySQL 镜像通常不会重新初始化数据库，也不会根据该环境变量重设已有 root 密码。</p>
+<p>因此，复用原数据目录时，应继续使用数据库中原有的账号密码。</p>
+<p>另外，本次新容器没有继续使用原命令中的 <code>--privileged</code>。MySQL 一般不需要该参数提供的广泛宿主机权限。</p>
+<p>实际使用时，应避免把真实数据库密码直接写入公开笔记或代码仓库。</p>
+<hr>
+<h2 id="检查新mysql容器">检查新MySQL容器
+</h2><h3 id="检查容器状态">检查容器状态
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker ps --filter name=^/mysql$
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>本次显示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mysql:5.7.25
+</span></span><span class="line"><span class="cl">Up
+</span></span><span class="line"><span class="cl">0.0.0.0:3307-&gt;3306/tcp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>说明新容器已经运行，端口映射正常。</p>
+<h3 id="查看-mysql-启动日志">查看 MySQL 启动日志
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker logs --tail 30 mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>本次日志中出现：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mysqld: ready for connections.
+</span></span><span class="line"><span class="cl">Version: &#39;5.7.25&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>说明 MySQL 服务已经成功启动，可以接受连接。</p>
+<h3 id="检查实际挂载目录">检查实际挂载目录
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker inspect mysql \
+</span></span><span class="line"><span class="cl">  --format &#39;{{range .Mounts}}{{println .Source &#34;-&gt;&#34; .Destination}}{{end}}&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>本次返回：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">conf</span> <span class="o">-&gt;</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">logs</span> <span class="o">-&gt;</span> <span class="o">/</span><span class="n">logs</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">data</span> <span class="o">-&gt;</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">mysql</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>说明新容器已经不再使用 <code>/tmp/mysql</code> 作为挂载目录。</p>
+<h3 id="检查-mysql-登录">检查 MySQL 登录
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker exec -it mysql mysql -uroot -p
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>输入数据库密码后，成功进入 MySQL 命令行。</p>
+<p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SHOW DATABASES;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>返回：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">information_schema
+</span></span><span class="line"><span class="cl">mysql
+</span></span><span class="line"><span class="cl">performance_schema
+</span></span><span class="line"><span class="cl">sys
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>说明当前 MySQL 可以正常查询数据库。</p>
+<h3 id="检查-mysql-数据目录">检查 MySQL 数据目录
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SHOW VARIABLES LIKE &#39;datadir&#39;;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>返回：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这是 MySQL 容器内部的数据目录。</p>
+<p>结合 Docker 挂载关系可知，实际文件存储在 Ubuntu 的：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/opt/mysql/data
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="检查自动重启策略">检查自动重启策略
+</h3><p>退出 MySQL：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">exit;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker inspect mysql \
+</span></span><span class="line"><span class="cl">  --format &#39;{{.HostConfig.RestartPolicy.Name}}&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>返回：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">unless-stopped
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>说明新容器已经配置自动重启策略。</p>
+<p>需要注意：<code>unless-stopped</code> 并不表示容器在被手动停止后仍会立即自动启动。</p>
+<hr>
+<h2 id="验证数据持久化">验证数据持久化
+</h2><h3 id="创建测试数据库">创建测试数据库
+</h3><p>进入 MySQL：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker exec -it mysql mysql -uroot -p
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">CREATE DATABASE persistence_test;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>创建测试数据库。</p>
+<h3 id="创建测试表">创建测试表
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">USE persistence_test;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">CREATE TABLE student (
+</span></span><span class="line"><span class="cl">    id INT PRIMARY KEY,
+</span></span><span class="line"><span class="cl">    name VARCHAR(50)
+</span></span><span class="line"><span class="cl">);
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="插入测试数据">插入测试数据
+</h3><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">INSERT INTO student VALUES (1, &#39;ZhangSan&#39;);
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>查询：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SELECT * FROM student;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>返回：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">+----+----------+
+</span></span><span class="line"><span class="cl">| id | name     |
+</span></span><span class="line"><span class="cl">+----+----------+
+</span></span><span class="line"><span class="cl">|  1 | ZhangSan |
+</span></span><span class="line"><span class="cl">+----+----------+
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>说明测试数据已成功写入。</p>
+<h3 id="重启-mysql-容器">重启 MySQL 容器
+</h3><p>退出 MySQL：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">exit;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker restart mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>本次返回：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>查看容器状态：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker ps --filter name=^/mysql$
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>结果显示容器重新进入 <code>Up</code> 状态。</p>
+<h3 id="重启后查询测试数据">重启后查询测试数据
+</h3><p>重新进入 MySQL：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker exec -it mysql mysql -uroot -p
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SELECT * FROM persistence_test.student;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>仍然返回：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">+----+----------+
+</span></span><span class="line"><span class="cl">| id | name     |
+</span></span><span class="line"><span class="cl">+----+----------+
+</span></span><span class="line"><span class="cl">|  1 | ZhangSan |
+</span></span><span class="line"><span class="cl">+----+----------+
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>说明 MySQL 容器重启后，数据库、表和测试数据都成功保留。</strong></p>
+<p>这证明本次 Docker Bind Mount 数据持久化配置正常。</p>
+<p>需要注意：这次验证的是<strong>容器重启后的数据保留</strong>，并不等于已经测试了虚拟机重启、磁盘故障或备份恢复等所有场景。</p>
+<hr>
+<h2 id="windows-navicat连接验证">Windows Navicat连接验证
+</h2><h3 id="连接配置">连接配置
+</h3><p>在 Windows 中打开 Navicat，使用以下配置：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>项目</th>
+					<th>配置</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>连接类型</td>
+					<td>MySQL</td>
+			</tr>
+			<tr>
+					<td>主机</td>
+					<td>192.168.240.100</td>
+			</tr>
+			<tr>
+					<td>端口</td>
+					<td>3307</td>
+			</tr>
+			<tr>
+					<td>用户名</td>
+					<td>root</td>
+			</tr>
+			<tr>
+					<td>密码</td>
+					<td>MySQL 原有密码</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>这里使用的是 Ubuntu 虚拟机的固定 IP，而不是 Docker 容器内部 IP。</p>
+<h3 id="为什么使用-3307-端口">为什么使用 3307 端口
+</h3><p>Docker 启动参数：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">-p 3307:3306
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>表示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Windows Navicat
+</span></span><span class="line"><span class="cl">    │
+</span></span><span class="line"><span class="cl">    ▼
+</span></span><span class="line"><span class="cl">Ubuntu 192.168.240.100:3307
+</span></span><span class="line"><span class="cl">    │
+</span></span><span class="line"><span class="cl">    ▼
+</span></span><span class="line"><span class="cl">Docker MySQL 容器 :3306
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>由于 Ubuntu 中可能还存在其他 MySQL 容器使用宿主机 3306 端口，因此本次继续使用 3307，避免端口冲突。</p>
+<h3 id="验证结果">验证结果
+</h3><p>本次在 Navicat 中点击「测试连接」，成功连接新的 MySQL 容器。</p>
+<p>随后展开数据库列表，可以看到：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">persistence_test
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>并且能够查看测试数据库。</p>
+<p>说明：</p>
+<ol>
+<li>VMware NAT 网络可以正常访问 Ubuntu。</li>
+<li>Ubuntu 固定 IP 配置有效。</li>
+<li>Docker 端口映射正常。</li>
+<li>MySQL 允许当前连接。</li>
+<li>MySQL 数据持久化迁移成功。</li>
+</ol>
+<hr>
+<h2 id="迁移过程中遇到的问题">迁移过程中遇到的问题
+</h2><h3 id="mycnf配置文件不存在">my.cnf配置文件不存在
+</h3><p><strong>问题：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ls -l /opt/mysql/conf/my.cnf
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>返回文件不存在。</p>
+<p><strong>原因分析：</strong></p>
+<p>迁移后的配置目录中没有找到原来的 <code>my.cnf</code> 文件。</p>
+<p><strong>解决方案：</strong></p>
+<p>重新创建：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">vi /opt/mysql/conf/my.cnf
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>并写入原有配置。</p>
+<p>需要注意，后续排查类似问题时，应同时检查旧目录中是否存在该文件，而不是直接认为 <code>cp -a</code> 复制失败。</p>
+<h3 id="mysql启动日志出现skip-name-resolve警告">MySQL启动日志出现skip-name-resolve警告
+</h3><p>日志中出现类似：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&#39;user&#39; entry &#39;root@localhost&#39; ignored in --skip-name-resolve mode.
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这是因为配置文件中存在：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">skip-name-resolve
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>该参数会禁止 MySQL 使用 DNS 解析客户端主机名。</p>
+<p>如果 MySQL 权限表中存在使用主机名的授权记录，可能出现相关警告。</p>
+<p>本次 MySQL 已经正常启动，root 登录和 Navicat 连接也都成功，因此暂时没有因为这些警告修改配置。</p>
+<p>但在实际项目中，应检查账户的 Host 配置，确保账户权限和连接来源匹配。</p>
+<h3 id="mysql启动日志出现复制线程警告">MySQL启动日志出现复制线程警告
+</h3><p>日志中出现：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Failed to start slave threads for channel &#39;&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这说明 MySQL 启动时尝试启动复制线程，但未能成功。</p>
+<p>为了检查当前是否存在 MySQL 从库配置，进入 MySQL 执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SHOW SLAVE STATUS\G
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>返回：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Empty set
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>说明当前没有通过该命令查询到已配置的从库复制关系。</p>
+<p>由于 MySQL 已经正常启动，且目前没有使用 MySQL 主从复制功能，本次暂时没有进一步修改复制状态。</p>
+<p>需要注意：</p>
+<p><strong>MySQL 主从复制与 Redis 主从复制是两个完全不同的功能。</strong></p>
+<p>Redis 的主从复制配置不会直接导致 MySQL 出现复制线程警告。</p>
+<h3 id="为什么不直接删除旧容器">为什么不直接删除旧容器
+</h3><p>迁移时将旧容器：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重命名为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mysql-old
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这样可以保留原始容器配置。</p>
+<p>如果新容器出现问题，可以在确认数据状态并停止新容器后，考虑使用旧容器进行回退。</p>
+<p>但是需要注意：旧容器使用的是 <code>/tmp/mysql</code> 数据目录，新容器使用的是 <code>/opt/mysql</code>。</p>
+<p>迁移后在新容器中写入的数据，不会自动同步回旧目录。</p>
+<p>因此，回退时不能假设两份数据仍然相同。</p>
+<h3 id="为什么不立即删除-tmpmysql">为什么不立即删除 /tmp/mysql
+</h3><p>虽然已经完成迁移，但原始目录仍然具有回退和排查价值。</p>
+<p>因此，本次迁移完成后，暂时保留：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/tmp/mysql
+</span></span><span class="line"><span class="cl">/opt/mysql-backup
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>以及旧容器：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mysql-old
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>待确认新容器长期运行正常、备份可恢复并且不再需要回退后，再决定是否清理。</p>
+<p>清理前必须再次确认目标路径，避免误删 <code>/opt/mysql/data</code>。</p>
+<hr>
+<h2 id="常用mysql-docker管理命令">常用MySQL Docker管理命令
+</h2><h3 id="查看运行中的容器">查看运行中的容器
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker ps
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="查看全部容器">查看全部容器
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker ps -a
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="启动-mysql">启动 MySQL
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker start mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="停止-mysql">停止 MySQL
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker stop mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="重启-mysql">重启 MySQL
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker restart mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="查看-mysql-日志">查看 MySQL 日志
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker logs --tail 50 mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="进入-mysql">进入 MySQL
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker exec -it mysql mysql -uroot -p
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="查看挂载目录">查看挂载目录
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker inspect mysql \
+</span></span><span class="line"><span class="cl">  --format &#39;{{range .Mounts}}{{println .Source &#34;-&gt;&#34; .Destination}}{{end}}&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="查看自动重启策略">查看自动重启策略
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker inspect mysql \
+</span></span><span class="line"><span class="cl">  --format &#39;{{.HostConfig.RestartPolicy.Name}}&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="查看-mysql-数据目录大小">查看 MySQL 数据目录大小
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">du -sh /opt/mysql/data
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="迁移前后对比">迁移前后对比
+</h2><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>对比项目</th>
+					<th>迁移前</th>
+					<th>迁移后</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>容器名称</td>
+					<td>mysql</td>
+					<td>mysql</td>
+			</tr>
+			<tr>
+					<td>MySQL 版本</td>
+					<td>5.7.25</td>
+					<td>5.7.25</td>
+			</tr>
+			<tr>
+					<td>配置目录</td>
+					<td>/tmp/mysql/conf</td>
+					<td>/opt/mysql/conf</td>
+			</tr>
+			<tr>
+					<td>数据目录</td>
+					<td>/tmp/mysql/data</td>
+					<td>/opt/mysql/data</td>
+			</tr>
+			<tr>
+					<td>日志目录</td>
+					<td>/tmp/mysql/logs</td>
+					<td>/opt/mysql/logs</td>
+			</tr>
+			<tr>
+					<td>宿主机端口</td>
+					<td>3307</td>
+					<td>3307</td>
+			</tr>
+			<tr>
+					<td>容器端口</td>
+					<td>3306</td>
+					<td>3306</td>
+			</tr>
+			<tr>
+					<td>自动重启策略</td>
+					<td>unless-stopped</td>
+					<td>unless-stopped</td>
+			</tr>
+			<tr>
+					<td>Windows 连接地址</td>
+					<td>192.168.240.100:3307</td>
+					<td>192.168.240.100:3307</td>
+			</tr>
+			<tr>
+					<td>数据持久化验证</td>
+					<td>未完成</td>
+					<td>容器重启验证成功</td>
+			</tr>
+	</tbody>
+</table></div>
+<hr>
+<h2 id="总结">总结
+</h2><p>本次迁移的核心目标，是解决 Docker MySQL 数据存储在 Ubuntu <code>/tmp</code> 临时目录中所带来的持久化风险。</p>
+<p>最终完成了以下操作：</p>
+<ol>
+<li>检查 Docker MySQL 原有配置和挂载目录。</li>
+<li>确认 Ubuntu 磁盘空间足够。</li>
+<li>使用 <code>mysqldump</code> 导出数据库。</li>
+<li>使用 <code>docker inspect</code> 保存原容器配置。</li>
+<li>正常停止 MySQL 容器。</li>
+<li>使用 <code>cp -a</code> 将数据从 <code>/tmp/mysql</code> 复制到 <code>/opt/mysql</code>。</li>
+<li>检查新旧数据目录是否一致。</li>
+<li>恢复 MySQL 配置文件 <code>my.cnf</code>。</li>
+<li>禁用旧容器自动重启，并重命名为 <code>mysql-old</code>。</li>
+<li>创建新的 MySQL 5.7.25 容器。</li>
+<li>将 <code>/opt/mysql</code> 作为新的绑定挂载目录。</li>
+<li>检查 MySQL 启动日志和数据库登录。</li>
+<li>创建测试数据库 <code>persistence_test</code>。</li>
+<li>重启容器并确认测试数据仍然存在。</li>
+<li>使用 Windows Navicat 验证远程连接。</li>
+</ol>
+<p><strong>最终结果：MySQL 数据已经成功迁移到</strong> <code>**/opt/mysql/data**</code><strong>，容器重启后测试数据仍然存在，Windows Navicat 也能够正常连接并查看数据库。</strong></p>
+<p>本次操作也说明了几个重要知识点：</p>
+<ul>
+<li>Docker 容器不等于虚拟机。</li>
+<li>Docker 容器内部目录与 Ubuntu 宿主目录可以通过 Bind Mount 建立映射。</li>
+<li>数据库不能依赖 <code>/tmp</code> 等可能被清理的临时目录保存长期数据。</li>
+<li>迁移数据库时，应先备份、再停止服务、再复制文件。</li>
+<li>数据持久化与数据备份是两个不同的概念。</li>
+<li>Docker 容器可以重新创建，但必须确保数据目录、镜像版本、配置和权限兼容。</li>
+<li>迁移完成后，需要通过真实的数据库写入、重启和查询验证结果。</li>
+</ul>
+<p><strong>补充：</strong> MySQL 5.7 已结束官方维护。本次继续使用 5.7.25 是为了保持与原学习环境兼容。如果以后部署正式项目，应规划升级到仍受支持的 MySQL 版本，并使用独立数据库账户、强密码、最小权限及定期备份机制。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <script src="https://utteranc.es/client.js" 
+        repo="IAmYuanyu/IAmYuanyu.github.io"
+        issue-term="pathname"
+        
+        crossorigin="anonymous"
+        async
+        >
+</script>
+
+<style>
+    .utterances {
+        max-width: unset;
+    }
+</style>
+
+<script>
+    let utterancesLoaded = false;
+
+    function setUtterancesTheme(theme) {
+        let utterances = document.querySelector('.utterances iframe');
+        if (utterances) {
+            utterances.contentWindow.postMessage(
+                {
+                    type: 'set-theme',
+                    theme: `github-${theme}`
+                },
+                'https://utteranc.es'
+            );
+        }
+    }
+
+    addEventListener('message', event => {
+        if (event.origin !== 'https://utteranc.es') return;
+
+        
+        utterancesLoaded = true;
+        setUtterancesTheme(document.documentElement.dataset.scheme)
+    });
+
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (!utterancesLoaded) return;
+        setUtterancesTheme(e.detail)
+    })
+</script>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2025 - 
+        
+        2026 凉介
+    </section>
+    
+    <section class="powerby">
+        
+            本站于2026年3月31日建立 <br/>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

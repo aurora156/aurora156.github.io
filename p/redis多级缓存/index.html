@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="引言 本文基于黑马2022的Redis课程高级篇编写，课程地址：黑马程序员Redis入门到实战教程，深度透析redis底层原理+redis分布式锁+企业解决方案+黑马点评实战项目\n课程资料：https://pan.baidu.com/s/1189u6u4icQYHg_9_7ovWmA&amp;pwd=eh11\n本文中若未特意提及，则默认Linux环境用Ubuntu 24.04，Redis用6.2.6版本，本地主机用Windows\n参考学习的博客地址：Redis 多级缓存\n">
 <title>Redis多级缓存</title>
 
 <link rel='canonical' href='https://aurora156.github.io/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/'>
 
 <link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="Redis多级缓存">
-<meta property='og:description' content="">
+<meta property='og:description' content="引言 本文基于黑马2022的Redis课程高级篇编写，课程地址：黑马程序员Redis入门到实战教程，深度透析redis底层原理+redis分布式锁+企业解决方案+黑马点评实战项目\n课程资料：https://pan.baidu.com/s/1189u6u4icQYHg_9_7ovWmA&amp;pwd=eh11\n本文中若未特意提及，则默认Linux环境用Ubuntu 24.04，Redis用6.2.6版本，本地主机用Windows\n参考学习的博客地址：Redis 多级缓存\n">
 <meta property='og:url' content='https://aurora156.github.io/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/'>
 <meta property='og:site_name' content='凉介的笔记'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-10-15T16:10:24&#43;08:00'/><meta property='article:modified_time' content='2026-10-15T16:10:24&#43;08:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Redis' /><meta property='article:tag' content='缓存' /><meta property='article:published_time' content='2026-10-15T16:10:24&#43;08:00'/><meta property='article:modified_time' content='2026-10-15T16:10:24&#43;08:00'/>
 <meta name="twitter:title" content="Redis多级缓存">
-<meta name="twitter:description" content="">
+<meta name="twitter:description" content="引言 本文基于黑马2022的Redis课程高级篇编写，课程地址：黑马程序员Redis入门到实战教程，深度透析redis底层原理+redis分布式锁+企业解决方案+黑马点评实战项目\n课程资料：https://pan.baidu.com/s/1189u6u4icQYHg_9_7ovWmA&amp;pwd=eh11\n本文中若未特意提及，则默认Linux环境用Ubuntu 24.04，Redis用6.2.6版本，本地主机用Windows\n参考学习的博客地址：Redis 多级缓存\n">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -203,7 +203,61 @@
     </ol>
 </aside>
 
-    
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li>
+      <ol>
+        <li><a href="#什么是多级缓存">什么是多级缓存</a></li>
+        <li><a href="#整体架构">整体架构</a></li>
+      </ol>
+    </li>
+    <li><a href="#jvm进程缓存">JVM进程缓存</a>
+      <ol>
+        <li><a href="#导入案例">导入案例</a>
+          <ol>
+            <li><a href="#安装mysql">安装MySQL</a></li>
+            <li><a href="#导入数据">导入数据</a></li>
+            <li><a href="#导入demo工程">导入Demo工程</a></li>
+            <li><a href="#导入前端页面">导入前端页面</a></li>
+          </ol>
+        </li>
+        <li><a href="#初识caffeine">初识Caffeine</a></li>
+        <li><a href="#实现jvm进程缓存">实现JVM进程缓存</a>
+          <ol>
+            <li><a href="#定义caffeine缓存对象">定义Caffeine缓存对象</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
 
             <main class="main full-width">
     <article class="main-article">
@@ -211,7 +265,23 @@
 
     <div class="article-details">
     
+    <header class="article-category">
+        
+            <a href="/categories/%E6%95%99%E7%A8%8B/" >
+                教程
+            </a>
+        
+    </header>
+    
 
+    
+    <section class="article-tags">
+        
+            <a href="/tags/redis/">Redis</a>
+        
+            <a href="/tags/%E7%BC%93%E5%AD%98/">缓存</a>
+        
+    </section>
     
 
     <div class="article-title-wrapper">
@@ -254,7 +324,537 @@
     <section class="article-content">
     
     
-    
+    <h1 id="引言">引言
+</h1><blockquote>
+<p>本文基于黑马2022的Redis课程高级篇编写，课程地址：<a class="link" href="https://www.bilibili.com/video/BV1cr4y1671t?spm_id_from=333.788.player.switch&amp;vd_source=5d30cbe8a5e5c1e21aa0b0a536d3829a"  target="_blank" rel="noopener"
+    >黑马程序员Redis入门到实战教程，深度透析redis底层原理+redis分布式锁+企业解决方案+黑马点评实战项目</a></p>
+<p>课程资料：https://pan.baidu.com/s/1189u6u4icQYHg_9_7ovWmA&amp;pwd=eh11</p>
+<p>本文中若未特意提及，则默认Linux环境用Ubuntu 24.04，Redis用6.2.6版本，本地主机用Windows</p>
+<p>参考学习的博客地址：<a class="link" href="https://xn--9krq6q3ox70h4k2b.me/p/redis-%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/#%E5%BC%95%E8%A8%80"  target="_blank" rel="noopener"
+    >Redis 多级缓存</a></p>
+</blockquote>
+<h3 id="什么是多级缓存">什么是多级缓存
+</h3><p>传统的缓存策略一般是请求到达Tomcat后，先查询Redis，如果未命中则查询数据库，如图：</p>
+<p><img src="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/%E5%A4%9A%E7%BA%A7.png"
+	width="971"
+	height="352"
+	srcset="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/%E5%A4%9A%E7%BA%A7_hu_16068aed21e1ea29.png 480w, /p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/%E5%A4%9A%E7%BA%A7_hu_163f9232c37f0772.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="275"
+		data-flex-basis="662px"
+	
+></p>
+<p>存在下面的问题：</p>
+<ul>
+<li>请求要经过Tomcat处理，Tomcat的性能成为整个系统的瓶颈</li>
+<li>Redis缓存失效时，会对数据库产生冲击</li>
+</ul>
+<p>而多级缓存就是充分利用请求处理的每个环节，分别添加缓存，减轻Tomcat压力，提升服务性能：</p>
+<ul>
+<li>浏览器访问静态资源时，优先读取浏览器本地缓存</li>
+<li>访问非静态资源（ajax查询数据）时，访问服务端</li>
+<li>请求到达Nginx后，优先读取Nginx本地缓存</li>
+<li>如果Nginx本地缓存未命中，则去直接查询Redis（不经过Tomcat）</li>
+<li>如果Redis查询未命中，则查询Tomcat</li>
+<li>请求进入Tomcat后，优先查询JVM进程缓存</li>
+<li>如果JVM进程缓存未命中，则查询数据库</li>
+</ul>
+<p><img src="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/%E5%A4%9A%E7%BA%A71.png"
+	width="971"
+	height="337"
+	srcset="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/%E5%A4%9A%E7%BA%A71_hu_db42b31c0855d8cf.png 480w, /p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/%E5%A4%9A%E7%BA%A71_hu_21e052b7a7ad241d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="288"
+		data-flex-basis="691px"
+	
+></p>
+<p>在多级缓存架构中，Nginx内部需要编写本地缓存查询、Redis查询、Tomcat查询的业务逻辑，因此这样的nginx服务不再是一个<strong>反向代理服务器</strong>，而是一个编写<strong>业务的Web服务器了</strong>。</p>
+<p>因此这样的业务Nginx服务也需要搭建集群来提高并发，再有专门的nginx服务来做反向代理，如图：</p>
+<p><img src="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/%E5%A4%9A%E7%BA%A72.png"
+	width="971"
+	height="349"
+	srcset="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/%E5%A4%9A%E7%BA%A72_hu_d012be5d8da20755.png 480w, /p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/%E5%A4%9A%E7%BA%A72_hu_d82b2a08da65f36c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="278"
+		data-flex-basis="667px"
+	
+></p>
+<p>另外，Tomcat服务将来也会部署为集群模式：</p>
+<p><img src="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/%E5%A4%9A%E7%BA%A73.png"
+	width="971"
+	height="312"
+	srcset="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/%E5%A4%9A%E7%BA%A73_hu_6b896d2d20b8783b.png 480w, /p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/%E5%A4%9A%E7%BA%A73_hu_832e38958c9b4230.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="311"
+		data-flex-basis="746px"
+	
+></p>
+<p>可见，多级缓存的关键有两个：</p>
+<ul>
+<li>一个是在nginx中编写业务，实现nginx本地缓存、Redis、Tomcat的查询</li>
+<li>另一个就是在Tomcat中实现JVM进程缓存</li>
+</ul>
+<p>其中Nginx编程则会用到OpenResty框架结合Lua这样的语言。</p>
+<h3 id="整体架构">整体架构
+</h3><p>下面本教程希望实现的架构，可以看完全文再回来看一遍，会更清晰</p>
+<p><img src="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/%E5%A4%9A%E7%BA%A74.png"
+	width="971"
+	height="474"
+	srcset="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/%E5%A4%9A%E7%BA%A74_hu_6273edde17bdb043.png 480w, /p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/%E5%A4%9A%E7%BA%A74_hu_c2f54e978cf0505d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="204"
+		data-flex-basis="491px"
+	
+></p>
+<h2 id="jvm进程缓存">JVM进程缓存
+</h2><h3 id="导入案例">导入案例
+</h3><h4 id="安装mysql">安装MySQL
+</h4><blockquote>
+<p>若宿主机上有正常运行的mysql建议先暂时关闭，防止docker中的mysql无法正常使用</p>
+</blockquote>
+<p>后期做数据同步需要用到MySQL的主从功能，所以需要大家在虚拟机中，利用Docker来运行一个MySQL容器。</p>
+<p>执行下方命令运行MySQL容器：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 进入/tmp目录</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> /tmp
+</span></span><span class="line"><span class="cl"><span class="c1"># 创建文件夹</span>
+</span></span><span class="line"><span class="cl">mkdir mysql
+</span></span><span class="line"><span class="cl"><span class="c1"># 进入mysql目录</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> mysql
+</span></span><span class="line"><span class="cl"><span class="c1"># 运行MySQL容器</span>
+</span></span><span class="line"><span class="cl">docker run <span class="se">\
+</span></span></span><span class="line"><span class="cl"> -p 3307:3306 <span class="se">\
+</span></span></span><span class="line"><span class="cl"> --name mysql <span class="se">\
+</span></span></span><span class="line"><span class="cl"> -v <span class="nv">$PWD</span>/conf:/etc/mysql/conf.d <span class="se">\
+</span></span></span><span class="line"><span class="cl"> -v <span class="nv">$PWD</span>/logs:/logs <span class="se">\
+</span></span></span><span class="line"><span class="cl"> -v <span class="nv">$PWD</span>/data:/var/lib/mysql <span class="se">\
+</span></span></span><span class="line"><span class="cl"> -e <span class="nv">MYSQL_ROOT_PASSWORD</span><span class="o">=</span><span class="m">123456</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"> --privileged <span class="se">\
+</span></span></span><span class="line"><span class="cl"> -d <span class="se">\
+</span></span></span><span class="line"><span class="cl"> mysql:5.7.25
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在/tmp/mysql/conf目录添加一个my.cnf文件，作为mysql的配置文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 创建文件</span>
+</span></span><span class="line"><span class="cl">vi /tmp/mysql/conf/my.cnf
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 在其中输入</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>mysqld<span class="o">]</span>
+</span></span><span class="line"><span class="cl">skip-name-resolve
+</span></span><span class="line"><span class="cl"><span class="nv">character_set_server</span><span class="o">=</span>utf8
+</span></span><span class="line"><span class="cl"><span class="nv">datadir</span><span class="o">=</span>/var/lib/mysql
+</span></span><span class="line"><span class="cl">server-id<span class="o">=</span><span class="m">1000</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>配置修改后，必须重启容器使新配置生效：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker restart mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>用客户端进行连接时提示：服务器已终止握手。设置了协议列表选项(<code>enabledTLSProtocols</code>)</p>
+<p>可以尝试关闭SSL验证，以Datagrip为例，可以在连接设置页的”高级“中找到”useSSL“将其值设置为FALSE</p>
+<p><img src="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/JVM.png"
+	width="785"
+	height="339"
+	srcset="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/JVM_hu_631298ade034e9dd.png 480w, /p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/JVM_hu_1b935f3bea4864c9.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="231"
+		data-flex-basis="555px"
+	
+></p>
+<h4 id="导入数据">导入数据
+</h4><p>在MySQL中创建一个名为heima的库，在其中导入资料提供的sql文件：item.sql</p>
+<p>其中包含两张表：</p>
+<ul>
+<li>tb_item：商品表，包含商品的基本信息</li>
+<li>tb_item_stock：商品库存表，包含商品的库存信息</li>
+</ul>
+<p>之所以将库存分离出来，是因为库存是更新比较频繁的信息，写操作较多。而其他信息修改的频率非常低。</p>
+<h4 id="导入demo工程">导入Demo工程
+</h4><p>导入资料提供的工程：item-service</p>
+<p>注意修改application.yml文件中配置的mysql地址信息：</p>
+<p><img src="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/JVM1.png"
+	width="971"
+	height="312"
+	srcset="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/JVM1_hu_80114d26c2fd019.png 480w, /p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/JVM1_hu_8d5949e40d1e1ec6.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="311"
+		data-flex-basis="746px"
+	
+></p>
+<p>需要修改为自己的虚拟机地址信息、还有账号和密码。</p>
+<p>修改后，启动服务，访问：http://localhost:8081/item/10001即可查询数据</p>
+<h4 id="导入前端页面">导入前端页面
+</h4><p>找到资料的nginx目录：nginx-1.18.0</p>
+<p>将其拷贝到一个非中文目录下，运行这个nginx服务。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 运行命令</span>
+</span></span><span class="line"><span class="cl">start nginx.exe
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 停止</span>
+</span></span><span class="line"><span class="cl">nginx -s stop
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后访问 http://localhost/item.html?id=10001即可</p>
+<p>现在，页面是假数据展示的。我们需要向服务器发送ajax请求，查询商品数据。</p>
+<p>打开控制台，可以看到页面有发起ajax查询数据：</p>
+<p><img src="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/JVM2.png"
+	width="575"
+	height="161"
+	srcset="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/JVM2_hu_3595dabe0cb6af1f.png 480w, /p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/JVM2_hu_ec268c46ae32aed0.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="357"
+		data-flex-basis="857px"
+	
+></p>
+<p>而这个请求地址同样是80端口，所以被当前的nginx反向代理了。</p>
+<p>查看nginx的conf目录下的nginx.conf文件：</p>
+<p><img src="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/JVM3.png"
+	width="473"
+	height="361"
+	srcset="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/JVM3_hu_2ed7a2cb429e1f09.png 480w, /p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/JVM3_hu_b9db8f8fe5599e3f.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="131"
+		data-flex-basis="314px"
+	
+></p>
+<p>其中的关键配置如下：</p>
+<p><img src="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/JVM4.png"
+	width="575"
+	height="244"
+	srcset="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/JVM4_hu_62d53cdab51f400f.png 480w, /p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/JVM4_hu_211d8cc983f09f63.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="235"
+		data-flex-basis="565px"
+	
+></p>
+<p>其中的172.21.199.168是我的虚拟机IP，也就是我的Nginx业务集群要部署的地方：</p>
+<p><img src="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/JVM5.png"
+	width="575"
+	height="201"
+	srcset="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/JVM5_hu_2ceb971d29445847.png 480w, /p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/JVM5_hu_4edeb7ef1cfae2dc.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="286"
+		data-flex-basis="686px"
+	
+></p>
+<h3 id="初识caffeine">初识Caffeine
+</h3><p>缓存在日常开发中启动至关重要的作用，由于是存储在内存中，数据的读取速度是非常快的，能大量减少对数据库的访问，减少数据库的压力。我们把缓存分为两类：</p>
+<ul>
+<li>分布式缓存，例如Redis：
+<ul>
+<li>优点：存储容量更大、可靠性更好、可以在集群间共享</li>
+<li>缺点：访问缓存有网络开销</li>
+<li>场景：缓存数据量较大、可靠性要求较高、需要在集群间共享</li>
+</ul>
+</li>
+<li>进程本地缓存，例如HashMap、GuavaCache：
+<ul>
+<li>优点：读取本地内存，没有网络开销，速度更快</li>
+<li>缺点：存储容量有限、可靠性较低、无法共享</li>
+<li>场景：性能要求较高，缓存数据量较小</li>
+</ul>
+</li>
+</ul>
+<p>下面就学习利用Caffeine框架来实现JVM进程缓存。</p>
+<p><strong>Caffeine</strong>是一个基于Java8开发的，提供了近乎最佳命中率的高性能的<strong>本地缓存库</strong>。目前Spring内部的缓存使用的就是Caffeine。GitHub地址：https://github.com/ben-manes/caffeine</p>
+<p>Caffeine的性能非常好，下图是官方给出的性能对比：</p>
+<p><img src="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/caf.png"
+	width="971"
+	height="482"
+	srcset="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/caf_hu_419de21a727bef3e.png 480w, /p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/assets/caf_hu_8219dec2d7d64688.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="201"
+		data-flex-basis="483px"
+	
+></p>
+<p>缓存使用的基本API：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="w"> </span><span class="nf">testBasicOps</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 构建cache对象</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Cache</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">cache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Caffeine</span><span class="p">.</span><span class="na">newBuilder</span><span class="p">().</span><span class="na">build</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 存数据</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">cache</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;缘鱼&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 取数据，不存在则返回null</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cache</span><span class="p">.</span><span class="na">getIfPresent</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;name = &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">name</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 取数据，若缓存不存在则查数据库，包含两个参数：</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 参数一：缓存的key</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 参数二：Lambda表达式，表达式参数就是缓存的key，方法体是查询数据库的逻辑</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 优先根据key查询JVM缓存，如果未命中，则执行参数二的Lambda表达式</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">gender</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cache</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">&#34;gender&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 根据key去数据库查询数据</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">&#34;男&#34;</span><span class="p">;</span><span class="w"> </span><span class="c1">// 写查询数据库的业务逻辑</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">});</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;gender = &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">gender</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>Caffeine提供了三种缓存驱逐策略：</p>
+<ul>
+<li><strong>基于容量</strong>：设置缓存的数量上限</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="c1">// 创建缓存对象</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">Cache</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">cache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Caffeine</span><span class="p">.</span><span class="na">newBuilder</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 设置缓存大小上限为1，即最多只能存1个key</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">.</span><span class="na">maximumSize</span><span class="p">(</span><span class="n">1</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">.</span><span class="na">build</span><span class="p">();</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>基于时间</strong>：设置缓存的有效时间</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="c1">// 创建缓存对象</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">Cache</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">cache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Caffeine</span><span class="p">.</span><span class="na">newBuilder</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 设置缓存有效期为 10 秒，从最后一次写入开始计时 </span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">.</span><span class="na">expireAfterWrite</span><span class="p">(</span><span class="n">Duration</span><span class="p">.</span><span class="na">ofSeconds</span><span class="p">(</span><span class="n">10</span><span class="p">))</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">.</span><span class="na">build</span><span class="p">();</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><strong>基于引用</strong>：设置缓存为软引用或弱引用，利用GC来回收缓存数据。性能较差，不建议使用。</li>
+</ul>
+<blockquote>
+<p><strong>注意</strong>：在默认情况下，当一个缓存元素过期的时候，Caffeine不会自动立即将其清理和驱逐。而是在一次读或写操作后，或者在空闲时间完成对失效数据的驱逐。</p>
+</blockquote>
+<h3 id="实现jvm进程缓存">实现JVM进程缓存
+</h3><p>下面模拟演示在Spring中如何使用Caffeine</p>
+<h4 id="定义caffeine缓存对象">定义Caffeine缓存对象
+</h4><p>在项目中的配置类中，定义定义Caffeine的缓存对象</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Configuration</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">CaffeineConfig</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Bean</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Cache</span><span class="o">&lt;</span><span class="n">Long</span><span class="p">,</span><span class="w"> </span><span class="n">Item</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">itemCache</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Caffeine</span><span class="p">.</span><span class="na">newBuilder</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">initialCapacity</span><span class="p">(</span><span class="n">100</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">maximumSize</span><span class="p">(</span><span class="n">10_000</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">build</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Bean</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Cache</span><span class="o">&lt;</span><span class="n">Long</span><span class="p">,</span><span class="w"> </span><span class="n">ItemStock</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">stockCache</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Caffeine</span><span class="p">.</span><span class="na">newBuilder</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">initialCapacity</span><span class="p">(</span><span class="n">100</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">maximumSize</span><span class="p">(</span><span class="n">10_000</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">build</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后就可以在业务中使用了</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@RestController</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">&#34;item&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ItemController</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">IItemService</span><span class="w"> </span><span class="n">itemService</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">IItemStockService</span><span class="w"> </span><span class="n">stockService</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Cache</span><span class="o">&lt;</span><span class="n">Long</span><span class="p">,</span><span class="w"> </span><span class="n">Item</span><span class="o">&gt;</span><span class="w"> </span><span class="n">itemCache</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Cache</span><span class="o">&lt;</span><span class="n">Long</span><span class="p">,</span><span class="w"> </span><span class="n">ItemStock</span><span class="o">&gt;</span><span class="w"> </span><span class="n">stockCache</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// ...其它略</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&#34;/{id}&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Item</span><span class="w"> </span><span class="nf">findById</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">)</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">itemCache</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">itemService</span><span class="p">.</span><span class="na">query</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">ne</span><span class="p">(</span><span class="s">&#34;status&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">3</span><span class="p">).</span><span class="na">eq</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">one</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&#34;/stock/{id}&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ItemStock</span><span class="w"> </span><span class="nf">findStockById</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">)</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">stockCache</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">stockService</span><span class="p">.</span><span class="na">getById</span><span class="p">(</span><span class="n">key</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div>
 </section>
 
 
@@ -268,6 +868,80 @@
     
 
     
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/p/redis-%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Redis- 分布式缓存</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/redis-%E5%AE%9E%E6%88%98%E7%AF%87/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Redis-实战篇</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Redis 入门篇</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/python%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Python基础语法</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/%E5%85%83%E6%B3%A8%E8%A7%A3/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">元注解</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
 
      
     

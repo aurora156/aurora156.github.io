@@ -7,10 +7,34 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>凉介</copyright>
-        <lastBuildDate>Mon, 05 Oct 2026 14:16:32 +0800</lastBuildDate><atom:link href="https://aurora156.github.io/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 17 Oct 2026 14:47:59 +0800</lastBuildDate><atom:link href="https://aurora156.github.io/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Docker</title>
+        <link>https://aurora156.github.io/tags/docker/</link>
+        <pubDate>Sat, 17 Oct 2026 14:47:59 +0800</pubDate>
+        
+        <guid>https://aurora156.github.io/tags/docker/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>MySQL</title>
+        <link>https://aurora156.github.io/tags/mysql/</link>
+        <pubDate>Sat, 17 Oct 2026 14:47:59 +0800</pubDate>
+        
+        <guid>https://aurora156.github.io/tags/mysql/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>数据持久化</title>
+        <link>https://aurora156.github.io/tags/%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96/</link>
+        <pubDate>Sat, 17 Oct 2026 14:47:59 +0800</pubDate>
+        
+        <guid>https://aurora156.github.io/tags/%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>Redis</title>
         <link>https://aurora156.github.io/tags/redis/</link>
-        <pubDate>Mon, 05 Oct 2026 14:16:32 +0800</pubDate>
+        <pubDate>Thu, 15 Oct 2026 16:10:24 +0800</pubDate>
         
         <guid>https://aurora156.github.io/tags/redis/</guid>
         <description></description>
@@ -18,7 +42,7 @@
         <item>
         <title>缓存</title>
         <link>https://aurora156.github.io/tags/%E7%BC%93%E5%AD%98/</link>
-        <pubDate>Mon, 05 Oct 2026 14:16:32 +0800</pubDate>
+        <pubDate>Thu, 15 Oct 2026 16:10:24 +0800</pubDate>
         
         <guid>https://aurora156.github.io/tags/%E7%BC%93%E5%AD%98/</guid>
         <description></description>
@@ -136,14 +160,6 @@
         <description></description>
         </item>
         <item>
-        <title>Docker</title>
-        <link>https://aurora156.github.io/tags/docker/</link>
-        <pubDate>Sat, 30 May 2026 08:38:52 +0800</pubDate>
-        
-        <guid>https://aurora156.github.io/tags/docker/</guid>
-        <description></description>
-        </item>
-        <item>
         <title>部署</title>
         <link>https://aurora156.github.io/tags/%E9%83%A8%E7%BD%B2/</link>
         <pubDate>Sat, 30 May 2026 08:38:52 +0800</pubDate>
@@ -213,14 +229,6 @@
         <pubDate>Sun, 12 Apr 2026 15:59:16 +0800</pubDate>
         
         <guid>https://aurora156.github.io/tags/jdbc/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>MySQL</title>
-        <link>https://aurora156.github.io/tags/mysql/</link>
-        <pubDate>Sun, 12 Apr 2026 15:59:16 +0800</pubDate>
-        
-        <guid>https://aurora156.github.io/tags/mysql/</guid>
         <description></description>
         </item>
         <item>
