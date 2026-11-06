@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Redis最佳实践 本文基于黑马2022的Redis课程高级篇编写，课程地址：[高级篇-Redis最佳实践-01.Redis最佳实践课程介绍_哔哩哔哩_bilibili\n](https://www.bilibili.com/video/BV1cr4y1671t/?spm_id_from=333.788.player.switch&vd_source=30ed35d5d781032adac226a1990f242f&p=134)\n课程资料：https://pan.baidu.com/s/1189u6u4icQYHg_9_7ovWmA&amp;pwd=eh11\n本文中若未特意提及，则默认Linux环境用Ubuntu 24.04，Redis用6.2.6版本，本地主机用Windows\n本篇内容参考的博客：Redis 最佳实践\n">
 <title>Redis最佳实践</title>
 
 <link rel='canonical' href='https://aurora156.github.io/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/'>
 
 <link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="Redis最佳实践">
-<meta property='og:description' content="">
+<meta property='og:description' content="Redis最佳实践 本文基于黑马2022的Redis课程高级篇编写，课程地址：[高级篇-Redis最佳实践-01.Redis最佳实践课程介绍_哔哩哔哩_bilibili\n](https://www.bilibili.com/video/BV1cr4y1671t/?spm_id_from=333.788.player.switch&vd_source=30ed35d5d781032adac226a1990f242f&p=134)\n课程资料：https://pan.baidu.com/s/1189u6u4icQYHg_9_7ovWmA&amp;pwd=eh11\n本文中若未特意提及，则默认Linux环境用Ubuntu 24.04，Redis用6.2.6版本，本地主机用Windows\n本篇内容参考的博客：Redis 最佳实践\n">
 <meta property='og:url' content='https://aurora156.github.io/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/'>
 <meta property='og:site_name' content='凉介的笔记'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-10-24T20:16:52&#43;08:00'/><meta property='article:modified_time' content='2026-10-24T20:16:52&#43;08:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java' /><meta property='article:tag' content='Redis' /><meta property='article:published_time' content='2026-10-24T20:16:52&#43;08:00'/><meta property='article:modified_time' content='2026-10-24T20:16:52&#43;08:00'/>
 <meta name="twitter:title" content="Redis最佳实践">
-<meta name="twitter:description" content="">
+<meta name="twitter:description" content="Redis最佳实践 本文基于黑马2022的Redis课程高级篇编写，课程地址：[高级篇-Redis最佳实践-01.Redis最佳实践课程介绍_哔哩哔哩_bilibili\n](https://www.bilibili.com/video/BV1cr4y1671t/?spm_id_from=333.788.player.switch&vd_source=30ed35d5d781032adac226a1990f242f&p=134)\n课程资料：https://pan.baidu.com/s/1189u6u4icQYHg_9_7ovWmA&amp;pwd=eh11\n本文中若未特意提及，则默认Linux环境用Ubuntu 24.04，Redis用6.2.6版本，本地主机用Windows\n本篇内容参考的博客：Redis 最佳实践\n">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -203,7 +203,90 @@
     </ol>
 </aside>
 
-    
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#redis键值设计">Redis键值设计</a>
+      <ol>
+        <li><a href="#优雅的key结构">优雅的key结构</a></li>
+        <li><a href="#拒绝bigkey">拒绝BigKey</a>
+          <ol>
+            <li><a href="#什么是bigkey">什么是BigKey</a></li>
+            <li><a href="#bigkey的危害">BigKey的危害</a></li>
+            <li><a href="#如何发现bigkey">如何发现BigKey</a></li>
+            <li><a href="#如何删除bigkey">如何删除BigKey</a></li>
+          </ol>
+        </li>
+        <li><a href="#恰当的数据类型">恰当的数据类型</a>
+          <ol>
+            <li><a href="#选择存储方式">选择存储方式</a></li>
+            <li><a href="#优化hash类型key">优化hash类型key</a></li>
+          </ol>
+        </li>
+        <li><a href="#总结">总结</a></li>
+      </ol>
+    </li>
+    <li><a href="#批处理优化">批处理优化</a>
+      <ol>
+        <li><a href="#pipeline">Pipeline</a>
+          <ol>
+            <li><a href="#mset">MSet</a></li>
+            <li><a href="#pipeline-1">Pipeline</a></li>
+          </ol>
+        </li>
+        <li><a href="#集群下的批处理">集群下的批处理</a></li>
+      </ol>
+    </li>
+    <li><a href="#服务端优化">服务端优化</a>
+      <ol>
+        <li><a href="#持久化配置">持久化配置</a></li>
+        <li><a href="#慢查询优化">慢查询优化</a>
+          <ol>
+            <li><a href="#什么是慢查询">什么是慢查询</a></li>
+            <li><a href="#如何查看慢查询">如何查看慢查询</a></li>
+          </ol>
+        </li>
+        <li><a href="#命令及安全配置">命令及安全配置</a></li>
+        <li><a href="#内存划分和内存配置">内存划分和内存配置</a></li>
+      </ol>
+    </li>
+    <li><a href="#集群最佳实践">集群最佳实践</a>
+      <ol>
+        <li><a href="#集群完整性问题">集群完整性问题</a></li>
+        <li><a href="#集群带宽问题">集群带宽问题</a></li>
+        <li><a href="#命令的集群兼容性问题">命令的集群兼容性问题</a></li>
+        <li><a href="#lua和事务的问题">lua和事务的问题</a></li>
+        <li><a href="#选主从还是集群">选主从还是集群</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
 
             <main class="main full-width">
     <article class="main-article">
@@ -211,7 +294,23 @@
 
     <div class="article-details">
     
+    <header class="article-category">
+        
+            <a href="/categories/%E6%95%99%E7%A8%8B/" >
+                教程
+            </a>
+        
+    </header>
+    
 
+    
+    <section class="article-tags">
+        
+            <a href="/tags/java/">Java</a>
+        
+            <a href="/tags/redis/">Redis</a>
+        
+    </section>
     
 
     <div class="article-title-wrapper">
@@ -254,7 +353,913 @@
     <section class="article-content">
     
     
-    
+    <h1 id="redis最佳实践">Redis最佳实践
+</h1><blockquote>
+<p>本文基于黑马2022的Redis课程高级篇编写，课程地址：[高级篇-Redis最佳实践-01.Redis最佳实践课程介绍_哔哩哔哩_bilibili</p>
+<p>](<a class="link" href="https://www.bilibili.com/video/BV1cr4y1671t/?spm_id_from=333.788.player.switch&amp;vd_source=30ed35d5d781032adac226a1990f242f&amp;p=134"  target="_blank" rel="noopener"
+    >https://www.bilibili.com/video/BV1cr4y1671t/?spm_id_from=333.788.player.switch&vd_source=30ed35d5d781032adac226a1990f242f&p=134</a>)</p>
+<p>课程资料：https://pan.baidu.com/s/1189u6u4icQYHg_9_7ovWmA&amp;pwd=eh11</p>
+<p>本文中若未特意提及，则默认Linux环境用Ubuntu 24.04，Redis用6.2.6版本，本地主机用Windows</p>
+<p>本篇内容参考的博客：<a class="link" href="https://xn--9krq6q3ox70h4k2b.me/p/redis-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/"  target="_blank" rel="noopener"
+    >Redis 最佳实践</a></p>
+</blockquote>
+<h2 id="redis键值设计">Redis键值设计
+</h2><h3 id="优雅的key结构">优雅的key结构
+</h3><p>Redis的Key虽然可以自定义，但最好遵循下面的几个最佳实践约定：</p>
+<ul>
+<li>遵循基本格式：[业务名称]:[数据名]:[id]</li>
+<li>长度不超过44字节</li>
+<li>不包含特殊字符</li>
+</ul>
+<p>例如：我们的登录业务，保存用户信息，其key可以设计成如下格式：</p>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/key.png"
+	width="406"
+	height="162"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/key_hu_dd63499fb5882a2.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/key_hu_56835e7e2c3e253c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="250"
+		data-flex-basis="601px"
+	
+></p>
+<p>这样设计的好处：</p>
+<ul>
+<li>可读性强</li>
+<li>避免key冲突</li>
+<li>方便管理</li>
+<li>更节省内存：key是string类型，底层编码包含int、embstr和raw三种。embstr在小于44字节使用，采用连续内存空间，内存占用更小。当字节数大于44字节时，会转为raw模式存储，在raw模式下，内存空间不是连续的，而是采用一个指针指向了另外一段内存空间，在这段空间里存储SDS（简单动态字符串）内容，这样空间不连续，访问的时候性能也就会受到影响，还有可能产生内存碎片</li>
+</ul>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/key1.1.png"
+	width="1378"
+	height="546"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/key1.1_hu_4bc5712780e0d152.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/key1.1_hu_27b11d1338ed23f6.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="252"
+		data-flex-basis="605px"
+	
+></p>
+<p>object encoding xxx：查看一个key的底层编码</p>
+<p>由于当前使用的版本是6.多的版本，所以字节数边界为44，如果Redis的版本是低于4.0的，那么此时的embstr的边界则为39</p>
+<h3 id="拒绝bigkey">拒绝BigKey
+</h3><h4 id="什么是bigkey">什么是BigKey
+</h4><p>BigKey通常以Key的大小和Key中成员的数量来综合判定，例如：</p>
+<ul>
+<li>Key本身的数据量过大：一个String类型的Key，它的值为5 MB</li>
+<li>Key中的成员数过多：一个ZSET类型的Key，它的成员数量为10,000个</li>
+<li>Key中成员的数据量过大：一个Hash类型的Key，它的成员数量虽然只有1,000个但这些成员的Value（值）总大小为100 MB</li>
+</ul>
+<p>*那么如何判断元素的大小呢？*redis也给我们提供了命令</p>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/key2.png"
+	width="654"
+	height="226"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/key2_hu_4871b4dd02f2dd49.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/key2_hu_5f554970856d047c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="289"
+		data-flex-basis="694px"
+	
+>推荐值：</p>
+<ul>
+<li>单个key的value小于10KB</li>
+<li>对于集合类型的key，建议元素数量小于1000</li>
+</ul>
+<h4 id="bigkey的危害">BigKey的危害
+</h4><ul>
+<li>网络阻塞
+<ul>
+<li>对BigKey执行读请求时，少量的QPS（每秒查询率或每秒请求数）就可能导致带宽使用率被占满，导致Redis实例，乃至所在物理机变慢</li>
+</ul>
+</li>
+<li>数据倾斜
+<ul>
+<li>BigKey所在的Redis实例内存使用率远超其他实例，无法使数据分片的内存资源达到均衡</li>
+</ul>
+</li>
+<li>Redis阻塞
+<ul>
+<li>对元素较多的hash、list、zset等做运算会耗时较旧，使主线程被阻塞</li>
+</ul>
+</li>
+<li>CPU压力
+<ul>
+<li>对BigKey的数据序列化和反序列化会导致CPU的使用率飙升，影响Redis实例和本机其它应用</li>
+</ul>
+</li>
+</ul>
+<h4 id="如何发现bigkey">如何发现BigKey
+</h4><p><strong>1）redis-cli –bigkeys</strong></p>
+<p>利用redis-cli提供的–bigkeys参数，可以遍历分析所有key，并返回Key的整体统计信息与每个数据的Top1的big key</p>
+<p>命令：<code>redis-cli -a 密码 --bigkeys</code></p>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/key3.1.png"
+	width="943"
+	height="867"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/key3.1_hu_d2af849a182465c2.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/key3.1_hu_51413e0b4b14d833.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="108"
+		data-flex-basis="261px"
+	
+></p>
+<p><strong>2）scan扫描</strong></p>
+<p>自己编程，利用scan扫描Redis中的所有key，利用strlen、hlen等命令判断key的长度（此处不建议使用MEMORY USAGE）</p>
+<p>Redis 的 <code>SCAN</code> 命令用于基于游标（Cursor）进行增量式迭代。其返回结果是一个包含两个元素的数组：</p>
+<ol>
+<li>
+<p>下一次迭代的游标：</p>
+<ul>
+<li>第一次调用时，需将游标设置为 <code>0</code> 以开启新的迭代。</li>
+<li>命令返回的第一个值即为下一次调用时需要传入的游标。</li>
+<li>当命令返回的游标再次变为 <code>0</code> 时，表示整个遍历过程已结束。</li>
+</ul>
+</li>
+<li>
+<p>当前批次的数据：</p>
+<ul>
+<li>返回的第二个值是一个数组（List），包含本次迭代扫描到的键（Keys）或元素。</li>
+<li>数组的大小受 <code>COUNT</code> 参数控制（例如下图中设置了 <code>COUNT 2</code>，即每次尝试返回约 2 个元素；若不设置，默认约为 10 个）。</li>
+</ul>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/key4.png"
+	width="445"
+	height="229"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/key4_hu_ab44747a0443ce36.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/key4_hu_c7e12c8872caf076.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="194"
+		data-flex-basis="466px"
+	
+></p>
+<p>​</p>
+</li>
+</ol>
+<p>参考代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span><span class="lnt">86
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">com.heima.jedis.util.JedisConnectionFactory</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.junit.jupiter.api.AfterEach</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.junit.jupiter.api.BeforeEach</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.junit.jupiter.api.Test</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">redis.clients.jedis.Jedis</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">redis.clients.jedis.ScanResult</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.HashMap</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Map</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">JedisTest</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Jedis</span><span class="w"> </span><span class="n">jedis</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@BeforeEach</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setUp</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 1.建立连接</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// jedis = new Jedis(&#34;192.168.150.101&#34;, 6379);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">jedis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JedisConnectionFactory</span><span class="p">.</span><span class="na">getJedis</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 2.设置密码</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">jedis</span><span class="p">.</span><span class="na">auth</span><span class="p">(</span><span class="s">&#34;123321&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 3.选择库</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">jedis</span><span class="p">.</span><span class="na">select</span><span class="p">(</span><span class="n">0</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">final</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">STR_MAX_LEN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">1024</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">final</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">HASH_MAX_LEN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">500</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">testScan</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">maxLen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">0</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">long</span><span class="w"> </span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">0</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">cursor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;0&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">do</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// 扫描并获取一部分key</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">ScanResult</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jedis</span><span class="p">.</span><span class="na">scan</span><span class="p">(</span><span class="n">cursor</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// 记录cursor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">cursor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="na">getCursor</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="na">getResult</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">list</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">list</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="k">break</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// 遍历</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">list</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="c1">// 判断key的类型</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">String</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jedis</span><span class="p">.</span><span class="na">type</span><span class="p">(</span><span class="n">key</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                    </span><span class="k">case</span><span class="w"> </span><span class="s">&#34;string&#34;</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jedis</span><span class="p">.</span><span class="na">strlen</span><span class="p">(</span><span class="n">key</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="n">maxLen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">STR_MAX_LEN</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="k">break</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                    </span><span class="k">case</span><span class="w"> </span><span class="s">&#34;hash&#34;</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jedis</span><span class="p">.</span><span class="na">hlen</span><span class="p">(</span><span class="n">key</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="n">maxLen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HASH_MAX_LEN</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="k">break</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                    </span><span class="k">case</span><span class="w"> </span><span class="s">&#34;list&#34;</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jedis</span><span class="p">.</span><span class="na">llen</span><span class="p">(</span><span class="n">key</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="n">maxLen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HASH_MAX_LEN</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="k">break</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                    </span><span class="k">case</span><span class="w"> </span><span class="s">&#34;set&#34;</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jedis</span><span class="p">.</span><span class="na">scard</span><span class="p">(</span><span class="n">key</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="n">maxLen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HASH_MAX_LEN</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="k">break</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                    </span><span class="k">case</span><span class="w"> </span><span class="s">&#34;zset&#34;</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jedis</span><span class="p">.</span><span class="na">zcard</span><span class="p">(</span><span class="n">key</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="n">maxLen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HASH_MAX_LEN</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="k">break</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                    </span><span class="k">default</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="k">break</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="c1">// 打印BigKey</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">len</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">maxLen</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">printf</span><span class="p">(</span><span class="s">&#34;Found big key : %s, type: %s, length or size: %d %n&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">cursor</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="s">&#34;0&#34;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@AfterEach</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">tearDown</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">jedis</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">jedis</span><span class="p">.</span><span class="na">close</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>3）第三方工具</strong></p>
+<p>利用第三方工具，如 <a class="link" href="https://github.com/sripathikrishnan/redis-rdb-tools"  target="_blank" rel="noopener"
+    >Redis-Rdb-Tools</a> 分析RDB快照文件，全面分析内存使用情况</p>
+<p><strong>4）网络监控</strong></p>
+<p>自定义工具，监控进出Redis的网络数据，超出预警值时主动告警，一般阿里云搭建的云服务器就有相关监控页面</p>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E7%BD%91%E7%BB%9C%E7%9B%91%E6%8E%A7.png"
+	width="654"
+	height="150"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E7%BD%91%E7%BB%9C%E7%9B%91%E6%8E%A7_hu_c518b50aa5f542a6.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E7%BD%91%E7%BB%9C%E7%9B%91%E6%8E%A7_hu_5b0d31a260f2a0c4.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="436"
+		data-flex-basis="1046px"
+	
+></p>
+<h4 id="如何删除bigkey">如何删除BigKey
+</h4><p>BigKey内存占用较多，即便时删除这样的key也需要耗费很长时间，导致Redis主线程阻塞，引发一系列问题</p>
+<ul>
+<li>redis 3.0 及以下版本</li>
+</ul>
+<p>如果是集合类型，则遍历BigKey的元素，先逐个删除子元素，最后删除BigKey。Redis也有提供专门对集合的scan：</p>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/key5.png"
+	width="654"
+	height="223"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/key5_hu_42ce14d314c53b95.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/key5_hu_b97734e09576e05d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="293"
+		data-flex-basis="703px"
+	
+></p>
+<ul>
+<li>Redis 4.0以后</li>
+</ul>
+<p>Redis在4.0后提供了异步删除的命令：unlink</p>
+<h3 id="恰当的数据类型">恰当的数据类型
+</h3><h4 id="选择存储方式">选择存储方式
+</h4><p>比如存储一个User对象，有三种存储方式，<em>应该选择哪种？</em></p>
+<p><strong>①方式一：json字符串</strong></p>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B.png"
+	width="654"
+	height="47"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B_hu_54876a075c801ece.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B_hu_8ba22fd1e5ab852.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1391"
+		data-flex-basis="3339px"
+	
+></p>
+<p>优点：实现简单粗暴</p>
+<p>缺点：数据耦合，不够灵活</p>
+<p><strong>②方式二：字段打散</strong><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B1.png"
+	width="654"
+	height="93"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B1_hu_18b8ba733c06a999.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B1_hu_65b99b9d8872e486.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="703"
+		data-flex-basis="1687px"
+	
+></p>
+<p>优点：可以灵活访问对象任意字段</p>
+<p>缺点：占用空间大、没办法做统一控制</p>
+<p><strong>③方式三：hash（推荐）</strong></p>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B2.png"
+	width="654"
+	height="94"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B2_hu_34151937e9be8b45.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B2_hu_772f8daf5ad932b3.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="695"
+		data-flex-basis="1669px"
+	
+></p>
+<p>优点：底层使用ziplist压缩内存，空间占用小，可以灵活访问对象的任意字段</p>
+<p>缺点：代码相对复杂</p>
+<h4 id="优化hash类型key">优化hash类型key
+</h4><p>假如有hash类型的key，其中有100万对field和value，field是自增id，<em>这个key存在什么问题？如何优化？</em></p>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/hash.png"
+	width="654"
+	height="120"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/hash_hu_d7446161936cfe9b.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/hash_hu_302bae63621a05b0.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="545"
+		data-flex-basis="1308px"
+	
+></p>
+<p>存在的问题：</p>
+<ul>
+<li>hash的entry数量超过500时，会使用哈希表而不是ZipList，内存占用较多。例如图中100万条大概会占60M</li>
+<li>可以通过hash-max-ziplist-entries配置entry（一个键值对就是一个entry）上限。但是如果entry过多就会导致BigKey问题</li>
+<li>相关命令：<code>config set/get hash-max-ziplist-entries </code></li>
+</ul>
+<p><strong>方案一</strong>：</p>
+<p>拆分为string类型：</p>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/hash1.png"
+	width="654"
+	height="179"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/hash1_hu_5fa383fdb0d2a35b.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/hash1_hu_dda3677f2f9b9a02.png 1024w"
+	loading="lazy"
+	
+		alt="ash"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="365"
+		data-flex-basis="876px"
+	
+></p>
+<p>存在的问题：</p>
+<ul>
+<li>string结构底层没有太多内存优化，内存占用较多，现在大约会占近80M</li>
+<li>想要批量获取这些数据比较麻烦</li>
+</ul>
+<p><strong>方案二</strong>：</p>
+<p>拆分为小的hash，将 id / 100 作为key，将id % 100 作为field，这样每100个元素为一个Hash（不一定要是100，只要entry小于hash-max-ziplist-entries配置的entry上限即可）</p>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/hash2.png"
+	width="654"
+	height="329"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/hash2_hu_a6ca38f680eec57b.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/hash2_hu_e5cf8a24e756a113.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="198"
+		data-flex-basis="477px"
+	
+></p>
+<blockquote>
+<p>例如：id从0-99，id/100都等于0，id%100分别等于0,1,2&hellip;99</p>
+<p>id从100-199，id/100都等于1，id%100分别等于0,1,2&hellip;999</p>
+</blockquote>
+<p>这种方案占用的内存在25M左右</p>
+<h3 id="总结">总结
+</h3><ul>
+<li>Key的最佳实践
+<ul>
+<li>固定格式：[业务名]:[数据名]:[id]</li>
+<li>足够简短：不超过44字节</li>
+<li>不包含特殊字符</li>
+</ul>
+</li>
+<li>Value的最佳实践：
+<ul>
+<li>合理的拆分数据，拒绝BigKey</li>
+<li>选择合适数据结构</li>
+<li>Hash结构的entry数量不要超过hash-max-ziplist-entries配置的entry上限</li>
+<li>设置合理的超时时间</li>
+</ul>
+</li>
+</ul>
+<h2 id="批处理优化">批处理优化
+</h2><h3 id="pipeline">Pipeline
+</h3><p>Redis 的 Pipeline（管道）本质上是一种批量命令优化机制。它的核心作用非常单一且明确：通过减少客户端与 Redis 服务器之间的网络往返次数（RTT, Round-Trip Time），来大幅提升批量操作的吞吐量。</p>
+<p>我们的客户端与redis服务器是这样交互的：</p>
+<p><strong>单个命令的执行流程↓</strong></p>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%89%B9%E5%A4%84%E7%90%86.png"
+	width="652"
+	height="246"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%89%B9%E5%A4%84%E7%90%86_hu_d5135c757d6b54a4.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%89%B9%E5%A4%84%E7%90%86_hu_44a09c79b5d6e7c3.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="265"
+		data-flex-basis="636px"
+	
+></p>
+<p><strong>N条命令的执行流程↓</strong></p>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%89%B9%E5%A4%84%E7%90%861.png"
+	width="652"
+	height="243"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%89%B9%E5%A4%84%E7%90%861_hu_cb1e8be1b5ca330f.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%89%B9%E5%A4%84%E7%90%861_hu_9bc059657bebba19.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="268"
+		data-flex-basis="643px"
+	
+></p>
+<p><strong>redis处理指令是很快的，主要花费的时候在于网络传输。于是乎很容易想到将多条指令批量的传输给redis</strong></p>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%89%B9%E5%A4%84%E7%90%862.png"
+	width="652"
+	height="245"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%89%B9%E5%A4%84%E7%90%862_hu_d47b28bb960e0935.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%89%B9%E5%A4%84%E7%90%862_hu_8d097b4783c06b8d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="266"
+		data-flex-basis="638px"
+	
+></p>
+<h4 id="mset">MSet
+</h4><p>Redis提供了很多Mxxx这样的命令，可以实现批量插入数据，例如：</p>
+<ul>
+<li>mset</li>
+<li>hmset</li>
+</ul>
+<p>利用mset批量插入10万条数据，参考代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="w"> </span><span class="nf">testMxx</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">arr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">String</span><span class="o">[</span><span class="n">2000</span><span class="o">]</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">currentTimeMillis</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">100000</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// j = (i % 1000) 的结果为0-999，现在让其左移一位，从原来的0,1,2,3,4,5...变为0,2,4,6,8,10...1998也就是把原来的数全部变为偶数，因为在计算机中，左移一位（&lt;&lt; 1）等同于乘以2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">1000</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">arr</span><span class="o">[</span><span class="n">j</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;test:key_&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="c1">//偶数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">arr</span><span class="o">[</span><span class="n">j</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">1</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;value_&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="c1">//奇数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">jedis</span><span class="p">.</span><span class="na">mset</span><span class="p">(</span><span class="n">arr</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">currentTimeMillis</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;time: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>注意：不要在一次批处理中传输太多命令，否则单次命令占用带宽过多，会导致网络阻塞，就像不能一次性让一头驴运太多东西，否则会把驴给压死一样</p>
+<h4 id="pipeline-1">Pipeline
+</h4><p>MSET虽然可以批处理，但是却只能操作String数据类型；HMSET只能处理哈希，而且key是不变的，变的只有field；SADD也是key不能变，而且只能处理set集合；因此如果有对复杂数据类型的批处理需要，建议使用Pipeline</p>
+<p>利用pipeline批量插入10万条数据，参考代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="w"> </span><span class="nf">testPipeline</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 创建管道</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Pipeline</span><span class="w"> </span><span class="n">pipeline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jedis</span><span class="p">.</span><span class="na">pipelined</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">currentTimeMillis</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">100000</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 放入命令到管道</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">pipeline</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="s">&#34;test:key_&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;value_&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//除了可以执行set，还可以执行别的（hset、lpush、sadd、zadd...）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">1000</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// 每放入1000条命令，批量执行</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">pipeline</span><span class="p">.</span><span class="na">sync</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">currentTimeMillis</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;time: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>不过MSET却是比Pipeline要快的，这是因为M操作是Redis的内置操作，M操作里边的多组kv会把它作为原子性的操作，也就是说一次性全执行完，中间 不会有其他命令来插队；而pipeline则不是，它是将这一组命令一起发到Redis里，但是这一组命令并不一定是一起就执行了的，因为pipeline里面命令传输是有先后的，它会将这些命令放在一个队列里依次执行，如果你在执行过程中有别的客户端也发了命令的话实际执行时长可能就会因为插队导致比预期的慢一些，不过也是可以接受的</p>
+</blockquote>
+<h3 id="集群下的批处理">集群下的批处理
+</h3><p>在 Redis 集群模式下，执行 <code>MSET</code> 或 <code>Pipeline</code> 等批处理操作时，存在一个关键限制：<strong>所有涉及的 Key 必须通过哈希槽（Hash Slot）计算并映射到同一个节点上</strong>。如果批处理中的多个 Key 分散在不同的节点，集群将无法在单次请求中完成路由，从而导致执行失败。</p>
+<p>这一限制在实际开发中往往带来极大的挑战。因为在常规的批量写入场景中，业务数据通常是随机或自然分布的，很难天然地满足“全部落在同一插槽”的苛刻条件。这极易引发跨槽（Cross-slot）错误，导致批量操作无法顺利执行。</p>
+<p>有4种解决方案：</p>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%89%B9%E5%A4%84%E7%90%863.1.png"
+	width="732"
+	height="296"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%89%B9%E5%A4%84%E7%90%863.1_hu_ae1343a77e1538a2.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%89%B9%E5%A4%84%E7%90%863.1_hu_11061c130c2ff83a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="247"
+		data-flex-basis="593px"
+	
+></p>
+<p><strong>第一种方案</strong>：串行执行，所以这种方式没有什么意义，当然，执行起来就很简单了，缺点就是耗时过久。</p>
+<p><strong>第二种方案</strong>：串行slot，简单来说，就是执行前，客户端先计算一下对应的key的slot，一样slot的key就放到一个组里边，不同的，就放到不同的组里边，然后对每个组执行pipeline的批处理，他就能串行执行各个组的命令，这种做法比第一种方法耗时要少，但是缺点是相对来说复杂一点，所以这种方案还需要优化一下</p>
+<p><strong>第三种方案</strong>：并行slot，相较于第二种方案在分组完成后串行执行，第三种方案就变成了并行执行各个命令，所以他的耗时就非常短，但是实现也更加复杂。</p>
+<p><strong>第四种方案</strong>：hash_tag，redis计算key的slot的时候，其实是根据key的有效部分来计算的，通过这种方式就能一次处理所有的key，这种方式耗时最短，实现也简单，但是如果通过操作key的有效部分，那么就会导致所有的key都落在一个节点上，产生数据倾斜的问题，所以推荐使用第三种方式。</p>
+<p>Spring封装的StringRedisTemplate在集群环境下批处理就是用的第三种方案</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">map</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HashMap</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">3</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;Rose&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;21&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&#34;sex&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;Female&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">opsForValue</span><span class="p">().</span><span class="na">multiSet</span><span class="p">(</span><span class="n">map</span><span class="p">);</span><span class="w"> </span><span class="c1">// multiSet方法底层就是用第三种方案实现的</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="服务端优化">服务端优化
+</h2><h3 id="持久化配置">持久化配置
+</h3><p>Redis的持久化虽然可以保证数据安全，但也会带来很多额外的开销，因此持久化请遵循下列建议：</p>
+<ul>
+<li>用来做缓存的Redis实例尽量不要开启持久化功能</li>
+<li>建议关闭RDB持久化功能，使用混合持久化（Hybrid Persistence）。开启 <code>aof-use-rdb-preamble yes</code>（Redis 4.0+支持）</li>
+<li>利用脚本定期在slave节点做RDB，实现数据备份</li>
+<li>设置合理的rewrite阈值，避免频繁的bgrewrite</li>
+<li>配置no-appendfsync-on-rewrite = yes，禁止在rewrite期间做aof，避免因AOF引起的阻塞（根据安全或性能做取舍，对性能要求高就yes，对安全要求高就no，不确定就用默认的no）</li>
+</ul>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E4%BC%98%E5%8C%96.png"
+	width="326"
+	height="297"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E4%BC%98%E5%8C%96_hu_65f62e8871bd5c6f.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E4%BC%98%E5%8C%96_hu_4a190c3fdf175e75.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="109"
+		data-flex-basis="263px"
+	
+></p>
+<ul>
+<li>部署有关建议：
+<ul>
+<li>Redis实例的物理机要预留足够内存，应对fork和rewrite</li>
+<li>单个Redis实例内存上限不要太大，例如4G或8G。可以加快fork的速度、减少主从同步、数据迁移压力</li>
+<li>不要与CPU密集型应用部署在一起</li>
+<li>不要与高硬盘负载应用一起部署。例如：数据库、消息队列</li>
+</ul>
+</li>
+</ul>
+<h3 id="慢查询优化">慢查询优化
+</h3><h4 id="什么是慢查询">什么是慢查询
+</h4><p>并不是很慢的查询才是慢查询，而是：<strong>在Redis执行时耗时超过某个阈值的命令，称为慢查询</strong></p>
+<p>慢查询的危害：由于Redis是单线程的，所以当客户端发出指令后，他们都会进入到redis底层的queue来执行，如果此时有一些慢查询的数据，就会导致大量请求阻塞，从而引起报错，所以我们需要解决慢查询问题。</p>
+<p>慢查询的阈值可以通过配置指定：</p>
+<p><code>slowlog-log-slower-than</code>：慢查询阈值，单位是微秒。默认是10000，建议1000</p>
+<p>慢查询会被放入慢查询日志中，日志的长度有上限，可以通过配置指定：</p>
+<p><code>slowlog-max-len</code>：慢查询日志（本质是一个队列）的长度。默认是128，建议1000</p>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%85%A2%E6%9F%A5%E8%AF%A2.png"
+	width="652"
+	height="168"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%85%A2%E6%9F%A5%E8%AF%A2_hu_381483f640c7028a.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%85%A2%E6%9F%A5%E8%AF%A2_hu_8cbd488e3ea3ebe9.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="388"
+		data-flex-basis="931px"
+	
+></p>
+<p>修改这两个配置可以使用：config set</p>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%85%A2%E6%9F%A5%E8%AF%A21.png"
+	width="654"
+	height="133"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%85%A2%E6%9F%A5%E8%AF%A21_hu_81f0900ee6324e51.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%85%A2%E6%9F%A5%E8%AF%A21_hu_3581148b81b0aa61.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="491"
+		data-flex-basis="1180px"
+	
+></p>
+<h4 id="如何查看慢查询">如何查看慢查询
+</h4><p>知道了以上内容之后，<em>那么如何查看慢查询日志列表呢?</em></p>
+<ul>
+<li>slowlog len：查询慢查询日志长度</li>
+<li>slowlog get [n]：读取n条慢查询日志</li>
+<li>slowlog reset：清空慢查询列表</li>
+</ul>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%85%A2%E6%9F%A5%E8%AF%A22.png"
+	width="654"
+	height="200"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%85%A2%E6%9F%A5%E8%AF%A22_hu_81e3369aebcfbb6f.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%85%A2%E6%9F%A5%E8%AF%A22_hu_7727c78308d0e761.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="327"
+		data-flex-basis="784px"
+	
+></p>
+<p>也可以直接使用Redis图形化界面进行查看</p>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%85%A2%E6%9F%A5%E8%AF%A23.png"
+	width="1522"
+	height="301"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%85%A2%E6%9F%A5%E8%AF%A23_hu_8ab54cd39197a5a4.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E6%85%A2%E6%9F%A5%E8%AF%A23_hu_294cbcab8108df5b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="505"
+		data-flex-basis="1213px"
+	
+></p>
+<h3 id="命令及安全配置">命令及安全配置
+</h3><p>安全可以说是服务器端一个非常重要的话题，如果安全出现了问题，一旦漏洞被恶意攻击者利用，就会给我们的系统带来巨大的损失。所以这小节就来解决这个问题。</p>
+<p>Redis 默认会绑定在 0.0.0.0:6379，这会将 Redis 服务直接暴露在公网上。如果 Redis 没有做身份认证，将会出现严重的安全漏洞。 漏洞重现方式：<a class="link" href="https://cloud.tencent.com/developer/article/1039000?spm=5176.28103460.0.0.67b92988Y4SrNZ"  target="_blank" rel="noopener"
+    >https://cloud.tencent.com/developer/article/1039000</a></p>
+<p>为什么会出现不需要密码也能登录的情况呢？这里的核心原理其实是攻击者利用了 Redis 的权限去篡改了 Linux 系统的 SSH 免密登录配置。SSH 免密登录需要在服务器的 <code>authorized_keys</code> 文件中存入客户端的公钥。而 Redis 的漏洞在于，攻击者可以在未授权登录的情况下，利用 Redis 的持久化功能，强行把自己的 SSH 公钥“写入”到 Linux 服务器的 <code>/root/.ssh/authorized_keys</code> 文件中，从而直接获取服务器的最高权限。</p>
+<p>漏洞出现的核心原因有以下几点：</p>
+<ul>
+<li>Redis 未设置密码（未授权访问）</li>
+<li>攻击者利用了 Redis 的 <code>config set</code> 命令动态修改 Redis 的持久化路径和文件名</li>
+<li>使用了 Root 账号权限启动 Redis，导致 Redis 有权限向系统核心目录写入文件</li>
+</ul>
+<p>所以：如何解决呢？我们可以采用如下几种方案</p>
+<p>为了避免这样的漏洞，这里给出一些建议：</p>
+<ul>
+<li>Redis 一定要设置强密码（<code>requirepass</code>）</li>
+<li>禁止线上使用高危命令：<code>keys</code>、<code>flushall</code>、<code>flushdb</code>、<code>config set</code> 等。可以利用 <code>rename-command</code> 重命名或直接禁用这些命令。</li>
+<li><code>bind</code>：限制网卡绑定，禁止外网网卡直接访问，仅允许内网或本机访问</li>
+<li>开启防火墙，严格限制 6379 端口的访问来源 IP</li>
+<li>不要使用 Root 账户启动 Redis，应使用权限受限的普通用户</li>
+<li>尽量不使用默认的 6379 端口，改为其他非常用端口</li>
+</ul>
+<h3 id="内存划分和内存配置">内存划分和内存配置
+</h3><p>当Redis内存不足时，可能导致Key频繁被删除、响应时间变长、QPS不稳定等问题。当内存使用率达到90%以上时就需要我们警惕，并快速定位到内存占用的原因。</p>
+<p><strong>有关碎片问题分析</strong></p>
+<p>Redis底层分配并不是这个key有多大，他就会分配多大，而是有他自己的分配策略，比如8、16、32、48等，假定当前key只需要10个字节，此时分配8肯定不够，那么他就会分配16个字节，多出来的6个字节就成为内部碎片（该分配单元内无法被当前 key 使用的空间），这就是我们常说的碎片问题，不过这个问题只要重启Redis服务就可以解决，不过不能暴力的把所有服务器都停掉，应该按照主从或者集群分批的去做重启，避免整个服务故障</p>
+<p><strong>进程内存问题分析：</strong></p>
+<p>这片内存，通常我们都可以忽略不计</p>
+<p><strong>缓冲区内存问题分析：</strong></p>
+<p>一般包括客户端缓冲区、AOF缓冲区、复制缓冲区等。客户端缓冲区又包括输入缓冲区和输出缓冲区两种。这部分内存占用波动较大，所以这部分内存是我们需要重点分析的。</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th><strong>内存占用</strong></th>
+					<th><strong>说明</strong></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>数据内存</td>
+					<td>是Redis最主要的部分，存储Redis的键值信息。主要问题是BigKey问题、内存碎片问题</td>
+			</tr>
+			<tr>
+					<td>进程内存</td>
+					<td>Redis主进程本身运⾏肯定需要占⽤内存，如代码、常量池等等；这部分内存⼤约⼏兆，在⼤多数⽣产环境中与Redis数据占⽤的内存相⽐可以忽略。</td>
+			</tr>
+			<tr>
+					<td>缓冲区内存</td>
+					<td>一般包括<strong>客户端缓冲区</strong>、<strong>AOF缓冲区</strong>、<strong>复制缓冲区</strong>等。客户端缓冲区又包括输入缓冲区和输出缓冲区两种。这部分内存占用波动较大，不当使用BigKey，可能导致内存溢出。</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>于是我们就需要通过一些命令，可以查看到Redis目前的内存分配状态：</p>
+<ul>
+<li>info memory：查看内存分配的情况</li>
+</ul>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E5%86%85%E5%AD%981.png"
+	width="637"
+	height="625"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E5%86%85%E5%AD%981_hu_e1b28cb7869b6b49.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E5%86%85%E5%AD%981_hu_81be375e2847da51.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="101"
+		data-flex-basis="244px"
+	
+></p>
+<ul>
+<li>memory usage ：查看key的主要占用情况</li>
+</ul>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E5%86%85%E5%AD%982.png"
+	width="604"
+	height="630"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E5%86%85%E5%AD%982_hu_6f7c883371c189f1.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E5%86%85%E5%AD%982_hu_29ee71e9db2b2819.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="95"
+		data-flex-basis="230px"
+	
+></p>
+<p>这些配置也可以在图形化界面工具中进行查看</p>
+<p>看到了这些配置，最关键的缓存区内存应该如何定位和解决呢？</p>
+<p>内存缓冲区常见的有三种：</p>
+<ul>
+<li>**复制缓冲区：**主从复制的repl_backlog_buf，如果太小可能导致频繁的全量复制，影响性能。通过repl-backlog-size来设置，默认1MB</li>
+<li>**AOF缓冲区：**AOF刷盘之前的缓存区域，AOF执行rewrite的缓冲区。没有直接可配置的容量上限</li>
+<li>**客户端缓冲区：**分为输入缓冲区和输出缓冲区，输入缓冲区最大1G且不能设置。输出缓冲区可以设置</li>
+</ul>
+<p>以上复制缓冲区和AOF缓冲区通常不会有问题，最关键就是客户端缓冲区的问题</p>
+<p>客户端缓冲区：指的就是我们发送命令时，客户端用来缓存命令的一个缓冲区，也就是我们向redis输入数据的输入端缓冲区和redis向客户端返回数据的响应缓存区，输入缓冲区最大1G且不能设置，所以这一块我们根本不用担心，如果超过了这个空间，redis会直接断开该客户端连接，因为本来此时此刻就代表着redis处理不过来了，我们需要担心的就是输出端缓冲区，其配置如下<img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E5%86%85%E5%AD%980.png"
+	width="711"
+	height="197"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E5%86%85%E5%AD%980_hu_2f7ce6124123d968.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E5%86%85%E5%AD%980_hu_dff0660ed2e517b1.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="360"
+		data-flex-basis="866px"
+	
+></p>
+<p>我们在使用Redis过程中，如果处理大量的big value，那么会导致我们的输出结果过多，如果输出缓冲区过大，会导致Redis直接断开。而默认配置下，普通客户端的输出缓冲区默认是没有大小限制的，这其实是一个巨大的隐患。一旦遇到BigKey或慢客户端，缓冲区就会无节制地膨胀，疯狂吞噬服务器内存。当内存占用达到物理极限时，不仅会触发操作系统的 OOM Killer 导致 Redis 进程崩溃，Redis自身的保护机制也可能强制断开连接。所以解决方案有两个：</p>
+<ol>
+<li>设置一个大小（即设置输出缓冲区的硬限制和软限制）。</li>
+<li>增加我们带宽的大小，可以缓解传输压力，但根本还是要合理设置输出缓冲区大小或控制big value的数量。</li>
+</ol>
+<h2 id="集群最佳实践">集群最佳实践
+</h2><h3 id="集群完整性问题">集群完整性问题
+</h3><p>在Redis的默认配置中，如果发现任意一个插槽不可用，则整个集群都会停止对外服务：</p>
+<p><img src="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E9%9B%86%E7%BE%A4.png"
+	width="658"
+	height="229"
+	srcset="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E9%9B%86%E7%BE%A4_hu_a4d712f37ae0f1.png 480w, /p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/assets/%E9%9B%86%E7%BE%A4_hu_ca3159963db3ecde.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="287"
+		data-flex-basis="689px"
+	
+></p>
+<p>为了保证高可用特性，这里建议将 <code>cluster-require-full-coverage</code> 配置为 false</p>
+<h3 id="集群带宽问题">集群带宽问题
+</h3><p>集群节点之间会不断的互相Ping来确定集群中其它节点的状态。每次Ping携带的信息至少包括：</p>
+<ul>
+<li>插槽信息</li>
+<li>集群状态信息</li>
+</ul>
+<p>集群中节点越多，集群状态信息数据量也越大，例如10个节点的相关信息可能达到1kb左右，此时每次节点间通信需要的带宽会非常高，这样会导致集群中大量的带宽都会被ping信息所占用，这是一个非常可怕的问题，所以我们需要去解决这样的问题</p>
+<p><strong>解决途径：</strong></p>
+<ul>
+<li>避免大集群，集群节点数不要太多，最好少于1000，如果业务庞大，则建立多个集群。</li>
+<li>避免在单个物理机中运行太多Redis实例</li>
+<li>配置合适的cluster-node-timeout值</li>
+</ul>
+<h3 id="命令的集群兼容性问题">命令的集群兼容性问题
+</h3><p>有关这个问题前面已经探讨过了，当我们使用批处理的命令时，redis要求我们的key必须落在相同的slot上，大量的key同时操作时，是无法完成的，所以客户端必须要对这样的数据进行处理，这些方案之前已经探讨过了，所以不再这个地方赘述了。</p>
+<h3 id="lua和事务的问题">lua和事务的问题
+</h3><p>Lua和事务都需要保证原子性。如果你的key不在同一个节点（即属于不同slot），那么Redis无法执行该Lua脚本或事务。所以在集群模式下，只有当你操作的key全部落在同一个节点时，才能成功执行Lua脚本和事务。</p>
+<h3 id="选主从还是集群">选主从还是集群
+</h3><p>单体Redis（主从Redis）已经能达到万级别的QPS，并且也具备很强的高可用特性。如果主从能满足业务需求的情况下，不是万不得已尽量不搭建Redis集群</p>
+
 </section>
 
 
@@ -268,6 +1273,80 @@
     
 
     
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Redis多级缓存</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/redis-%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Redis- 分布式缓存</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/redis-%E5%AE%9E%E6%88%98%E7%AF%87/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Redis-实战篇</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/redis-%E5%85%A5%E9%97%A8%E7%AF%87/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Redis 入门篇</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/%E5%85%83%E6%B3%A8%E8%A7%A3/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">元注解</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
 
      
     

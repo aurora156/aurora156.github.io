@@ -3253,7 +3253,8 @@
 &lt;p&gt;参考学习的博客地址：&lt;a class=&#34;link&#34; href=&#34;https://xn--9krq6q3ox70h4k2b.me/p/redis-%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/#%E4%B8%BB%E4%BB%8E%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5%E5%8E%9F%E7%90%86&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;Redis 分布式缓存&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;教程中将以6.2.6版本的Redis进行演示&lt;/p&gt;
-&lt;p&gt;教程中的/tmp地址仅为学习时使用的目录，后续目录改为了/opt/redis，部分目录没有进行修正,如果有遇到数据迁移、持久化等问题，请移步另一篇文章：&lt;/p&gt;
+&lt;p&gt;教程中的/tmp地址仅为学习时使用的目录，后续目录改为了/opt/redis，部分目录没有进行修正,如果有遇到数据迁移、持久化等问题，请移步另一篇文章：&lt;a class=&#34;link&#34; href=&#34;https://aurora156.github.io/p/docker-mysql%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E8%BF%81%E7%A7%BB/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Docker MySQL数据持久化迁移&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id=&#34;引言&#34;&gt;引言
 &lt;/h1&gt;&lt;h3 id=&#34;单机redis的问题&#34;&gt;单机Redis的问题
