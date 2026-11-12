@@ -7,7 +7,1377 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>凉介</copyright>
-        <lastBuildDate>Fri, 06 Nov 2026 16:40:10 +0800</lastBuildDate><atom:link href="https://aurora156.github.io/categories/%E6%95%99%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 10 Nov 2026 15:31:53 +0800</lastBuildDate><atom:link href="https://aurora156.github.io/categories/%E6%95%99%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Redis原理篇 网络模型</title>
+        <link>https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/</link>
+        <pubDate>Tue, 10 Nov 2026 15:31:53 +0800</pubDate>
+        
+        <guid>https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/</guid>
+        <description>&lt;blockquote&gt;
+&lt;p&gt;本文基于黑马2022的Redis课程原理篇编写，课程地址：&lt;a class=&#34;link&#34; href=&#34;https://www.bilibili.com/video/BV1cr4y1671t?spm_id_from=333.788.player.switch&amp;amp;vd_source=5d30cbe8a5e5c1e21aa0b0a536d3829a&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;黑马程序员Redis入门到实战教程，深度透析redis底层原理+redis分布式锁+企业解决方案+黑马点评实战项目&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;本篇内容参考的博客：&lt;a class=&#34;link&#34; href=&#34;https://xn--9krq6q3ox70h4k2b.me/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Redis原理篇-网络模型&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;用户态与内核态的-io-读写&#34;&gt;用户态与内核态的 IO 读写
+&lt;/h2&gt;&lt;h3 id=&#34;linux分层架构&#34;&gt;Linux分层架构
+&lt;/h3&gt;&lt;p&gt;服务器大多都采用Linux系统，下面以Linux为例来介绍：&lt;/p&gt;
+&lt;p&gt;Ubuntu 和 CentOS 都是 Linux 的发行版，发行版可以看成对 Linux 包了一层壳，任何 Linux 发行版，其系统内核都是 Linux。我们的应用都需要通过 Linux 内核与硬件交互。&lt;/p&gt;
+&lt;p&gt;用户应用（如 MySQL、Redis）无法直接访问硬件设备（CPU、内存、网卡等），必须通过内核来操作硬件。内核包含设备驱动、内存管理、进程管理、文件系统、网络管理等模块，并封装成系统调用接口供用户应用使用。&lt;/p&gt;
+&lt;p&gt;计算机硬件包括 CPU、内存、网卡等，内核（通过寻址空间）可以操作硬件，但是内核需要不同设备的驱动，有了这些驱动之后，内核就可以对计算机硬件进行内存管理、文件系统管理、进程管理等。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/linux.png&#34;
+	width=&#34;654&#34;
+	height=&#34;258&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/linux_hu_a222540cba0263a0.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/linux_hu_6e16ae8d37e21e87.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;253&#34;
+		data-flex-basis=&#34;608px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;资源隔离&#34;&gt;资源隔离
+&lt;/h3&gt;&lt;p&gt;内核本身也是软件，运行时需要消耗 CPU 和内存等资源（操作系统本身也会占用一部分内存）。若不限制用户直接操作内核，用户应用随意使用资源可能导致冲突甚至系统崩溃。&lt;/p&gt;
+&lt;p&gt;所以需要将用户应用与内核隔离开，&lt;em&gt;如何隔离呢？&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;首先需要将进程的寻址空间划分为两个部分：&lt;strong&gt;内核空间&lt;/strong&gt;和&lt;strong&gt;用户空间&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;什么是寻址空间呢？&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;应用程序也好，内核也好，都无法直接访问物理内存，而是通过虚拟地址来使用内存，由内核负责将虚拟地址映射到物理内存上。&lt;/p&gt;
+&lt;p&gt;内核和应用程序访问虚拟内存时，就需要一个虚拟地址，这个地址是一个无符号的整数。比如一个32位的操作系统，其地址总线宽度为32位，虚拟地址空间大小就是2的32次方，也就是说它的寻址范围是0到2³²−1，这片寻址空间对应的就是2的32次方个字节，也就是4 GB。这个4 GB，通常会有3 GB分给用户空间，1 GB分给内核空间。这样在内存层面上将用户应用和内核隔离开，从而杜绝冲突和崩溃。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E8%B5%84%E6%BA%900.png&#34;
+	width=&#34;332&#34;
+	height=&#34;228&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E8%B5%84%E6%BA%900_hu_356b87d532e7c933.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E8%B5%84%E6%BA%900_hu_5ff080af08d2eb36.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;145&#34;
+		data-flex-basis=&#34;349px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;用户态与内核态及-io-缓冲区&#34;&gt;用户态与内核态及 IO 缓冲区
+&lt;/h3&gt;&lt;p&gt;CPU 会将指令分为 4 个特权级别（Ring 0 ～ Ring 3），Ring 3 权限最低，Ring 0 权限最高。&lt;/p&gt;
+&lt;p&gt;Linux只使用Ring0和Ring3：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;用户空间（Ring3）：用户空间可执行的指令，不能直接操作硬件资源，必须通过系统调用。&lt;/li&gt;
+&lt;li&gt;内核空间（Ring0）：内核空间可执行的指令，可以操作所有硬件资源。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;进程在执行过程中可能需要在用户空间和内核空间之间切换：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;运行在用户空间时称为&lt;strong&gt;用户态&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;运行在内核空间时称为&lt;strong&gt;内核态&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Linux系统为了提高IO效率，用户空间和内核空间都设有缓冲区（buffer）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;用户缓冲区：用于IO流的缓冲（如BufferedInputStream）。&lt;/li&gt;
+&lt;li&gt;内核缓冲区：用于缓存数据，避免频繁物理访问。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;写数据的流程如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;用户态进程执行普通运算（无需切换）。&lt;/li&gt;
+&lt;li&gt;需要写入磁盘时，先写入用户缓冲区。&lt;/li&gt;
+&lt;li&gt;发起系统调用，切换到内核态。&lt;/li&gt;
+&lt;li&gt;内核将用户缓冲区的数据拷贝到内核缓冲区。&lt;/li&gt;
+&lt;li&gt;再将内核缓冲区的数据写入磁盘。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;读数据的流程如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;用户态进程发起读请求（如从磁盘或网卡读数据）。&lt;/li&gt;
+&lt;li&gt;系统调用后切换到内核态，内核判断数据是否就绪（例如等待网络数据到达网卡）。&lt;/li&gt;
+&lt;li&gt;数据就绪后，从硬件读取到内核缓冲区。&lt;/li&gt;
+&lt;li&gt;从内核缓冲区拷贝数据到用户缓冲区。&lt;/li&gt;
+&lt;li&gt;切换回用户态，对数据进行处理。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E7%94%A8%E6%88%B7.png&#34;
+	width=&#34;654&#34;
+	height=&#34;420&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E7%94%A8%E6%88%B7_hu_19f99c4753d8cf96.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E7%94%A8%E6%88%B7_hu_378879a1441454f1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;155&#34;
+		data-flex-basis=&#34;373px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;所以将上述IO读写流程应用到HTTP服务器场景时流程大致如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;客户端与服务器建立连接后，发送请求数据。&lt;/li&gt;
+&lt;li&gt;服务器在读取请求时，等待数据到达网卡（阻塞等待）。&lt;/li&gt;
+&lt;li&gt;数据到达后，从网卡读入内核缓冲区，再拷贝到用户缓冲区。&lt;/li&gt;
+&lt;li&gt;用户空间进行业务处理（如解析请求、生成响应）。&lt;/li&gt;
+&lt;li&gt;响应数据写入用户缓冲区，拷贝到内核缓冲区，再写到网卡发送给客户端。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;整个过程中涉及多次状态切换和数据拷贝。&lt;/p&gt;
+&lt;h3 id=&#34;核心问题&#34;&gt;核心问题
+&lt;/h3&gt;&lt;p&gt;从上面的流程中可以发现无效等待和数据拷贝过多。当数据未到达时，进程需要阻塞等待，浪费CPU时间，而数据在内核空间和用户空间之间来回拷贝，耗费性能。&lt;/p&gt;
+&lt;p&gt;所以后续要介绍的五种IO模型（阻塞IO、非阻塞IO、IO多路复用、信号驱动IO、异步IO）均围绕以下两点进行优化：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;减少无效等待（如非阻塞、多路复用等）。&lt;/li&gt;
+&lt;li&gt;减少用户态与内核态之间的数据拷贝（如零拷贝技术等）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;阻塞io&#34;&gt;阻塞IO
+&lt;/h2&gt;&lt;p&gt;阻塞IO的核心特征就是在“等待数据就绪”和“数据拷贝”这两个阶段，&lt;strong&gt;用户进程全程处于阻塞等待状态&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;执行流程如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;用户进程发起系统调用（例如 &lt;code&gt;recvfrom&lt;/code&gt;）尝试读取数据。&lt;/li&gt;
+&lt;li&gt;内核检查是否有数据就绪。
+&lt;ul&gt;
+&lt;li&gt;若无数据，内核不会立即返回错误，而是让进程等待。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;阻塞等待阶段&lt;/strong&gt;：用户进程被挂起，直到硬件设备（如网卡）将数据准备好并放入内核缓冲区。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据拷贝阶段&lt;/strong&gt;：内核将数据从内核缓冲区复制到用户缓冲区。此阶段用户进程&lt;strong&gt;依然阻塞&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;系统调用返回成功结果，用户进程恢复运行并开始处理数据。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E9%98%BB%E5%A1%9E.png&#34;
+	width=&#34;654&#34;
+	height=&#34;317&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E9%98%BB%E5%A1%9E_hu_5f0128b1a7310757.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E9%98%BB%E5%A1%9E_hu_ab8cfc7b85bee06c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;206&#34;
+		data-flex-basis=&#34;495px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;阻塞IO模型中，用户进程在两个阶段都是阻塞状态&lt;/p&gt;
+&lt;h2 id=&#34;非阻塞io&#34;&gt;非阻塞IO
+&lt;/h2&gt;&lt;p&gt;非阻塞IO（Non-Blocking IO）是相对于阻塞IO（Blocking IO）而言的一种模型。其核心特征在于“不阻塞”。&lt;/p&gt;
+&lt;p&gt;与阻塞IO的对比：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;阻塞IO&lt;/strong&gt;：在调用 &lt;code&gt;recvfrom&lt;/code&gt; 系统函数时，如果内核没有准备好数据，用户进程会阻塞（等待），直到数据就绪。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;非阻塞IO&lt;/strong&gt;：在调用 &lt;code&gt;recvfrom&lt;/code&gt; 系统函数时，如果内核没有准备好数据，&lt;strong&gt;不会阻塞用户进程&lt;/strong&gt;，而是立即返回一个失败的信息（例如错误码 &lt;code&gt;EWOULDBLOCK&lt;/code&gt;）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;下图展示了非阻塞IO的完整流程，主要分为两个阶段：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E9%9D%9E%E9%98%BB%E5%A1%9E.png&#34;
+	width=&#34;654&#34;
+	height=&#34;329&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E9%9D%9E%E9%98%BB%E5%A1%9E_hu_172a80148c1fd201.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E9%9D%9E%E9%98%BB%E5%A1%9E_hu_b33b0bd0869a5985.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;198&#34;
+		data-flex-basis=&#34;477px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;流程详解：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;用户应用发起系统调用&lt;/strong&gt;：调用 &lt;code&gt;recvfrom&lt;/code&gt; 等函数，向内核请求数据。&lt;/li&gt;
+&lt;li&gt;内核检查数据：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;情况一（数据未就绪）&lt;/strong&gt;：内核发现数据尚未准备好（例如网卡数据未到达），会立即返回一个状态，告知用户应用“暂无数据”。这个状态通常由错误码 &lt;code&gt;EWOULDBLOCK&lt;/code&gt; 表示。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;情况二（数据已就绪）&lt;/strong&gt;：如果数据已存在于内核缓存区，则直接进入数据拷贝阶段。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;用户应用轮询（Polling）&lt;/strong&gt;：当收到“暂无数据”的返回后，用户应用&lt;strong&gt;不会挂起或阻塞&lt;/strong&gt;，而是可以立即执行其他操作，或者&lt;strong&gt;立即再次调用&lt;/strong&gt; &lt;code&gt;recvfrom&lt;/code&gt; 进行询问。这个“不断询问”的过程被称为“&lt;strong&gt;忙轮询&lt;/strong&gt;（Busy Polling）”。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据就绪与拷贝&lt;/strong&gt;：在某一次轮询中，内核发现数据已就绪。此时，内核会启动数据拷贝操作，将数据从&lt;strong&gt;内核缓存区&lt;/strong&gt;复制到用户进程的&lt;strong&gt;用户缓存区&lt;/strong&gt;。&lt;strong&gt;这个拷贝过程是耗时的&lt;/strong&gt;，在此期间，用户进程是&lt;strong&gt;阻塞&lt;/strong&gt;的。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;返回结果&lt;/strong&gt;：数据拷贝完成后，&lt;code&gt;recvfrom&lt;/code&gt; 调用成功，用户应用获得数据并进行处理。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;如果轮询期间就仅仅是反复调用 &lt;code&gt;recvfrom&lt;/code&gt; 进行询问，单从数据获取的效率看，非阻塞IO的性能相比于阻塞IO，并没有本质的提升。因为用户进程最终依然需要等到数据真正就绪并完成拷贝才能获得结果。&lt;/p&gt;
+&lt;p&gt;在阻塞IO中，进程在等待期间被挂起（不消耗CPU），但在非阻塞IO中，进程为了获取数据，需要进行忙轮询（不断发起系统调用），这会产生大量的上下文切换和CPU时间消耗，从而导致&lt;strong&gt;CPU使用率暴增&lt;/strong&gt;，性能可能反而下降。&lt;/p&gt;
+&lt;p&gt;尽管单纯使用非阻塞IO性能不佳，但它是一个重要的&lt;strong&gt;基础构建块&lt;/strong&gt;。它为更高级的模型（如 &lt;strong&gt;I/O多路复用&lt;/strong&gt;）提供了可能性。&lt;strong&gt;I/O多路复用必须结合非阻塞IO&lt;/strong&gt;，才能发挥出更好的性能，避免单个连接阻塞整个进程的问题。&lt;/p&gt;
+&lt;h2 id=&#34;io多路复用&#34;&gt;IO多路复用
+&lt;/h2&gt;&lt;h3 id=&#34;什么是io多路复用&#34;&gt;什么是IO多路复用
+&lt;/h3&gt;&lt;p&gt;在阻塞IO和非阻塞IO模型中，用户应用在第一阶段（数据等待阶段）都需要调用&lt;code&gt;recvfrom&lt;/code&gt;系统调用来尝试获取数据。它们的差别在于当数据尚未就绪时的处理方式：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;阻塞IO&lt;/strong&gt;：如果调用&lt;code&gt;recvfrom&lt;/code&gt;时数据未就绪，&lt;strong&gt;进程/线程会被阻塞&lt;/strong&gt;，无法执行其他任务。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;非阻塞IO&lt;/strong&gt;：如果调用&lt;code&gt;recvfrom&lt;/code&gt;时数据未就绪，系统调用会立即返回一个错误，&lt;strong&gt;CPU可能会空转（轮询）&lt;/strong&gt;，效率低下。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这两种模型的主要问题在于，当处理多个Socket连接时，如果第一个连接的数据尚未就绪，就会导致后续所有连接的等待（无论是线程阻塞还是CPU空轮询），造成&lt;strong&gt;无效等待&lt;/strong&gt;，无法充分利用CPU资源，性能较差。&lt;/p&gt;
+&lt;p&gt;为了形象说明上述问题，下面以快餐店点餐为例：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;顾客（Socket连接）排队到收银台（单个处理线程）。&lt;/li&gt;
+&lt;li&gt;服务流程分两步：① 顾客思考吃什么（等待数据就绪）；② 顾客点餐，服务员将信息传到后厨（读取数据）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E5%A4%9A%E8%B7%AF1.png&#34;
+	width=&#34;515&#34;
+	height=&#34;73&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E5%A4%9A%E8%B7%AF1_hu_d0ed582cf7930737.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E5%A4%9A%E8%B7%AF1_hu_ea715218978dcae1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;705&#34;
+		data-flex-basis=&#34;1693px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;问题&lt;/strong&gt;：如果排在最前面的顾客（第一个Socket）有“选择困难症”（数据迟迟未就绪），那么后面所有已经想好要吃什么（数据已就绪）的顾客都必须等待，整个点餐（IO处理）效率极低。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;要提升效率，早期的思路是增加增加线程/进程，即&lt;strong&gt;多线程/多进程模型&lt;/strong&gt;。但线程/进程增多会导致CPU上下文切换开销增大，成本高，性能未必持续提升。 &lt;strong&gt;IO多路复用模型&lt;/strong&gt;提供了另一种高效的解决方案：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不让顾客排队，而是让服务员（&lt;strong&gt;单个线程&lt;/strong&gt;）同时监听所有顾客（&lt;strong&gt;多个Socket连接&lt;/strong&gt;）。谁想好要吃什么了（哪个Socket的数据就绪了），服务员就去处理谁，避免无效等待。&lt;/li&gt;
+&lt;li&gt;IO多路复用是利用单个线程来同时监听多个&lt;strong&gt;文件描述符（File Descriptor, FD）&lt;/strong&gt;，并在某个FD可读或可写时得到通知，从而避免无效等待，充分利用CPU资源。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;什么是文件描述符？&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;FD是一个从0开始递增的无符号整数，用来关联Linux中的一个文件。在Linux中，“&lt;strong&gt;一切皆文件&lt;/strong&gt;”。这包括普通文件、视频、硬件设备等，当然也包括网络套接字（&lt;strong&gt;Socket&lt;/strong&gt;）。&lt;/p&gt;
+&lt;p&gt;当每个客户端与服务器建立连接时，都会产生一个对应的Socket，也就有了一个对应的FD。因此，IO多路复用监听多个FD，本质上就是同时监听多个网络连接。&lt;/p&gt;
+&lt;p&gt;IO多路复用的流程可以清晰地分为两个阶段，这两个阶段&lt;strong&gt;都是阻塞&lt;/strong&gt;的，但关键在于监听的粒度不同，从而避免了无效等待。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E5%A4%9A%E8%B7%AF.png&#34;
+	width=&#34;654&#34;
+	height=&#34;321&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E5%A4%9A%E8%B7%AF_hu_7413df6127778ed8.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E5%A4%9A%E8%B7%AF_hu_f59fc19ffe2db7a7.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;203&#34;
+		data-flex-basis=&#34;488px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;阶段一：等待数据就绪（监听FD）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;用户应用调用一个如&lt;code&gt;select&lt;/code&gt;的系统调用，将所有需要监听的FD列表传递给内核。&lt;/li&gt;
+&lt;li&gt;内核开始&lt;strong&gt;监听&lt;/strong&gt;这些FD。如果&lt;strong&gt;任意一个或多个FD&lt;/strong&gt;的数据准备就绪（可读），内核就会&lt;strong&gt;返回&lt;/strong&gt;，告诉用户进程哪些FD可读。&lt;/li&gt;
+&lt;li&gt;如果所有FD都没有就绪，用户进程&lt;strong&gt;会在此阻塞等待&lt;/strong&gt;，直到有FD就绪。这个等待是必要的，但不同于阻塞IO，它是在&lt;strong&gt;一个线程上监听多个连接&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;阶段二：处理数据（读取与拷贝）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;用户进程从&lt;code&gt;select&lt;/code&gt;调用返回后，获得了就绪的FD列表。&lt;/li&gt;
+&lt;li&gt;进程循环处理列表中的每一个就绪FD：
+&lt;ul&gt;
+&lt;li&gt;针对某个就绪的FD，调用&lt;code&gt;recvfrom&lt;/code&gt;系统调用去读取数据。&lt;strong&gt;此时数据一定已就绪，所以不会在recvfrom上阻塞&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;内核将数据从内核空间拷贝到用户空间。&lt;/li&gt;
+&lt;li&gt;进程处理拷贝完成的数据。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;处理完所有就绪的FD后，进程可以再次调用&lt;code&gt;select&lt;/code&gt;去监听下一批就绪的FD。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Linux系统下，IO多路复用的具体实现有多种，常见的有三种：&lt;code&gt;select&lt;/code&gt;、&lt;code&gt;poll&lt;/code&gt;、&lt;code&gt;epoll&lt;/code&gt;。它们的核心差异在于&lt;strong&gt;通知用户进程就绪FD的方式&lt;/strong&gt;。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;select 和 poll：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;工作方式&lt;/strong&gt;：内核在检测到有FD就绪后，只会通知用户进程“有FD可读/可写”，但&lt;strong&gt;不会明确告知是具体哪几个FD&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;用户进程的操作&lt;/strong&gt;：用户进程需要&lt;strong&gt;逐个遍历&lt;/strong&gt;所有监听的FD，来找出到底哪几个是真正就绪的。这就像服务员面前的灯亮了，但不知道是哪桌的客人，只能挨个去问。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;epoll：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;工作方式&lt;/strong&gt;：内核在检测到有FD就绪后，不仅会通知用户进程，还会&lt;strong&gt;直接把那些就绪的FD放入一个指定的数据结构（用户空间内存）中&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;用户进程的操作&lt;/strong&gt;：用户进程可以直接从该数据结构中&lt;strong&gt;获取到就绪的FD列表&lt;/strong&gt;，无需遍历所有监听的FD，效率更高。这就像服务员面前的叫号机，直接显示了是几号桌的客人好了。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;select&#34;&gt;select
+&lt;/h3&gt;&lt;h4 id=&#34;结构&#34;&gt;结构
+&lt;/h4&gt;&lt;p&gt;select 函数用于监听多个文件描述符（FD）上的 I/O 事件。定义如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-C&#34; data-lang=&#34;C&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;select&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nfds&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;                  &lt;span class=&#34;c1&#34;&gt;// 要监听的 FD 集合中的最大 FD 值 + 1，作为遍历上限。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;fd_set&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;readfds&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;           &lt;span class=&#34;c1&#34;&gt;// 要监听的“可读事件” FD 集合。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;fd_set&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;writefds&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;          &lt;span class=&#34;c1&#34;&gt;// 要监听的“可写事件” FD 集合。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;fd_set&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;exceptfds&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;         &lt;span class=&#34;c1&#34;&gt;// 要监听的“异常事件” FD 集合。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;timeval&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;timeout&lt;/span&gt;    &lt;span class=&#34;c1&#34;&gt;// 超时时间。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;nfds&lt;/strong&gt;：这是一个重要参数，代表要监听的文件描述符的最大值加1，它告诉内核只需检查从 0 到 &lt;code&gt;nfds-1&lt;/code&gt; 的 FD，避免无效遍历。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;fd_set 集合&lt;/strong&gt;：内核将 I/O 事件分为三类：可读、可写、异常。程序员需要将待监听的 FD 分别放入对应的集合中。例如，一个新连接到来，其 FD 应放入 &lt;code&gt;readfds&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;timeout 超时时间：
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;NULL&lt;/code&gt;：永久阻塞，直到有 FD 就绪。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;0&lt;/code&gt;：非阻塞，无论有无 FD 就绪立即返回。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;gt;0&lt;/code&gt;：阻塞等待指定时间后返回。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;fd_set&lt;/code&gt; 是一个特殊的结构体，其核心是用于表示 FD 集合的位图（bit map）。结构如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-C&#34; data-lang=&#34;C&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 定义类型别名 __fd_mask，本质是 long int
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;typedef&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;long&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__fd_mask&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// fd_set 记录要监听的 fd 集合，及其对应状态
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;typedef&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c1&#34;&gt;// fds_bits 是 long 类型数组，长度为 1024/32 = 32
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c1&#34;&gt;// 共 1024 个比特位，每个比特位代表一个 fd，0 代表未就绪，1 代表就绪
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;__fd_mask&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fds_bits&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;__FD_SETSIZE&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;__NFDBITS&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c1&#34;&gt;// ...
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fd_set&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ol&gt;
+&lt;li&gt;数组大小：在典型的 Linux 实现中，&lt;code&gt;__FD_SETSIZE&lt;/code&gt; 为 1024，&lt;code&gt;__NFDBITS&lt;/code&gt; 为 32（一个 &lt;code&gt;long&lt;/code&gt; 类型占的位数）。因此数组大小为 &lt;code&gt;1024 / 32 = 32&lt;/code&gt; 个元素。&lt;/li&gt;
+&lt;li&gt;每个元素是 &lt;code&gt;long&lt;/code&gt; 类型，在 32 位系统中占 4 字节（32 位），在 64 位系统中占 8 字节（64 位）。以 32 位为例，每个元素有 32 个比特位。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;总容量&lt;/strong&gt;：数组有 32 个元素，每个元素有 32 个比特位，总共 &lt;code&gt;32 * 32 = 1024&lt;/code&gt; 个比特位。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;存储方式&lt;/strong&gt;：每个比特位对应一个 FD。例如，要监听 FD=1，就将索引为 1 的比特位设置为 1；要监听 FD=5，就将索引为 5 的比特位设置为 1。这种方式极大地节省了内存。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;执行流程&#34;&gt;执行流程
+&lt;/h4&gt;&lt;p&gt;一次 select 调用的完整生命周期如下：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第一步：用户空间准备&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;创建 fd_set&lt;/strong&gt;：在用户空间创建并初始化一个 &lt;code&gt;fd_set&lt;/code&gt; 结构体，例如 &lt;code&gt;rfds&lt;/code&gt;，用于存放要监听“可读事件”的 FD。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;设置比特位&lt;/strong&gt;：使用宏（如 &lt;code&gt;FD_SET(fd, &amp;amp;rfds)&lt;/code&gt;）将需要监听的 FD 对应的比特位设置为 1。例如，要监听 FD 1、2、5，则将 &lt;code&gt;rfds&lt;/code&gt; 中索引为 1、2、5 的比特位置为 1。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/select.png&#34;
+	width=&#34;654&#34;
+	height=&#34;230&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/select_hu_717d7087ea96c6cc.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/select_hu_3ac53a0ce8876068.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;284&#34;
+		data-flex-basis=&#34;682px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第二步：调用 select 并进入内核&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;用户态 -&amp;gt; 内核态切换&lt;/strong&gt;：调用 &lt;code&gt;select(nfds, &amp;amp;rfds, NULL, NULL, 3)&lt;/code&gt;。这个过程会触发用户态到内核态的切换。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据拷贝&lt;/strong&gt;：用户空间的 &lt;code&gt;rfds&lt;/code&gt; 结构体被拷贝到内核空间。内核获得了一个副本。&lt;/li&gt;
+&lt;li&gt;内核遍历与监听：
+&lt;ul&gt;
+&lt;li&gt;内核遍历传入的 &lt;code&gt;fd_set&lt;/code&gt; 副本中所有被设置为 1 的比特位（即所有被监听的 FD）。&lt;/li&gt;
+&lt;li&gt;检查这些 FD 的实际 I/O 就绪状态（例如，接收缓冲区是否有数据）。&lt;/li&gt;
+&lt;li&gt;如果没有 FD 就绪：内核会使当前进程休眠，并等待两种唤醒条件：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;超时&lt;/strong&gt;：设定的 3 秒时间到达。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;事件驱动&lt;/strong&gt;：某个被监听的 FD 上发生了 I/O 事件（例如，网络数据到达，FD=1 变为可读）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;如果有 FD 就绪&lt;/strong&gt;：内核停止遍历，继续执行后续步骤。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/select1.png&#34;
+	width=&#34;654&#34;
+	height=&#34;476&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/select1_hu_26c19fb7a6f2f10c.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/select1_hu_847079b7ea3cf29d.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;137&#34;
+		data-flex-basis=&#34;329px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第三步：内核返回结果&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;修改 fd_set 副本：内核不会直接返回就绪的 FD 列表，而是直接修改用户空间拷贝过来的那个&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;fd_set&lt;/code&gt; 副本。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;它将&lt;strong&gt;所有未就绪&lt;/strong&gt;的 FD 对应的比特位&lt;strong&gt;重新设置为 0&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;仅&lt;strong&gt;保留就绪的&lt;/strong&gt; FD 对应的比特位为 1。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;内核态 -&amp;gt; 用户态切换&lt;/strong&gt;：&lt;code&gt;select&lt;/code&gt; 函数返回，同时将修改后的 &lt;code&gt;fd_set&lt;/code&gt; 副本&lt;strong&gt;拷贝回&lt;/strong&gt;用户空间的原始 &lt;code&gt;rfds&lt;/code&gt; 中。此时，用户空间的 &lt;code&gt;rfds&lt;/code&gt; 已经只包含就绪的 FD 了。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;返回值&lt;/strong&gt;：&lt;code&gt;select&lt;/code&gt; 返回一个整数，表示就绪的 FD 总数（例如，有 2 个 FD 可读，就返回 2）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/select2.png&#34;
+	width=&#34;654&#34;
+	height=&#34;473&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/select2_hu_d751b6916ca861b2.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/select2_hu_5b10cc63cc6c0969.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;138&#34;
+		data-flex-basis=&#34;331px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第四步：用户空间处理&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;遍历 fd_set&lt;/strong&gt;：由于 &lt;code&gt;select&lt;/code&gt; 只返回了就绪 FD 的数量，并未指出具体是哪个，因此用户程序必须&lt;strong&gt;再次遍历&lt;/strong&gt; &lt;code&gt;rfds&lt;/code&gt; 位图中的每一个比特位。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;识别并处理&lt;/strong&gt;：检查每个比特位是否为 1。如果是，则说明该比特位对应的 FD 已就绪，可以对其进行非阻塞的读/写操作。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;循环&lt;/strong&gt;：处理完一次 &lt;code&gt;select&lt;/code&gt; 的结果后，如果还需要继续监听，需要&lt;strong&gt;重新创建并设置&lt;/strong&gt; &lt;code&gt;fd_set&lt;/code&gt;（因为上一次调用已经改变了 &lt;code&gt;rfds&lt;/code&gt; 的内容），然后再次调用 &lt;code&gt;select&lt;/code&gt;，进入下一轮循环&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/select3.png&#34;
+	width=&#34;654&#34;
+	height=&#34;472&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/select3_hu_22ab314b33d10881.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/select3_hu_20e479d8ca45047a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;138&#34;
+		data-flex-basis=&#34;332px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;核心缺陷&#34;&gt;核心缺陷
+&lt;/h4&gt;&lt;p&gt;通过上述流程分析，可以总结出 &lt;code&gt;select&lt;/code&gt; 模型存在的三个主要问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;每次调用都需要内存拷贝&lt;/strong&gt;：每次调用 &lt;code&gt;select&lt;/code&gt;，都需要将用户空间的 &lt;code&gt;fd_set&lt;/code&gt; 拷贝到内核空间；&lt;code&gt;select&lt;/code&gt; 返回后，又需要将内核修改过的 &lt;code&gt;fd_set&lt;/code&gt; 拷贝回用户空间。&lt;strong&gt;每次循环都会经历两次用户态与内核态的数据拷贝和上下文切换&lt;/strong&gt;，性能开销较大。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;无法直接获取就绪的 FD&lt;/strong&gt;：&lt;code&gt;select&lt;/code&gt; 返回的是就绪 FD 的数量，而不是一个就绪列表。用户程序&lt;strong&gt;必须线性遍历整个 fd_set 位图&lt;/strong&gt;（最多 1024 个比特位），才能找出具体是哪些 FD 就绪。这增加了额外的 CPU 开销。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;最大 FD 数量受限&lt;/strong&gt;：由于 &lt;code&gt;fd_set&lt;/code&gt; 结构是固定大小的位图（通常为 1024 位），&lt;code&gt;select&lt;/code&gt; 能够监听的文件描述符数量存在上限。这个限制在源码中定义，修改需要重新编译内核，不灵活。在高并发场景下，1024 个连接的上限通常不够用。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;正是由于这些缺陷，在现代 Linux 系统中，select已逐渐被更高效的 poll 和 epoll 机制所取代。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;poll&#34;&gt;poll
+&lt;/h3&gt;&lt;h4 id=&#34;结构-1&#34;&gt;结构
+&lt;/h4&gt;&lt;p&gt;poll模式是对select模式的改进，但性能提升不明显。主要改进在于简化了参数，并&lt;strong&gt;解除了对监听fd数量的上限限制&lt;/strong&gt;。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-C&#34; data-lang=&#34;C&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;poll&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;pollfd&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fds&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// pollfd数组，可以自定义大小
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;nfds_t&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nfds&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;       &lt;span class=&#34;c1&#34;&gt;// 数组元素个数
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;timeout&lt;/span&gt;        &lt;span class=&#34;c1&#34;&gt;// 超时时间
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;参数简化&lt;/strong&gt;：与select不同，poll只需传递一个统一的&lt;code&gt;pollfd&lt;/code&gt;数组，不再区分读、写、异常三个独立集合。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;fds参数&lt;/strong&gt;：指向&lt;code&gt;pollfd&lt;/code&gt;结构体数组的指针，数组包含了所有需要监听的文件描述符(fd)信息。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;nfds参数&lt;/strong&gt;：指定数组中需要监听的元素个数。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;timeout参数&lt;/strong&gt;：超时时间（毫秒），含义与select相同。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;pollfd结构如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-C&#34; data-lang=&#34;C&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;pollfd&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fd&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;            &lt;span class=&#34;c1&#34;&gt;// 要监听的文件描述符
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;short&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;events&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;// 监听的事件类型（输入）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kt&#34;&gt;short&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;revents&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 实际发生的事件类型（输出）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;events&lt;/code&gt;字段：在调用&lt;code&gt;poll()&lt;/code&gt;前设置，指定要监听的事件类型。常见事件类型包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;POLLIN&lt;/code&gt;：可读事件。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;POLLOUT&lt;/code&gt;：可写事件。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;POLLERR&lt;/code&gt;：错误事件。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;POLLNVAL&lt;/code&gt;：文件描述符未打开。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;revents字段&lt;/strong&gt;：由内核在&lt;code&gt;poll()&lt;/code&gt;返回时填充，表示实际发生的事件。如果无事件发生，该值为0。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;执行流程-1&#34;&gt;执行流程
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;创建数组&lt;/strong&gt;：在用户空间创建&lt;code&gt;pollfd&lt;/code&gt;数组，并填充所有需要监听的fd及其关注的事件类型（&lt;code&gt;events&lt;/code&gt;字段）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;调用poll函数&lt;/strong&gt;：调用&lt;code&gt;poll()&lt;/code&gt;，将整个&lt;code&gt;pollfd&lt;/code&gt;数组从用户空间拷贝到内核空间。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;内核处理&lt;/strong&gt;：内核将数组数据转为链表存储（无上限），并遍历所有fd，检查是否有就绪事件。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;等待与返回&lt;/strong&gt;：如果没有就绪事件，内核会等待（直到超时或被信号中断）。最终返回就绪fd的数量&lt;code&gt;n&lt;/code&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;数据返回&lt;/strong&gt;：内核将处理后的&lt;code&gt;pollfd&lt;/code&gt;数组（其中&lt;code&gt;revents&lt;/code&gt;字段已更新）拷贝回用户空间。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;用户处理：用户程序检查返回值&lt;code&gt;n&lt;/code&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;若 &lt;code&gt;n &amp;gt; 0&lt;/code&gt;，表示有fd就绪，需要&lt;strong&gt;遍历整个pollfd数组&lt;/strong&gt;，检查每个元素的&lt;code&gt;revents&lt;/code&gt;字段来找到具体的就绪fd。&lt;/li&gt;
+&lt;li&gt;若 &lt;code&gt;n == 0&lt;/code&gt;，表示超时且无事件就绪。&lt;/li&gt;
+&lt;li&gt;若 &lt;code&gt;n &amp;lt; 0&lt;/code&gt;，表示发生错误。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;对比select&#34;&gt;对比select
+&lt;/h4&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;对比维度&lt;/th&gt;
+					&lt;th&gt;select模式&lt;/th&gt;
+					&lt;th&gt;poll模式&lt;/th&gt;
+					&lt;th&gt;分析与说明&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;参数复杂度&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;需传递三个独立的fd集合（读、写、异常）。&lt;/td&gt;
+					&lt;td&gt;只需传递一个统一的&lt;code&gt;pollfd&lt;/code&gt;数组。&lt;/td&gt;
+					&lt;td&gt;poll模式&lt;strong&gt;接口更简洁&lt;/strong&gt;。&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;fd上限&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;受限于&lt;code&gt;FD_SETSIZE&lt;/code&gt;（通常为1024）。&lt;/td&gt;
+					&lt;td&gt;数组大小可自定义，内核用链表存储，&lt;strong&gt;理论上无上限&lt;/strong&gt;。&lt;/td&gt;
+					&lt;td&gt;poll模式&lt;strong&gt;解决了最大连接数限制问题&lt;/strong&gt;。&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;数据拷贝&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;每次调用都需要在用户空间和内核空间之间拷贝三个fd集合。&lt;/td&gt;
+					&lt;td&gt;每次调用都需要拷贝整个&lt;code&gt;pollfd&lt;/code&gt;数组。&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;均存在数据拷贝开销&lt;/strong&gt;，未解决此问题。&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;事件检测&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;返回后，需遍历所有fd才能找到就绪的fd。&lt;/td&gt;
+					&lt;td&gt;返回后，仍需遍历整个&lt;code&gt;pollfd&lt;/code&gt;数组检查&lt;code&gt;revents&lt;/code&gt;字段。&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;均存在O(n)的遍历开销&lt;/strong&gt;，未解决此问题。&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;优势：poll模式的主要优势是&lt;strong&gt;突破了select的1024个文件描述符的限制&lt;/strong&gt;，适用于需要监听大量连接的场景。&lt;/p&gt;
+&lt;p&gt;劣势与未解决的问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;数据拷贝&lt;/strong&gt;：每次系统调用都需要在用户空间和内核空间之间进行数据拷贝，存在开销。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;线性遍历&lt;/strong&gt;：内核需要遍历所有被监听的fd，用户程序在返回后也需要遍历数组以查找就绪fd。当监听的fd数量非常大时，这种&lt;strong&gt;线性扫描（O(n)复杂度）的性能会显著下降&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;结论&lt;/strong&gt;：poll模式可以看作是“&lt;strong&gt;换汤不换药&lt;/strong&gt;”的改进，虽然解决了最大连接数的问题，但其性能瓶颈（数据拷贝和线性扫描）并未得到根本性解决。因此，在实际的高性能网络编程中，select和poll模式都&lt;strong&gt;很少被直接使用&lt;/strong&gt;，业界更倾向于使用性能更优的epoll等模式。&lt;/p&gt;
+&lt;h3 id=&#34;epoll&#34;&gt;epoll
+&lt;/h3&gt;&lt;h4 id=&#34;结构-2&#34;&gt;结构
+&lt;/h4&gt;&lt;p&gt;epoll模式是对select和poll模式的&lt;strong&gt;巨大改进&lt;/strong&gt;，其性能相较于前两者有&lt;strong&gt;非常大的提升&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;epoll提供了三个核心函数：&lt;code&gt;epoll_create&lt;/code&gt;、&lt;code&gt;epoll_ctl&lt;/code&gt;、&lt;code&gt;epoll_wait&lt;/code&gt;，通过这些函数实现了高效的事件通知机制。&lt;/p&gt;
+&lt;p&gt;在内核中，通过&lt;code&gt;epoll_create&lt;/code&gt;会创建一个名为&lt;code&gt;eventpoll&lt;/code&gt;的结构体，其内部包含两个关键属性：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;rbr&lt;/code&gt;（红黑树）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;作用&lt;/strong&gt;：记录所有&lt;strong&gt;需要监听的&lt;/strong&gt;FD（File Descriptor）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;特点&lt;/strong&gt;：FD本身是无符号整数且有序递增，使用红黑树存储可以实现高效的增、删、改、查操作，且性能稳定，不会随节点数量增加而显著下降。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;rdllist&lt;/code&gt;/(链表）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;作用&lt;/strong&gt;：记录&lt;strong&gt;已经就绪的&lt;/strong&gt;、有事件的FD。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;特点&lt;/strong&gt;：当某个FD的事件就绪时，会通过回调函数将其添加到此链表中，便于快速获取所有就绪的FD。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/epoll.png&#34;
+	width=&#34;665&#34;
+	height=&#34;540&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/epoll_hu_1824709bd447117b.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/epoll_hu_c3f1393712416e64.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;123&#34;
+		data-flex-basis=&#34;295px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;epoll_create(int size)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;功能：在内核中创建一个&lt;code&gt;eventpoll&lt;/code&gt;结构体实例。&lt;/p&gt;
+&lt;p&gt;参数：&lt;code&gt;size&lt;/code&gt;（建议的大小，但在现代Linux内核中常被忽略）。&lt;/p&gt;
+&lt;p&gt;返回值：成功时返回&lt;code&gt;epfd&lt;/code&gt;，即该&lt;code&gt;eventpoll&lt;/code&gt;实例的唯一文件描述符句柄。每次调用都会创建一个新的实例。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;功能：向指定的&lt;code&gt;epoll&lt;/code&gt;实例（由&lt;code&gt;epfd&lt;/code&gt;标识）&lt;strong&gt;添加、修改或删除&lt;/strong&gt;一个需要监听的FD。它只负责&lt;strong&gt;管理监听列表&lt;/strong&gt;，执行非常快。&lt;/p&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;epfd&lt;/code&gt;：&lt;code&gt;epoll&lt;/code&gt;实例的句柄。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;op&lt;/code&gt;：操作类型。
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;EPOLL_CTL_ADD&lt;/code&gt;：&lt;strong&gt;添加&lt;/strong&gt;一个新的FD到监听的红黑树上。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;EPOLL_CTL_MOD&lt;/code&gt;：&lt;strong&gt;修改&lt;/strong&gt;已注册FD的监听事件类型。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;EPOLL_CTL_DEL&lt;/code&gt;：&lt;strong&gt;删除&lt;/strong&gt;一个已注册的FD。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;fd&lt;/code&gt;：要操作的文件描述符。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;event&lt;/code&gt;：指向&lt;code&gt;epoll_event&lt;/code&gt;结构体的指针，指定要监听的事件类型（如读事件&lt;code&gt;EPOLLIN&lt;/code&gt;、写事件&lt;code&gt;EPOLLOUT&lt;/code&gt;、异常事件等）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;关键机制（回调函数）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;当通过&lt;code&gt;epoll_ctl&lt;/code&gt;将一个FD添加到红黑树时，内核会为该FD&lt;strong&gt;设置一个回调函数&lt;/strong&gt;（称为&lt;code&gt;ep_poll_callback&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;当这个FD对应的事件（如网卡收到数据）就绪时，内核会&lt;strong&gt;自动触发这个回调函数&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;回调函数的逻辑非常简单：&lt;strong&gt;将就绪的FD添加到eventpoll结构体的rdllist就绪链表中&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;功能：在&lt;code&gt;epoll&lt;/code&gt;实例上&lt;strong&gt;等待事件就绪&lt;/strong&gt;。它相当于select/poll中“等待”功能的部分，是&lt;strong&gt;阻塞或轮询&lt;/strong&gt;的核心。&lt;/p&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;epfd&lt;/code&gt;：&lt;code&gt;epoll&lt;/code&gt;实例的句柄。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;events&lt;/code&gt;：一个&lt;strong&gt;空的&lt;/strong&gt;&lt;code&gt;epoll_event&lt;/code&gt;结构体数组，&lt;strong&gt;用于接收内核返回的就绪事件&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;maxevents&lt;/code&gt;：&lt;code&gt;events&lt;/code&gt;数组的最大容量，即每次调用最多能返回多少个就绪事件。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;timeout&lt;/code&gt;：超时时间（毫秒）。
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-1&lt;/code&gt;：&lt;strong&gt;永久阻塞&lt;/strong&gt;，直到有事件就绪。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;0&lt;/code&gt;：&lt;strong&gt;非阻塞&lt;/strong&gt;，立即返回当前是否有事件就绪。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;gt;0&lt;/code&gt;：&lt;strong&gt;阻塞指定时间&lt;/strong&gt;，超时后返回。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;执行流程与返回值：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;内核首先检查&lt;code&gt;rdllist&lt;/code&gt;就绪链表&lt;strong&gt;是否为空&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;如果链表&lt;strong&gt;不为空&lt;/strong&gt;，则函数&lt;strong&gt;立即返回&lt;/strong&gt;，并将&lt;code&gt;rdllist&lt;/code&gt;中的所有就绪FD信息&lt;strong&gt;拷贝&lt;/strong&gt;到用户提供的&lt;code&gt;events&lt;/code&gt;数组中（其实在拷贝之前还有操作，将在&lt;a class=&#34;link&#34; href=&#34;https://xn--9krq6q3ox70h4k2b.me/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/#%e5%86%85%e6%a0%b8%e5%8e%9f%e7%90%86%e5%88%86%e6%9e%90&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;后面&lt;/a&gt;补充），返回值为就绪的FD数量。&lt;/li&gt;
+&lt;li&gt;如果链表&lt;strong&gt;为空&lt;/strong&gt;，则进程根据&lt;code&gt;timeout&lt;/code&gt;参数决定是阻塞、非阻塞或定时等待。&lt;/li&gt;
+&lt;li&gt;在等待期间，若有新事件就绪，其对应的回调函数会将其添加到&lt;code&gt;rdllist&lt;/code&gt;中。&lt;/li&gt;
+&lt;li&gt;等待结束或超时后，再次检查&lt;code&gt;rdllist&lt;/code&gt;，并返回相应结果。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;执行流程-2&#34;&gt;执行流程
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;用户空间：调用&lt;code&gt;epoll_ctl&lt;/code&gt;添加监听FD（如3，5，6，7，8，9）后，内核的红黑树(&lt;code&gt;rbr&lt;/code&gt;)中会包含这些FD。&lt;/li&gt;
+&lt;li&gt;当FD6和FD8就绪时，内核会通过已注册的回调函数将它们添加到就绪链表（&lt;code&gt;rdllist&lt;/code&gt;）中。&lt;/li&gt;
+&lt;li&gt;用户空间调用&lt;code&gt;epoll_wait&lt;/code&gt;，内核检查&lt;code&gt;rdllist&lt;/code&gt;，发现有元素6和8，于是将这两个FD的信息拷贝到用户传入的空数组&lt;code&gt;events&lt;/code&gt;中并返回数量：2。此后用户程序通常会循环再次调用 &lt;code&gt;epoll_wait&lt;/code&gt; 继续等待新事件。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;与select/poll的关键区别&lt;/strong&gt;：拷贝回用户空间的&lt;strong&gt;仅仅是就绪的FD&lt;/strong&gt;，而不是所有监听的FD。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/image-20260607202152971.png&#34;
+	width=&#34;627&#34;
+	height=&#34;563&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/image-20260607202152971_hu_747243ab177c4bf6.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/image-20260607202152971_hu_b5bc85cae94bbf25.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;image-20260607202152971&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;111&#34;
+		data-flex-basis=&#34;267px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;解决的问题&#34;&gt;解决的问题
+&lt;/h4&gt;&lt;p&gt;select模式的三大问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;FD数量限制&lt;/strong&gt;：由FD集合（位图）决定，最大通常为&lt;strong&gt;1024&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;内存拷贝开销&lt;/strong&gt;：每次调用&lt;code&gt;select&lt;/code&gt;，都需要将&lt;strong&gt;整个FD集合&lt;/strong&gt;从用户空间拷贝到内核空间；返回时，又需要将&lt;strong&gt;整个FD集合&lt;/strong&gt;拷贝回用户空间。存在&lt;strong&gt;两次&lt;/strong&gt;数据拷贝。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;遍历效率低下&lt;/strong&gt;：&lt;code&gt;select&lt;/code&gt;返回后，用户进程&lt;strong&gt;必须遍历整个FD集合&lt;/strong&gt;，才能判断出哪些FD是就绪的。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;poll模式的改进与问题：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;改进&lt;/strong&gt;：将FD集合改为链表，&lt;strong&gt;解决了FD数量的理论上限问题&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;遗留问题：
+&lt;ol&gt;
+&lt;li&gt;依然存在两次内存拷贝（全量FD集合的拷贝）。&lt;/li&gt;
+&lt;li&gt;依然需要遍历整个链表来判断就绪状态。当FD数量很多时，遍历链表的&lt;strong&gt;性能会非常差&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;epoll模式如何解决上述问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;解决FD数量限制与遍历性能&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;epoll使用&lt;strong&gt;红黑树&lt;/strong&gt;存储所有监听的FD。红黑树理论上没有上限，且其增删改查的时间复杂度为O(log N)，&lt;strong&gt;性能稳定&lt;/strong&gt;，不会因FD数量增多而显著下降。&lt;/p&gt;
+&lt;p&gt;这解决了select的数量上限问题，也解决了poll因链表过长导致的遍历性能问题。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;解决内存拷贝问题&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;对于监听的FD&lt;/strong&gt;：每个FD只需要通过&lt;code&gt;epoll_ctl&lt;/code&gt;&lt;strong&gt;添加一次&lt;/strong&gt;到内核的红黑树。之后的所有&lt;code&gt;epoll_wait&lt;/code&gt;调用，都&lt;strong&gt;不需要再次传递FD列表&lt;/strong&gt;，因此&lt;strong&gt;避免了重复的、全量的FD集合拷贝&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;对于就绪的FD&lt;/strong&gt;：&lt;code&gt;epoll_wait&lt;/code&gt;返回时，内核只将&lt;strong&gt;就绪链表rdllist中的FD信息&lt;/strong&gt;拷贝回用户空间的&lt;code&gt;events&lt;/code&gt;数组。相比select/poll拷贝所有FD，&lt;strong&gt;拷贝的数据量大大减少&lt;/strong&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;解决遍历判断问题&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;epoll_wait&lt;/code&gt;返回的&lt;code&gt;events&lt;/code&gt;数组中，&lt;strong&gt;直接就是就绪的FD&lt;/strong&gt;。用户进程拿到这个数组后，&lt;strong&gt;无需再遍历判断&lt;/strong&gt;，可直接处理。而select/poll返回的是包含所有FD的集合，必须自己遍历筛选。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;epoll的事件通知机制&#34;&gt;epoll的事件通知机制
+&lt;/h3&gt;&lt;h4 id=&#34;两种通知模式&#34;&gt;两种通知模式
+&lt;/h4&gt;&lt;p&gt;在IO多路复用中，当文件描述符（File Descriptor， FD）有数据可读时，调用 &lt;code&gt;epoll_wait&lt;/code&gt; 就可以得到通知。但事件通知的模式分为两种：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Level Triggered（水平触发，简称LT）&lt;/strong&gt;：当FD有数据可读时，会&lt;strong&gt;重复通知多次&lt;/strong&gt;，直到数据被完全处理完毕，&lt;strong&gt;是epoll的默认模式&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Edge Triggered（边缘触发，简称ET）&lt;/strong&gt;：当FD有数据可读时，&lt;strong&gt;只会被通知一次&lt;/strong&gt;，无论数据是否被处理完毕。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;下面举个例子来说明，假设一个客户端socket对应的FD已经注册到了epoll实例中，流程如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;客户端发送数据&lt;/strong&gt;：客户端socket发送了2KB的数据，此时FD有数据可读。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;服务端首次通知&lt;/strong&gt;：服务端调用 &lt;code&gt;epoll_wait&lt;/code&gt;，得到通知说该FD就绪。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;服务端读取部分数据&lt;/strong&gt;：服务端从FD读取了1KB数据（数据未读完）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;服务端再次询问：服务端再次调用 &lt;code&gt;epoll_wait&lt;/code&gt;，询问内核“FD是否就绪”。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;在LT模式下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;因为内核检测到FD中仍有1KB数据未被读取（数据可读状态持续存在），所以会&lt;strong&gt;再次通知&lt;/strong&gt;服务端说“FD就绪”。&lt;/li&gt;
+&lt;li&gt;服务端便可以继续读取剩下的1KB数据，直至数据读完。之后再调用 &lt;code&gt;epoll_wait&lt;/code&gt; 就不会收到通知了。&lt;/li&gt;
+&lt;li&gt;循环往复，直到数据被彻底读完。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在ET模式下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;由于内核只在FD状态&lt;strong&gt;从无数据变为有数据&lt;/strong&gt;的瞬间（边沿）通知一次，而之前已经通知过了，因此再次调用 &lt;code&gt;epoll_wait&lt;/code&gt; 时&lt;strong&gt;不会再得到通知&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;如果服务端没有一次性读完所有数据，剩余的1KB数据将残留在缓冲区中，&lt;strong&gt;再也没有机会被处理&lt;/strong&gt;，除非有新的数据到达再次触发状态变化。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;内核原理分析&#34;&gt;内核原理分析
+&lt;/h4&gt;&lt;p&gt;在epoll的内部实现中，当调用 &lt;code&gt;epoll_wait&lt;/code&gt; 时，内核会做两件事：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;将就绪的FD数量返回。&lt;/li&gt;
+&lt;li&gt;将就绪的FD拷贝到用户空间。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;前面没提到的是&lt;/strong&gt;，在完成拷贝动作&lt;strong&gt;之前&lt;/strong&gt;，内核会先将这些FD从内核的&lt;strong&gt;就绪列表（ready list）&lt;/strong&gt; 中移除：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;对于LT模式&lt;/strong&gt;：在拷贝完成后，内核会再次检查这些FD。如果发现它们的数据&lt;strong&gt;仍未被读取完毕&lt;/strong&gt;，则会&lt;strong&gt;将它们重新添加回就绪列表&lt;/strong&gt;。这样，下一次 &lt;code&gt;epoll_wait&lt;/code&gt; 时，这些FD仍然会被包含在返回结果中，从而实现“重复通知”。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;对于ET模式&lt;/strong&gt;：在拷贝完成后，内核&lt;strong&gt;不会&lt;/strong&gt;将FD重新添加回就绪列表。因此，只有在FD的状态发生新的变化（如新数据到达）时，它才会再次出现在就绪列表中。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;et模式的数据残留问题及解决方案&#34;&gt;ET模式的数据残留问题及解决方案
+&lt;/h4&gt;&lt;p&gt;由于ET模式只通知一次，如果在一次通知中没有读取完所有数据，就会导致数据残留。有以下两种解决方案：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;方案一：手动重新注册FD&lt;/strong&gt;。在首次读取完数据后，如果判断FD中仍有数据，则&lt;strong&gt;手动调用 epoll_ctl&lt;/strong&gt; 函数。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用 &lt;code&gt;EPOLL_CTL_MOD&lt;/code&gt; 操作修改该FD的监控事件。&lt;/li&gt;
+&lt;li&gt;这个操作会触发内核再次检查该FD，如果发现仍有数据，就会将其&lt;strong&gt;重新添加回就绪列表&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;缺点&lt;/strong&gt;：这相当于模拟了LT模式的行为，会产生额外的 &lt;code&gt;epoll_ctl&lt;/code&gt; 系统调用开销，并导致内核重复拷贝数据到用户空间，性能上并无优势。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;方案二：使用非阻塞IO一次性读取完所有数据&lt;/strong&gt;。在一次通知的处理中，循环调用读取函数，直到将FD缓冲区中的所有数据全部读完。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;关键点&lt;/strong&gt;：必须使用&lt;strong&gt;非阻塞IO&lt;/strong&gt;。如果使用阻塞IO，当数据读完时，程序会阻塞在 &lt;code&gt;read&lt;/code&gt; 系统调用上等待新数据，从而导致整个进程被阻塞。&lt;/li&gt;
+&lt;li&gt;使用非阻塞IO时，当数据读完，&lt;code&gt;read&lt;/code&gt; 函数会返回一个特定标识（如 &lt;code&gt;EAGAIN&lt;/code&gt;），程序可以据此跳出循环。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;优点&lt;/strong&gt;：避免了频繁的 &lt;code&gt;epoll_wait&lt;/code&gt; 调用和内核-用户空间的数据拷贝，性能更优。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;两种模式对比&#34;&gt;两种模式对比
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;LT模式&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;优点：编程简单，实现容易，不容易遗漏数据。&lt;/li&gt;
+&lt;li&gt;缺点：
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;性能影响&lt;/strong&gt;：由于重复通知，会导致频繁的 &lt;code&gt;epoll_wait&lt;/code&gt; 系统调用和内核与用户空间之间的数据拷贝，影响性能。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;惊群效应（Thundering Herd）&lt;/strong&gt;：如果多个进程同时监听同一个FD，当FD就绪时，LT模式会唤醒&lt;strong&gt;所有&lt;/strong&gt;监听它的进程。但只有一个进程能成功处理数据，其他进程的唤醒是多余的，这会引发惊群问题，造成资源浪费。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;ET模式&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;优点：
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;性能更高&lt;/strong&gt;：减少了系统调用次数和数据拷贝次数。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;避免惊群&lt;/strong&gt;：FD就绪后只通知一次，只会唤醒一个进程，有效避免了惊群效应。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;缺点：编程相对复杂，需要确保在一次通知中读取完所有数据，否则可能导致数据丢失。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;epoll服务端流程&#34;&gt;epoll服务端流程
+&lt;/h3&gt;&lt;p&gt;本节将介绍基于 epoll 模型实现一个 Web 服务（TCP 服务端）的运行流程。&lt;/p&gt;
+&lt;p&gt;Redis 的底层网络模型正是基于这种 epoll 机制，理解此流程是后续学习 Redis 网络模型的基础。整个流程涉及内核空间与用户空间的协作，通过事件驱动来处理客户端连接与请求。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;启动与初始化阶段&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;创建epoll实例：服务器启动后，首先基于epoll API创建一个epoll实例（epoll_create）。&lt;/p&gt;
+&lt;p&gt;然后会在内核中准备两个关键数据结构：红黑树和就绪链表。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;初始化Server Socket：因为是基于TCP协议的Web服务，需要创建一个服务器端套接字（Server Socket）。在Linux中，Server Socket也被视为一个文件，因此拥有自己的文件描述符，记作SSFD。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;注册监听阶段&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;注册SSFD到epoll：使用 &lt;code&gt;epoll_ctl&lt;/code&gt; 命令，指定操作类型为&lt;strong&gt;ADD&lt;/strong&gt;，将代表Server Socket的文件描述符（SSFD）添加到epoll实例的红黑树上。&lt;/li&gt;
+&lt;li&gt;绑定回调函数：同时，为SSFD绑定一个回调函数（epoll_callback）。当对应的FD就绪时（例如，有连接请求到达），会被内核立即执行，并将该就绪的FD添加到epoll的&lt;strong&gt;就绪列表&lt;/strong&gt;中。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;事件循环与监听阶段&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;等待就绪事件：调用&lt;code&gt;epoll_wait&lt;/code&gt;，开始阻塞等待事件发生。&lt;/p&gt;
+&lt;p&gt;工作原理：epoll_wait会检查就绪列表是否为空。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果就绪列表&lt;strong&gt;非空&lt;/strong&gt;，则直接返回就绪的FD列表。&lt;/li&gt;
+&lt;li&gt;如果就绪列表&lt;strong&gt;为空&lt;/strong&gt;，则会阻塞等待指定的时间（超时时间）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;返回处理：&lt;code&gt;epoll_wait&lt;/code&gt;返回后，必须判断返回值：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果返回值为&lt;strong&gt;0&lt;/strong&gt;，表示在等待期间没有任何FD就绪，需重新调用 &lt;code&gt;epoll_wait&lt;/code&gt;（通常置于一个循环中）。&lt;/li&gt;
+&lt;li&gt;如果返回值&lt;strong&gt;大于0&lt;/strong&gt;，则表示有事件就绪，返回值即为就绪FD的数量，这些就绪 FD 的信息可以从传入的 &lt;code&gt;events&lt;/code&gt; 数组中获取。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;事件判断与分发：获得就绪事件后，需要判断事件类型和来源。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;初始情况：对于Server Socket，只有当&lt;strong&gt;有客户端发起连接请求&lt;/strong&gt;时，其FD（SSFD）才会产生**读事件（EPOLLIN）**并被添加到就绪列表。&lt;/li&gt;
+&lt;li&gt;随着服务运行：epoll实例监听的FD会越来越多，事件类型也会增多（如读、写、异常等）。因此需要根据事件类型进行判断。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;处理具体事件&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;处理新客户端连接事件：
+&lt;ul&gt;
+&lt;li&gt;判断条件：就绪事件是&lt;strong&gt;读事件（EPOLLIN）&lt;/strong&gt;，并且&lt;strong&gt;是SSFD可读&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;处理动作：表明有新的客户端Socket试图连接服务器。调用 &lt;code&gt;accept()&lt;/code&gt; 系统调用，接受该客户端连接，得到&lt;strong&gt;客户端Socket对应的FD&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;后续操作：将新的客户端FD，像之前SSFD一样，通过 &lt;code&gt;epoll_ctl&lt;/code&gt; 注册到epoll实例（添加到红黑树），并绑定相应的回调函数。然后继续等待事件。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;处理客户端数据请求事件：
+&lt;ul&gt;
+&lt;li&gt;判断条件：就绪事件是&lt;strong&gt;读事件（EPOLLIN）&lt;/strong&gt;，但&lt;strong&gt;不是SSFD可读&lt;/strong&gt;（即不是新连接），而是某个&lt;strong&gt;普通的客户端Socket FD可读&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;处理动作：表示有客户端发送了请求数据（请求参数）。
+&lt;ul&gt;
+&lt;li&gt;从该客户端Socket中读取请求参数。&lt;/li&gt;
+&lt;li&gt;根据参数处理业务逻辑。&lt;/li&gt;
+&lt;li&gt;处理完成后，将响应结果写回给客户端Socket，完成一次请求-响应流程。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;处理异常事件：除了读事件，还可能遇到&lt;strong&gt;异常事件&lt;/strong&gt;（如EPOLLERR）。
+&lt;ul&gt;
+&lt;li&gt;处理动作：即使是异常，也需要向客户端返回响应（可能是错误信息），完成本次交互。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/epoll1.png&#34;
+	width=&#34;654&#34;
+	height=&#34;273&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/epoll1_hu_ae05753bb18753c3.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/epoll1_hu_1dd0b1d284169f1e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;239&#34;
+		data-flex-basis=&#34;574px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;简单总结一下流程：&lt;/p&gt;
+&lt;p&gt;基于 epoll 的 TCP 服务端启动后，首先调用 &lt;code&gt;epoll_create&lt;/code&gt; 在内核中创建 epoll 实例并初始化红黑树与就绪链表；接着创建服务端 Socket（SSFD），通过 &lt;code&gt;epoll_ctl&lt;/code&gt; 将其注册到 epoll 的红黑树上并绑定回调函数。随后进入事件循环：调用 &lt;code&gt;epoll_wait&lt;/code&gt; 阻塞等待就绪事件，当有客户端连接时，SSFD 产生读事件，服务端调用 &lt;code&gt;accept&lt;/code&gt; 获取客户端 FD 并同样注册到 epoll 中；当已连接的客户端 FD 产生读事件时，服务端读取请求、处理业务逻辑并返回响应，完成一次请求-响应交互。随着事件越来越多，可能就不是serverSocket可读了，可能是客户端Socket可读（因为前面注册了客户端FD），如果是客户端Socket可读就要去处理对应的请求参数，然后写出响应。&lt;/p&gt;
+&lt;h2 id=&#34;信号驱动io&#34;&gt;信号驱动IO
+&lt;/h2&gt;&lt;p&gt;信号驱动IO是与内核建立SIGIO的信号关联并设置回调，当内核有FD就绪时，会发出SIGIO信号通知用户，期间用户应用可以执行其它业务，无需阻塞等待。&lt;/p&gt;
+&lt;p&gt;执行流程：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;注册信号处理函数&lt;/strong&gt;：用户进程通过 &lt;code&gt;sigaction&lt;/code&gt; 系统调用，向内核指定一个文件描述符（FD）并绑定一个信号处理函数。此调用立即返回，&lt;strong&gt;不阻塞&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;内核监控数据就绪&lt;/strong&gt;：内核监控指定的FD。当有数据到达时，内核标记该FD为就绪状态。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;发送信号通知&lt;/strong&gt;：内核向用户进程发送&lt;code&gt;SIGIO&lt;/code&gt;信号。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;执行信号处理函数&lt;/strong&gt;：用户进程被唤醒，执行预先注册的信号处理函数。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;主动发起读取&lt;/strong&gt;：在信号处理函数中，用户进程主动调用 &lt;code&gt;recvfrom&lt;/code&gt; 等函数去读取数据。&lt;strong&gt;此时是阻塞的&lt;/strong&gt;，需要等待数据从内核空间拷贝到用户空间完成。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据处理&lt;/strong&gt;：读取完成后，进行数据处理。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E4%BF%A1%E5%8F%B7.png&#34;
+	width=&#34;655&#34;
+	height=&#34;368&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E4%BF%A1%E5%8F%B7_hu_9cc286bd9f78ec5a.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E4%BF%A1%E5%8F%B7_hu_57211434fe0354a6.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;177&#34;
+		data-flex-basis=&#34;427px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;性能分析：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;优点&lt;/strong&gt;：第一阶段（等待数据就绪）是非阻塞的，用户进程无需轮询，可以处理其他连接请求，性能较好。&lt;/li&gt;
+&lt;li&gt;缺点：
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;信号队列溢出&lt;/strong&gt;：在高并发场景下，大量的IO操作会产生大量信号，这些信号会进入一个队列。如果信号过多，可能导致信号队列溢出，从而丢失部分信号通知。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;上下文切换开销&lt;/strong&gt;：频繁地在内核态和用户态之间传递信号，会产生一定的性能开销。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;结论&lt;/strong&gt;：由于上述缺点，该模型在并发场景下存在问题，实际使用相对较少。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;异步io&#34;&gt;异步IO
+&lt;/h2&gt;&lt;p&gt;异步IO模式下，用户进程发起IO操作后，完全不需要关心后续的数据等待和拷贝过程，全部由内核代劳，内核完成后会主动通知用户进程。这是&lt;strong&gt;真正的、彻底的异步&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;执行流程：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;发起异步读取&lt;/strong&gt;：用户进程调用异步读取接口（如 &lt;code&gt;aio_read&lt;/code&gt;），指定要读取的FD以及数据读取到的用户空间缓冲区地址，然后&lt;strong&gt;立即返回&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;内核全程处理并通知&lt;/strong&gt;：内核接管了整个IO过程：等待数据就绪 -&amp;gt; 将数据从内核空间拷贝到用户空间指定的缓冲区，完成后通过指定的信号或回调函数通知用户进程“数据已准备就绪”。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;直接处理数据&lt;/strong&gt;：用户进程收到通知时，数据已经在用户空间的缓冲区中，可以直接处理，无需再发起读取操作。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E5%BC%82%E6%AD%A5.png&#34;
+	width=&#34;655&#34;
+	height=&#34;310&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E5%BC%82%E6%AD%A5_hu_b9c22f851334d7f.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E5%BC%82%E6%AD%A5_hu_99fd1fa97d2d1885.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;211&#34;
+		data-flex-basis=&#34;507px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;性能分析：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;优点&lt;/strong&gt;：用户进程在&lt;strong&gt;两个阶段（等待数据、数据拷贝）都是非阻塞的&lt;/strong&gt;，实现了真正的异步，极大地提升了用户体验和系统效率。&lt;/li&gt;
+&lt;li&gt;缺点：
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;内核负担重&lt;/strong&gt;：在高并发下，所有IO等待和拷贝任务都堆积在内核中，可能给内核带来较大的内存和稳定性压力。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;实现复杂&lt;/strong&gt;：异步IO的回调或信号通知机制，其代码实现复杂度远高于其他模型。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;结论&lt;/strong&gt;：虽然理论上非常优秀，但由于内核实现复杂和高并发下的资源压力，应用并不如IO多路复用广泛。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;五种模型对比&#34;&gt;五种模型对比
+&lt;/h2&gt;&lt;p&gt;前四种模型都算是同步，只有最后一种才算是异步。判断一个IO操作是同步还是异步，核心在于其第二阶段：&lt;strong&gt;数据从内核空间拷贝到用户空间的过程是否阻塞&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;同步IO：在第二阶段（数据拷贝），用户进程是阻塞的，必须等待数据拷贝完成才能继续执行。包括前四种模型：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;阻塞IO&lt;/strong&gt;：两个阶段全程阻塞。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;非阻塞IO&lt;/strong&gt;：第一阶段非阻塞（轮询），但第二阶段（拷贝）阻塞。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;IO多路复用&lt;/strong&gt;：第一阶段（等待FD就绪）阻塞在&lt;code&gt;select/poll/epoll&lt;/code&gt;上，第二阶段（拷贝）也阻塞。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;信号驱动IO&lt;/strong&gt;：第一阶段非阻塞（信号通知），但第二阶段（在信号处理函数中发起拷贝）阻塞。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;异步IO：两个阶段（等待数据、数据拷贝）&lt;strong&gt;全程非阻塞&lt;/strong&gt;，由内核完成后通知。&lt;/p&gt;
+&lt;p&gt;注意，“阻塞”与“非阻塞”描述的是第一阶段（等待数据）用户进程的状态。“同步”与“异步”描述的是第二阶段（数据拷贝）用户进程是否参与并等待。&lt;/p&gt;
+&lt;p&gt;所以非阻塞IO仍然是&lt;strong&gt;同步IO&lt;/strong&gt;，因为它在数据拷贝时需要用户进程主动发起且等待。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E5%90%8C%E5%BC%82.png&#34;
+	width=&#34;512&#34;
+	height=&#34;318&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E5%90%8C%E5%BC%82_hu_cebdf0d6350ea212.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E5%90%8C%E5%BC%82_hu_709eab7b4a17a788.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;161&#34;
+		data-flex-basis=&#34;386px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;redis网络模型&#34;&gt;Redis网络模型
+&lt;/h2&gt;&lt;h3 id=&#34;单线程还是多线程&#34;&gt;单线程还是多线程
+&lt;/h3&gt;&lt;p&gt;&lt;em&gt;Redis是单线程还是多线程？&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果仅仅聊Redis的核心业务部分（命令处理），答案是单线程&lt;/li&gt;
+&lt;li&gt;如果是聊整个Redis，那么答案就是多线程&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Redis 在其发展过程中，在不同版本引入了对多线程的支持，这导致了“多线程”说法的出现。关键版本节点如下：&lt;/p&gt;
+&lt;p&gt;Redis v4.0：引入后台线程&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;主要用于处理一些耗时较长的任务，例如异步删除命令 &lt;code&gt;UNLINK&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;当需要删除一个很大的 Key 时，为了避免阻塞主线程，Redis 会先标记删除，然后由后台线程异步执行实际的删除操作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Redis v6.0：在网络模型中引入多线程&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;为了充分利用现代多核 CPU 的性能，Redis 6.0 在其网络模型（处理网络 I/O）中引入了多线程。&lt;/li&gt;
+&lt;li&gt;这&lt;strong&gt;并没有改变 Redis 命令处理（核心部分）单线程的本质&lt;/strong&gt;。多线程仅用于提高网络数据读写、解析的效率。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以即使在 Redis 6.0 中引入了多线程，其执行命令的核心部分仍然是单线程的。&lt;/p&gt;
+&lt;h3 id=&#34;为什么选择单线程&#34;&gt;为什么选择单线程
+&lt;/h3&gt;&lt;p&gt;&lt;em&gt;为什么Redis选择单线程？&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;尽管硬件性能不断提升，Redis 长期以来一直坚持其核心命令处理为单线程。主要原因如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;纯内存操作，性能瓶颈在网络延迟
+&lt;ul&gt;
+&lt;li&gt;Redis 的操作绝大部分都是内存操作，执行速度极快（纳秒或微秒级）。&lt;/li&gt;
+&lt;li&gt;性能瓶颈不在于 CPU 的计算速度，而在于网络 I/O 的处理开销（如系统调用、数据拷贝等）。&lt;/li&gt;
+&lt;li&gt;因此，通过多线程来提升 CPU 利用率对整体性能的提升有限。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;避免多线程上下文切换开销
+&lt;ul&gt;
+&lt;li&gt;引入多线程会导致频繁的线程上下文切换。&lt;/li&gt;
+&lt;li&gt;上下文切换需要保存和恢复线程状态，这是一个有开销的操作，可能会降低程序的整体执行效率，甚至导致性能下降。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;无需考虑线程安全，简化实现与保证性能
+&lt;ul&gt;
+&lt;li&gt;在单线程模型下，所有命令顺序执行，天然保证了线程安全。&lt;/li&gt;
+&lt;li&gt;开发者无需为复杂的并发控制（如加锁、解锁）而烦恼。&lt;/li&gt;
+&lt;li&gt;引入多线程处理命令后，必须引入线程锁等安全机制，这会使代码复杂度急剧上升，且锁的竞争可能再次拖累性能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;单线程网络模型&#34;&gt;单线程网络模型
+&lt;/h3&gt;&lt;h4 id=&#34;技术实现&#34;&gt;技术实现
+&lt;/h4&gt;&lt;p&gt;先了解Redis 6.0之前的单线程网络模型。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E7%BD%91%E7%BB%9C.png&#34;
+	width=&#34;387&#34;
+	height=&#34;282&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E7%BD%91%E7%BB%9C_hu_f88c061ef9a673da.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E7%BD%91%E7%BB%9C_hu_42aab41ca1a0ae25.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;137&#34;
+		data-flex-basis=&#34;329px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E7%BD%91%E7%BB%9C1.png&#34;
+	width=&#34;306&#34;
+	height=&#34;257&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E7%BD%91%E7%BB%9C1_hu_c39d8df42b1b8a7d.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E7%BD%91%E7%BB%9C1_hu_8ac2c47baeb3762e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;119&#34;
+		data-flex-basis=&#34;285px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Redis为了提高单线程运行性能，底层采用了IO多路复用技术。但不同操作系统的实现有所差异：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;epoll&lt;/code&gt;：Linux系统的默认实现。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kqueue&lt;/code&gt;：FreeBSD/Mac OS等系统的实现。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;select/poll&lt;/code&gt;：跨平台的通用实现。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;evport&lt;/code&gt;：Solaris系统的实现。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Redis对上述不同的IO多路复用实现进行了二次封装，提供了统一的接口（API），使得上层代码无需关心底层具体实现。&lt;/p&gt;
+&lt;p&gt;这些封装文件位于Redis源码中，例如：&lt;code&gt;ae_epoll.c&lt;/code&gt;、&lt;code&gt;ae_kqueue.c&lt;/code&gt;、&lt;code&gt;ae_select.c&lt;/code&gt;、&lt;code&gt;ae_evport.c&lt;/code&gt;，它们对外暴露了统一的 API，核心接口包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;aeApiCreate()&lt;/code&gt;: 创建IO多路复用实例（例如 &lt;code&gt;epoll_create&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;aeApiAddEvent()&lt;/code&gt;: 注册文件描述符（FD）到IO多路复用实例（例如 &lt;code&gt;epoll_ctl&lt;/code&gt; 注册 &lt;code&gt;EPOLLIN&lt;/code&gt; 或 &lt;code&gt;EPOLLOUT&lt;/code&gt; 事件）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;aeApiDelEvent()&lt;/code&gt;: 从IO多路复用实例中移除对某个FD的监听。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;aeApiPoll()&lt;/code&gt;: 等待FD就绪（例如 &lt;code&gt;epoll_wait&lt;/code&gt;）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在ae.c里面去选择对应的实现方案&lt;/p&gt;
+&lt;p&gt;Redis在编译或启动时，通过判断当前系统的宏定义（如 &lt;code&gt;HAVE_EPOLL&lt;/code&gt;, &lt;code&gt;HAVE_KQUEUE&lt;/code&gt;），在 &lt;code&gt;ae.c&lt;/code&gt; 文件中动态选择并引入对应的实现文件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果支持 &lt;code&gt;epoll&lt;/code&gt;，则引入 &lt;code&gt;ae_epoll.c&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;如果支持 &lt;code&gt;kqueue&lt;/code&gt;，则引入 &lt;code&gt;ae_kqueue.c&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;如果都不支持，则回退到 &lt;code&gt;ae_select.c&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;核心流程&#34;&gt;核心流程
+&lt;/h4&gt;&lt;p&gt;Redis服务器启动和运行的核心流程，本质是一个&lt;strong&gt;单线程的事件循环&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;服务端启动 (server.c 中的 main 函数)&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;初始化服务 (initServer)&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;创建事件循环实例&lt;/strong&gt;：调用 &lt;code&gt;aeCreateEventLoop()&lt;/code&gt;，内部会调用 &lt;code&gt;aeApiCreate()&lt;/code&gt;，创建IO多路复用实例（如 &lt;code&gt;epoll_create&lt;/code&gt;）。对于 epoll，内核会为该实例维护一个红黑树（记录所有监听的 FD）和一个就绪链表（记录就绪的 FD）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;监听TCP端口，创建ServerSocket&lt;/strong&gt;：调用 &lt;code&gt;listenToPort()&lt;/code&gt;，根据配置文件中的端口和IP创建服务端Socket，并得到其文件描述符（&lt;code&gt;ipfd&lt;/code&gt;）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;注册连接处理器&lt;/strong&gt;：将ServerSocket的FD注册到事件循环，并为其绑定一个读事件处理器——&lt;code&gt;acceptTcpHandler&lt;/code&gt;。这意味着一旦ServerSocket可读（即有新客户端连接），就会调用此处理器。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;设置事件循环的前置处理器&lt;/strong&gt;：调用 &lt;code&gt;aeSetBeforeSleepProc()&lt;/code&gt;，注册一个 &lt;code&gt;beforeSleep&lt;/code&gt; 函数。该函数将在每次事件循环等待（&lt;code&gt;aeApiPoll&lt;/code&gt;）前执行。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;beforeSleep&lt;/code&gt; 函数的作用：&lt;/p&gt;
+&lt;p&gt;该函数在每次调用 &lt;code&gt;aeApiPoll&lt;/code&gt; 等待前执行，主要工作是&lt;strong&gt;为所有待写数据的客户端注册写事件监听&lt;/strong&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;工作流程：
+&lt;ol&gt;
+&lt;li&gt;获取一个指向 &lt;code&gt;server.clients_pending_write&lt;/code&gt; 队列（存储了所有有响应数据待发送的客户端）的迭代器。&lt;/li&gt;
+&lt;li&gt;遍历该队列中的每一个客户端（&lt;code&gt;client&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;对于每个客户端，调用 &lt;code&gt;aeApiAddEvent()&lt;/code&gt; 将其FD注册为对 &lt;strong&gt;写事件（AE_WRITABLE）&lt;/strong&gt; 的监听。&lt;/li&gt;
+&lt;li&gt;同时，为该客户端绑定写事件处理器——&lt;code&gt;sendReplyToClient&lt;/code&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;设计目的：Redis将“准备好数据”和“实际写入Socket”这两个步骤分离。命令执行后，只将结果放入客户端的输出缓冲区，并标记该客户端为“待写”。在每次事件循环的间隙，统一处理这些“待写”客户端，为它们开启写监听。这样当IO多路复用检测到Socket可写时，就可以直接进行写入，提高了效率。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;开始事件监听循环 (aeMain)&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;进入一个 &lt;code&gt;while&lt;/code&gt; 循环，条件是事件循环未停止。&lt;/li&gt;
+&lt;li&gt;在循环中，调用 &lt;code&gt;aeProcessEvents()&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/image-20260608203915234.png&#34;
+	width=&#34;1439&#34;
+	height=&#34;613&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/image-20260608203915234_hu_a60f23fba01a2d51.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/image-20260608203915234_hu_95b9e474a7704234.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;image-20260608203915234&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;234&#34;
+		data-flex-basis=&#34;563px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;事件处理 (aeProcessEvents)&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;这是网络模型的核心，其流程如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;调用 beforeSleep 处理器&lt;/strong&gt;：执行在事件循环等待前需要完成的工作。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;等待FD就绪&lt;/strong&gt;：调用 &lt;code&gt;aeApiPoll()&lt;/code&gt;（底层对应 &lt;code&gt;epoll_wait&lt;/code&gt; 等），阻塞等待至少有一个FD就绪。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;处理就绪事件&lt;/strong&gt;： &lt;code&gt;aeApiPoll&lt;/code&gt; 返回就绪的FD列表。循环遍历这些FD，并根据其注册的处理器类型进行分发：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;ServerSocket有读事件&lt;/p&gt;
+&lt;p&gt;（代表有新连接）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;触发 &lt;code&gt;acceptTcpHandler&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;处理器内部执行两步：
+&lt;ol&gt;
+&lt;li&gt;调用 &lt;code&gt;accept()&lt;/code&gt; 接受客户端连接，得到客户端Socket的FD（&lt;code&gt;cfd&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;将这个新的客户端FD注册到事件循环，并为其绑定一个读事件处理器——&lt;code&gt;readQueryFromClient&lt;/code&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 数据读处理器&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;acceptTcpHandler&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(...)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// ...&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 接收socket连接，获取FD&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fd&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;accept&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;s&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sa&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;len&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// ...&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 创建connection，关联fd&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;connection&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;conn&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;connCreateSocket&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;conn&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fd&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fd&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// ...&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 内部调用aeApiAddEvent(fd, READABLE),&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 监听socket的FD读事件，并绑定读处理器readQueryFromClient&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;connSetReadHandler&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;conn&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;readQueryFromClient&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;客户端Socket有读事件&lt;/p&gt;
+&lt;p&gt;（代表客户端有命令请求到达）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;触发 &lt;code&gt;readQueryFromClient&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;处理器内部主要完成以下工作：
+&lt;ol&gt;
+&lt;li&gt;从客户端Socket读取数据到查询缓冲区（&lt;code&gt;queryBuf&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;解析缓冲区数据，转换成Redis命令（参数存入 &lt;code&gt;c-&amp;gt;argv&lt;/code&gt; 数组）。&lt;/li&gt;
+&lt;li&gt;处理该命令。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;33
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;34
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;35
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;36
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;37
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;38
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;39
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;40
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;41
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;42
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;readQueryFromClient&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;connection&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;conn&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 获取当前客户端，客户端中有缓冲区用来读和写&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;client&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;connGetPrivateData&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;conn&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 获取 c-&amp;gt;querybuf 缓冲区大小&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;long&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;qblen&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sdslen&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;querybuf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 注：sdslen 是 SDS 字符串长度函数&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 读取请求数据到 c-&amp;gt;querybuf 缓冲区&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;connRead&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;conn&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;querybuf&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;qblen&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;readlen&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// ...&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 解析缓冲区字符串，转为 Redis 命令参数存入 c-&amp;gt;argv 数组&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;processInputBuffer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// ...&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 处理 c-&amp;gt;argv 中的命令&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;processCommand&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;processCommand&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;client&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// ...&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 根据命令名称，寻找命令对应的 command，例如 setCommand&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cmd&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lastcmd&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lookupCommand&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;argv&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;]-&amp;gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ptr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 注：argv[0] 是命令名，.ptr 指向 SDS 内容&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// ...&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 执行 command，得到响应结果，例如 ping 命令，对应 pingCommand&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cmd&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;proc&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 调用命令处理函数&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 把执行结果写出，例如 ping 命令，就返回 &amp;#34;pong&amp;#34; 给 client，&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// shared.pong 是 字符串 &amp;#34;pong&amp;#34; 的 SDS 对象&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;addReply&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;shared&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;pong&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;C_OK&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;addReply&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;client&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;robj&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;obj&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 尝试把结果写到 c-&amp;gt;buf 客户端写缓冲区&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;_addReplyToBuffer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;obj&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ptr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sdslen&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;obj&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ptr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;C_OK&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 如果 c-&amp;gt;buf 写不下，则写到 c-&amp;gt;reply，这是一个链表，容量无上限&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;_addReplyProtoToList&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;obj&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ptr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sdslen&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;obj&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ptr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 将客户端添加到 server.clients_pending_write 这个队列，等待被写出&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;listAddNodeHead&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;server&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;clients_pending_write&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;命令请求处理详解 (&lt;code&gt;readQueryFromClient&lt;/code&gt; -&amp;gt; &lt;code&gt;processCommand&lt;/code&gt;)：&lt;/p&gt;
+&lt;p&gt;当客户端有数据到达时，&lt;code&gt;readQueryFromClient&lt;/code&gt; 被触发，内部调用 &lt;code&gt;processCommand&lt;/code&gt; 处理命令。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;读取与解析请求：
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;readQueryFromClient&lt;/code&gt; 从客户端Socket读取字节数据，存入该客户端的 &lt;code&gt;queryBuf&lt;/code&gt; 缓冲区。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;processInputBuffer&lt;/code&gt; 函数负责将 &lt;code&gt;queryBuf&lt;/code&gt; 中的字节流，按照RESP协议解析成多个Redis命令和参数，存储在 &lt;code&gt;c-&amp;gt;argv&lt;/code&gt;（一个 &lt;code&gt;robj*&lt;/code&gt; 数组）中。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;执行命令 (&lt;code&gt;processCommand&lt;/code&gt;)：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;查找命令&lt;/strong&gt;：根据 &lt;code&gt;c-&amp;gt;argv[0]&lt;/code&gt;（命令名称，如 &lt;code&gt;set&lt;/code&gt;, &lt;code&gt;get&lt;/code&gt;），在命令表中查找对应的 &lt;code&gt;redisCommand&lt;/code&gt; 结构体（其中包含处理函数指针 &lt;code&gt;proc&lt;/code&gt;）。此过程调用 &lt;code&gt;lookupCommand&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;执行命令&lt;/strong&gt;：调用找到的命令处理函数，如 &lt;code&gt;setCommand-&amp;gt;proc(c)&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;返回结果&lt;/strong&gt;：命令执行完成后，结果被封装成Redis对象。调用 &lt;code&gt;addReply(c, obj)&lt;/code&gt; 函数将结果写入该客户端的输出缓冲区（&lt;code&gt;c-&amp;gt;buf&lt;/code&gt; 或 &lt;code&gt;c-&amp;gt;reply&lt;/code&gt; 链表）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;管理写队列：
+&lt;ul&gt;
+&lt;li&gt;在 &lt;code&gt;addReply&lt;/code&gt; 函数中，如果成功将数据写入缓冲区，则会将该客户端（&lt;code&gt;client&lt;/code&gt;）添加到 &lt;code&gt;server.clients_pending_write&lt;/code&gt; 队列中。&lt;/li&gt;
+&lt;li&gt;这样，在下一次 &lt;code&gt;beforeSleep&lt;/code&gt; 执行时，这个客户端就会被注册写事件监听，等待实际将数据发送出去。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;客户端Socket有写事件&lt;/p&gt;
+&lt;p&gt;（代表可以向客户端发送响应）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;触发 &lt;code&gt;sendReplyToClient&lt;/code&gt;（该处理器通常是在 &lt;code&gt;beforeSleep&lt;/code&gt; 中为待发送响应的客户端绑定的）。&lt;/li&gt;
+&lt;li&gt;处理器将响应数据从输出缓冲区写入客户端Socket。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B.png&#34;
+	width=&#34;1026&#34;
+	height=&#34;440&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B_hu_61a4c8ca500e03f2.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B_hu_897d6b43f4067eca.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;233&#34;
+		data-flex-basis=&#34;559px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;流程可简化为：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E5%8D%95%E7%BA%BF%E7%A8%8B.png&#34;
+	width=&#34;1595&#34;
+	height=&#34;652&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E5%8D%95%E7%BA%BF%E7%A8%8B_hu_a9153a0c2b4ef89e.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E5%8D%95%E7%BA%BF%E7%A8%8B_hu_35fd9d57b504504a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;244&#34;
+		data-flex-basis=&#34;587px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;多线程网络模型&#34;&gt;多线程网络模型
+&lt;/h3&gt;&lt;p&gt;Redis 6.0引入了多线程，目的是为了&lt;strong&gt;提高IO读写的效率&lt;/strong&gt;，因为网络IO操作往往是性能瓶颈。&lt;/p&gt;
+&lt;p&gt;核心思想是将&lt;strong&gt;耗时的网络IO操作&lt;/strong&gt;（读取客户端请求、写入响应结果）交由多个IO线程并行处理，而&lt;strong&gt;命令的执行依然由主线程单线程串行完成&lt;/strong&gt;，以保证线程安全和原子性。&lt;/p&gt;
+&lt;p&gt;引入多线程的环节：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;读取客户端请求数据&lt;/strong&gt;：多线程并行读取多个客户端Socket的数据。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;写入响应结果数据&lt;/strong&gt;：多线程并行向多个客户端Socket写入数据。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;未引入多线程的环节：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;IO多路复用模块（epoll_wait等）&lt;/strong&gt;：依然由主线程执行。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;命令解析&lt;/strong&gt;：在读取数据后，将其解析为Redis命令的过程，依然由主线程执行。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;命令执行&lt;/strong&gt;：纯粹的内存操作，速度极快，由主线程执行。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B.png&#34;
+	width=&#34;845&#34;
+	height=&#34;343&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B_hu_123d259bd729b91f.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/assets/%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B_hu_133878be52759c97.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;246&#34;
+		data-flex-basis=&#34;591px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;对比单线程，流程的变化如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;接收请求&lt;/strong&gt;：主线程通过IO多路复用（&lt;code&gt;aeApiPoll&lt;/code&gt;）得知有多个客户端Socket可读。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;多线程读&lt;/strong&gt;：主线程将这些可读的客户端Socket分配给多个IO线程。每个IO线程负责读取对应Socket的数据，存入客户端的查询缓冲区（&lt;code&gt;queryBuf&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;主线程处理&lt;/strong&gt;：所有IO线程读取完毕后，主线程遍历这些客户端，对每个客户端的 &lt;code&gt;queryBuf&lt;/code&gt; 进行解析，转换为Redis命令（&lt;code&gt;processInputBuffer&lt;/code&gt;），然后执行命令（&lt;code&gt;processCommand&lt;/code&gt;）。命令执行的结果被放入客户端的输出缓冲区。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;多线程写&lt;/strong&gt;：主线程将那些输出缓冲区有数据的客户端，分配给多个IO线程。每个IO线程负责将对应客户端输出缓冲区的数据写入Socket。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;等待下一次循环&lt;/strong&gt;：主线程再次调用IO多路复用，等待新的事件。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;虽然单次请求的响应时间（RTT）没有缩短，但通过并行处理多个客户端的IO操作，服务器的&lt;strong&gt;整体吞吐量（QPS）&lt;/strong&gt; 相比单线程模型有了显著提升。命令执行阶段仍然是单线程，避免了复杂的锁机制，保证了Redis数据结构操作的原子性和一致性。&lt;/p&gt;
+&lt;p&gt;在Redis配置文件中，可以通过 &lt;code&gt;io-threads&lt;/code&gt; 和 &lt;code&gt;io-threads-do-reads&lt;/code&gt; 参数来开启和配置IO线程的数量。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Redis原理篇 数据结构</title>
         <link>https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</link>
         <pubDate>Fri, 06 Nov 2026 16:40:10 +0800</pubDate>
