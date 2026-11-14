@@ -30,21 +30,19 @@
 &lt;h2 id=&#34;过期策略&#34;&gt;过期策略
 &lt;/h2&gt;&lt;h3 id=&#34;核心问题&#34;&gt;核心问题
 &lt;/h3&gt;&lt;p&gt;过期策略通过 &lt;code&gt;expire&lt;/code&gt; 命令为key设置TTL（Time To Live，存活时间）。例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;127.0.0.1:6379&amp;gt; &lt;span class=&#34;nb&#34;&gt;set&lt;/span&gt; name jack
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;OK
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;127.0.0.1:6379&amp;gt; expire name &lt;span class=&#34;m&#34;&gt;5&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;integer&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;在TTL到期前访问该key可获取值，到期后访问则返回 &lt;code&gt;(nil)&lt;/code&gt;，表明key已被删除，内存得以回收。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/assets/%E8%BF%87%E6%9C%9F.png&#34;
+	width=&#34;471&#34;
+	height=&#34;154&#34;
+	srcset=&#34;https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/assets/%E8%BF%87%E6%9C%9F_hu_62d66c773f5459ad.png 480w, https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/assets/%E8%BF%87%E6%9C%9F_hu_32dc6174c4b7f7da.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;305&#34;
+		data-flex-basis=&#34;734px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;在TTL到期前访问该key可获取值，到期后访问则返回 &lt;code&gt;(nil)&lt;/code&gt;，表明key已被删除，内存得以回收。&lt;/p&gt;
 &lt;p&gt;这引出了两个核心原理问题：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;&lt;em&gt;Redis是如何知道一个key是否过期的？&lt;/em&gt;&lt;/li&gt;
@@ -391,12 +389,8 @@
 	
 &gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;eviction pool 的作用&lt;/strong&gt;：从所有 key 中随机采样一批，然后只从这批样本中挑选出“最应该被淘汰”的 key 放入池中。最终从池中淘汰。这是一种&lt;strong&gt;空间换时间&lt;/strong&gt;的优化，平衡了性能和准确性。&lt;strong&gt;默认大小为16&lt;/strong&gt;。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;idle time 的计算&lt;/p&gt;
-&lt;p&gt;：为了统一将各种策略（LRU, LFU, TTL）映射到同一个“idle time”概念上，便于比较和排序。&lt;/p&gt;
+&lt;li&gt;&lt;strong&gt;eviction_pool 的作用&lt;/strong&gt;：从所有 key 中随机采样一批，然后只从这批样本中挑选出“最应该被淘汰”的 key 放入池中。最终从池中淘汰。这是一种&lt;strong&gt;空间换时间&lt;/strong&gt;的优化，平衡了性能和准确性。&lt;strong&gt;默认大小为16&lt;/strong&gt;。[这个池子将来会按照某种升序的方式进行排列，排列以后值越大的越先淘汰，由此可以固定淘汰的逻辑，不过按什么升序排列这个可以根据不同的算法来改变]&lt;/li&gt;
+&lt;li&gt;idle time 的计算：为了统一将各种策略（LRU, LFU, TTL）映射到同一个“idle time”概念上，便于比较和排序。
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;LRU 策略&lt;/strong&gt;：&lt;code&gt;idle time = 当前时间 - lru 时间戳（秒）&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;LFU 策略&lt;/strong&gt;：&lt;code&gt;idle time = 255 - 逻辑访问次数&lt;/code&gt; （逻辑访问次数越小，idle time 越大）&lt;/li&gt;
@@ -404,9 +398,7 @@
 &lt;li&gt;&lt;strong&gt;Random 策略&lt;/strong&gt;：不使用 eviction pool，直接随机挑选并删除。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;maxmemory_samples 参数&lt;/strong&gt;：每次从数据库中随机挑选的 key 数量（默认 5）。值越大，淘汰越精确，但 CPU 开销也越大。&lt;/p&gt;
-&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;maxmemory_samples 参数&lt;/strong&gt;：每次从数据库中随机挑选的 key 数量（默认 5）。值越大，淘汰越精确，但 CPU 开销也越大。&lt;/li&gt;
 &lt;/ul&gt;
 </description>
         </item>

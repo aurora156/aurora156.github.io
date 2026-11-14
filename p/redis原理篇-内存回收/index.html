@@ -336,21 +336,19 @@
 <h2 id="过期策略">过期策略
 </h2><h3 id="核心问题">核心问题
 </h3><p>过期策略通过 <code>expire</code> 命令为key设置TTL（Time To Live，存活时间）。例如：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">127.0.0.1:6379&gt; <span class="nb">set</span> name jack
-</span></span><span class="line"><span class="cl">OK
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; expire name <span class="m">5</span>
-</span></span><span class="line"><span class="cl"><span class="o">(</span>integer<span class="o">)</span> <span class="m">1</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>在TTL到期前访问该key可获取值，到期后访问则返回 <code>(nil)</code>，表明key已被删除，内存得以回收。</p>
+<p><img src="/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/assets/%E8%BF%87%E6%9C%9F.png"
+	width="471"
+	height="154"
+	srcset="/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/assets/%E8%BF%87%E6%9C%9F_hu_62d66c773f5459ad.png 480w, /p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/assets/%E8%BF%87%E6%9C%9F_hu_32dc6174c4b7f7da.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="305"
+		data-flex-basis="734px"
+	
+></p>
+<p>在TTL到期前访问该key可获取值，到期后访问则返回 <code>(nil)</code>，表明key已被删除，内存得以回收。</p>
 <p>这引出了两个核心原理问题：</p>
 <ol>
 <li><em>Redis是如何知道一个key是否过期的？</em></li>
@@ -697,12 +695,8 @@
 	
 ></p>
 <ul>
-<li>
-<p><strong>eviction pool 的作用</strong>：从所有 key 中随机采样一批，然后只从这批样本中挑选出“最应该被淘汰”的 key 放入池中。最终从池中淘汰。这是一种<strong>空间换时间</strong>的优化，平衡了性能和准确性。<strong>默认大小为16</strong>。</p>
-</li>
-<li>
-<p>idle time 的计算</p>
-<p>：为了统一将各种策略（LRU, LFU, TTL）映射到同一个“idle time”概念上，便于比较和排序。</p>
+<li><strong>eviction_pool 的作用</strong>：从所有 key 中随机采样一批，然后只从这批样本中挑选出“最应该被淘汰”的 key 放入池中。最终从池中淘汰。这是一种<strong>空间换时间</strong>的优化，平衡了性能和准确性。<strong>默认大小为16</strong>。[这个池子将来会按照某种升序的方式进行排列，排列以后值越大的越先淘汰，由此可以固定淘汰的逻辑，不过按什么升序排列这个可以根据不同的算法来改变]</li>
+<li>idle time 的计算：为了统一将各种策略（LRU, LFU, TTL）映射到同一个“idle time”概念上，便于比较和排序。
 <ul>
 <li><strong>LRU 策略</strong>：<code>idle time = 当前时间 - lru 时间戳（秒）</code></li>
 <li><strong>LFU 策略</strong>：<code>idle time = 255 - 逻辑访问次数</code> （逻辑访问次数越小，idle time 越大）</li>
@@ -710,9 +704,7 @@
 <li><strong>Random 策略</strong>：不使用 eviction pool，直接随机挑选并删除。</li>
 </ul>
 </li>
-<li>
-<p><strong>maxmemory_samples 参数</strong>：每次从数据库中随机挑选的 key 数量（默认 5）。值越大，淘汰越精确，但 CPU 开销也越大。</p>
-</li>
+<li><strong>maxmemory_samples 参数</strong>：每次从数据库中随机挑选的 key 数量（默认 5）。值越大，淘汰越精确，但 CPU 开销也越大。</li>
 </ul>
 
 </section>
