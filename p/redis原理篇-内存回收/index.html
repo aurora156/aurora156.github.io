@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content=" 本文基于黑马2022的Redis课程原理篇编写，课程地址：黑马程序员Redis入门到实战教程，深度透析redis底层原理+redis分布式锁+企业解决方案+黑马点评实战项目\n本篇内容参考博客：Redis原理篇-内存回收\n">
+<title>Redis原理篇 内存回收</title>
+
+<link rel='canonical' href='https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/'>
+
+<link rel="stylesheet" href="/scss/style.min.9a6f47bb0cccb59cea32f2407a4d279494201cb8a12596986b2cc96158da0dea.css"><meta property='og:title' content="Redis原理篇 内存回收">
+<meta property='og:description' content=" 本文基于黑马2022的Redis课程原理篇编写，课程地址：黑马程序员Redis入门到实战教程，深度透析redis底层原理+redis分布式锁+企业解决方案+黑马点评实战项目\n本篇内容参考博客：Redis原理篇-内存回收\n">
+<meta property='og:url' content='https://aurora156.github.io/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/'>
+<meta property='og:site_name' content='凉介的笔记'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Redis' /><meta property='article:published_time' content='2026-11-14T15:53:57&#43;08:00'/><meta property='article:modified_time' content='2026-11-14T15:53:57&#43;08:00'/>
+<meta name="twitter:title" content="Redis原理篇 内存回收">
+<meta name="twitter:description" content=" 本文基于黑马2022的Redis课程原理篇编写，课程地址：黑马程序员Redis入门到实战教程，深度透析redis底层原理+redis分布式锁+企业解决方案+黑马点评实战项目\n本篇内容参考博客：Redis原理篇-内存回收\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_28f265b6f4c29d51.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🌆</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">凉介的笔记</a></h1>
+            <h2 class="site-description">凉介的博客</h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>档案</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#引言">引言</a></li>
+    <li><a href="#过期策略">过期策略</a>
+      <ol>
+        <li><a href="#核心问题">核心问题</a></li>
+        <li><a href="#数据库结构">数据库结构</a></li>
+        <li><a href="#过期key的删除策略">过期key的删除策略</a>
+          <ol>
+            <li><a href="#惰性删除">惰性删除</a></li>
+            <li><a href="#周期删除">周期删除</a></li>
+            <li><a href="#对比">对比</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#淘汰策略">淘汰策略</a>
+      <ol>
+        <li><a href="#八种内存淘汰策略">八种内存淘汰策略</a></li>
+        <li><a href="#lru-与-lfu-算法">LRU 与 LFU 算法</a></li>
+        <li><a href="#performevictions-淘汰流程">performEvictions 淘汰流程</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E6%95%99%E7%A8%8B/" >
+                教程
+            </a>
+        
+    </header>
+    
+
+    
+    <section class="article-tags">
+        
+            <a href="/tags/redis/">Redis</a>
+        
+    </section>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/">Redis原理篇 内存回收</a>
+        </h2>
+
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2026-11-14</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <blockquote>
+<p>本文基于黑马2022的Redis课程原理篇编写，课程地址：<a class="link" href="https://www.bilibili.com/video/BV1cr4y1671t?spm_id_from=333.788.player.switch&amp;vd_source=5d30cbe8a5e5c1e21aa0b0a536d3829a"  target="_blank" rel="noopener"
+    >黑马程序员Redis入门到实战教程，深度透析redis底层原理+redis分布式锁+企业解决方案+黑马点评实战项目</a></p>
+<p>本篇内容参考博客：<a class="link" href="https://xn--9krq6q3ox70h4k2b.me/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/"  target="_blank" rel="noopener"
+    >Redis原理篇-内存回收</a></p>
+</blockquote>
+<h2 id="引言">引言
+</h2><p>Redis性能卓越的关键在于其所有操作都基于内存。然而，单个Redis节点的内存不宜设置过大，否则会影响持久化或主从同步的性能。</p>
+<p>因此，通常在配置文件中通过 <code>maxmemory</code> 参数设置Redis的最大内存限制（例如 <code>maxmemory 1gb</code>）。当内存使用达到上限时，将无法存储更多数据。</p>
+<p>为解决此问题，Redis提供了两种主要的内存管理策略：</p>
+<ul>
+<li>过期策略</li>
+<li>内存淘汰策略</li>
+</ul>
+<h2 id="过期策略">过期策略
+</h2><h3 id="核心问题">核心问题
+</h3><p>过期策略通过 <code>expire</code> 命令为key设置TTL（Time To Live，存活时间）。例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">127.0.0.1:6379&gt; <span class="nb">set</span> name jack
+</span></span><span class="line"><span class="cl">OK
+</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; expire name <span class="m">5</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>integer<span class="o">)</span> <span class="m">1</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在TTL到期前访问该key可获取值，到期后访问则返回 <code>(nil)</code>，表明key已被删除，内存得以回收。</p>
+<p>这引出了两个核心原理问题：</p>
+<ol>
+<li><em>Redis是如何知道一个key是否过期的？</em></li>
+<li><em>key过期后，是立即被删除吗？</em></li>
+</ol>
+<h3 id="数据库结构">数据库结构
+</h3><p>Redis内部默认有16个数据库（编号0-15），每个数据库对应一个 <code>redisDb</code> 结构体。该结构体是理解过期策略的基础。</p>
+<p><img src="/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/assets/%E6%95%B0%E6%8D%AE%E5%BA%93.png"
+	width="844"
+	height="322"
+	srcset="/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/assets/%E6%95%B0%E6%8D%AE%E5%BA%93_hu_f134f898ac300fd8.png 480w, /p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/assets/%E6%95%B0%E6%8D%AE%E5%BA%93_hu_2dc3da0dcd7c1b3.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="262"
+		data-flex-basis="629px"
+	
+></p>
+<ul>
+<li><code>dict *dict;</code>：<strong>键空间</strong>。这是一个字典，存储了该数据库中所有的 <code>key-value</code> 对。key和value都以 <code>redisObject</code> 指针形式存储。</li>
+<li><code>dict *expires;</code>：<strong>过期字典</strong>。这个字典专门存储那些设置了过期时间的key。其键（key）与 <code>dict</code> 字典中的键相同，指向同一个 <code>redisObject</code>；但其值（value）不是原value，而是该key对应的 <strong>过期时间戳</strong>（TTL）。</li>
+<li>其他属性如 <code>blocking_keys</code>, <code>watched_keys</code>, <code>id</code>, <code>avg_ttl</code> 等用于特定功能或统计，当前阶段非核心。</li>
+</ul>
+<p>下面是<code>redisDb</code> 两个核心字典 <code>dict</code> 和 <code>expires</code>的结构关系图：</p>
+<p><img src="/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/assets/%E6%95%B0%E6%8D%AE%E5%BA%931.png"
+	width="844"
+	height="408"
+	srcset="/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/assets/%E6%95%B0%E6%8D%AE%E5%BA%931_hu_3d2a8cef93b10e4f.png 480w, /p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/assets/%E6%95%B0%E6%8D%AE%E5%BA%931_hu_2abdd3f9895b2882.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="206"
+		data-flex-basis="496px"
+	
+></p>
+<ul>
+<li><code>dict</code>（键空间）负责存储所有键值对。</li>
+<li><code>expires</code> 字典仅存储设置了过期时间的key及其过期时间戳。因此，<code>expires</code> 中的元素数量 <code>&lt;=</code> <code>dict</code> 中的元素数量。</li>
+<li>当查询一个key是否过期时，Redis会从 <code>expires</code> 字典中查找该key，获取其过期时间戳并与当前时间比较。</li>
+</ul>
+<p>现在就可以回答前面的第一个问题了，<em>Redis是如何知道一个key是否过期的？</em></p>
+<p>是利用两个Dict分别记录key-value键值对和key-ttl键值对</p>
+<h3 id="过期key的删除策略">过期key的删除策略
+</h3><p>第二个问题，*key过期后，是立即被删除吗？*答案是不会</p>
+<p>Redis <strong>不会</strong> 在key过期的那一刻立即删除它。因为为海量的key都设置定时器会极大消耗CPU资源，影响Redis服务性能。因此，Redis采用了两种策略的组合：</p>
+<ul>
+<li>惰性删除</li>
+<li>周期删除</li>
+</ul>
+<h4 id="惰性删除">惰性删除
+</h4><p>并非在TTL到期后立即删除，而是在<strong>下一次访问该key时</strong>，再检查其是否过期。如果过期，则执行删除操作。</p>
+<p>Redis在执行任何对key的增删改查（如 <code>lookupKeyWriteWithFlags</code>, <code>lookupKeyReadWithFlags</code>）操作时，都会先调用 <code>expireIfNeeded(db, key)</code> 函数。</p>
+<p>该函数的核心逻辑是，在 <code>expires</code> 字典中查找key，获取过期时间，与当前时间比较。若已过期，则调用 <code>deleteExpiredKeyAndPropagate(db, key)</code> 进行删除并同步（如有必要），然后返回删除结果。</p>
+<p><img src="/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/assets/%E5%88%A0%E9%99%A4.png"
+	width="844"
+	height="271"
+	srcset="/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/assets/%E5%88%A0%E9%99%A4_hu_57e4775378a0606e.png 480w, /p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/assets/%E5%88%A0%E9%99%A4_hu_a3ae3a099c233494.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="311"
+		data-flex-basis="747px"
+	
+></p>
+<p>优点是对CPU友好，删除操作只在必要时发生。</p>
+<p>但缺点是，如果一个过期key再也没有被访问，它将<strong>永远不会被删除</strong>，会造成内存泄漏。因此，惰性删除需要配合定期删除。</p>
+<h4 id="周期删除">周期删除
+</h4><p>通过一个<strong>定时任务</strong>，<strong>周期性地抽样检查</strong>一部分过期key，并执行删除操作。此任务会不断遍历数据库，最终覆盖所有key。</p>
+<p>两种触发方式：</p>
+<ol>
+<li><strong>SLOW模式（慢模式）</strong>： 在Redis服务器初始化时设置一个定时任务，执行 <code>serverCron()</code> 函数。其执行频率由 <code>server.hz</code> 配置（默认为10，即每秒10次，每100ms执行一次）。此模式<strong>执行时间较长</strong>（但受控），<strong>频率较低</strong>。</li>
+<li><strong>FAST模式（快模式）</strong>： 在Redis事件循环的每一个周期开始前，调用 <code>beforeSleep()</code> 函数，其中会执行一次 <code>activeExpireCycle(ACTIVE_EXPIRE_CYCLE_FAST)</code>。此模式<strong>执行时间极短</strong>（不超过1ms），<strong>频率高</strong>（与事件循环频率相同，但两次间隔不低于2ms）。</li>
+</ol>
+<p><img src="/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/assets/%E5%88%A0%E9%99%A41.png"
+	width="844"
+	height="290"
+	srcset="/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/assets/%E5%88%A0%E9%99%A41_hu_b170717970e56d41.png 480w, /p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/assets/%E5%88%A0%E9%99%A41_hu_ec660b868366737c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="291"
+		data-flex-basis="698px"
+	
+></p>
+<p><strong>共同执行流程（activeExpireCycle函数）</strong>：</p>
+<ol>
+<li>遍历所有数据库（0-15）。</li>
+<li>对于每个数据库的 <code>expires</code> 字典，逐个遍历其哈希表桶（bucket）。</li>
+<li>从每个桶中<strong>抽样</strong>（例如，SLOW模式每次抽样约20个key）检查key是否过期。</li>
+<li>如果发现过期key，则删除它。</li>
+<li>删除后，会检查两个停止条件：（若不满足停止条件，则会继续循环）
+<ul>
+<li><strong>时间限制</strong>： SLOW模式总执行时间不超过周期（100ms）的25%（即25ms）；FAST模式不超过1ms。</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><strong>比例限制</strong>： 如果本次抽样中，<strong>过期key的比例低于10%</strong>，则认为过期key已不多，可以提前结束本次清理任务。</li>
+</ul>
+<h4 id="对比">对比
+</h4><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>特性</th>
+					<th>SLOW模式</th>
+					<th>FAST模式</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>触发位置</strong></td>
+					<td><code>serverCron()</code> 定时任务</td>
+					<td><code>beforeSleep()</code> 事件循环回调</td>
+			</tr>
+			<tr>
+					<td><strong>执行频率</strong></td>
+					<td>低频（默认10Hz，100ms/次）</td>
+					<td>高频（与事件循环频率同步）</td>
+			</tr>
+			<tr>
+					<td><strong>单次执行时长</strong></td>
+					<td>较长，但严格控制（不超过25ms）</td>
+					<td>极短（严格不超过1ms）</td>
+			</tr>
+			<tr>
+					<td><strong>主要目的</strong></td>
+					<td>深度清理，处理大量积压的过期key</td>
+					<td>快速清理，避免阻塞主线程</td>
+			</tr>
+			<tr>
+					<td><strong>影响</strong></td>
+					<td>可能带来短暂的性能波动</td>
+					<td>对主线程几乎无阻塞</td>
+			</tr>
+	</tbody>
+</table></div>
+<p><strong>关键参数与公式</strong>：</p>
+<ul>
+<li>SLOW模式下任务执行周期 <code>period</code> = <code>1000 / server.hz</code> ms。若 <code>server.hz=10</code>，则 <code>period=100ms</code></li>
+<li>SLOW模式单次清理最大耗时为period×25%</li>
+<li>FAST模式单次清理最大耗时要≤1ms</li>
+<li>两种模式都会在抽样后检查：如果 <code>expired_count / sampled_count &lt; 10%</code>，则提前结束本次任务</li>
+</ul>
+<h2 id="淘汰策略">淘汰策略
+</h2><p>在数据量巨大的项目中，即使删除了所有过期 key，Redis 内存也可能达到设置的上限（<code>maxmemory</code>），无法满足新的数据写入需求。</p>
+<p>所以引入 <strong>内存淘汰策略</strong>。当 Redis 内存使用达到 <code>maxmemory</code> 阈值时，<strong>主动挑选一部分 key 进行删除</strong>（无论这些 key 是否过期），以释放内存空间。</p>
+<p><em>何时检查与淘汰？</em></p>
+<p>Redis 在<strong>任何命令执行之前</strong>，都会检查内存是否充足。如果不足，会尝试调用 <code>performEvictions</code> 函数进行内存清理。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kt">int</span><span class="w"> </span><span class="nf">processCommand</span><span class="p">(</span><span class="n">client</span><span class="w"> </span><span class="o">*</span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 如果配置了 maxmemory 属性，并且当前没有执行 Lua 脚本</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">server</span><span class="p">.</span><span class="na">maxmemory</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">server</span><span class="p">.</span><span class="na">lua_timedout</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 尝试进行内存淘汰</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">out_of_memory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">performEvictions</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EVICT_FAIL</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// ... 其他逻辑 ...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 如果内存清理失败（out_of_memory 为真），且配置了在内存满时拒绝写入</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">out_of_memory</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">reject_cmd_on_oom</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">rejectCommand</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="n">shared</span><span class="p">.</span><span class="na">oomerr</span><span class="p">);</span><span class="w"> </span><span class="c1">// 拒绝执行当前命令</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">C_OK</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// ... 正常执行命令 ...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果 <code>performEvictions()</code> 返回失败（<code>EVICT_FAIL</code>），表示内存仍不足，根据配置决定是直接拒绝命令（报 OOM 错误）还是放任不管</p>
+<p><em>挑选哪些key？</em></p>
+<p>Redis 提供了多种策略来决定淘汰哪些 key。</p>
+<h3 id="八种内存淘汰策略">八种内存淘汰策略
+</h3><p>Redis 通过配置 <code>maxmemory-policy</code> 来选择策略。</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>策略名称</th>
+					<th>淘汰范围</th>
+					<th>算法/选择依据</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>noeviction</strong></td>
+					<td>-</td>
+					<td>-</td>
+					<td><strong>默认策略</strong>。不淘汰任何 key。当内存已满，尝试写入新数据时，Redis 将直接返回错误。</td>
+			</tr>
+			<tr>
+					<td><strong>volatile-ttl</strong></td>
+					<td>带过期时间的 key (<code>expires</code> 字典)</td>
+					<td>TTL 值</td>
+					<td>优先淘汰<strong>剩余存活时间（TTL）最短</strong>的 key。</td>
+			</tr>
+			<tr>
+					<td><strong>allkeys-random</strong></td>
+					<td>所有 key (<code>dict</code> 字典)</td>
+					<td>随机</td>
+					<td>从所有 key 中<strong>随机选择</strong>一个进行淘汰。</td>
+			</tr>
+			<tr>
+					<td><strong>volatile-random</strong></td>
+					<td>带过期时间的 key (<code>expires</code> 字典)</td>
+					<td>随机</td>
+					<td>从设置了过期时间的 key 中<strong>随机选择</strong>一个进行淘汰。</td>
+			</tr>
+			<tr>
+					<td><strong>allkeys-lru</strong></td>
+					<td>所有 key (<code>dict</code> 字典)</td>
+					<td>LRU</td>
+					<td>对所有 key，基于 <strong>LRU（Least Recently Used）</strong> 算法进行淘汰。</td>
+			</tr>
+			<tr>
+					<td><strong>volatile-lru</strong></td>
+					<td>带过期时间的 key (<code>expires</code> 字典)</td>
+					<td>LRU</td>
+					<td>对设置了过期时间的 key，基于 <strong>LRU</strong> 算法进行淘汰。</td>
+			</tr>
+			<tr>
+					<td><strong>allkeys-lfu</strong></td>
+					<td>所有 key (<code>dict</code> 字典)</td>
+					<td>LFU</td>
+					<td>对所有 key，基于 <strong>LFU（Least Frequently Used）</strong> 算法进行淘汰。</td>
+			</tr>
+			<tr>
+					<td><strong>volatile-lfu</strong></td>
+					<td>带过期时间的 key (<code>expires</code> 字典)</td>
+					<td>LFU</td>
+					<td>对设置了过期时间的 key，基于 <strong>LFU</strong> 算法进行淘汰。</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>在生产环境中，需要根据业务数据访问模式（是否倾向于最近访问或高频访问）来选择合适的 <code>maxmemory-policy</code>。通常 <code>allkeys-lru</code> 是一个比较通用且高效的选择。</p>
+<p><strong>配置方式</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="c1"># 在配置文件 redis.conf 中修改对应策略</span>
+</span></span><span class="line"><span class="cl"><span class="na">maxmemory-policy noeviction</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 或通过命令行动态设置</span>
+</span></span><span class="line"><span class="cl"><span class="na">CONFIG SET maxmemory-policy allkeys-lru</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="lru-与-lfu-算法">LRU 与 LFU 算法
+</h3><p>每个 Redis 的值（key-value 中的 value）在内存中都被封装成一个 <code>redisObject</code> 结构体：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">redisObject</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="nl">type</span><span class="p">:</span><span class="mi">4</span><span class="p">;</span>      <span class="c1">// 对象类型（String, List, Hash, Set, ZSet）
+</span></span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="nl">encoding</span><span class="p">:</span><span class="mi">4</span><span class="p">;</span>  <span class="c1">// 编码方式
+</span></span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="nl">lru</span><span class="p">:</span><span class="n">LRU_BITS</span><span class="p">;</span> <span class="c1">// LRU：以秒为单位记录最近一次访问时间，长度24bit；LFU：高16位以分钟为单位记录最近一次访问时间，低8位记录逻辑访问次数
+</span></span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">refcount</span><span class="p">;</span>         <span class="c1">// 引用计数
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="o">*</span><span class="n">ptr</span><span class="p">;</span>            <span class="c1">// 指向真实数据的指针
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">robj</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>lru</code>这个 24 位字段的含义取决于配置的淘汰策略 (<code>maxmemory-policy</code>)：</p>
+<ul>
+<li>当使用 LRU 算法时，记录的是最近一次访问的时间戳（秒）。
+<ul>
+<li><strong>LRU = Least Recently Used (最少最近使用)</strong>。</li>
+<li><strong>淘汰标准</strong>：<code>当前时间 - lru值</code> 的差值越大（即 key 越久没被访问），其“空闲时间”（idletime）越大，优先被淘汰。</li>
+<li><strong>注意</strong>：很多人误译为“最近最少使用”，这是错误的。<strong>正确翻译是“最少最近使用”</strong>，关注的是“最近一次使用时间”这个点。</li>
+</ul>
+</li>
+<li>当使用 LFU 算法时，这 24 位被拆分为两部分：
+<ul>
+<li><strong>LFU = Least Frequently Used (最少频率使用)</strong>。</li>
+<li><strong>高 16 位</strong>：记录<strong>最近一次访问的时间戳（分钟为单位）</strong>。</li>
+<li><strong>低 8 位</strong>：记录 <strong>“逻辑访问次数”</strong>（Logical Access Counter）。</li>
+<li><strong>淘汰标准</strong>：逻辑访问次数值越小（代表访问频率低），优先被淘汰。</li>
+</ul>
+</li>
+</ul>
+<p>LFU 逻辑访问次数的计算原理：</p>
+<p>LFU 并不是简单计数，而是一种<strong>概率性、带衰减</strong>的计数器，用很小的空间（8bit）近似统计访问频率。 计算过程（当 key 被访问时）：</p>
+<ol>
+<li>生成一个 <strong>0~1 之间的随机数 R</strong>。</li>
+<li>用<strong>旧的逻辑访问次数</strong> 乘以 <code>lfu_log_factor</code>（默认值 10），再 <strong>+1</strong>，然后取其倒数得到概率 <strong>P</strong>。 P=1/(旧次数×lfu_log_factor+1)</li>
+<li>比较 <strong>R</strong> 和 <strong>P</strong>：如果 <strong>R &lt; P</strong>，则逻辑访问次数 <strong>+1</strong>（最大不超过 255）。</li>
+<li>访问次数会随时间衰减。公式为 <code>当前逻辑访问次数 = max(0, 旧次数 - floor(距离上次访问的时间/lfu_decay_time))</code>。<code>lfu_decay_time</code> 默认 1 分钟。</li>
+</ol>
+<p>在配置文件 redis.conf 中修改对应策略：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="c1"># 访问次数的增长因子，默认10，值越大，计数器增长越慢</span>
+</span></span><span class="line"><span class="cl"><span class="na">lfu-log-factor 10</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 衰减因子，默认1，单位分钟，值越大，计数器衰减越慢</span>
+</span></span><span class="line"><span class="cl"><span class="na">lfu-decay-time 1</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="performevictions-淘汰流程">performEvictions 淘汰流程
+</h3><p>Redis 采用了<strong>近似 LRU/LFU 算法</strong>，通过维护一个 <strong>eviction pool（淘汰池）</strong> 和采样比较来高效执行淘汰，避免全量扫描所有 key。大致流程如下图：<img src="/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/assets/%E6%B7%98%E6%B1%B0.png"
+	width="844"
+	height="428"
+	srcset="/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/assets/%E6%B7%98%E6%B1%B0_hu_77fccf0f74bd9318.png 480w, /p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6/assets/%E6%B7%98%E6%B1%B0_hu_7c651415995bbe2c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="197"
+		data-flex-basis="473px"
+	
+></p>
+<ul>
+<li>
+<p><strong>eviction pool 的作用</strong>：从所有 key 中随机采样一批，然后只从这批样本中挑选出“最应该被淘汰”的 key 放入池中。最终从池中淘汰。这是一种<strong>空间换时间</strong>的优化，平衡了性能和准确性。<strong>默认大小为16</strong>。</p>
+</li>
+<li>
+<p>idle time 的计算</p>
+<p>：为了统一将各种策略（LRU, LFU, TTL）映射到同一个“idle time”概念上，便于比较和排序。</p>
+<ul>
+<li><strong>LRU 策略</strong>：<code>idle time = 当前时间 - lru 时间戳（秒）</code></li>
+<li><strong>LFU 策略</strong>：<code>idle time = 255 - 逻辑访问次数</code> （逻辑访问次数越小，idle time 越大）</li>
+<li><strong>TTL 策略</strong>：<code>idle time = Long型最大值 - 剩余TTL值</code> （剩余时间越短，idle time 越大）</li>
+<li><strong>Random 策略</strong>：不使用 eviction pool，直接随机挑选并删除。</li>
+</ul>
+</li>
+<li>
+<p><strong>maxmemory_samples 参数</strong>：每次从数据库中随机挑选的 key 数量（默认 5）。值越大，淘汰越精确，但 CPU 开销也越大。</p>
+</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-resp%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Redis原理篇 RESP通信协议</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Redis原理篇 网络模型</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/redis%E5%8E%9F%E7%90%86%E7%AF%87-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Redis原理篇 数据结构</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Redis最佳实践</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/redis%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Redis多级缓存</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script src="https://utteranc.es/client.js" 
+        repo="IAmYuanyu/IAmYuanyu.github.io"
+        issue-term="pathname"
+        
+        crossorigin="anonymous"
+        async
+        >
+</script>
+
+<style>
+    .utterances {
+        max-width: unset;
+    }
+</style>
+
+<script>
+    let utterancesLoaded = false;
+
+    function setUtterancesTheme(theme) {
+        let utterances = document.querySelector('.utterances iframe');
+        if (utterances) {
+            utterances.contentWindow.postMessage(
+                {
+                    type: 'set-theme',
+                    theme: `github-${theme}`
+                },
+                'https://utteranc.es'
+            );
+        }
+    }
+
+    addEventListener('message', event => {
+        if (event.origin !== 'https://utteranc.es') return;
+
+        
+        utterancesLoaded = true;
+        setUtterancesTheme(document.documentElement.dataset.scheme)
+    });
+
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (!utterancesLoaded) return;
+        setUtterancesTheme(e.detail)
+    })
+</script>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2025 - 
+        
+        2026 凉介
+    </section>
+    
+    <section class="powerby">
+        
+            本站于2026年3月31日建立 <br/>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
