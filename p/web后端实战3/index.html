@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Tlias智能学习辅助系统 完成了员工管理的列表查询功能之后，接下来呢，我们再来完成新增员工的功能。 具体的需求如下：\n新增员工 在新增员工的时候，在表单中，我们既要录入员工的基本信息，又要录入员工的工作经历信息。 员工基本信息，对应的表结构是 emp表，员工工作经历信息，对应的表结构是 emp_expr 表，所以这里我们要操作两张表，往两张表中保存数据。\n">
-<title>Web后端实战（3）</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Tlias 员工新增：事务管理与文件上传 完成了员工管理的列表查询功能之后，接下来呢，我们再来完成新增员工的功能。 具体的需求如下：\n新增员工 ">
+<title>Tlias 员工新增：事务管理与文件上传</title>
 
 <link rel='canonical' href='https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/'>
 
-<link rel="stylesheet" href="/scss/style.min.9a6f47bb0cccb59cea32f2407a4d279494201cb8a12596986b2cc96158da0dea.css"><meta property='og:title' content="Web后端实战（3）">
-<meta property='og:description' content="Tlias智能学习辅助系统 完成了员工管理的列表查询功能之后，接下来呢，我们再来完成新增员工的功能。 具体的需求如下：\n新增员工 在新增员工的时候，在表单中，我们既要录入员工的基本信息，又要录入员工的工作经历信息。 员工基本信息，对应的表结构是 emp表，员工工作经历信息，对应的表结构是 emp_expr 表，所以这里我们要操作两张表，往两张表中保存数据。\n">
+<link rel="stylesheet" href="/scss/style.min.9a6f47bb0cccb59cea32f2407a4d279494201cb8a12596986b2cc96158da0dea.css"><meta property='og:title' content="Tlias 员工新增：事务管理与文件上传">
+<meta property='og:description' content="Tlias 员工新增：事务管理与文件上传 完成了员工管理的列表查询功能之后，接下来呢，我们再来完成新增员工的功能。 具体的需求如下：\n新增员工 ">
 <meta property='og:url' content='https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/'>
 <meta property='og:site_name' content='凉介的笔记'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java' /><meta property='article:tag' content='后端' /><meta property='article:tag' content='阿里云' /><meta property='article:published_time' content='2026-05-06T19:58:41&#43;08:00'/><meta property='article:modified_time' content='2026-05-06T19:58:41&#43;08:00'/>
-<meta name="twitter:title" content="Web后端实战（3）">
-<meta name="twitter:description" content="Tlias智能学习辅助系统 完成了员工管理的列表查询功能之后，接下来呢，我们再来完成新增员工的功能。 具体的需求如下：\n新增员工 在新增员工的时候，在表单中，我们既要录入员工的基本信息，又要录入员工的工作经历信息。 员工基本信息，对应的表结构是 emp表，员工工作经历信息，对应的表结构是 emp_expr 表，所以这里我们要操作两张表，往两张表中保存数据。\n">
+<meta name="twitter:title" content="Tlias 员工新增：事务管理与文件上传">
+<meta name="twitter:description" content="Tlias 员工新增：事务管理与文件上传 完成了员工管理的列表查询功能之后，接下来呢，我们再来完成新增员工的功能。 具体的需求如下：\n新增员工 ">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -316,7 +316,7 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/">Web后端实战（3）</a>
+            <a href="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/">Tlias 员工新增：事务管理与文件上传</a>
         </h2>
 
         
@@ -354,7 +354,7 @@
     <section class="article-content">
     
     
-    <h1 id="tlias智能学习辅助系统">Tlias智能学习辅助系统
+    <h1 id="tlias-员工新增事务管理与文件上传">Tlias 员工新增：事务管理与文件上传
 </h1><p>完成了员工管理的列表查询功能之后，接下来呢，我们再来完成新增员工的功能。 具体的需求如下：</p>
 <p><img src="/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%96%B0%E5%A2%9E%E5%91%98%E5%B7%A5%E9%9C%80%E6%B1%82.png"
 	width="1026"
@@ -3795,7 +3795,7 @@
         
 
         <div class="article-details">
-            <h2 class="article-title">Web后端实战（6）</h2>
+            <h2 class="article-title">Tlias 登录认证：JWT、Filter 与 Interceptor</h2>
         </div>
     </a>
 </article>
@@ -3808,7 +3808,7 @@
         
 
         <div class="article-details">
-            <h2 class="article-title">Web后端实战（5）</h2>
+            <h2 class="article-title">Tlias 班级与学员管理：业务接口与统计功能</h2>
         </div>
     </a>
 </article>
@@ -3821,7 +3821,7 @@
         
 
         <div class="article-details">
-            <h2 class="article-title">Web后端实战（4）</h2>
+            <h2 class="article-title">Tlias 员工维护：异常处理与数据统计</h2>
         </div>
     </a>
 </article>
@@ -3834,7 +3834,7 @@
         
 
         <div class="article-details">
-            <h2 class="article-title">Web后端实战（2）</h2>
+            <h2 class="article-title">Tlias 员工查询：多表关联、分页与动态 SQL</h2>
         </div>
     </a>
 </article>
@@ -3847,7 +3847,7 @@
         
 
         <div class="article-details">
-            <h2 class="article-title">Web后端实战</h2>
+            <h2 class="article-title">Tlias 部门管理：REST 接口开发与日志基础</h2>
         </div>
     </a>
 </article>

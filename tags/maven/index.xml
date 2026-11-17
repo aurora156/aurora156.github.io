@@ -8,12 +8,12 @@
         <language>zh-cn</language>
         <copyright>凉介</copyright>
         <lastBuildDate>Thu, 21 May 2026 20:50:02 +0800</lastBuildDate><atom:link href="https://aurora156.github.io/tags/maven/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>后端web进阶（Maven高级）</title>
+        <title>Maven 工程管理：分模块、继承聚合与私服</title>
         <link>https://aurora156.github.io/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6maven%E9%AB%98%E7%BA%A7/</link>
         <pubDate>Thu, 21 May 2026 20:50:02 +0800</pubDate>
         
         <guid>https://aurora156.github.io/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6maven%E9%AB%98%E7%BA%A7/</guid>
-        <description>&lt;h1 id=&#34;后端web进阶maven高级&#34;&gt;后端web进阶(Maven高级)
+        <description>&lt;h1 id=&#34;maven-工程管理分模块继承聚合与私服&#34;&gt;Maven 工程管理：分模块、继承聚合与私服
 &lt;/h1&gt;&lt;p&gt;Web开发讲解完毕之后，我们再来学习Maven高级。其实在前面的课程当中，我们已经学习了Maven。&lt;/p&gt;
 &lt;p&gt;我们讲到 &lt;strong&gt;Maven 是一款构建和管理 Java 项目的工具&lt;/strong&gt;。经过前面十几天 web 开发的学习，相信大家对于 Maven 这款工具的基本使用应该没什么问题了。我们掌握了 Maven 工具的基本使用之后，其实对于一些简单的项目的构建及管理基本上就没什么问题了。&lt;/p&gt;
 &lt;p&gt;但是如果我们需要开发一些中大型的项目，此时仅凭我们前面所学习的 Maven 的基础知识就比较难以应对了。所以我们接下来还需要学习 Maven 提供的一些高级的功能，这些功能在构建和管理 Java 项目的时候用的也是非常多的。&lt;/p&gt;

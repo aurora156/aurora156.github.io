@@ -8,12 +8,12 @@
         <language>zh-cn</language>
         <copyright>凉介</copyright>
         <lastBuildDate>Wed, 06 May 2026 19:58:41 +0800</lastBuildDate><atom:link href="https://aurora156.github.io/tags/%E9%98%BF%E9%87%8C%E4%BA%91/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>Web后端实战（3）</title>
+        <title>Tlias 员工新增：事务管理与文件上传</title>
         <link>https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/</link>
         <pubDate>Wed, 06 May 2026 19:58:41 +0800</pubDate>
         
         <guid>https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/</guid>
-        <description>&lt;h1 id=&#34;tlias智能学习辅助系统&#34;&gt;Tlias智能学习辅助系统
+        <description>&lt;h1 id=&#34;tlias-员工新增事务管理与文件上传&#34;&gt;Tlias 员工新增：事务管理与文件上传
 &lt;/h1&gt;&lt;p&gt;完成了员工管理的列表查询功能之后，接下来呢，我们再来完成新增员工的功能。 具体的需求如下：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%96%B0%E5%A2%9E%E5%91%98%E5%B7%A5%E9%9C%80%E6%B1%82.png&#34;
 	width=&#34;1026&#34;

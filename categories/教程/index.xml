@@ -24601,12 +24601,12 @@ print(dq)  # 输出 deque([1, 2, 3])&lt;/li&gt;
 </description>
         </item>
         <item>
-        <title>后端web进阶（SpringBoot原理）</title>
+        <title>Spring Boot 原理：配置优先级、Bean 管理与自动配置</title>
         <link>https://aurora156.github.io/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/</link>
         <pubDate>Thu, 21 May 2026 20:52:49 +0800</pubDate>
         
         <guid>https://aurora156.github.io/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6springboot%E5%8E%9F%E7%90%86/</guid>
-        <description>&lt;h1 id=&#34;后端web进阶springboot原理&#34;&gt;后端web进阶(SpringBoot原理)
+        <description>&lt;h1 id=&#34;spring-boot-原理配置优先级bean-管理与自动配置&#34;&gt;Spring Boot 原理：配置优先级、Bean 管理与自动配置
 &lt;/h1&gt;&lt;p&gt;在前面的课程当中，我们学习的都是web开发的技术使用，都是面向应用层面的，我们学会了怎么样去用。而我们今天所要学习的是web后端开发的最后一个篇章springboot原理篇，主要偏向于底层原理。&lt;/p&gt;
 &lt;p&gt;这一篇的内容包括这么三个部分：&lt;/p&gt;
 &lt;ol&gt;
@@ -27718,12 +27718,12 @@ print(dq)  # 输出 deque([1, 2, 3])&lt;/li&gt;
 </description>
         </item>
         <item>
-        <title>后端web进阶（Maven高级）</title>
+        <title>Maven 工程管理：分模块、继承聚合与私服</title>
         <link>https://aurora156.github.io/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6maven%E9%AB%98%E7%BA%A7/</link>
         <pubDate>Thu, 21 May 2026 20:50:02 +0800</pubDate>
         
         <guid>https://aurora156.github.io/p/%E5%90%8E%E7%AB%AFweb%E8%BF%9B%E9%98%B6maven%E9%AB%98%E7%BA%A7/</guid>
-        <description>&lt;h1 id=&#34;后端web进阶maven高级&#34;&gt;后端web进阶(Maven高级)
+        <description>&lt;h1 id=&#34;maven-工程管理分模块继承聚合与私服&#34;&gt;Maven 工程管理：分模块、继承聚合与私服
 &lt;/h1&gt;&lt;p&gt;Web开发讲解完毕之后，我们再来学习Maven高级。其实在前面的课程当中，我们已经学习了Maven。&lt;/p&gt;
 &lt;p&gt;我们讲到 &lt;strong&gt;Maven 是一款构建和管理 Java 项目的工具&lt;/strong&gt;。经过前面十几天 web 开发的学习，相信大家对于 Maven 这款工具的基本使用应该没什么问题了。我们掌握了 Maven 工具的基本使用之后，其实对于一些简单的项目的构建及管理基本上就没什么问题了。&lt;/p&gt;
 &lt;p&gt;但是如果我们需要开发一些中大型的项目，此时仅凭我们前面所学习的 Maven 的基础知识就比较难以应对了。所以我们接下来还需要学习 Maven 提供的一些高级的功能，这些功能在构建和管理 Java 项目的时候用的也是非常多的。&lt;/p&gt;
@@ -29319,12 +29319,12 @@ print(dq)  # 输出 deque([1, 2, 3])&lt;/li&gt;
 </description>
         </item>
         <item>
-        <title>SpringAOP</title>
+        <title>Spring AOP：切面机制与操作日志实现</title>
         <link>https://aurora156.github.io/p/springaop/</link>
         <pubDate>Tue, 19 May 2026 22:15:16 +0800</pubDate>
         
         <guid>https://aurora156.github.io/p/springaop/</guid>
-        <description>&lt;h1 id=&#34;后端web进阶aop&#34;&gt;后端Web进阶（AOP）
+        <description>&lt;h1 id=&#34;spring-aop切面机制与操作日志实现&#34;&gt;Spring AOP：切面机制与操作日志实现
 &lt;/h1&gt;&lt;p&gt;接下来我们进入到AOP的学习。 AOP也是spring框架的第二大核心，我们先来学习AOP的基础。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;什么是AOP？&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;AOP：&lt;strong&gt;A&lt;/strong&gt;spect &lt;strong&gt;O&lt;/strong&gt;riented &lt;strong&gt;P&lt;/strong&gt;rogramming（&lt;strong&gt;面向切面编程、面向方面编程&lt;/strong&gt;），其实说白了，面向切面编程就是面向特定方法编程。&lt;/p&gt;
@@ -32255,12 +32255,12 @@ print(dq)  # 输出 deque([1, 2, 3])&lt;/li&gt;
 </description>
         </item>
         <item>
-        <title>Web后端实战（6）</title>
+        <title>Tlias 登录认证：JWT、Filter 与 Interceptor</title>
         <link>https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/</link>
         <pubDate>Sun, 17 May 2026 14:02:36 +0800</pubDate>
         
         <guid>https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/</guid>
-        <description>&lt;h1 id=&#34;tlias智能学习辅助系统&#34;&gt;Tlias智能学习辅助系统
+        <description>&lt;h1 id=&#34;tlias-登录认证jwtfilter-与-interceptor&#34;&gt;Tlias 登录认证：JWT、Filter 与 Interceptor
 &lt;/h1&gt;&lt;p&gt;通过前面的学习，我们已经实现了部门管理、员工管理的基本功能，但是会发现，我们并没有登录，就直接访问到了Tlias智能学习辅助系统的后台。 这是不安全的，所以我们今天的主题就是登录认证。最终要实现的效果是：&lt;/p&gt;
 &lt;p&gt;如果用户名密码错误，不允许登录系统。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%986/assets/%E7%94%A8%E6%88%B7%E5%90%8D%E6%88%96%E5%AF%86%E7%A0%81%E9%94%99%E8%AF%AF.png&#34;
@@ -34729,12 +34729,12 @@ print(dq)  # 输出 deque([1, 2, 3])&lt;/li&gt;
 </description>
         </item>
         <item>
-        <title>Web后端实战（5）</title>
+        <title>Tlias 班级与学员管理：业务接口与统计功能</title>
         <link>https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/</link>
         <pubDate>Fri, 15 May 2026 14:34:35 +0800</pubDate>
         
         <guid>https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%985/</guid>
-        <description>&lt;h1 id=&#34;tlias智能学习辅助系统&#34;&gt;Tlias智能学习辅助系统
+        <description>&lt;h1 id=&#34;tlias-班级与学员管理业务接口与统计功能&#34;&gt;Tlias 班级与学员管理：业务接口与统计功能
 &lt;/h1&gt;&lt;h2 id=&#34;数据准备&#34;&gt;数据准备
 &lt;/h2&gt;&lt;p&gt;在数据库中，创建学生表 &lt;code&gt;clazz&lt;/code&gt; , &lt;code&gt;student&lt;/code&gt;，SQL如下：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
@@ -37366,12 +37366,12 @@ print(dq)  # 输出 deque([1, 2, 3])&lt;/li&gt;
 </description>
         </item>
         <item>
-        <title>Web后端实战（4）</title>
+        <title>Tlias 员工维护：异常处理与数据统计</title>
         <link>https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/</link>
         <pubDate>Fri, 08 May 2026 20:59:55 +0800</pubDate>
         
         <guid>https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/</guid>
-        <description>&lt;h1 id=&#34;tlias智能学习辅助系统&#34;&gt;Tlias智能学习辅助系统
+        <description>&lt;h1 id=&#34;tlias-员工维护异常处理与数据统计&#34;&gt;Tlias 员工维护：异常处理与数据统计
 &lt;/h1&gt;&lt;h2 id=&#34;删除员工&#34;&gt;删除员工
 &lt;/h2&gt;&lt;h3 id=&#34;需求&#34;&gt;需求
 &lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%984/assets/%E5%88%A0%E9%99%A4%E5%91%98%E5%B7%A5.png&#34;
@@ -38989,12 +38989,12 @@ print(dq)  # 输出 deque([1, 2, 3])&lt;/li&gt;
 </description>
         </item>
         <item>
-        <title>Web后端实战（3）</title>
+        <title>Tlias 员工新增：事务管理与文件上传</title>
         <link>https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/</link>
         <pubDate>Wed, 06 May 2026 19:58:41 +0800</pubDate>
         
         <guid>https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/</guid>
-        <description>&lt;h1 id=&#34;tlias智能学习辅助系统&#34;&gt;Tlias智能学习辅助系统
+        <description>&lt;h1 id=&#34;tlias-员工新增事务管理与文件上传&#34;&gt;Tlias 员工新增：事务管理与文件上传
 &lt;/h1&gt;&lt;p&gt;完成了员工管理的列表查询功能之后，接下来呢，我们再来完成新增员工的功能。 具体的需求如下：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%983/assets/%E6%96%B0%E5%A2%9E%E5%91%98%E5%B7%A5%E9%9C%80%E6%B1%82.png&#34;
 	width=&#34;1026&#34;
@@ -42411,12 +42411,12 @@ print(dq)  # 输出 deque([1, 2, 3])&lt;/li&gt;
 &lt;/div&gt;</description>
         </item>
         <item>
-        <title>Web后端实战（2）</title>
+        <title>Tlias 员工查询：多表关联、分页与动态 SQL</title>
         <link>https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/</link>
         <pubDate>Sun, 19 Apr 2026 22:07:05 +0800</pubDate>
         
         <guid>https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/</guid>
-        <description>&lt;h1 id=&#34;tlias智能学习辅助系统&#34;&gt;Tlias智能学习辅助系统
+        <description>&lt;h1 id=&#34;tlias-员工查询多表关联分页与动态-sql&#34;&gt;Tlias 员工查询：多表关联、分页与动态 SQL
 &lt;/h1&gt;&lt;p&gt;实现了部门管理的功能之后，接下来我们再来实现员工管理的功能。&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%982/assets/%E5%91%98%E5%B7%A5%E7%AE%A1%E7%90%86.png&#34;
 	width=&#34;1026&#34;
 	height=&#34;565&#34;
@@ -45696,12 +45696,12 @@ print(dq)  # 输出 deque([1, 2, 3])&lt;/li&gt;
 &lt;/div&gt;</description>
         </item>
         <item>
-        <title>Web后端实战</title>
+        <title>Tlias 部门管理：REST 接口开发与日志基础</title>
         <link>https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/</link>
         <pubDate>Wed, 15 Apr 2026 20:28:12 +0800</pubDate>
         
         <guid>https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%AE%9E%E6%88%98/</guid>
-        <description>&lt;h1 id=&#34;tlias智能学习辅助系统&#34;&gt;Tlias智能学习辅助系统
+        <description>&lt;h1 id=&#34;tlias-部门管理rest-接口开发与日志基础&#34;&gt;Tlias 部门管理：REST 接口开发与日志基础
 &lt;/h1&gt;&lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;需求：&lt;/p&gt;
@@ -51594,12 +51594,12 @@ print(dq)  # 输出 deque([1, 2, 3])&lt;/li&gt;
 </description>
         </item>
         <item>
-        <title>Web后端开发</title>
+        <title>Spring Boot Web 入门：HTTP、分层架构与 IoC</title>
         <link>https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/</link>
         <pubDate>Wed, 08 Apr 2026 22:38:33 +0800</pubDate>
         
         <guid>https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/</guid>
-        <description>&lt;h1 id=&#34;web后端开发&#34;&gt;Web后端开发
+        <description>&lt;h1 id=&#34;spring-boot-web-入门http分层架构与-ioc&#34;&gt;Spring Boot Web 入门：HTTP、分层架构与 IoC
 &lt;/h1&gt;&lt;h2 id=&#34;web基础知识&#34;&gt;Web基础知识
 &lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://aurora156.github.io/p/web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/assets/%E8%B5%84%E6%BA%90.png&#34;
 	width=&#34;2247&#34;
